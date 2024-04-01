@@ -43,7 +43,7 @@ onBeforeUnmount(() => {
     push({
         query: {
             ...currentRoute.value.query,
-            tab: null,
+            tab: undefined,
         },
         replace: true,
     })  
