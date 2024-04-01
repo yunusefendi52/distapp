@@ -1,0 +1,51 @@
+datasource db {
+    provider = "postgresql"
+    // url      = "postgresql://postgres:Qwerty@123@localhost:5432/AppDeployin"
+    url      = env("DATABASE_URL")
+}
+
+// datasource db {
+//     provider = "sqlite"
+//     url      = "file:./data/app.db"
+// }
+
+generator clientWorker {
+    provider        = "prisma-client-js"
+    // previewFeatures = ["driverAdapters"]
+}
+
+model User {
+    id                  Int                   @id @default(autoincrement())
+    name                String
+    OrganizationsPeople OrganizationsPeople[]
+}
+
+model Organizations {
+    id                  Int                   @id @default(autoincrement())
+    name                String                @unique
+    displayName         String
+    OrganizationsPeople OrganizationsPeople[]
+    Apps                Apps[]
+}
+
+model OrganizationsPeople {
+    userId         Int
+    organizationId Int
+
+    user         User          @relation(fields: [userId], references: [id])
+    organization Organizations @relation(fields: [organizationId], references: [id])
+
+    @@id([userId, organizationId])
+}
+
+model Apps {
+    id          Int    @id @default(autoincrement())
+    name        String
+    displayName String
+    osType      Int
+
+    Organization    Organizations @relation(fields: [organizationsId], references: [id])
+    organizationsId Int
+
+    @@unique([organizationsId, name])
+}

@@ -1,0 +1,20 @@
+/* You can add global styles to this file, and also import other style files */
+
+$gutter: 1rem; //for primeflex grid system
+@import '@/assets/layout/styles/layout/layout.scss';
+
+.bg-1 {
+    background-color: var(--surface-0);
+}
+
+.bg-2 {
+    background-color: var(--surface-100);
+}
+
+.bg-3 {
+    background-color: var(--surface-200);
+}
+
+.bg-4 {
+    background-color: var(--surface-300);
+}
