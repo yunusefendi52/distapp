@@ -1,7 +1,7 @@
 import jsonwebtoken from 'jsonwebtoken'
 import { JWT_KEY } from '../utils/utils';
 
-type AuthData = {
+export type AuthData = {
   userId: number,
 }
 

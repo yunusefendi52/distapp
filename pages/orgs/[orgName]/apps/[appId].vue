@@ -1,22 +1,20 @@
 <template>
     <h4>{{ detailApp.data.value?.displayName }}</h4>
-    <div class="card px-2 py-1">
-        <TabView v-model:active-index="active">
-            <TabPanel header="Releases">
-                <Releases />
-            </TabPanel>
-            <TabPanel header="Groups">
-                <p class="m-0">
-                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
-                    totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
-                    dicta sunt explicabo. Nemo enim
-                    ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni
-                    dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam
-                    eius modi.
-                </p>
-            </TabPanel>
-        </TabView>
-    </div>
+    <TabView v-model:active-index="active">
+        <TabPanel header="Artifacts">
+            <Releases :org-name="orgName" :app-name="appName" />
+        </TabPanel>
+        <TabPanel header="Groups">
+            <p class="m-0">
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+                totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
+                dicta sunt explicabo. Nemo enim
+                ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni
+                dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam
+                eius modi.
+            </p>
+        </TabPanel>
+    </TabView>
 </template>
 
 <script setup lang="ts">
@@ -46,13 +44,17 @@ onBeforeUnmount(() => {
             tab: undefined,
         },
         replace: true,
-    })  
+    })
 })
+
+const appName = params.appId as string
+const orgName = params.orgName as string
 
 const detailApp = await useFetch('/api/detail-app', {
     query: {
-        appName: params.appId,
-        orgName: params.orgName,
+        appName: appName,
+        orgName: orgName,
     },
 })
+provide('detail-app', toOsType(detailApp.data.value?.osType))
 </script>
