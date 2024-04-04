@@ -1,7 +1,7 @@
 import { getStorageKeys } from "~/server/utils/utils"
 
 export default defineEventHandler(async (event) => {
-    const { key, appName, orgName } = await readBody(event)
+    const { key, appName, orgName, releaseNotes } = await readBody(event)
     const { temp, assets } = getStorageKeys(event.context.auth, key)
     const prisma = event.context.prisma
     await prisma.$transaction(async (t) => {
@@ -31,6 +31,7 @@ export default defineEventHandler(async (event) => {
                 versionCode: '1',
                 versionName: '1.0.0',
                 appsId: app.id,
+                releaseNotes: releaseNotes,
             },
         })
     })
