@@ -61,9 +61,13 @@ model Artifacts {
     createdAt     DateTime
     updatedAt     DateTime
 
+    releaseId Int
+
     apps                   Apps                     @relation(fields: [appsId], references: [id])
     appsId                 Int
     ArtifactsGroupsManager ArtifactsGroupsManager[]
+
+    @@unique([appsId, releaseId])
 }
 
 model ArtifactsGroups {

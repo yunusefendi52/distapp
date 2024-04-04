@@ -1,6 +1,7 @@
 <template>
     <Button @click="upload" label="Upload" class="mb-3"></Button>
-    <DataTable :value="list" single>
+    <DataTable :value="list" single @row-click="selectRow($event)">
+        <Column field="releaseId" header="Release Id" style="width: 15%"></Column>
         <Column field="versionName" header="Version Name"></Column>
         <Column field="versionCode" header="Version Code"></Column>
         <Column field="createdAt" header="Date">
@@ -12,14 +13,13 @@
                 </label>
             </template>
         </Column>
-        <!-- <Column field="category" header="Category"></Column>
-        <Column field="quantity" header="Quantity"></Column> -->
     </DataTable>
 </template>
 
 <script setup lang="ts">
 import moment from 'moment'
 import AppFileUpload from './AppFileUpload.vue';
+import { DataTableRowClickEvent } from 'primevue/datatable';
 
 const props = defineProps<{
     orgName: string,
@@ -54,5 +54,9 @@ const upload = () => {
             }
         }
     })
+}
+
+const selectRow =async  (row: DataTableRowClickEvent) => {
+    console.log(row.data)
 }
 </script>

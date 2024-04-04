@@ -22,6 +22,28 @@ export default defineEventHandler(async (event) => {
                 },
             },
         })
+        const lastArtifact = await prisma.artifacts.findFirst({
+            orderBy: {
+                releaseId: 'desc',
+            },
+            select: {
+                releaseId: true,
+            },
+            where: {
+                apps: {
+                    name: appName,
+                    Organization: {
+                        name: orgName,
+                        OrganizationsPeople: {
+                            every: {
+                                userId: event.context.auth.userId,
+                            },
+                        },
+                    },
+                },
+            },
+        })
+        const newReleaseId = (lastArtifact?.releaseId ?? 0) + 1
         const now = new Date()
         await prisma.artifacts.create({
             data: {
@@ -32,6 +54,7 @@ export default defineEventHandler(async (event) => {
                 versionName: '1.0.0',
                 appsId: app.id,
                 releaseNotes: releaseNotes,
+                releaseId: newReleaseId,
             },
         })
     })
