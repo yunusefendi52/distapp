@@ -1,0 +1,25 @@
+name = "app-deployin"
+compatibility_date = "2023-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+# [vars]
+# MY_VAR = "my-variable"
+
+# [[kv_namespaces]]
+# binding = "MY_KV_NAMESPACE"
+# id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# [[r2_buckets]]
+# binding = "MY_BUCKET"
+# bucket_name = "my-bucket"
+
+[[d1_databases]]
+binding = "DB" # i.e. available in your Worker on env.DB
+database_name = "app-deployin"
+database_id = "8c6bb4d8-1d0e-4ac4-b0bd-3df676dedc1c"
+
+# [ai]
+# binding = "AI"
+
+[site]
+bucket = "./public"
