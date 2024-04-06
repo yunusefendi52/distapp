@@ -62,7 +62,7 @@ export default defineNuxtConfig({
       })
     },
     "build:done": async () => {
-      if (process.env.NODE_ENV === 'developemtn') {
+      if (process.env.NODE_ENV === 'development') {
         console.log('Starting server-api dev server')
         spawn('bun', [
           'run',
