@@ -1,13 +1,14 @@
 import { resolve } from 'path'
 import { createCommonJS } from 'mlly'
 const { __dirname } = createCommonJS(import.meta.url)
+import { spawn, spawnSync } from "child_process";
 
 export default defineNuxtConfig({
   runtimeConfig: {
     JWT_KEY: '',
   },
   nitro: {
-    preset: 'bun',
+    preset: 'cloudflare-pages',
     experimental: {
       openAPI: true
     },
@@ -49,7 +50,6 @@ export default defineNuxtConfig({
       exclude: ['Editor']
     }
   },
-  auth: { provider: { type: 'local' } },
   css: ['~/assets/css/main.css', 'primeicons/primeicons.css', 'primeflex/primeflex.scss', 'primevue/resources/primevue.min.css', '@/assets/styles.scss'],
   hooks: {
     'pages:extend'(pages) {
@@ -58,6 +58,28 @@ export default defineNuxtConfig({
         path: '/orgs/:orgName',
         file: resolve(__dirname, 'pages/apps.vue'),
       })
-    }
-  }
+    },
+    "build:done": async () => {
+      if (process.env.NODE_ENV === 'developemtn') {
+        console.log('Starting server-api dev server')
+        spawn('bun', [
+          'run',
+          'dev:remote',
+        ], {
+          cwd: './server-api',
+          stdio: 'inherit',
+        }).on('exit', (code) => {
+          console.log('Finished starting server-api dev server')
+        })
+      }
+    },
+  },
+  routeRules: {
+    '/api/**': {
+      proxy: {
+        to: "http://localhost:3001/api/**",
+      },
+    },
+  },
 })
+// maunya disatuin atau dipisahin apinya ? satuin ajalha dan pikirin dockernya

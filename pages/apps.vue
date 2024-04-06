@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { MenuItem } from 'primevue/menuitem';
 import { CreateAppDialog } from '#components'
-import { ListAppsRequest } from '~/server/api/list-apps.get';
 import _ from 'lodash'
-import { normalizeName } from '~/server/utils/utils';
+import { normalizeName } from '~/utils/utils';
 
 const { name: routeName, params } = useRoute()
 const orgNameParam = params.orgName
@@ -52,7 +51,7 @@ const saveOrg = async () => {
 const request = ref<ListAppsRequest | undefined>({
     orgName: orgNameParam as string | undefined,
 })
-const { data: apps, refresh, pending } = await useFetch('/api/list-apps', {
+const { data: apps, refresh, pending } = await useFetch<any[]>('/api/list-apps', {
     query: request,
     watch: [request],
 })
@@ -83,6 +82,11 @@ const search = (e: any) => {
         ...request.value,
         ...data,
     }, _.isEmpty)
+}
+
+interface ListAppsRequest {
+    search?: string
+    orgName?: string
 }
 
 </script>
@@ -159,3 +163,4 @@ const search = (e: any) => {
         </form>
     </Dialog>
 </template>
+../utils/utils
