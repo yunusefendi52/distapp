@@ -3,7 +3,7 @@ import { createCommonJS } from 'mlly'
 const { __dirname } = createCommonJS(import.meta.url)
 import { spawn, spawnSync } from "child_process";
 
-const API_URL = process.env.API_URL || 'https://app-deployin-api.yedevapp.workers.dev'
+const API_URL = process.env.API_URL || process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : 'https://app-deployin-api.yedevapp.workers.dev'
 
 export default defineNuxtConfig({
   runtimeConfig: {
