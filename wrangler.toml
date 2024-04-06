@@ -1,6 +1,7 @@
 name = "app-deployin"
 compatibility_date = "2023-12-01"
-compatibility_flags = ["nodejs_compat"]
+# compatibility_flags = ["nodejs_compat", "node:util", "node:./util"]
+node_compat = true
 
 # [vars]
 # MY_VAR = "my-variable"
