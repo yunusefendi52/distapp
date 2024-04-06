@@ -1,4 +1,4 @@
-name = "app-deployin"
+name = "app-deployin-api"
 compatibility_date = "2023-12-01"
 # compatibility_flags = ["nodejs_compat", "node:util", "node:./util"]
 node_compat = true

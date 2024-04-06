@@ -10,6 +10,8 @@
 </template>
 
 <script setup lang="ts">
+import { OsType, getMimeTypeFromosType } from '~/utils/utils';
+
 const releaseNotes = ref<string | null>(null)
 const dialogRef = inject<any>('dialogRef');
 const osType = ref<OsType | null>(null)
@@ -48,7 +50,7 @@ const submit = async () => {
 
 
 const onUpload = async (file: File) => {
-    const { url, file: key } = await $fetch('/api/artifacts/upload-artifact', {
+    const { url, file: key } = await $fetch<any>('/api/artifacts/upload-artifact', {
         method: 'post',
     })
     await $fetch(url, {

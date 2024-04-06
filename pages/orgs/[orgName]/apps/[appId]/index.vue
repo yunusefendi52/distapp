@@ -19,6 +19,8 @@
 </template>
 
 <script setup lang="ts">
+import { toOsType } from '~/utils/utils';
+
 const items = ref([
     { label: 'Artifacts' },
     { label: 'Groups' },
@@ -56,7 +58,7 @@ onBeforeUnmount(() => {
 const appName = params.appId as string
 const orgName = params.orgName as string
 
-const detailApp = await useFetch('/api/detail-app', {
+const detailApp = await useFetch<any>('/api/detail-app', {
     query: {
         appName: appName,
         orgName: orgName,

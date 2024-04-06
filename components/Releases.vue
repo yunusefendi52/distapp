@@ -20,6 +20,7 @@
 import moment from 'moment'
 import AppFileUpload from './AppFileUpload.vue';
 import { DataTableRowClickEvent } from 'primevue/datatable';
+import { OsType } from '~/utils/utils';
 
 const props = defineProps<{
     orgName: string,

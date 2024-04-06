@@ -3,6 +3,8 @@ import { createCommonJS } from 'mlly'
 const { __dirname } = createCommonJS(import.meta.url)
 import { spawn, spawnSync } from "child_process";
 
+const API_URL = process.env.API_URL || 'https://app-deployin-api.yedevapp.workers.dev'
+
 export default defineNuxtConfig({
   runtimeConfig: {
     JWT_KEY: '',
@@ -77,7 +79,7 @@ export default defineNuxtConfig({
   routeRules: {
     '/api/**': {
       proxy: {
-        to: "http://localhost:3001/api/**",
+        to: `${API_URL}/api/**`,
       },
     },
   },
