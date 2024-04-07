@@ -36,6 +36,20 @@
       "when": 1712497424239,
       "tag": "0004_needy_skrulls",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1712531893263,
+      "tag": "0005_mature_imperial_guard",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1712531973590,
+      "tag": "0006_famous_daimon_hellstrom",
+      "breakpoints": true
     }
   ]
 }

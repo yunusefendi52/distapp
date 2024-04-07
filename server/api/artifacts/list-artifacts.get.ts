@@ -1,28 +1,28 @@
+import { and, eq } from "drizzle-orm"
+import { organizations, organizationsPeople } from "~/server/db/schema"
 import { getStorageKeys } from "~/server/utils/utils"
+import { takeUniqueOrThrow } from "../detail-app.get"
 
 export default defineEventHandler(async (event) => {
-    return []
-    // const prisma = event.context.prisma
-    // const { appName, orgName } = getQuery(event)
-    // return await prisma.artifacts.findMany({
-    //     include: {
-    //         apps: true,
-    //     },
-    //     orderBy: {
-    //         createdAt: 'desc',
-    //     },
-    //     where: {
-    //         apps: {
-    //             name: appName?.toString(),
-    //             Organization: {
-    //                 name: orgName?.toString(),
-    //                 OrganizationsPeople: {
-    //                     every: {
-    //                         userId: event.context.auth.userId,
-    //                     },
-    //                 },
-    //             },
-    //         },
-    //     },
-    // })
+    const db = event.context.drizzle
+    const userId = event.context.auth.userId
+    const { appName, orgName } = getQuery(event)
+    const userOrg = await db.select({
+        organizationsId: organizations.id,
+    })
+        .from(organizationsPeople)
+        .leftJoin(organizations, eq(organizations.id, organizationsPeople.organizationId))
+        .where(and(eq(organizationsPeople.userId, userId), eq(organizations.name, orgName!.toString())))
+        .then(takeUniqueOrThrow)
+    const app = await db.query.apps.findMany({
+        where(fields, operators) {
+            return operators.and(operators.eq(fields.organizationsId, userOrg.organizationsId!), operators.eq(fields.name, appName!.toString()))
+        },
+    }).then(takeUniqueOrThrow)
+    const artficats = await db.query.artifacts.findMany({
+        where(fields, operators) {
+            return operators.eq(fields.appsId, app.id)
+        },
+    })
+    return artficats
 })

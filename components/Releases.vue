@@ -2,8 +2,8 @@
     <Button @click="upload" label="Upload" class="mb-3"></Button>
     <DataTable :value="list" single @row-click="selectRow($event)">
         <Column field="releaseId" header="Release Id" style="width: 15%"></Column>
-        <Column field="versionName" header="Version Name"></Column>
-        <Column field="versionCode" header="Version Code"></Column>
+        <Column field="versionName2" header="Version Name"></Column>
+        <Column field="versionCode2" header="Version Code"></Column>
         <Column field="createdAt" header="Date">
             <template #body="slotProps">
                 <label v-tooltip.bottom="{
@@ -58,6 +58,6 @@ const upload = () => {
 
 const selectRow =async  (row: DataTableRowClickEvent) => {
     console.log(row.data)
-    await navigateTo(`${props.appName}/${row.data.id}`)
+    await navigateTo(`${props.appName}/${row.data.releaseId}`)
 }
 </script>

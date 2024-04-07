@@ -31,7 +31,7 @@ const { mutateAsync, isPending } = useMutation({
 async function saveOrg() {
     await mutateAsync({
         name: appName.value,
-        osType: listOs.indexOf(selectedOs.value!),
+        osType: selectedOs.value!,
         orgId: (selectedOrg.value as any).id,
     })
     dialogRef.value.close({

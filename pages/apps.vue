@@ -138,7 +138,7 @@ const upperCase = (value: string | null | undefined) => {
             </Column>
             <Column header="OS">
                 <template #body="prop">
-                    {{ prop.data.osType === 0 ? 'Android' : 'iOS' }}
+                    {{ prop.data.osType === 'android' ? 'Android' : 'iOS' }}
                 </template>
             </Column>
             <Column header="Owner" v-if="!isOrg">
