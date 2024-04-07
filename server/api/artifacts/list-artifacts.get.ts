@@ -23,6 +23,9 @@ export default defineEventHandler(async (event) => {
         where(fields, operators) {
             return operators.eq(fields.appsId, app.id)
         },
+        orderBy(fields, operators) {
+            return operators.desc(fields.releaseId)
+        },
     })
     return artficats
 })
