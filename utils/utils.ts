@@ -1,6 +1,6 @@
-export const toOsType = (osType?: number): OsType => {
+export const toOsType = (osType?: "android" | "ios" | null | undefined): OsType => {
     switch (osType) {
-        case 0:
+        case 'android':
             return 'android'
         default:
             return 'ios'

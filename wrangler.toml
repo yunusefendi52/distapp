@@ -1,0 +1,5 @@
+# Top-level configuration
+name = "app-deployin"
+main = "dist/_worker.js/index.js"
+compatibility_date = "2022-07-12"
+nodejs_compat = true

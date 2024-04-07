@@ -4,19 +4,20 @@ const { __dirname } = createCommonJS(import.meta.url)
 
 export default defineNuxtConfig({
   runtimeConfig: {
-    JWT_KEY: '',
+    JWT_KEY: 'f4c0f54576b147238afe4c237faf1ebf',
   },
   nitro: {
-    preset: 'bun',
+    preset: 'cloudflare-pages',
     experimental: {
       openAPI: true
     },
+    // node: true,
   },
   imports: {
     presets: [{
       from: '@tanstack/vue-query',
       imports: ['useMutation']
-    },]
+    }]
   },
   vite: {
     define: {

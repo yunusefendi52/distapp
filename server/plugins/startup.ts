@@ -1,11 +1,7 @@
-import { PrismaClient } from "@prisma/client"
 import { services } from "../services"
 import { S3, S3Client, type S3ClientConfig } from "@aws-sdk/client-s3"
 
 export default defineNitroPlugin(async (nuxtApp) => {
-    services.prisma = new PrismaClient({
-        log: ['error', 'info', 'query', 'warn']
-    })
     const s3Config: S3ClientConfig = {
         credentials: {
             accessKeyId: 'niMVVLTJtujejdnkkceX',
