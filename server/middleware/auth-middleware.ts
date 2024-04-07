@@ -15,12 +15,18 @@ declare module 'h3' {
 export default defineEventHandler(async (event) => {
   const appAuth = getCookie(event, 'app-auth')
   if (appAuth) {
-    const verifiedData = await jose.jwtVerify(appAuth, JWT_KEY)
-    if (!verifiedData) {
+    try {
+      const verifiedData = await jose.jwtVerify(appAuth, JWT_KEY)
+      if (!verifiedData) {
+        deleteCookie(event, 'app-auth')
+      } else {
+        const userId = verifiedData.payload.sub
+        event.context.auth = { userId: userId! }
+      }
+    }
+    catch (e) {
+      console.log(e)
       deleteCookie(event, 'app-auth')
-    } else {
-      const userId = verifiedData.payload.sub
-      event.context.auth = { userId: userId! }
     }
   } else {
     console.log('user not logged in')
