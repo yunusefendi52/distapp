@@ -44,9 +44,10 @@ model Apps {
     displayName String
     osType      Int
 
-    Organization    Organizations @relation(fields: [organizationsId], references: [id])
+    Organization    Organizations     @relation(fields: [organizationsId], references: [id])
     organizationsId Int
     Artifacts       Artifacts[]
+    ArtifactsGroups ArtifactsGroups[]
 
     @@unique([organizationsId, name])
 }
@@ -60,6 +61,27 @@ model Artifacts {
     createdAt     DateTime
     updatedAt     DateTime
 
-    apps   Apps @relation(fields: [appsId], references: [id])
-    appsId Int
+    apps                   Apps                     @relation(fields: [appsId], references: [id])
+    appsId                 Int
+    ArtifactsGroupsManager ArtifactsGroupsManager[]
+}
+
+model ArtifactsGroups {
+    id   Int    @id @default(autoincrement())
+    name String
+
+    apps                   Apps                     @relation(fields: [appsId], references: [id])
+    appsId                 Int
+    ArtifactsGroupsManager ArtifactsGroupsManager[]
+
+    @@unique([appsId, name])
+}
+
+model ArtifactsGroupsManager {
+    artifacts         Artifacts       @relation(fields: [artifactsId], references: [id])
+    artifactsGroup    ArtifactsGroups @relation(fields: [artifactsGroupsId], references: [id])
+    artifactsId       Int
+    artifactsGroupsId Int
+
+    @@unique([artifactsId, artifactsGroupsId])
 }
