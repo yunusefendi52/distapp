@@ -1,4 +1,5 @@
 import { JWT_KEY } from '../utils/utils';
+import * as jose from 'jose'
 
 export type AuthData = {
   userId: string,
@@ -11,6 +12,17 @@ declare module 'h3' {
 }
 
 
-export default defineEventHandler((event) => {
-  event.context.auth = { userId: '8551be3fcf41470b806a6334d24396d6' }
+export default defineEventHandler(async (event) => {
+  const appAuth = getCookie(event, 'app-auth')
+  if (appAuth) {
+    const verifiedData = await jose.jwtVerify(appAuth, JWT_KEY)
+    if (!verifiedData) {
+      deleteCookie(event, 'app-auth')
+    } else {
+      const userId = verifiedData.payload.sub
+      event.context.auth = { userId: userId! }
+    }
+  } else {
+    console.log('user not logged in')
+  }
 })
