@@ -1,17 +1,16 @@
-import { PrismaClient } from "@prisma/client"
 import { services } from "../services"
 import { S3, S3Client, type S3ClientConfig } from "@aws-sdk/client-s3"
 
+const endpoint = process.env.S3_ENDPOINT!
+const accessKeyId = process.env.S3_ACCESS_KEY_ID!
+const secretAccessKey = process.env.S3_SECRET_ACCESS_KEY!
 export default defineNitroPlugin(async (nuxtApp) => {
-    services.prisma = new PrismaClient({
-        log: ['error', 'info', 'query', 'warn']
-    })
     const s3Config: S3ClientConfig = {
         credentials: {
-            accessKeyId: 'niMVVLTJtujejdnkkceX',
-            secretAccessKey: 'n8FRdjEn7mAKKSq2hpnXAShu6GhqSj8PqQ0IGl9H'
+            accessKeyId: accessKeyId,
+            secretAccessKey: secretAccessKey,
         },
-        endpoint: 'http://127.0.0.1:9000',
+        endpoint: endpoint,
         forcePathStyle: true,
         region: 'us-east-1',
     }

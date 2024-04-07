@@ -1,0 +1,431 @@
+{
+  "version": "5",
+  "dialect": "sqlite",
+  "id": "c509ef57-a289-4b38-a2ec-4a510f289925",
+  "prevId": "0a59163f-4ecf-453d-a701-d054ce000b74",
+  "tables": {
+    "apps": {
+      "name": "apps",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "displayName": {
+          "name": "displayName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "osType": {
+          "name": "osType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "organizationsId": {
+          "name": "organizationsId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "apps_id_unique": {
+          "name": "apps_id_unique",
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        },
+        "apps_organizationsId_name_unique": {
+          "name": "apps_organizationsId_name_unique",
+          "columns": [
+            "organizationsId",
+            "name"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "apps_organizationsId_organizations_id_fk": {
+          "name": "apps_organizationsId_organizations_id_fk",
+          "tableFrom": "apps",
+          "tableTo": "organizations",
+          "columnsFrom": [
+            "organizationsId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "artifacts": {
+      "name": "artifacts",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "fileObjectKey": {
+          "name": "fileObjectKey",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "releaseNotes": {
+          "name": "releaseNotes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "releaseId": {
+          "name": "releaseId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "appsId": {
+          "name": "appsId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "artifacts_id_unique": {
+          "name": "artifacts_id_unique",
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        },
+        "artifacts_appsId_releaseId_unique": {
+          "name": "artifacts_appsId_releaseId_unique",
+          "columns": [
+            "appsId",
+            "releaseId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "artifacts_appsId_apps_id_fk": {
+          "name": "artifacts_appsId_apps_id_fk",
+          "tableFrom": "artifacts",
+          "tableTo": "apps",
+          "columnsFrom": [
+            "appsId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "artifactsGroups": {
+      "name": "artifactsGroups",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "appsId": {
+          "name": "appsId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "artifactsGroups_id_unique": {
+          "name": "artifactsGroups_id_unique",
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        },
+        "artifactsGroups_appsId_name_unique": {
+          "name": "artifactsGroups_appsId_name_unique",
+          "columns": [
+            "appsId",
+            "name"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "artifactsGroups_appsId_apps_id_fk": {
+          "name": "artifactsGroups_appsId_apps_id_fk",
+          "tableFrom": "artifactsGroups",
+          "tableTo": "apps",
+          "columnsFrom": [
+            "appsId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "artifactsGroupsManager": {
+      "name": "artifactsGroupsManager",
+      "columns": {
+        "artifactsId": {
+          "name": "artifactsId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "artifactsGroupsId": {
+          "name": "artifactsGroupsId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "artifactsGroupsManager_artifactsId_artifactsGroupsId_unique": {
+          "name": "artifactsGroupsManager_artifactsId_artifactsGroupsId_unique",
+          "columns": [
+            "artifactsId",
+            "artifactsGroupsId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "artifactsGroupsManager_artifactsId_artifacts_id_fk": {
+          "name": "artifactsGroupsManager_artifactsId_artifacts_id_fk",
+          "tableFrom": "artifactsGroupsManager",
+          "tableTo": "artifacts",
+          "columnsFrom": [
+            "artifactsId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "artifactsGroupsManager_artifactsGroupsId_artifactsGroups_id_fk": {
+          "name": "artifactsGroupsManager_artifactsGroupsId_artifactsGroups_id_fk",
+          "tableFrom": "artifactsGroupsManager",
+          "tableTo": "artifactsGroups",
+          "columnsFrom": [
+            "artifactsGroupsId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "organizations": {
+      "name": "organizations",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "displayName": {
+          "name": "displayName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "organizations_id_unique": {
+          "name": "organizations_id_unique",
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        },
+        "organizations_name_unique": {
+          "name": "organizations_name_unique",
+          "columns": [
+            "name"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "organizationsPeople": {
+      "name": "organizationsPeople",
+      "columns": {
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "organizationId": {
+          "name": "organizationId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "organizationsPeople_userId_organizationId_unique": {
+          "name": "organizationsPeople_userId_organizationId_unique",
+          "columns": [
+            "userId",
+            "organizationId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "organizationsPeople_userId_users_id_fk": {
+          "name": "organizationsPeople_userId_users_id_fk",
+          "tableFrom": "organizationsPeople",
+          "tableTo": "users",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "organizationsPeople_organizationId_organizations_id_fk": {
+          "name": "organizationsPeople_organizationId_organizations_id_fk",
+          "tableFrom": "organizationsPeople",
+          "tableTo": "organizations",
+          "columnsFrom": [
+            "organizationId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "users": {
+      "name": "users",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "users_id_unique": {
+          "name": "users_id_unique",
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

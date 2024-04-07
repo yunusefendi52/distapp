@@ -14,7 +14,7 @@ const orgsStore = useOrgsStore()
 const onRowSelect = (event: any) => {
     const appName = event.data.name
     console.log(event.data)
-    const orgName = event.data.Organization.name
+    const orgName = event.data.organization.name
     navigateTo(`/orgs/${orgName}/apps/${appName}`)
 };
 
@@ -85,6 +85,10 @@ const search = (e: any) => {
     }, _.isEmpty)
 }
 
+const upperCase = (value: string | null | undefined) => {
+    return value?.toUpperCase()
+}
+
 </script>
 
 <template>
@@ -126,7 +130,7 @@ const search = (e: any) => {
                     <div class="flex flex-row gap-3 items-center px-3 py-2">
                         <div class="rounded flex items-center justify-center"
                             style="height: 34px; width: 34px; background-color: #ece9fc; color: #2a1261">
-                            <label class="text-2xl">{{ _.upperCase(prop.data.displayName[0]) }}</label>
+                            <label class="text-2xl">{{ upperCase(prop.data.displayName[0]) }}</label>
                         </div>
                         <label class="font-semibold text-lg">{{ prop.data.displayName }}</label>
                     </div>
@@ -139,7 +143,7 @@ const search = (e: any) => {
             </Column>
             <Column header="Owner" v-if="!isOrg">
                 <template #body="prop">
-                    {{ prop.data.Organization.name }}
+                    {{ prop.data.organization.name }}
                 </template>
             </Column>
             <template #empty>

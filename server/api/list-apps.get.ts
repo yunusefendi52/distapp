@@ -1,36 +1,31 @@
+import { and, eq, sql } from "drizzle-orm"
+import { organizations, organizationsPeople } from "../db/schema"
+
 export default defineEventHandler(async (event) => {
     const userId = event.context.auth.userId
-    const prisma = event.context.prisma
+    const db = event.context.drizzle
     const { search, orgName } = getQuery<ListAppsRequest>(event)
-    const userOrgs = await prisma.organizations.findMany({
-        include: {
-            OrganizationsPeople: true,
-        },
-        where: {
-            OrganizationsPeople: {
-                every: {
-                    userId: userId,
-                    organization: {
-                        name: orgName,
-                    },
-                },
-            },
-        },
+    const userOrgs = await db.select({
+        id: organizations.id,
     })
-    const apps = await prisma.apps.findMany({
-        include: {
-            Organization: true,
+        .from(organizations)
+        .innerJoin(organizationsPeople, and(
+            eq(organizationsPeople.organizationId, organizations.id),
+            eq(organizationsPeople.userId, userId)))
+        .where(orgName ? eq(organizations.name, orgName.toString()) : undefined)
+    const userOrgIds = userOrgs.map(e => e.id)
+    const apps = await db.query.apps.findMany({
+        with: {
+            organization: true,
         },
-        where: {
-            OR: userOrgs.map(e => e.id).map(e => ({
-                organizationsId: e,
-            })),
-            displayName: {
-                contains: search,
-            },
+        where(fields, operators) {
+            return operators.and(
+                userOrgIds.length ? operators.inArray(fields.organizationsId, userOrgIds) : operators.sql`false`,
+                search ? operators.like(fields.displayName, search) : undefined,
+            )
         },
-        orderBy: {
-            name: 'asc',
+        orderBy(fields, operators) {
+            return operators.desc(fields.name)
         },
     })
     return apps

@@ -11,5 +11,5 @@ export const useOrgsStore = defineStore('orgs-store', () => {
 
 interface OrgInfo {
     name: string
-    id: number
+    id: string
 }

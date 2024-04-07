@@ -1,19 +1,20 @@
+import { organizations, organizationsPeople } from "../db/schema"
+import { generateId } from "../utils/utils"
+
 export default defineEventHandler(async (event) => {
     const userId = event.context.auth.userId
-    const prisma = event.context.prisma
+    const db = event.context.drizzle
     const { name, displayName } = await readBody(event)
-    await prisma.$transaction(async (tx) => {
-        const org = await tx.organizations.create({
-            data: {
-                name: normalizeName(name),
-                displayName: displayName,
-            },
+    await db.transaction(async t => {
+        const organizationId = generateId()
+        await t.insert(organizations).values({
+            id: organizationId,
+            name: normalizeName(name),
+            displayName: displayName,
         })
-        await tx.organizationsPeople.create({
-            data: {
-                userId: userId,
-                organizationId: org.id,
-            },
+        await t.insert(organizationsPeople).values({
+            userId: userId,
+            organizationId: organizationId,
         })
     })
     return { ok: true }
