@@ -20,7 +20,7 @@ type Variables = {
 api.use(async (c, next) => {
     const appAuth = getCookie(c, 'app-auth')
     if (appAuth) {
-        const verifiedData = await verify(appAuth, JWT_KEY)
+        const verifiedData = await verify(appAuth, JWT_KEY, 'HS256')
         if (!verifiedData) {
             console.log('Not verified')
             deleteCookie(c, 'app-auth')
@@ -268,7 +268,7 @@ api.post('auth/signin', async c => {
     const token = await sign({
         name: 'Yunus',
         userId: 'd04317d667e747df9b4fd6848cbcc11d',
-    }, JWT_KEY)
+    }, JWT_KEY, 'HS256')
     setCookie(c, 'app-auth', token, {
         httpOnly: false,
         secure: true,
