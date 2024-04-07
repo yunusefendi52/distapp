@@ -1,34 +1,37 @@
 <template>
-    <div class="flex flex-col gap-2">
-        <label class="font-bold text-small">Upload Here</label>
-        <div class="border-2 border-dashed p-3 rounded flex flex-row items-center gap-3" style="
-    border-color: var(--surface-border);">
-            <input class="p-2 border rounded-lg" ref="fileRef" type="file" :accept="mimeTypeFromOsType">
-            <Button label="Upload" @click="submit" :loading="isPending" />
+    <div class="flex flex-column gap-3">
+        <input class="p-2 border rounded-lg" ref="fileRef" type="file" :accept="mimeTypeFromOsType">
+        <div class="flex flex-column gap-2">
+            <label for="releasenotes">Release Notes</label>
+            <InputText id="releasenotes" v-model="releaseNotes" aria-describedby="releasenotes-help" />
         </div>
+        <Button label="Upload" @click="submit" :loading="isPending" />
     </div>
 </template>
 
 <script setup lang="ts">
-const osType = inject<OsType>('detail-app')
-const mimeTypeFromOsType = getMimeTypeFromosType(osType)
-const fileRef = ref<HTMLInputElement | null>(null)
-const emit = defineEmits<{
-    (event: 'onUpload', file: File, resolve: (value: unknown) => void, reject: (value: unknown) => void): void
-}>()
+const releaseNotes = ref<string | null>(null)
+const dialogRef = inject<any>('dialogRef');
+const osType = ref<OsType | null>(null)
+const prop = ref<any>(null)
+onMounted(() => {
+    osType.value = dialogRef.value.data.osType;
+    prop.value = dialogRef.value.data.props
+})
 
-const refreshListArtifacts = inject<any>('refresh-list-artifacts')
+const mimeTypeFromOsType = computed(() => getMimeTypeFromosType(osType.value ?? 'android'))
+const fileRef = ref<HTMLInputElement | null>(null)
 
 const { mutateAsync, isPending } = useMutation({
     mutationFn: async (file: File) => {
-        await new Promise((resolve, reject) => {
-            emit('onUpload', file, resolve, reject)
-        })
+        await onUpload(file)
     },
     onSuccess: () => {
         if (fileRef.value) {
             fileRef.value.value = ''
-            refreshListArtifacts()
+            dialogRef.value.close({
+                success: true,
+            });
         }
     },
 })
@@ -41,4 +44,25 @@ const submit = async () => {
     }
     mutateAsync(realFile)
 }
+
+
+
+const onUpload = async (file: File) => {
+    const { url, file: key } = await $fetch('/api/artifacts/upload-artifact', {
+        method: 'post',
+    })
+    await $fetch(url, {
+        method: 'put',
+        body: file,
+        redirect: "follow",
+    })
+    await $fetch('/api/artifacts/upload-artifact-url', {
+        method: 'post',
+        body: {
+            key: key,
+            ...prop.value,
+            releaseNotes: releaseNotes.value,
+        },
+    })
+};
 </script>
