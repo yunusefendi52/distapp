@@ -10,7 +10,7 @@ datasource db {
 // }
 
 generator clientWorker {
-    provider        = "prisma-client-js"
+    provider = "prisma-client-js"
     // previewFeatures = ["driverAdapters"]
 }
 
@@ -46,6 +46,20 @@ model Apps {
 
     Organization    Organizations @relation(fields: [organizationsId], references: [id])
     organizationsId Int
+    Artifacts       Artifacts[]
 
     @@unique([organizationsId, name])
+}
+
+model Artifacts {
+    id            Int      @id @default(autoincrement())
+    fileObjectKey String   @unique
+    versionName   String
+    versionCode   String
+    releaseNotes  String?
+    createdAt     DateTime
+    updatedAt     DateTime
+
+    apps   Apps @relation(fields: [appsId], references: [id])
+    appsId Int
 }

@@ -16,6 +16,8 @@
     "format:check": "prettier --check \"**/*.{js,vue,d.ts}\""
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.540.0",
+    "@aws-sdk/s3-request-presigner": "^3.540.0",
     "@hebilicious/vue-query-nuxt": "^0.3.0",
     "@pinia/nuxt": "^0.5.1",
     "@prisma/client": "^5.11.0",
@@ -24,17 +26,20 @@
     "h3": "^1.11.1",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
+    "moment": "^2.30.1",
     "pg": "^8.11.3",
     "pinia": "^2.1.7",
     "primeflex": "^3.3.0",
     "primeicons": "^6.0.1",
-    "primevue": "^3.49.1"
+    "primevue": "^3.49.1",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.18.9",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/lodash": "^4.17.0",
     "@types/pg": "^8.11.4",
+    "@types/uuid": "^9.0.8",
     "autoprefixer": "^10.4.19",
     "eslint": "^8.30.0",
     "eslint-config-prettier": "^8.5.0",
