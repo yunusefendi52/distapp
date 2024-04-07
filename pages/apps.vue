@@ -13,7 +13,9 @@ const orgsStore = useOrgsStore()
 
 const onRowSelect = (event: any) => {
     const appName = event.data.name
-    navigateTo(`/orgs/${orgNameParam}/apps/${appName}`)
+    console.log(event.data)
+    const orgName = event.data.Organization.name
+    navigateTo(`/orgs/${orgName}/apps/${appName}`)
 };
 
 const addOrgVisible = ref(false)
@@ -121,17 +123,13 @@ const search = (e: any) => {
             selectionMode="single">
             <Column header="Name">
                 <template #body="prop">
-                    <RouterLink :to="`/orgs/${prop.data.Organization.name}/apps/${prop.data.name}`" custom>
-                        <a :href="`/orgs/${prop.data.Organization.name}/apps/${prop.data.name}`">
-                            <div class="flex flex-row gap-3 items-center px-3 py-2">
-                                <div class="rounded flex items-center justify-center"
-                                    style="height: 34px; width: 34px; background-color: #ece9fc; color: #2a1261">
-                                    <label class="text-2xl">{{ _.upperCase(prop.data.displayName[0]) }}</label>
-                                </div>
-                                <label class="font-semibold text-lg">{{ prop.data.displayName }}</label>
-                            </div>
-                        </a>
-                    </RouterLink>
+                    <div class="flex flex-row gap-3 items-center px-3 py-2">
+                        <div class="rounded flex items-center justify-center"
+                            style="height: 34px; width: 34px; background-color: #ece9fc; color: #2a1261">
+                            <label class="text-2xl">{{ _.upperCase(prop.data.displayName[0]) }}</label>
+                        </div>
+                        <label class="font-semibold text-lg">{{ prop.data.displayName }}</label>
+                    </div>
                 </template>
             </Column>
             <Column header="OS">
