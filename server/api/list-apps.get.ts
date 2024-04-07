@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
             )
         },
         orderBy(fields, operators) {
-            return operators.desc(fields.name)
+            return operators.asc(fields.name)
         },
     })
     return apps

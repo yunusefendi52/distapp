@@ -1,5 +1,5 @@
 import { organizations, organizationsPeople } from "../db/schema"
-import { and, eq } from 'drizzle-orm'
+import { and, asc, eq } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
     const userId = event.context.auth.userId
@@ -13,5 +13,6 @@ export default defineEventHandler(async (event) => {
         .innerJoin(organizationsPeople, and(
             eq(organizationsPeople.organizationId, organizations.id),
             eq(organizationsPeople.userId, userId)))
+        .orderBy(asc(organizations.name))
     return orgs
 })
