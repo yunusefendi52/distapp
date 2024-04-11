@@ -2,6 +2,7 @@ import { and, eq } from "drizzle-orm"
 import { artifacts, organizations, organizationsPeople } from "~/server/db/schema"
 import { getStorageKeys } from "~/server/utils/utils"
 import { takeUniqueOrThrow } from "../detail-app.get"
+import { createS3 } from "~/server/services/s3"
 
 export default defineEventHandler(async (event) => {
     const { key, appName, orgName, releaseNotes } = await readBody(event)
@@ -42,12 +43,13 @@ export default defineEventHandler(async (event) => {
         releaseNotes: releaseNotes,
         releaseId: newReleaseId,
     })
-    await event.context.s3.copyObject({
+    const s3 = createS3(event)
+    await s3.copyObject({
         CopySource: `app-deployin/${temp}`,
         Bucket: 'app-deployin',
         Key: assets,
     })
-    await event.context.s3.deleteObject({
+    await s3.deleteObject({
         Bucket: 'app-deployin',
         Key: temp,
     })

@@ -5,8 +5,8 @@ import { S3, S3Client } from '@aws-sdk/client-s3';
 
 declare module 'h3' {
     interface H3EventContext {
-        s3Client: S3Client,
-        s3: S3,
+        s3Client: unknown,
+        s3: unknown,
         drizzle: LibSQLDatabase<typeof schema>,
     }
 }
