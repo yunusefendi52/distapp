@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     const signedUrl = await getSignedUrl(s3, new PutObjectCommand({
         Bucket: 'app-deployin',
         Key: temp,
-        // Expires: expires, // TODO: epxiry here
+        Expires: expires, // TODO: epxiry here
         ContentType: 'application/vnd.android.package-archive',
     }))
     return {
