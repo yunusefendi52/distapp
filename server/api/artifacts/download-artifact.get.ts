@@ -10,6 +10,8 @@ export default defineEventHandler(async (event) => {
     const signedUrl = await getSignedUrl(s3, new GetObjectCommand({
         Bucket: s3BucketName,
         Key: assets,
-    }))
+    }), {
+        expiresIn: 1800,
+    })
     await sendRedirect(event, signedUrl)
 })
