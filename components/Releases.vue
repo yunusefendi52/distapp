@@ -28,7 +28,7 @@ const props = defineProps<{
     appName: string,
 }>()
 
-const { data, refresh } = await useFetch('/api/artifacts/list-artifacts', {
+const { data, refresh } = useFetch('/api/artifacts/list-artifacts', {
     query: {
         orgName: props.orgName,
         appName: props.appName,

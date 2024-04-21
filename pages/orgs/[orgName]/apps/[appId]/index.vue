@@ -56,7 +56,7 @@ onBeforeUnmount(() => {
 const appName = params.appId as string
 const orgName = params.orgName as string
 
-const detailApp = await useFetch('/api/detail-app', {
+const detailApp = useFetch('/api/detail-app', {
     query: {
         appName: appName,
         orgName: orgName,

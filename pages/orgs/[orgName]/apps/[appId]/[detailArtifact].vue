@@ -10,7 +10,7 @@ const appName = params.appId as string
 const orgName = params.orgName as string
 const releaseId = params.detailArtifact as string
 
-const { data } = await useFetch('/api/artifacts/detail-artifact', {
+const { data } = useFetch('/api/artifacts/detail-artifact', {
     query: {
         appName: appName,
         orgName: orgName,

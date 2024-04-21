@@ -30,7 +30,7 @@ const props = defineProps<{
     appName: string,
 }>()
 
-const { data: list, refresh } = await useFetch('/api/groups/list-groups', {
+const { data: list, refresh } = useFetch('/api/groups/list-groups', {
     query: {
         orgName: props.orgName,
         appName: props.appName,

@@ -2,7 +2,7 @@ export const useOrgsStore = defineStore('orgs-store', () => {
     const orgs = ref<OrgInfo[]>([])
 
     const fetchOrgs = async () => {
-        const r = await useFetch('/api/list-orgs')
+        const r = useFetch('/api/list-orgs')
         orgs.value = r.data.value ?? []
     }
 

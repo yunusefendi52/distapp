@@ -52,7 +52,7 @@ const saveOrg = async () => {
 const request = ref<ListAppsRequest | undefined>({
     orgName: orgNameParam as string | undefined,
 })
-const { data: apps, refresh, pending } = await useFetch('/api/list-apps', {
+const { data: apps, refresh, pending } = useFetch('/api/list-apps', {
     query: request,
     watch: [request],
 })
