@@ -1,18 +1,22 @@
 <template>
-    <h4>{{ detailApp.data.value?.displayName }}</h4>
+    <div class="flex flex-row items-center justify-center h-12">
+        <div class="flex-1">
+            <h4>{{ detailApp.data.value?.displayName }}</h4>
+        </div>
+    </div>
     <div class="flex flex-col gap-3">
         <TabMenu v-model:active-index="active" :model="items" :pt="{
-        menu: 'remove-bg-tabmenu',
-        menuitem: 'remove-bg-tabmenu',
-    }" />
+            menu: 'remove-bg-tabmenu',
+            menuitem: 'remove-bg-tabmenu',
+        }" />
         <div :style="{
-        display: active == 0 ? 'unset' : 'none',
-    }">
+            display: active == 0 ? 'unset' : 'none',
+        }">
             <Releases :org-name="orgName" :app-name="appName" />
         </div>
         <div :style="{
-        display: active == 1 ? 'unset' : 'none',
-    }">
+            display: active == 1 ? 'unset' : 'none',
+        }">
             <Groups :org-name="orgName" :app-name="appName" />
         </div>
     </div>
