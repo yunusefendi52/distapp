@@ -1,9 +1,11 @@
 <template>
     <Button class="mb-3" label="New Group" @click="visible = true"></Button>
-
-    <DataTable :value="list" single>
-        <Column field="name" header="Group Name"></Column>
-    </DataTable>
+    
+    <div class="card p-0">
+        <DataTable :value="list" single>
+            <Column field="name" header="Group Name"></Column>
+        </DataTable>
+    </div>
 
     <Dialog v-model:visible="visible" modal header="New Group" :style="{ width: '25rem' }">
         <form @submit.prevent="saveNewGroup({
