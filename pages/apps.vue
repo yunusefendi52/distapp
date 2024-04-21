@@ -9,7 +9,7 @@ const { name: routeName, params } = useRoute()
 const orgNameParam = params.orgName
 const isOrg = computed(() => routeName === 'orgs')
 
-const orgsStore = useOrgsStore()
+const orgsStore = await useOrgsStore()
 
 const onRowSelect = (event: any) => {
     const appName = event.data.name
@@ -35,7 +35,7 @@ const { mutateAsync, isPending } = useMutation({
         body: r,
     }),
     onSuccess: async () => {
-        await orgsStore.fetchOrgs()
+        orgsStore.refresh()
         addOrgVisible.value = false
         navigateTo(`/orgs/${orgNameNormalized.value}`)
         orgName.value = ''

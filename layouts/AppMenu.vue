@@ -1,17 +1,15 @@
 <script setup lang="ts">
-const orgsStore = useOrgsStore()
+const orgsStore = await useOrgsStore()
 
 const items = computed(() => [{
     label: 'All Apps',
     icon: 'pi pi-home',
     route: '/apps'
-}, ...orgsStore.orgs.map((e) => ({
+}, ...orgsStore.orgs.value.map((e) => ({
     label: e.name,
     icon: 'pi pi-users',
     route: `/orgs/${e.name}`
 }))])
-
-await callOnce(orgsStore.fetchOrgs)
 
 const route = useRoute()
 const activeRoute = computed(() => route.path)

@@ -24,7 +24,10 @@ export default defineNuxtConfig({
     presets: [{
       from: '@tanstack/vue-query',
       imports: ['useMutation']
-    }]
+    }],
+    dirs: [
+      'server/stores',
+    ],
   },
   vite: {
     define: {
@@ -50,7 +53,7 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  modules: ['@hebilicious/vue-query-nuxt', 'nuxt-primevue', '@pinia/nuxt'],
+  modules: ['@hebilicious/vue-query-nuxt', 'nuxt-primevue'],
   primevue: {
     options: { ripple: true },
     components: {
