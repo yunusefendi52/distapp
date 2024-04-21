@@ -3,6 +3,7 @@ import { artifacts, organizations, organizationsPeople } from "~/server/db/schem
 import { getStorageKeys } from "~/server/utils/utils"
 import { takeUniqueOrThrow } from "../detail-app.get"
 import { createS3 } from "~/server/services/s3"
+import { CopyObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3"
 
 export default defineEventHandler(async (event) => {
     const { key, appName, orgName, releaseNotes } = await readBody(event)
@@ -44,13 +45,13 @@ export default defineEventHandler(async (event) => {
         releaseId: newReleaseId,
     })
     const s3 = createS3(event)
-    await s3.copyObject({
+    await s3.send(new CopyObjectCommand({
         CopySource: `app-deployin/${temp}`,
         Bucket: 'app-deployin',
         Key: assets,
-    }).promise()
-    await s3.deleteObject({
+    }))
+    await s3.send(new DeleteObjectCommand({
         Bucket: 'app-deployin',
         Key: temp,
-    }).promise()
+    }))
 })

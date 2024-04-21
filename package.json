@@ -17,11 +17,11 @@
     "deploy": "bun run build && npx wrangler pages deploy dist/"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.556.0",
     "@hebilicious/vue-query-nuxt": "^0.3.0",
     "@libsql/client": "^0.6.0",
     "@pinia/nuxt": "^0.5.1",
     "@tanstack/vue-query": "^5.28.9",
-    "aws-sdk": "^2.1597.0",
     "chart.js": "3.3.2",
     "drizzle-orm": "^0.30.7",
     "h3": "^1.11.1",

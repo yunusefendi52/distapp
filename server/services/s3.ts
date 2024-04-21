@@ -1,4 +1,6 @@
-import S3 from 'aws-sdk/clients/s3.js';
+import {
+    S3Client,
+} from "@aws-sdk/client-s3";
 import type { EventHandlerRequest, H3Event } from "h3";
 
 export const createS3 = (event: H3Event<EventHandlerRequest>) => {
@@ -6,11 +8,12 @@ export const createS3 = (event: H3Event<EventHandlerRequest>) => {
     const endpoint = env.S3_ENDPOINT!
     const accessKeyId = env.S3_ACCESS_KEY_ID!
     const secretAccessKey = env.S3_SECRET_ACCESS_KEY!
-    const s3 = new S3({
+    const s3 = new S3Client({
         endpoint: endpoint,
-        accessKeyId: accessKeyId,
-        secretAccessKey: secretAccessKey,
-        signatureVersion: 'v4',
+        credentials: {
+            accessKeyId: accessKeyId,
+            secretAccessKey: secretAccessKey,
+        },
     })
     return s3
 }
