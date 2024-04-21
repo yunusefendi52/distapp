@@ -5,15 +5,13 @@ import type { EventHandlerRequest, H3Event } from "h3";
 
 export const createS3 = (event: H3Event<EventHandlerRequest>) => {
     const env = event.context.cloudflare?.env ?? process.env
-    const endpoint = env.S3_ENDPOINT!
-    const accessKeyId = env.S3_ACCESS_KEY_ID!
-    const secretAccessKey = env.S3_SECRET_ACCESS_KEY!
+    const { S3_ENDPOINT, S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY } = useRuntimeConfig(event)
     const s3 = new S3Client({
-        endpoint: endpoint,
+        endpoint: S3_ENDPOINT,
         region: 'auto',
         credentials: {
-            accessKeyId: accessKeyId,
-            secretAccessKey: secretAccessKey,
+            accessKeyId: S3_ACCESS_KEY_ID,
+            secretAccessKey: S3_SECRET_ACCESS_KEY,
         },
     })
     return s3
