@@ -58,6 +58,6 @@ const upload = () => {
 
 const selectRow =async  (row: DataTableRowClickEvent) => {
     console.log(row.data)
-    await navigateTo(`${props.appName}/${row.data.releaseId}`)
+    await navigateTo(`/orgs/${props.orgName}/apps/${props.appName}/${row.data.releaseId}`)
 }
 </script>
