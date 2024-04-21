@@ -3,7 +3,7 @@ const orgsStore = await useOrgsStore()
 
 const items = computed(() => [{
     label: 'All Apps',
-    icon: 'pi pi-home',
+    icon: 'pi pi-th-large',
     route: '/apps'
 }, ...orgsStore.orgs.value.map((e) => ({
     label: e.name,
