@@ -4,6 +4,11 @@
     <div class="card p-0">
         <DataTable :value="list" single>
             <Column field="name" header="Group Name"></Column>
+            <template #empty>
+                <div class="flex items-center justify-center">
+                    <label>No data found</label>
+                </div>
+            </template>
         </DataTable>
     </div>
 

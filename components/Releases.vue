@@ -14,6 +14,11 @@
                 </label>
             </template>
         </Column>
+        <template #empty>
+            <div class="flex items-center justify-center">
+                <label>No data found</label>
+            </div>
+        </template>
     </DataTable>
     </div>
 </template>
