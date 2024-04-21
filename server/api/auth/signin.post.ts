@@ -4,6 +4,12 @@ import * as jose from 'jose'
 const alg = 'HS256'
 
 export default defineEventHandler(async (event) => {
+    const { key } = await readBody(event)
+    const config = useRuntimeConfig(event)
+    if (key !== config.SIGNIN_KEY) { // for testing only
+        return setResponseStatus(event, 401)
+    }
+
     const token = await new jose.SignJWT({
         sub: 'b287aa5d85a040f78aa53a2ff7d53023',
     }).setProtectedHeader({ alg })

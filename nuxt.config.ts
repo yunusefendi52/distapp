@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     S3_ENDPOINT: '',
     S3_ACCESS_KEY_ID: '',
     S3_SECRET_ACCESS_KEY: '',
+    SIGNIN_KEY: '',
     public: {
     },
   },
