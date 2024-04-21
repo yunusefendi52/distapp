@@ -10,6 +10,7 @@ export const createS3 = (event: H3Event<EventHandlerRequest>) => {
     const secretAccessKey = env.S3_SECRET_ACCESS_KEY!
     const s3 = new S3Client({
         endpoint: endpoint,
+        region: 'auto',
         credentials: {
             accessKeyId: accessKeyId,
             secretAccessKey: secretAccessKey,
