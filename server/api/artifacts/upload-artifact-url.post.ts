@@ -48,9 +48,9 @@ export default defineEventHandler(async (event) => {
         CopySource: `app-deployin/${temp}`,
         Bucket: 'app-deployin',
         Key: assets,
-    })
+    }).promise()
     await s3.deleteObject({
         Bucket: 'app-deployin',
         Key: temp,
-    })
+    }).promise()
 })
