@@ -1,5 +1,5 @@
 import { createS3 } from "~/server/services/s3"
-import { getStorageKeys } from "~/server/utils/utils"
+import { getStorageKeys, s3BucketName } from "~/server/utils/utils"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { GetObjectCommand } from "@aws-sdk/client-s3"
 
@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     const { assets } = getStorageKeys(event.context.auth, fileObjectKey?.toString()!)
     const s3 = createS3(event)
     const signedUrl = await getSignedUrl(s3, new GetObjectCommand({
-        Bucket: 'app-deployin',
+        Bucket: s3BucketName,
         Key: assets,
     }))
     await sendRedirect(event, signedUrl)

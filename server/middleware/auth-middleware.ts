@@ -1,4 +1,4 @@
-import { JWT_KEY } from '../utils/utils';
+import { getJwtKey } from '../utils/utils';
 import * as jose from 'jose'
 
 export type AuthData = {
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   const appAuth = getCookie(event, 'app-auth')
   if (appAuth) {
     try {
-      const verifiedData = await jose.jwtVerify(appAuth, JWT_KEY)
+      const verifiedData = await jose.jwtVerify(appAuth, getJwtKey(event))
       if (!verifiedData) {
         deleteCookie(event, 'app-auth')
       } else {

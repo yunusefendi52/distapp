@@ -1,13 +1,17 @@
 import { v4 } from "uuid"
 import type { AuthData } from "../middleware/auth-middleware"
+import type { EventHandlerRequest, H3Event } from "h3"
 
 export const normalizeName = (value: string): string => {
     return value.replaceAll(' ', '-')
 }
 
-export const JWT_KEY = new TextEncoder().encode(
-    '86969769fb6b4fb4a663d42ea05bf44a',
-)
+export const getJwtKey = (event: H3Event<EventHandlerRequest>) => {
+    const config = useRuntimeConfig(event)
+    return new TextEncoder().encode(
+        config.JWT_KEY,
+    )
+}
 
 export const getStorageKeys = (auth: AuthData, key: String) => {
     return {
@@ -17,3 +21,5 @@ export const getStorageKeys = (auth: AuthData, key: String) => {
 }
 
 export const generateId = () => v4()
+
+export const s3BucketName = 'distapp'

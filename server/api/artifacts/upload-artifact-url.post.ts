@@ -1,6 +1,6 @@
 import { and, eq } from "drizzle-orm"
 import { artifacts, organizations, organizationsPeople } from "~/server/db/schema"
-import { getStorageKeys } from "~/server/utils/utils"
+import { getStorageKeys, s3BucketName } from "~/server/utils/utils"
 import { takeUniqueOrThrow } from "../detail-app.get"
 import { createS3 } from "~/server/services/s3"
 import { CopyObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3"
@@ -46,12 +46,12 @@ export default defineEventHandler(async (event) => {
     })
     const s3 = createS3(event)
     await s3.send(new CopyObjectCommand({
-        CopySource: `app-deployin/${temp}`,
-        Bucket: 'app-deployin',
+        CopySource: `${s3BucketName}/${temp}`,
+        Bucket: s3BucketName,
         Key: assets,
     }))
     await s3.send(new DeleteObjectCommand({
-        Bucket: 'app-deployin',
+        Bucket: s3BucketName,
         Key: temp,
     }))
 })

@@ -1,4 +1,4 @@
-import { JWT_KEY } from '~/server/utils/utils'
+import { getJwtKey } from '~/server/utils/utils'
 import * as jose from 'jose'
 
 const alg = 'HS256'
@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
         sub: 'b287aa5d85a040f78aa53a2ff7d53023',
     }).setProtectedHeader({ alg })
         .setIssuedAt()
-        .sign(JWT_KEY)
+        .sign(getJwtKey(event))
     setCookie(event, 'app-auth', token, {
         httpOnly: false,
         secure: true,

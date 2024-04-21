@@ -1,12 +1,5 @@
 # Top-level configuration
-name = "app-deployin"
+name = "distapp"
 main = "dist/_worker.js/index.js"
-compatibility_date = "2022-07-12"
-nodejs_compat = true
-
-[vars]
-DB_URL="libsql://app-deployin-yunusefendi52.turso.io"
-DB_AUTH_TOKEN="eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3MTI1MTI0MDUsImlkIjoiYjc3ODQ3YTgtOGViNi00ZWUyLWIwNmItNjJiNGQ5MGIyYzAxIn0.0JUoVDiR_uIc5J8PqQ9g0m23KV4AqSxOd7upI8dSkM7yi-e9jAUhNGmKjWXX7sILL5a1RBo5Iyl3u_IYvAa6DA"
-S3_ENDPOINT="https://5207a2f472acc313954e4d659c1da413.r2.cloudflarestorage.com"
-S3_ACCESS_KEY_ID="4bb65f90619d1ad975666bb18f441aef"
-S3_SECRET_ACCESS_KEY="3d1dfcfe3d3e35d764742d7bdb24d592dcaa50ade57e7e41541cb28b04a2b098"
+compatibility_date = "2024-04-21"
+compatibility_flags = [ "nodejs_compat" ]

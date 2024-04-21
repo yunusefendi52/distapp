@@ -4,7 +4,14 @@ const { __dirname } = createCommonJS(import.meta.url)
 
 export default defineNuxtConfig({
   runtimeConfig: {
-    JWT_KEY: 'f4c0f54576b147238afe4c237faf1ebf',
+    JWT_KEY: '',
+    DB_URL: '',
+    DB_AUTH_TOKEN: '',
+    S3_ENDPOINT: '',
+    S3_ACCESS_KEY_ID: '',
+    S3_SECRET_ACCESS_KEY: '',
+    public: {
+    },
   },
   nitro: {
     preset: 'cloudflare-pages',
@@ -26,7 +33,7 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      title: 'AppDeployin',
+      title: 'DistApp',
       // link: [
       //   {
       //     id: 'theme-css',
