@@ -1,3 +1,5 @@
+import moment from "moment"
+
 export const toOsType = (osType?: "android" | "ios" | null | undefined): OsType => {
     switch (osType) {
         case 'android':
@@ -39,4 +41,8 @@ export function formatBytes(bytes: number, decimals = 2, isBinary = false) {
 
     return `${parseFloat((bytes / Math.pow(inByte, maxPow)).toFixed(dm))} ${sizes[maxPow]
         }`;
+}
+
+export const formatDate = (value?: string | null) => {
+    return moment(value).format('LLL')
 }

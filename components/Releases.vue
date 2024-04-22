@@ -2,29 +2,26 @@
     <Button @click="upload" label="Upload" class="mb-3"></Button>
     <div class="card p-0">
         <DataTable :value="list" single @row-click="selectRow($event)" selectionMode="single">
-        <Column field="releaseId" header="Release Id" style="width: 15%"></Column>
-        <Column field="versionName2" header="Version Name"></Column>
-        <Column field="versionCode2" header="Version Code"></Column>
-        <Column field="createdAt" header="Date">
-            <template #body="slotProps">
-                <label v-tooltip.bottom="{
-        value: moment(slotProps.data.createdAt).format(),
-    }">
-                    {{ moment(slotProps.data.createdAt).fromNow() }}
-                </label>
+            <Column field="releaseId" header="Release Id" style="width: 15%"></Column>
+            <Column field="versionName2" header="Version Name"></Column>
+            <Column field="versionCode2" header="Version Code"></Column>
+            <Column field="createdAt" header="Date">
+                <template #body="slotProps">
+                    <label>
+                        {{ formatDate(slotProps.data.createdAt) }}
+                    </label>
+                </template>
+            </Column>
+            <template #empty>
+                <div class="flex items-center justify-center">
+                    <label>No data found</label>
+                </div>
             </template>
-        </Column>
-        <template #empty>
-            <div class="flex items-center justify-center">
-                <label>No data found</label>
-            </div>
-        </template>
-    </DataTable>
+        </DataTable>
     </div>
 </template>
 
 <script setup lang="ts">
-import moment from 'moment'
 import AppFileUpload from './AppFileUpload.vue';
 import { DataTableRowClickEvent } from 'primevue/datatable';
 
@@ -63,7 +60,7 @@ const upload = () => {
     })
 }
 
-const selectRow =async  (row: DataTableRowClickEvent) => {
+const selectRow = async (row: DataTableRowClickEvent) => {
     console.log(row.data)
     await navigateTo(`/orgs/${props.orgName}/apps/${props.appName}/${row.data.releaseId}`)
 }

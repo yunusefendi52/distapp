@@ -11,7 +11,7 @@
             <label class="font-semibold text-xl">Version {{ detailArtifact?.versionName2 }} ({{
                 detailArtifact?.releaseId
             }})</label>
-            <label class="text-lg">{{ format(detailArtifact?.createdAt) }}</label>
+            <label class="text-lg">{{ formatDate(detailArtifact?.createdAt) }}</label>
         </div>
         <div class="flex flex-col gap-2">
             <span class="font-semibold">Release Notes</span>
@@ -62,10 +62,6 @@ const { data: detailArtifact } = useFetch('/api/artifacts/detail-artifact', {
 const download = () => {
     const url = `/api/artifacts/download-artifact?fileObjectKey=${detailArtifact.value?.fileObjectKey}`
     window.open(url, '_blank')
-}
-
-const format = (value?: string | null) => {
-    return moment(value).format('LLL')
 }
 
 
