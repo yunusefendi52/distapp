@@ -1,32 +1,44 @@
 <template>
     <div class="flex flex-row items-center justify-center h-12">
         <div class="flex-1">
-            <h4 >{{ detailApp?.displayName }}</h4>
+            <h4>{{ detailApp?.displayName }}</h4>
         </div>
         <Button label="Download" @click="download"></Button>
     </div>
-    <div class="flex flex-col gap-3">
-        <!-- <TabMenu v-model:active-index="active" :model="items" :pt="{
-            menu: 'remove-bg-tabmenu',
-            menuitem: 'remove-bg-tabmenu',
-        }" />
-        <div :style="{
-            display: active == 0 ? 'unset' : 'none',
-        }">
-            <Releases :org-name="orgName" :app-name="appName" />
+    <!-- <div>{{ detailArtifact }}</div> -->
+    <div class="flex flex-col gap-3 mt-3 card p-3">
+        <div class="flex flex-col gap-1">
+            <label class="font-semibold text-xl">Version {{ detailArtifact?.versionName2 }} ({{
+                detailArtifact?.releaseId
+            }})</label>
+            <label class="text-lg">{{ format(detailArtifact?.createdAt) }}</label>
         </div>
-        <div :style="{
-            display: active == 1 ? 'unset' : 'none',
-        }">
-            <Groups :org-name="orgName" :app-name="appName" />
-        </div> -->
+        <div class="flex flex-col gap-2">
+            <span class="font-semibold">Release Notes</span>
+            <label>{{ detailArtifact?.releaseNotes ?? '-' }}</label>
+        </div>
+        <div class="flex flex-col gap-2">
+            <span class="font-semibold">Downloads</span>
+            <label>{{ '-' }}</label>
+        </div>
+        <div class="flex flex-col gap-2">
+            <span class="font-semibold">Groups</span>
+            <label>{{ '-' }}</label>
+        </div>
+        <div class="flex flex-col gap-2">
+            <span class="font-semibold">File metadata</span>
+            <div class="flex flex-col">
+                <label>{{ `MD5: ${detailArtifact?.fileMetadata?.md5?.replaceAll('"', '')}` }}</label>
+                <label>{{ `File Extension: ${getExtensionFromMimeType(detailArtifact?.fileMetadata?.contentType)}` }}</label>
+                <label>{{ `File Size: ${formatBytes(detailArtifact?.fileMetadata?.contentLength ?? 0)}` }}</label>
+            </div>
+        </div>
     </div>
-    <!-- {{ data }} -->
-
-
 </template>
 
 <script setup lang="ts">
+import moment from 'moment'
+
 const { params } = useRoute()
 const appName = params.appId as string
 const orgName = params.orgName as string
@@ -39,7 +51,7 @@ const { data: detailApp } = useFetch('/api/detail-app', {
     },
 })
 
-const { data } = useFetch('/api/artifacts/detail-artifact', {
+const { data: detailArtifact } = useFetch('/api/artifacts/detail-artifact', {
     query: {
         appName: appName,
         orgName: orgName,
@@ -48,7 +60,13 @@ const { data } = useFetch('/api/artifacts/detail-artifact', {
 })
 
 const download = () => {
-    const url = `/api/artifacts/download-artifact?fileObjectKey=${data.value?.fileObjectKey}`
+    const url = `/api/artifacts/download-artifact?fileObjectKey=${detailArtifact.value?.fileObjectKey}`
     window.open(url, '_blank')
 }
+
+const format = (value?: string | null) => {
+    return moment(value).format('LLL')
+}
+
+
 </script>

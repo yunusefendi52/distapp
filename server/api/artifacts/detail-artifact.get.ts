@@ -2,6 +2,8 @@ import { and, eq } from "drizzle-orm"
 import { organizations, organizationsPeople } from "~/server/db/schema"
 import { getStorageKeys } from "~/server/utils/utils"
 import { takeUniqueOrThrow } from "../detail-app.get"
+import { createS3 } from "~/server/services/s3"
+import { GetObjectAttributesCommand, GetObjectTaggingCommand, HeadObjectCommand, ObjectAttributes } from "@aws-sdk/client-s3"
 
 export default defineEventHandler(async (event) => {
     const db = event.context.drizzle
@@ -28,5 +30,18 @@ export default defineEventHandler(async (event) => {
             )
         },
     }).then(takeUniqueOrThrow)
-    return detailArtifact
+    const s3 = createS3(event)
+    const { assets } = getStorageKeys(event.context.auth, detailArtifact.fileObjectKey)
+    const headObject = await s3.send(new HeadObjectCommand({
+        Bucket: s3BucketName,
+        Key: assets,
+    }))
+    return {
+        ...detailArtifact,
+        fileMetadata: {
+            md5: headObject.ETag,
+            contentLength: headObject.ContentLength,
+            contentType: headObject.ContentType,
+        },
+    }
 })
