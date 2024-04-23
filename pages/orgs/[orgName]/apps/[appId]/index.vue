@@ -3,6 +3,7 @@
         <div class="flex-1">
             <h4>{{ detailApp.data.value?.displayName }}</h4>
         </div>
+        <!-- <Button icon="pi pi-trash" severity="danger" /> -->
     </div>
     <div class="flex flex-col gap-3">
         <TabMenu v-model:active-index="active" :model="items" :pt="{

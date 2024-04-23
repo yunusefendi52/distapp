@@ -47,7 +47,6 @@ export const apps = sqliteTable('apps', {
     osType: text('osType', {
         enum: ['android', 'ios']
     }),
-
     organizationsId: text('organizationsId').references(() => organizations.id),
 }, (t) => ({
     organizationsId_name: unique().on(t.organizationsId, t.name),

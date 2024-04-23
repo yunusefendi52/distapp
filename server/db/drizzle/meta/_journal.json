@@ -50,6 +50,20 @@
       "when": 1712531973590,
       "tag": "0006_famous_daimon_hellstrom",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1713883052770,
+      "tag": "0007_normal_ender_wiggin",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1713883545854,
+      "tag": "0008_aspiring_barracuda",
+      "breakpoints": true
     }
   ]
 }
