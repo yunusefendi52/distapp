@@ -5,6 +5,13 @@
             <Column field="releaseId" header="Release Id" style="width: 15%"></Column>
             <Column field="versionName2" header="Version Name"></Column>
             <Column field="versionCode2" header="Version Code"></Column>
+            <Column field="groups" header="Groups">
+                <template #body="slotProps">
+                    <label>
+                        {{ formatGroups(slotProps.data.groups) }}
+                    </label>
+                </template>
+            </Column>
             <Column field="createdAt" header="Date">
                 <template #body="slotProps">
                     <label>

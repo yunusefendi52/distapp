@@ -1,5 +1,5 @@
 import { and, eq } from "drizzle-orm"
-import { organizations, organizationsPeople } from "~/server/db/schema"
+import { artifacts, artifactsGroups, artifactsGroupsManager, organizations, organizationsPeople } from "~/server/db/schema"
 import { getStorageKeys } from "~/server/utils/utils"
 import { takeUniqueOrThrow } from "../detail-app.get"
 
@@ -27,5 +27,15 @@ export default defineEventHandler(async (event) => {
             return operators.desc(fields.releaseId)
         },
     })
-    return artficats
+    const artifactGroups = await Promise.all(artficats.map(async e => {
+        const groups = await db.select()
+            .from(artifactsGroups)
+            .leftJoin(artifactsGroupsManager, eq(artifactsGroupsManager.artifactsGroupsId, artifactsGroups.id))
+            .where(eq(artifactsGroups.id, e.id))
+        return {
+            ...e,
+            groups,
+        }
+    }))
+    return artifactGroups
 })

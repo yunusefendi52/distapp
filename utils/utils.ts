@@ -1,3 +1,4 @@
+import { join } from "lodash"
 import moment from "moment"
 
 export const toOsType = (osType?: "android" | "ios" | null | undefined): OsType => {
@@ -45,4 +46,8 @@ export function formatBytes(bytes: number, decimals = 2, isBinary = false) {
 
 export const formatDate = (value?: string | null) => {
     return moment(value).format('LLL')
+}
+
+export const formatGroups = (groups: any[] | undefined) => {
+    return groups && groups.length ? join(groups.map(e => e.artifactsGroups.name), ', ') : '-'
 }

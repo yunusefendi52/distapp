@@ -23,7 +23,7 @@
         </div>
         <div class="flex flex-col gap-2">
             <span class="font-semibold">Groups</span>
-            <label>{{ '-' }}</label>
+            <label>{{ formatGroups(detailArtifact?.groups) }}</label>
         </div>
         <div class="flex flex-col gap-2">
             <span class="font-semibold">File metadata</span>

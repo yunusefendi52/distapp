@@ -1,5 +1,5 @@
 import { and, eq } from "drizzle-orm"
-import { organizations, organizationsPeople } from "~/server/db/schema"
+import { artifactsGroups, artifactsGroupsManager, organizations, organizationsPeople } from "~/server/db/schema"
 import { getStorageKeys } from "~/server/utils/utils"
 import { takeUniqueOrThrow } from "../detail-app.get"
 import { createS3 } from "~/server/services/s3"
@@ -32,10 +32,16 @@ export default defineEventHandler(async (event) => {
     }).then(takeUniqueOrThrow)
     const s3 = createS3(event)
     const { assets } = getStorageKeys(event.context.auth, detailArtifact.fileObjectKey)
-    const headObject = await s3.send(new HeadObjectCommand({
-        Bucket: s3BucketName,
-        Key: assets,
-    }))
+    const [headObject, groups] = await Promise.all([
+        s3.send(new HeadObjectCommand({
+            Bucket: s3BucketName,
+            Key: assets,
+        })),
+        db.select()
+            .from(artifactsGroups)
+            .leftJoin(artifactsGroupsManager, eq(artifactsGroupsManager.artifactsGroupsId, artifactsGroups.id))
+            .where(eq(artifactsGroups.id, detailArtifact.id))
+    ])
     return {
         ...detailArtifact,
         fileMetadata: {
@@ -43,5 +49,6 @@ export default defineEventHandler(async (event) => {
             contentLength: headObject.ContentLength,
             contentType: headObject.ContentType,
         },
+        groups,
     }
 })
