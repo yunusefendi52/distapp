@@ -1,6 +1,6 @@
 import { and, eq } from "drizzle-orm"
 import { artifactsGroups, artifactsGroupsManager, organizations, organizationsPeople } from "~/server/db/schema"
-import { getStorageKeys } from "~/server/utils/utils"
+import { generateRandomPassword, getStorageKeys } from "~/server/utils/utils"
 import { takeUniqueOrThrow } from "../detail-app.get"
 import { createS3 } from "~/server/services/s3"
 import { GetObjectAttributesCommand, GetObjectTaggingCommand, HeadObjectCommand, ObjectAttributes } from "@aws-sdk/client-s3"
@@ -42,6 +42,7 @@ export default defineEventHandler(async (event) => {
             .leftJoin(artifactsGroupsManager, eq(artifactsGroupsManager.artifactsGroupsId, artifactsGroups.id))
             .where(eq(artifactsGroupsManager.artifactsId, detailArtifact.id))
     ])
+    console.log('pass', generateRandomPassword())
     return {
         ...detailArtifact,
         fileMetadata: {
