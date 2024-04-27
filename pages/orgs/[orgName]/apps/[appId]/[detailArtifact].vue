@@ -23,13 +23,19 @@
         </div>
         <div class="flex flex-col gap-2">
             <span class="font-semibold">Groups</span>
-            <label>{{ formatGroups(detailArtifact?.groups) }}</label>
+            <div class="flex flex-row">
+                <MultiSelect v-model="selectedGroup" display="chip" :options="groups" optionLabel="name"
+                    placeholder="Select Groups" />
+                <Button class="ml-3" @click="() => saveGroups()" :loading="saveGroupsStatus == 'pending'"
+                    label="Save Groups" />
+            </div>
         </div>
         <div class="flex flex-col gap-2">
             <span class="font-semibold">File metadata</span>
             <div class="flex flex-col">
                 <label>{{ `MD5: ${detailArtifact?.fileMetadata?.md5?.replaceAll('"', '')}` }}</label>
-                <label>{{ `File Extension: ${getExtensionFromMimeType(detailArtifact?.fileMetadata?.contentType)}` }}</label>
+                <label>{{ `File Extension: ${getExtensionFromMimeType(detailArtifact?.fileMetadata?.contentType)}`
+                    }}</label>
                 <label>{{ `File Size: ${formatBytes(detailArtifact?.fileMetadata?.contentLength ?? 0)}` }}</label>
             </div>
         </div>
@@ -37,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from 'moment'
+import { UpdateGroupsRequest } from '~/server/api/update-artifact-groups.put';
 
 const { params } = useRoute()
 const appName = params.appId as string
@@ -51,7 +57,7 @@ const { data: detailApp } = useFetch('/api/detail-app', {
     },
 })
 
-const { data: detailArtifact } = useFetch('/api/artifacts/detail-artifact', {
+const { data: detailArtifact, refresh } = useFetch('/api/artifacts/detail-artifact', {
     query: {
         appName: appName,
         orgName: orgName,
@@ -64,5 +70,30 @@ const download = () => {
     window.open(url, '_blank')
 }
 
+const { data: appGroups } = useFetch('/api/groups/list-groups', {
+    query: {
+        appName: appName,
+        orgName: orgName,
+    },
+})
+const groups = computed(() => appGroups.value ?? [])
+const selectedGroup = ref<any[]>()
+watchEffect(() => {
+    selectedGroup.value = detailArtifact.value?.groups.map(e => e.artifactsGroups) ?? []
+})
+const { execute: saveGroups, status: saveGroupsStatus } = useAsyncData(() => {
+    return $fetch('/api/update-artifact-groups', {
+        body: {
+            artifactId: detailArtifact.value?.id ?? '',
+            groupIds: selectedGroup.value?.map(e => e.id) ?? [],
+        } satisfies UpdateGroupsRequest,
+        method: 'put',
+        onResponse: () => {
+            refresh()
+        },
+    })
+}, {
+    immediate: false,
+})
 
 </script>

@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
         const groups = await db.select()
             .from(artifactsGroups)
             .leftJoin(artifactsGroupsManager, eq(artifactsGroupsManager.artifactsGroupsId, artifactsGroups.id))
-            .where(eq(artifactsGroups.id, e.id))
+            .where(eq(artifactsGroupsManager.artifactsId, e.id))
         return {
             ...e,
             groups,

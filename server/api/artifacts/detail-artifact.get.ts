@@ -40,7 +40,7 @@ export default defineEventHandler(async (event) => {
         db.select()
             .from(artifactsGroups)
             .leftJoin(artifactsGroupsManager, eq(artifactsGroupsManager.artifactsGroupsId, artifactsGroups.id))
-            .where(eq(artifactsGroups.id, detailArtifact.id))
+            .where(eq(artifactsGroupsManager.artifactsId, detailArtifact.id))
     ])
     return {
         ...detailArtifact,

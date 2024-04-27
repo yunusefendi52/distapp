@@ -89,7 +89,7 @@ export const artifactsRelations = relations(artifacts, t => ({
     artifactsGroupsManager: t.many(artifactsGroupsManager),
 }))
 
-// ArtifactsGroups
+// ArtifactsGroups (this should be app gorups actually)
 export const artifactsGroups = sqliteTable('artifactsGroups', {
     id: text('id').primaryKey().unique(),
     name: text('name').notNull(),

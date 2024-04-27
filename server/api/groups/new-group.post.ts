@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
     }).then(takeUniqueOrThrow)
     await db.insert(artifactsGroups).values({
         id: generateId(),
-        name: normalizeName(groupName),
+        name: groupName,
         appsId: app!.id,
     })
     return {
