@@ -10,7 +10,7 @@
         <div class="flex flex-col gap-1">
             <label class="font-semibold text-xl">Version {{ detailArtifact?.versionName2 }} ({{
                 detailArtifact?.releaseId
-            }})</label>
+                }})</label>
             <label class="text-lg">{{ formatDate(detailArtifact?.createdAt) }}</label>
         </div>
         <div class="flex flex-col gap-2">
@@ -66,7 +66,7 @@ const { data: detailArtifact, refresh } = useFetch('/api/artifacts/detail-artifa
 })
 
 const download = () => {
-    const url = `/api/artifacts/download-artifact?fileObjectKey=${detailArtifact.value?.fileObjectKey}`
+    const url = `/api/artifacts/download-artifact?appName=${appName}&orgName=${orgName}&releaseId=${releaseId}`
     window.open(url, '_blank')
 }
 

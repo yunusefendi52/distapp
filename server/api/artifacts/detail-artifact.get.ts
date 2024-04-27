@@ -42,9 +42,9 @@ export default defineEventHandler(async (event) => {
             .leftJoin(artifactsGroupsManager, eq(artifactsGroupsManager.artifactsGroupsId, artifactsGroups.id))
             .where(eq(artifactsGroupsManager.artifactsId, detailArtifact.id))
     ])
-    console.log('pass', generateRandomPassword())
-    return {
+    const response = {
         ...detailArtifact,
+        fileObjectKey: undefined,
         fileMetadata: {
             md5: headObject.ETag,
             contentLength: headObject.ContentLength,
@@ -52,4 +52,6 @@ export default defineEventHandler(async (event) => {
         },
         groups,
     }
+    delete response.fileObjectKey
+    return response
 })
