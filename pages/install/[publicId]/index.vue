@@ -12,7 +12,8 @@
                 <template #header>
                     <div class="flex flex-row w-full">
                         <div class="flex-1 flex flex-col">
-                            <a :name="item.id" :href="'#' + item.id" class="font-bold">Version {{ item.versionName2 }}
+                            <a :name="item.releaseId" :href="'#' + item.releaseId" class="font-bold">Version {{
+                                item.versionName2 }}
                                 ({{
                                     item.releaseId
                                 }})</a>
@@ -20,7 +21,7 @@
                             <!-- <span>30mbbb</span> -->
                         </div>
                         <div>
-                            <Button label="Download" />
+                            <Button label="Download" @click="download(item.releaseId)" />
                         </div>
                     </div>
                 </template>
@@ -55,6 +56,10 @@ useSeoMeta({
     title: `DistApp - ${data.value?.app.name ?? ''}`
 })
 
+const download = (releaseId: number) => {
+    const url = `/api/install/download?publicId=${publicId}&releaseId=${releaseId}`
+    window.open(url, '_blank')
+}
 </script>
 
 <style scoped>
