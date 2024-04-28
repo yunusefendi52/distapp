@@ -64,6 +64,13 @@
       "when": 1713883545854,
       "tag": "0008_aspiring_barracuda",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1714276274024,
+      "tag": "0009_mighty_vargas",
+      "breakpoints": true
     }
   ]
 }

@@ -22,6 +22,7 @@ export default defineEventHandler(async (event) => {
         id: generateId(),
         name: groupName,
         appsId: app!.id,
+        publicId: generateRandomPassword(42),
     })
     return {
         ok: true,

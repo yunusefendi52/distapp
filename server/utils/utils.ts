@@ -23,15 +23,14 @@ export const getStorageKeys = (auth: AuthData, key: String) => {
 
 export const generateId = () => v4()
 
-export const generateRandomPassword = () => {
+export const generateRandomPassword = (length = 60) => {
     let chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let pwordLength = 60;
     let password = '';
 
     const array = new Uint32Array(chars.length);
     crypto.getRandomValues(array);
 
-    for (let i = 0; i < pwordLength; i++) {
+    for (let i = 0; i < length; i++) {
         password += chars[array[i] % chars.length];
     }
     return password

@@ -1,9 +1,14 @@
 <template>
     <Button class="mb-3" label="New Group" @click="visible = true"></Button>
-    
+
     <div class="card p-0">
         <DataTable :value="list" single>
             <Column field="name" header="Group Name"></Column>
+            <Column header="Public Link" style="width: 15%">
+                <template #body="{ data }">
+                    <Button :disabled="!data.publicId" icon="pi pi-copy" @click="copyPublicLink(data)" />
+                </template>
+            </Column>
             <template #empty>
                 <div class="flex items-center justify-center">
                     <label>No data found</label>
@@ -14,10 +19,10 @@
 
     <Dialog v-model:visible="visible" modal header="New Group" :style="{ width: '25rem' }">
         <form @submit.prevent="saveNewGroup({
-        appName: props.appName,
-        orgName: props.orgName,
-        groupName: newGroupName,
-    })">
+            appName: props.appName,
+            orgName: props.orgName,
+            groupName: newGroupName,
+        })">
             <div class="flex align-items-center gap-3 mb-3">
                 <InputText v-model="newGroupName" class="flex-auto" autocomplete="off" />
             </div>
@@ -63,5 +68,10 @@ const { mutate: saveNewGroup, isPending: savingNewGroup } = useMutation({
         visible.value = false
     }
 })
+
+const copyPublicLink = (data: any) => {
+    const link = `${window.location.origin}/install/${data.publicId}`
+    navigator.clipboard.writeText(link);
+}
 
 </script>

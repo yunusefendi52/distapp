@@ -1,4 +1,4 @@
-import { organizations, organizationsPeople } from "~/server/db/schema"
+import { organizations, organizationsPeople, organizationsPeopleRelations } from "~/server/db/schema"
 import { takeUniqueOrThrow } from "../detail-app.get"
 import { and, eq } from "drizzle-orm"
 
@@ -20,6 +20,9 @@ export default defineEventHandler(async (event) => {
     }).then(takeUniqueOrThrow)
     const groups = await db.query.artifactsGroups.findMany({
         where: (t, o) => o.eq(t.appsId, app!.id),
+        orderBy(fields, operators) {
+            return operators.asc(fields.name)
+        },
     })
     return groups
 })

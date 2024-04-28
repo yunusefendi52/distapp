@@ -94,6 +94,7 @@ export const artifactsGroups = sqliteTable('artifactsGroups', {
     id: text('id').primaryKey().unique(),
     name: text('name').notNull(),
     appsId: text('appsId').references(() => apps.id),
+    publicId: text('publicId').unique(),
 }, t => ({
     appsId_releaseId: unique().on(t.appsId, t.name),
 }))
