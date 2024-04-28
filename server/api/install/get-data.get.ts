@@ -1,5 +1,5 @@
-import { and, eq } from "drizzle-orm"
-import { organizations, organizationsPeople } from "~/server/db/schema"
+import { and, desc, eq } from "drizzle-orm"
+import { artifacts, artifactsGroupsManager, organizations, organizationsPeople } from "~/server/db/schema"
 import { takeUniqueOrThrow } from "../detail-app.get"
 
 export default defineEventHandler(async (event) => {
@@ -26,19 +26,16 @@ export default defineEventHandler(async (event) => {
             return operators.eq(fields.id, app.organizationsId!)
         },
     }).then(takeUniqueOrThrow)
-    const artifacts = await db.query.artifacts.findMany({
-        where(fields, operators) {
-            return operators.eq(fields.appsId, app.id)
-        },
-        orderBy(fields, operators) {
-            return operators.desc(fields.createdAt)
-        },
-        limit: 100, // TODO: pagination?  
-    })
+    const artifactList = await db.select()
+        .from(artifactsGroupsManager)
+        .leftJoin(artifacts, eq(artifacts.id, artifactsGroupsManager.artifactsId))
+        .where(eq(artifactsGroupsManager.artifactsGroupsId, artifactGroup.id))
+        .orderBy(desc(artifacts.createdAt))
+        .limit(100)
     return {
         app,
         org,
         artifactGroup,
-        artifacts,
+        artifacts: artifactList,
     }
 })

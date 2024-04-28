@@ -9,7 +9,7 @@
                 <h6>{{ data?.app.osType === 'ios' ? 'iOS' : 'Android' }} | {{ data?.org.displayName }} | {{
                     data?.artifactGroup.name }}</h6>
             </div>
-            <Panel v-for="item in data?.artifacts" :key="item.id">
+            <Panel v-for="item in data?.artifacts.map(e => e.artifacts!)" :key="item.id">
                 <template #header>
                     <div class="flex flex-row w-full">
                         <div class="flex-1 flex flex-col">
