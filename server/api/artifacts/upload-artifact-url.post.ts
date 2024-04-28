@@ -54,4 +54,8 @@ export default defineEventHandler(async (event) => {
         Bucket: s3BucketName,
         Key: temp,
     }))
+
+    return {
+        artifactId: artifactsId,
+    }
 })

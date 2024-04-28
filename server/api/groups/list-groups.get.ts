@@ -3,7 +3,14 @@ import { takeUniqueOrThrow } from "../detail-app.get"
 import { and, eq } from "drizzle-orm"
 
 export default defineEventHandler(async (event) => {
-    const { appName, orgName } = getQuery(event)
+    const query = getQuery(event)
+    const orgName = query.orgName?.toString()
+    const appName = query.appName?.toString()
+    if (!orgName || !appName) {
+        setResponseStatus(event, 400)
+        return
+    }
+
     const db = event.context.drizzle
     const userId = event.context.auth.userId
     const userOrg = await db.select({

@@ -5,11 +5,18 @@
             <label for="releasenotes">Release Notes</label>
             <InputText id="releasenotes" v-model="releaseNotes" aria-describedby="releasenotes-help" />
         </div>
+        <div class="flex flex-column gap-2">
+            <label for="releasenotes">Groups</label>
+            <MultiSelect v-model="selectedGroup" display="chip" :options="groups" optionLabel="name"
+                placeholder="Select Groups" />
+        </div>
         <Button label="Upload" @click="submit" :loading="isPending" />
     </div>
 </template>
 
 <script setup lang="ts">
+import { UpdateGroupsRequest } from '~/server/api/update-artifact-groups.put';
+
 const releaseNotes = ref<string | null>(null)
 const dialogRef = inject<any>('dialogRef');
 const osType = ref<OsType | null>(null)
@@ -26,9 +33,28 @@ onMounted(() => {
 const mimeTypeFromOsType = computed(() => getMimeTypeFromosType(osType.value ?? 'android'))
 const fileRef = ref<HTMLInputElement | null>(null)
 
+const { data: appGroups } = useFetch('/api/groups/list-groups', {
+    query: {
+        appName: appName,
+        orgName: orgName,
+    },
+})
+const groups = computed(() => appGroups.value ?? [])
+const selectedGroup = ref<any[]>()
+
 const { mutateAsync, isPending } = useMutation({
     mutationFn: async (file: File) => {
-        await onUpload(file)
+        const { artifactId } = await onUpload(file)
+        const groupIds = selectedGroup.value?.map(e => e.id) ?? []
+        if (artifactId && groupIds && groupIds.length) {
+            await $fetch('/api/update-artifact-groups', {
+                body: {
+                    artifactId: artifactId,
+                    groupIds: groupIds,
+                } satisfies UpdateGroupsRequest,
+                method: 'put',
+            })
+        }
     },
     onSuccess: () => {
         if (fileRef.value) {
@@ -64,7 +90,7 @@ const onUpload = async (file: File) => {
         body: file,
         redirect: "follow",
     })
-    await $fetch('/api/artifacts/upload-artifact-url', {
+    const data = await $fetch('/api/artifacts/upload-artifact-url', {
         method: 'post',
         body: {
             key: key,
@@ -72,5 +98,6 @@ const onUpload = async (file: File) => {
             releaseNotes: releaseNotes.value,
         },
     })
+    return data
 };
 </script>

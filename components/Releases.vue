@@ -60,6 +60,7 @@ const upload = () => {
             props,
             orgName: props.orgName,
             appName: props.appName,
+            artifactId: 
         },
         onClose: (o) => {
             if (o?.data?.success) {
