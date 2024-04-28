@@ -14,11 +14,10 @@ export const getJwtKey = (event: H3Event<EventHandlerRequest>) => {
     )
 }
 
-export const getStorageKeys = (auth: AuthData | string, key: String) => {
-    const userId = typeof auth === 'string' ? auth : auth.userId
+export const getStorageKeys = (orgId: string, appId: string, key: string) => {
     return {
-        temp: `temporary/userId-${userId}/${key}`,
-        assets: `assets/userId-${userId}/${key}`,
+        temp: `temporary/orgid-${orgId}-${appId}/${key}`,
+        assets: `assets/orgid-${orgId}-${appId}/${key}`,
     }
 }
 

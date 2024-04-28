@@ -32,12 +32,6 @@ export default defineEventHandler(async (event) => {
             return operators.eq(fields.id, app.organizationsId!)
         },
     }).then(takeUniqueOrThrow)
-    const orgPeople = await db.query.organizationsPeople.findMany({
-        where(fields, operators) {
-            return operators.eq(fields.organizationId, org.id)
-        },
-        limit: 1,
-    }).then(takeUniqueOrThrow)
     const detailArtifact = await db.query.artifacts.findMany({
         where(fields, operators) {
             return operators.and(
@@ -46,7 +40,7 @@ export default defineEventHandler(async (event) => {
             )
         },
     }).then(takeUniqueOrThrow)
-    const { assets } = getStorageKeys(orgPeople.userId!, detailArtifact.fileObjectKey)
+    const { assets } = getStorageKeys(org.id, app.id, detailArtifact.fileObjectKey)
     const s3 = createS3(event)
     const signedUrl = await getSignedUrl(s3, new GetObjectCommand({
         Bucket: s3BucketName,

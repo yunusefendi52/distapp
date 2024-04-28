@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
             )
         },
     }).then(takeUniqueOrThrow)
-    const { assets } = getStorageKeys(event.context.auth, detailArtifact.fileObjectKey)
+    const { assets } = getStorageKeys(userOrg.organizationsId!, app.id, detailArtifact.fileObjectKey)
     const s3 = createS3(event)
     const signedUrl = await getSignedUrl(s3, new GetObjectCommand({
         Bucket: s3BucketName,

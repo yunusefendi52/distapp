@@ -7,7 +7,6 @@ import { CopyObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3"
 
 export default defineEventHandler(async (event) => {
     const { key, appName, orgName, releaseNotes } = await readBody(event)
-    const { temp, assets } = getStorageKeys(event.context.auth, key)
     const userId = event.context.auth.userId
     const db = event.context.drizzle
     const userOrg = await db.select({
@@ -44,6 +43,7 @@ export default defineEventHandler(async (event) => {
         releaseNotes: releaseNotes,
         releaseId: newReleaseId,
     })
+    const { temp, assets } = getStorageKeys(userOrg.organizationsId!, app.id, key)
     const s3 = createS3(event)
     await s3.send(new CopyObjectCommand({
         CopySource: `${s3BucketName}/${temp}`,

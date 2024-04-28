@@ -58,6 +58,8 @@ const upload = () => {
         data: {
             osType,
             props,
+            orgName: props.orgName,
+            appName: props.appName,
         },
         onClose: (o) => {
             if (o?.data?.success) {
