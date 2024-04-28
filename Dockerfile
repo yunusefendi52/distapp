@@ -4,9 +4,7 @@ WORKDIR /builder
 COPY package.json bun.lockb /builder/
 RUN bun install --frozen-lockfile
 COPY . .
-RUN bun run prisma:generate
-
-RUN bun run build
+RUN bun run build --preset=bun
 
 FROM oven/bun:1
 WORKDIR /app
