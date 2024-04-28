@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
     const signedUrl = await getSignedUrl(s3, new GetObjectCommand({
         Bucket: s3BucketName,
         Key: assets,
-        ResponseContentDisposition: 'attachment; filename ="release.apk"'
+        ResponseContentDisposition: `attachment; filename ="${app.name}"`
     }), {
         expiresIn: 1800,
     })
