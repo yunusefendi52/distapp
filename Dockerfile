@@ -10,4 +10,4 @@ FROM oven/bun:1
 WORKDIR /app
 COPY --from=builder /builder/.output .
 
-ENTRYPOINT [ "bun" "run" "server/index.mjs" ]
+ENTRYPOINT [ "bun", "run", "server/index.mjs" ]
