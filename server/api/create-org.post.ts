@@ -1,3 +1,4 @@
+import { v4 } from "uuid"
 import { organizations, organizationsPeople } from "../db/schema"
 import { generateId } from "../utils/utils"
 
@@ -9,7 +10,7 @@ export default defineEventHandler(async (event) => {
         const organizationId = generateId()
         await t.insert(organizations).values({
             id: organizationId,
-            name: normalizeName(name),
+            name: `${normalizeName(name)}-${v4().substring(0, 7)}`,
             displayName: displayName,
         })
         await t.insert(organizationsPeople).values({
