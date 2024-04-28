@@ -6,7 +6,7 @@
         <div class="container flex flex-col gap-3 p-3">
             <div>
                 <h1>{{ data?.app.displayName }}</h1>
-                <h6>{{ data?.app.osType }} | {{ data?.org.displayName }}</h6>
+                <h6>{{ data?.app.osType === 'ios' ? 'iOS' : 'Android' }} | {{ data?.org.displayName }}</h6>
             </div>
             <Panel v-for="item in data?.artifacts" :key="item.id">
                 <template #header>
