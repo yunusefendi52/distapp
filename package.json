@@ -14,7 +14,7 @@
     "format:check": "prettier --check \"**/*.{js,vue,d.ts}\"",
     "drizzle:generate": "drizzle-kit generate:sqlite",
     "drizzle:migrate": "bun run server/db/migrate.ts",
-    "deploy": "bun run build && npx wrangler pages deploy dist/"
+    "deploy": "bun run build --preset=cloudflare-pages && npx wrangler pages deploy dist/"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.556.0",
