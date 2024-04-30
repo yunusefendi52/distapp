@@ -27,12 +27,13 @@ export default defineEventHandler(async (event) => {
     const key = generateRandomPassword()
     var expires = 300;
     const { temp } = getStorageKeys(userOrg.organizationsId!, app.id, key)
+    const limitUploadSizeMb = useRuntimeConfig(event)
     const s3 = new S3AppClient()
     const signedUrl = await s3.getSignedUrlPutObject(event, new PutObjectCommand({
         Bucket: s3BucketName,
         Key: temp,
-        ContentType: 'application/vnd.android.package-archive',
-    }), expires)
+        ContentLength: limitUploadSizeMb.app.limitUploadSizeMb,
+    }), expires)    
     return {
         file: key,
         url: signedUrl,
