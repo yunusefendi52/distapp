@@ -44,7 +44,7 @@ async function saveOrg() {
         <div class="flex flex-column gap-3 w-25rem">
             <div class="flex flex-column gap-2">
                 <label>Organization</label>
-                <Dropdown name="org" v-model="selectedOrg" :options="orgs" optionLabel="name" :disabled="disableOrg"
+                <Dropdown name="org" v-model="selectedOrg" :options="orgs" optionLabel="displayName" :disabled="disableOrg"
                     placeholder="Select organization" />
             </div>
             <div class="flex flex-column gap-2">

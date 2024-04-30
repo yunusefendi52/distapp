@@ -2,8 +2,8 @@ import { and, eq } from "drizzle-orm"
 import { artifacts, organizations, organizationsPeople } from "~/server/db/schema"
 import { getStorageKeys, s3BucketName } from "~/server/utils/utils"
 import { takeUniqueOrThrow } from "../detail-app.get"
-import { createS3 } from "~/server/services/s3"
 import { CopyObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3"
+import { S3AppClient } from "~/server/services/S3AppClient"
 
 export default defineEventHandler(async (event) => {
     const { key, appName, orgName, releaseNotes } = await readBody(event)
@@ -44,13 +44,13 @@ export default defineEventHandler(async (event) => {
         releaseId: newReleaseId,
     })
     const { temp, assets } = getStorageKeys(userOrg.organizationsId!, app.id, key)
-    const s3 = createS3(event)
-    await s3.send(new CopyObjectCommand({
+    const s3 = new S3AppClient()
+    await s3.send(event, new CopyObjectCommand({
         CopySource: `${s3BucketName}/${temp}`,
         Bucket: s3BucketName,
         Key: assets,
     }))
-    await s3.send(new DeleteObjectCommand({
+    await s3.send(event, new DeleteObjectCommand({
         Bucket: s3BucketName,
         Key: temp,
     }))

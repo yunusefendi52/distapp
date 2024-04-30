@@ -143,7 +143,7 @@ const upperCase = (value: string | null | undefined) => {
             </Column>
             <Column header="Owner" v-if="!isOrg">
                 <template #body="prop">
-                    {{ prop.data.organization.name }}
+                    {{ prop.data.organization.displayName }}
                 </template>
             </Column>
             <template #empty>

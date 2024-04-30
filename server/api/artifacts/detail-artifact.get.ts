@@ -2,8 +2,8 @@ import { and, eq } from "drizzle-orm"
 import { artifactsGroups, artifactsGroupsManager, organizations, organizationsPeople } from "~/server/db/schema"
 import { generateRandomPassword, getStorageKeys } from "~/server/utils/utils"
 import { takeUniqueOrThrow } from "../detail-app.get"
-import { createS3 } from "~/server/services/s3"
 import { GetObjectAttributesCommand, GetObjectTaggingCommand, HeadObjectCommand, ObjectAttributes } from "@aws-sdk/client-s3"
+import { S3AppClient, type AppHeadObjectCommandOutput } from "~/server/services/S3AppClient"
 
 export default defineEventHandler(async (event) => {
     const db = event.context.drizzle
@@ -30,13 +30,13 @@ export default defineEventHandler(async (event) => {
             )
         },
     }).then(takeUniqueOrThrow)
-    const s3 = createS3(event)
+    const s3 = new S3AppClient()
     const { assets } = getStorageKeys(userOrg.organizationsId!, app.id, detailArtifact.fileObjectKey)
     const [headObject, groups] = await Promise.all([
-        s3.send(new HeadObjectCommand({
+        s3.send(event, new HeadObjectCommand({
             Bucket: s3BucketName,
             Key: assets,
-        })),
+        })).then(e => e as AppHeadObjectCommandOutput),
         db.select()
             .from(artifactsGroups)
             .leftJoin(artifactsGroupsManager, eq(artifactsGroupsManager.artifactsGroupsId, artifactsGroups.id))
