@@ -1,5 +1,4 @@
 import { v4 } from "uuid"
-import type { AuthData } from "../middleware/auth-middleware"
 import type { EventHandlerRequest, H3Event } from "h3"
 import crypto from 'node:crypto'
 

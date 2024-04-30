@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
     await db.insert(users).values({
         name: 'User 1',
         id: event.context.auth.userId,
-    })
+    }).onConflictDoNothing()
     return {
         ok: true,
     }

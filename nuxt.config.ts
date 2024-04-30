@@ -11,6 +11,11 @@ export default defineNuxtConfig({
     S3_ACCESS_KEY_ID: '',
     S3_SECRET_ACCESS_KEY: '',
     SIGNIN_KEY: '',
+    google: {
+      clientSecret: '',
+      clientId: '761350052674-43tvrv0e5jqrls4tkheobnfpba0006o1.apps.googleusercontent.com',
+      redirectUrl: '/api/auth/callback',
+    },
     public: {
     },
   },

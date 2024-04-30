@@ -6,7 +6,7 @@ const items = computed(() => [{
     icon: 'pi pi-th-large',
     route: '/apps'
 }, ...orgsStore.orgs.value.map((e) => ({
-    label: e.name,
+    label: e.displayName,
     icon: 'pi pi-users',
     route: `/orgs/${e.name}`
 }))])

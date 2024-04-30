@@ -10,4 +10,5 @@ export const useOrgsStore = async () => {
 interface OrgInfo {
     name: string
     id: string
+    displayName: string
 }
