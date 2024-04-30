@@ -47,7 +47,7 @@ export default defineEventHandler(async (event) => {
         fileObjectKey: undefined,
         fileMetadata: {
             md5: headObject.ETag,
-            contentLength: headObject.ContentLength,
+            contentLength: parseInt(headObject.ContentLength),
             contentType: headObject.ContentType,
         },
         groups,

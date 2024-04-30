@@ -11,7 +11,7 @@ export const toOsType = (osType?: "android" | "ios" | null | undefined): OsType 
 }
 
 export const getMimeTypeFromosType = (osType?: OsType): string => {
-    return osType == 'android' ? 'application/vnd.android.package-archive' : 'application/octet-stream'
+    return osType == 'android' ? 'application/vnd.android.package-archive,.aab' : '.ipa'
 }
 
 export type OsType = 'android' | 'ios'
