@@ -12,8 +12,12 @@ declare module 'h3' {
 
 export default defineEventHandler(async (event) => {
     const env = event.context.cloudflare?.env ?? process.env
+    const config = useRuntimeConfig(event)
     event.context = {
         ...event.context,
-        drizzle: db(env),
+        drizzle: db({
+            ...env,
+            enableLogging: config.app.enableDrizzleLogging,
+        }),
     }
 })

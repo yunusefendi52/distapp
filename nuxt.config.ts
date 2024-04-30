@@ -4,6 +4,9 @@ const { __dirname } = createCommonJS(import.meta.url)
 
 export default defineNuxtConfig({
   runtimeConfig: {
+    app: {
+      enableDrizzleLogging: true,
+    },
     JWT_KEY: '',
     DB_URL: '',
     DB_AUTH_TOKEN: '',
