@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
     const s3 = new S3AppClient()
     const { assets } = getStorageKeys(userOrg.organizationsId!, app.id, detailArtifact.fileObjectKey)
     const [headObject, groups] = await Promise.all([
-        s3.send(event, new HeadObjectCommand({
+        s3.getHeadObject(event, new HeadObjectCommand({
             Bucket: s3BucketName,
             Key: assets,
         })).then(e => e as AppHeadObjectCommandOutput),

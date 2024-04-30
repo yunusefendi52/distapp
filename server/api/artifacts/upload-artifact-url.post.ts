@@ -45,12 +45,12 @@ export default defineEventHandler(async (event) => {
     })
     const { temp, assets } = getStorageKeys(userOrg.organizationsId!, app.id, key)
     const s3 = new S3AppClient()
-    await s3.send(event, new CopyObjectCommand({
+    await s3.copyObject(event, new CopyObjectCommand({
         CopySource: `${s3BucketName}/${temp}`,
         Bucket: s3BucketName,
         Key: assets,
     }))
-    await s3.send(event, new DeleteObjectCommand({
+    await s3.deleteObject(event, new DeleteObjectCommand({
         Bucket: s3BucketName,
         Key: temp,
     }))

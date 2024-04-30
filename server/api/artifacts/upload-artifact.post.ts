@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
     var expires = 300;
     const { temp } = getStorageKeys(userOrg.organizationsId!, app.id, key)
     const s3 = new S3AppClient()
-    const signedUrl = await s3.getSignedUrl(event, new PutObjectCommand({
+    const signedUrl = await s3.getSignedUrlPutObject(event, new PutObjectCommand({
         Bucket: s3BucketName,
         Key: temp,
         ContentType: 'application/vnd.android.package-archive',

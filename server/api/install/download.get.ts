@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
     }).then(takeUniqueOrThrow)
     const { assets } = getStorageKeys(org.id, app.id, detailArtifact.fileObjectKey)
     const s3 = new S3AppClient()
-    const signedUrl = await s3.getSignedUrl(event, new GetObjectCommand({
+    const signedUrl = await s3.getSignedUrlGetObject(event, new GetObjectCommand({
         Bucket: s3BucketName,
         Key: assets,
         ResponseContentDisposition: `attachment; filename ="${app.name}"`
