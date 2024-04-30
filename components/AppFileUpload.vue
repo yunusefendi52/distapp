@@ -23,12 +23,10 @@ const osType = ref<OsType | null>(null)
 const prop = ref<any>(null)
 const orgName = ref<string>('')
 const appName = ref<string>('')
-onMounted(() => {
-    osType.value = dialogRef.value.data.osType;
-    prop.value = dialogRef.value.data.props
-    orgName.value = dialogRef.value.data.orgName
-    appName.value = dialogRef.value.data.appName
-})
+osType.value = dialogRef.value.data.osType
+prop.value = dialogRef.value.data.props
+orgName.value = dialogRef.value.data.orgName
+appName.value = dialogRef.value.data.appName
 
 const mimeTypeFromOsType = computed(() => getMimeTypeFromosType(osType.value ?? 'android'))
 const fileRef = ref<HTMLInputElement | null>(null)

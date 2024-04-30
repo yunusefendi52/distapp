@@ -43,8 +43,6 @@ const signin = (event: any) => {
 
 const host = ref('')
 if (process.client) {
-    onMounted(() => {
-        host.value = window.location.origin
-    })
+    host.value = window.location.origin
 }
 </script>

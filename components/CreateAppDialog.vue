@@ -12,13 +12,11 @@ const disableOrg = ref<boolean>(false)
 const selectedOs = ref(null)
 const appName = ref(null)
 
-onMounted(() => {
-    const orgName = dialogRef.value.data.orgName
-    if (orgName) {
-        selectedOrg.value = orgs.value.find(v => v.name == orgName)
-    }
-    disableOrg.value = orgName != null
-})
+const orgName = dialogRef.value.data.orgName
+if (orgName) {
+    selectedOrg.value = orgs.value.find(v => v.name == orgName)
+}
+disableOrg.value = orgName != null
 
 const { mutateAsync, isPending } = useMutation({
     mutationFn: (r: any) => $fetch('/api/create-app', {
