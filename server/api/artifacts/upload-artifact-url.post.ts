@@ -6,7 +6,7 @@ import { CopyObjectCommand, DeleteObjectCommand, GetObjectCommand } from "@aws-s
 import { S3AppClient } from "~/server/services/S3AppClient"
 
 export default defineEventHandler(async (event) => {
-    const { key, appName, orgName, releaseNotes } = await readBody(event)
+    const { key, appName, orgName, releaseNotes, packageMetadata, } = await readBody(event)
     const userId = event.context.auth.userId
     const db = event.context.drizzle
     const userOrg = await db.select({
@@ -22,25 +22,18 @@ export default defineEventHandler(async (event) => {
         },
     }).then(takeUniqueOrThrow)
     const { temp, assets } = getStorageKeys(userOrg.organizationsId!, app.id, key)
-
-    // Processing the file
-    const s3 = new S3AppClient()
-    const tempSignedUrl = await s3.getSignedUrlGetObject(event, new GetObjectCommand({
-        Bucket: s3BucketName,
-        Key: temp,
-    }), 1800)
-    const response = await fetch(tempSignedUrl)
-    if (!response.ok) {
-        setResponseStatus(event, 400)
-        return
+    const packageData = packageMetadata as {
+        versionCode: string,
+        versionName: string,
+        packageName: string,
+        extension: string,
     }
-    const arrayBuffer = await response.arrayBuffer() // WARNING: This will download to memory
-    const packageData = await readPackageFile(arrayBuffer)
     if (!packageData) {
         setResponseStatus(event, 400, 'Cannot read package')
         return
     }
 
+    const s3 = new S3AppClient()
     await s3.copyObject(event, new CopyObjectCommand({
         CopySource: `${s3BucketName}/${temp}`,
         Bucket: s3BucketName,
@@ -74,7 +67,7 @@ export default defineEventHandler(async (event) => {
         releaseNotes: releaseNotes,
         releaseId: newReleaseId,
         extension: packageData?.extension,
-        packageName: packageData?.metadata?.packageName,
+        packageName: packageData?.packageName,
     })
 
     return {

@@ -1,6 +1,5 @@
 import { parse } from "@plist/parse"
 import JSZip from "jszip"
-import ManifestParser from '../apkparser/manifest'
 
 export const readPackageFile = async (data: File | Buffer | ArrayBuffer | string | Blob) => {
     var fileZip = new JSZip();
@@ -22,14 +21,28 @@ export const readPackageFile = async (data: File | Buffer | ArrayBuffer | string
     }
 
     // it's android apk
-    const androidManifestApk = await fileZip.file('AndroidManifest.xml')?.async('nodebuffer')
-    if (androidManifestApk) {
-        extension = 'apk'
-        const manifestParser = new ManifestParser(androidManifestApk, {}).parse()
-        packageMetadata = {
-            versionCode: manifestParser.versionCode,
-            versionName: manifestParser.versionName,
-            packageName: manifestParser.packageName,
+    const androidManifestApkEntry = fileZip.file('AndroidManifest.xml')
+    if (androidManifestApkEntry) {
+        if (process.server) {
+            const androidManifestApk = await androidManifestApkEntry?.async('nodebuffer')
+            if (androidManifestApk) {
+                extension = 'apk'
+                const ManifestParser = await import('~/utils/apkparser/manifest')
+                const manifestParser = new ManifestParser.default(androidManifestApk, {}).parse()
+                packageMetadata = {
+                    versionCode: manifestParser.versionCode,
+                    versionName: manifestParser.versionName,
+                    packageName: manifestParser.package,
+                }
+            }
+        } else {
+            const base64Manifest = await androidManifestApkEntry.async('base64')
+            packageMetadata = await $fetch('/api/manifest-parser-api', {
+                method: 'post',
+                body: {
+                    base64: base64Manifest,
+                }
+            })
         }
     }
 
@@ -54,7 +67,7 @@ export const readPackageFile = async (data: File | Buffer | ArrayBuffer | string
         versionName: packageMetadata?.versionName!,
         versionCode: parseInt(packageMetadata?.versionCode!),
         extension: extension,
-        metadata: packageMetadata,
+        packageName: packageMetadata.packageName,
     }
     return packageDetail
 }
