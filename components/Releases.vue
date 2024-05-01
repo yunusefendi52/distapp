@@ -8,7 +8,7 @@
             <Column header="Groups">
                 <template #body="slotProps">
                     <label>
-                        {{ slotProps.data.groups.names }}
+                        {{ slotProps.data.groups.names ?? '-' }}
                     </label>
                 </template>
             </Column>
