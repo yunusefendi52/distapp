@@ -14,13 +14,18 @@ export default defineNuxtConfig({
     S3_ENDPOINT: '',
     S3_ACCESS_KEY_ID: '',
     S3_SECRET_ACCESS_KEY: '',
-    SIGNIN_KEY: '',
+    adminKey: {
+      key: '' // generate using openssl
+    },
     google: {
       clientSecret: '',
-      clientId: '761350052674-43tvrv0e5jqrls4tkheobnfpba0006o1.apps.googleusercontent.com',
+      clientId: '',
       redirectUrl: '/api/auth/callback',
     },
     public: {
+      adminKey: {
+        enable: true,
+      },
     },
   },
   nitro: {

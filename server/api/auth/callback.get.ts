@@ -4,6 +4,41 @@ import { users } from '~/server/db/schema'
 
 const alg = 'HS256'
 
+export const generateUserToken = async (
+    event: H3Event<EventHandlerRequest>,
+    signInProvider: string,
+    userId: string,
+    userEmail: string,
+    userRealName: string,
+) => {
+    userId = `${signInProvider}-${userId}`
+    const token = await new jose.SignJWT({
+        sub: userId,
+        'email': userEmail,
+        'provider': signInProvider,
+    }).setProtectedHeader({ alg })
+        .setIssuedAt()
+        .sign(getJwtKey(event))
+    const db = event.context.drizzle
+    await db.insert(users).values({
+        name: userRealName,
+        id: userId,
+    }).onConflictDoNothing()
+    return {
+        token,
+    }
+}
+
+export const signInUser = (
+    event: H3Event<EventHandlerRequest>,
+    token: string) => {
+    setCookie(event, 'app-auth', token, {
+        httpOnly: false,
+        secure: true,
+        sameSite: 'lax',
+    })
+}
+
 export default defineEventHandler(async (event) => {
     const query = getQuery(event)
     const state = query.state?.toString()!
@@ -56,24 +91,8 @@ export default defineEventHandler(async (event) => {
         setResponseStatus(event, 401, 'User does not have user id or email')
         return
     }
-    userId = `${signInProvider}-${userId}`
-    const token = await new jose.SignJWT({
-        sub: userId,
-        'email': userEmail,
-        'provider': signInProvider,
-    }).setProtectedHeader({ alg })
-        .setIssuedAt()
-        .sign(getJwtKey(event))
-    setCookie(event, 'app-auth', token, {
-        httpOnly: false,
-        secure: true,
-        sameSite: 'lax',
-    })
-    const db = event.context.drizzle
-    await db.insert(users).values({
-        name: userRealName,
-        id: userId,
-    }).onConflictDoNothing()
+    const { token } = await generateUserToken(event, signInProvider, userId, userEmail, userRealName)
+    signInUser(event, token)
     await sendRedirect(event, '/')
 })
 

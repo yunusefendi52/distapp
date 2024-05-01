@@ -1,42 +1,33 @@
-# Nuxt 3 Minimal Starter
+## DistApp
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Distribute Android and iOS app. Alternative App Center Distribution with option to self-hosted your self
 
 ## Setup
 
-Make sure to install the dependencies:
+#### Ensure you have the required .env
 
 ```bash
-# yarn
-yarn install
-
-# npm
-npm install
-
-# pnpm
-pnpm install
+NUXT_DB_URL=
+NUXT_DB_AUTH_TOKEN=
+NUXT_S3_ENDPOINT=
+NUXT_S3_ACCESS_KEY_ID=
+NUXT_S3_SECRET_ACCESS_KEY=
+NUXT_JWT_KEY=
+NUXT_SIGNIN_KEY=
+NUXT_GOOGLE_CLIENT_ID=
+NUXT_GOOGLE_CLIENT_SECRET=
+NUXT_ADMIN_KEY_KEY=
+NUXT_PUBLIC_ADMIN_KEY_ENABLE=
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`
+#### Make sure to install the dependencies:
 
 ```bash
-npm run dev
+ban install
 ```
 
-## Production
-
-Build the application for production:
+#### Development Server
 
 ```bash
-npm run build
+bun run dev
 ```
-
-Locally preview production build:
-
-```bash
-npm run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

@@ -1,25 +1,15 @@
-import { getJwtKey } from '~/server/utils/utils'
-import * as jose from 'jose'
-
+import { generateUserToken, signInUser } from './callback.get'
 const alg = 'HS256'
 
 export default defineEventHandler(async (event) => {
     const { key } = await readBody(event)
     const config = useRuntimeConfig(event)
-    if (key !== config.SIGNIN_KEY) { // for testing only
+    if (key !== config.adminKey.key) {
         return setResponseStatus(event, 401)
     }
 
-    const token = await new jose.SignJWT({
-        sub: 'b287aa5d85a040f78aa53a2ff7d53023',
-    }).setProtectedHeader({ alg })
-        .setIssuedAt()
-        .sign(getJwtKey(event))
-    setCookie(event, 'app-auth', token, {
-        httpOnly: false,
-        secure: true,
-        sameSite: 'lax',
-    })
+    const { token } = await generateUserToken(event, 'admin', '8ba3c4aa500f4c1e8ba84991960454c4', 'admin@admin.com', 'Admin')
+    signInUser(event, token)
     return {
         ok: true,
     }

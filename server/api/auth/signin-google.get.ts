@@ -1,6 +1,5 @@
 import { Auth } from 'googleapis'
 import * as jose from 'jose'
-import { createGoogleOAuth } from '~/server/utils/utils'
 
 const alg = 'HS256'
 
