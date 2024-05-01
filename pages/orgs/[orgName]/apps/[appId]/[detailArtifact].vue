@@ -1,7 +1,10 @@
 <template>
     <div class="flex flex-row items-center justify-center h-12">
-        <div class="flex-1">
+        <div class="flex flex-row flex-1 gap-2 items-center">
             <h4>{{ detailApp?.displayName }}</h4>
+            <div v-if="status === 'pending' || status2 === 'pending'">
+                <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" />
+            </div>
         </div>
         <Button label="Download" @click="download"></Button>
     </div>
@@ -10,7 +13,7 @@
         <div class="flex flex-col gap-1">
             <label class="font-semibold text-xl">Version {{ detailArtifact?.versionName2 }} ({{
                 detailArtifact?.releaseId
-                }})</label>
+            }})</label>
             <label class="text-lg">{{ formatDate(detailArtifact?.createdAt) }}</label>
         </div>
         <div class="flex flex-col gap-2">
@@ -50,14 +53,14 @@ const appName = params.appId as string
 const orgName = params.orgName as string
 const releaseId = params.detailArtifact as string
 
-const { data: detailApp } = useFetch('/api/detail-app', {
+const { data: detailApp, status } = useFetch('/api/detail-app', {
     query: {
         appName: appName,
         orgName: orgName,
     },
 })
 
-const { data: detailArtifact, refresh } = useFetch('/api/artifacts/detail-artifact', {
+const { data: detailArtifact, refresh, status: status2 } = useFetch('/api/artifacts/detail-artifact', {
     query: {
         appName: appName,
         orgName: orgName,

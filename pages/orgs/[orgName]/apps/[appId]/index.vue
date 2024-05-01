@@ -1,7 +1,10 @@
 <template>
     <div class="flex flex-row items-center justify-center h-12">
-        <div class="flex-1">
+        <div class="flex flex-row flex-1 gap-2 items-center">
             <h4>{{ detailApp.data.value?.displayName }}</h4>
+            <div v-if="status === 'pending'">
+                <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" />
+            </div>
         </div>
         <!-- <Button icon="pi pi-trash" severity="danger" /> -->
     </div>
@@ -67,6 +70,7 @@ const detailApp = useFetch('/api/detail-app', {
         orgName: orgName,
     },
 })
+const { status } = detailApp
 
 const osType = computed(() => toOsType(detailApp.data.value?.osType))
 provide('detail-app', osType)
