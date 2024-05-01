@@ -6,7 +6,7 @@
                 <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" />
             </div>
         </div>
-        <Button label="Download" @click="download"></Button>
+        <Button :loading="isDownloading" label="Download" @click="download"></Button>
     </div>
     <!-- <div>{{ detailArtifact }}</div> -->
     <div class="flex flex-col gap-3 mt-3 card p-3">
@@ -68,16 +68,24 @@ const { data: detailArtifact, refresh, status: status2 } = useFetch('/api/artifa
     },
 })
 
+const isDownloading = ref(false)
+
 const download = async () => {
-    const url = `/api/artifacts/download-artifact?appName=${appName}&orgName=${orgName}&releaseId=${releaseId}`
+    let url = `/api/artifacts/download-artifact?appName=${appName}&orgName=${orgName}&releaseId=${releaseId}`
     if (isIosDevice()) {
-        const data = await $fetch(url, {
-            query: {
-                manifestPlist: true,
-            },
-        })
-        const manifestLink = generateManifestLink(data, releaseId, undefined)
-        document.location = manifestLink
+        try {
+            isDownloading.value = true
+            url = `${url}&manifestPlist=true`
+            const data = await $fetch(url, {
+                query: {
+                    manifestPlist: true,
+                },
+            })
+            const manifestLink = generateManifestLink(data, releaseId, undefined)
+            document.location = manifestLink
+        } finally {
+            isDownloading.value = false
+        }
     } else {
         window.open(url, '_blank')
     }

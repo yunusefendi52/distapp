@@ -61,9 +61,9 @@ export default defineEventHandler(async (event) => {
     if (manifestPlist) {
         return {
             signedUrl,
-            packageName: detailArtifact.packageName,
-            versionName: detailArtifact.versionName2,
-            displayName: app.displayName,
+			packageName: detailArtifact.packageName,
+			versionName: detailArtifact.versionName2,
+			displayName: app.displayName,
         }
     }
 
