@@ -76,6 +76,8 @@ export const artifacts = sqliteTable('artifacts', {
         mode: 'timestamp_ms',
     }),
     releaseId: integer('releaseId').notNull(),
+    extension: text('extension'),
+    packageName: text('packageName'),
 
     appsId: text('appsId').references(() => apps.id),
 }, t => ({

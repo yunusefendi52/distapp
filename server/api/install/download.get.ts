@@ -45,7 +45,7 @@ export default defineEventHandler(async (event) => {
     const signedUrl = await s3.getSignedUrlGetObject(event, new GetObjectCommand({
         Bucket: s3BucketName,
         Key: assets,
-        ResponseContentDisposition: `attachment; filename ="${app.name}"`
+        ResponseContentDisposition: `attachment; filename ="${app.name}${detailArtifact.extension ? `.${detailArtifact.extension}` : ''}"`,
     }), 1800)
     await sendRedirect(event, signedUrl)
 })

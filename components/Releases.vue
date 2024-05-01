@@ -47,7 +47,7 @@ const list = computed(() => data.value as any[])
 
 const dialog = useDialog();
 
-const osType = inject<OsType>('detail-app')
+const osType = inject<ComputedRef<OsType>>('detail-app')
 
 const upload = () => {
     dialog.open(AppFileUpload, {
@@ -58,8 +58,6 @@ const upload = () => {
         data: {
             osType,
             props,
-            orgName: props.orgName,
-            appName: props.appName,
         },
         onClose: (o) => {
             if (o?.data?.success) {

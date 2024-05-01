@@ -71,6 +71,13 @@
       "when": 1714276274024,
       "tag": "0009_mighty_vargas",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1714497020037,
+      "tag": "0010_jittery_warbird",
+      "breakpoints": true
     }
   ]
 }

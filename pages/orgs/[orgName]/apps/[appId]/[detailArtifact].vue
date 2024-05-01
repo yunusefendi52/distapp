@@ -34,7 +34,7 @@
             <span class="font-semibold">File metadata</span>
             <div class="flex flex-col">
                 <label>{{ `MD5: ${detailArtifact?.fileMetadata?.md5?.replaceAll('"', '')}` }}</label>
-                <label>{{ `File Extension: ${getExtensionFromMimeType(detailArtifact?.fileMetadata?.contentType)}`
+                <label>{{ `File Extension: ${detailArtifact?.extension}`
                     }}</label>
                 <label>{{ `File Size: ${formatBytes(detailArtifact?.fileMetadata?.contentLength ?? 0)}` }}</label>
             </div>

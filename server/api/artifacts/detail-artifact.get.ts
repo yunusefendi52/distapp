@@ -4,6 +4,7 @@ import { generateRandomPassword, getStorageKeys } from "~/server/utils/utils"
 import { takeUniqueOrThrow } from "../detail-app.get"
 import { GetObjectAttributesCommand, GetObjectTaggingCommand, HeadObjectCommand, ObjectAttributes } from "@aws-sdk/client-s3"
 import { S3AppClient, type AppHeadObjectCommandOutput } from "~/server/services/S3AppClient"
+import { readPackageFile } from "~/server/utils/package-reader"
 
 export default defineEventHandler(async (event) => {
     const db = event.context.drizzle

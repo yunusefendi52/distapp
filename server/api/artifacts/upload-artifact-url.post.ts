@@ -2,7 +2,7 @@ import { and, eq } from "drizzle-orm"
 import { artifacts, organizations, organizationsPeople } from "~/server/db/schema"
 import { getStorageKeys, s3BucketName } from "~/server/utils/utils"
 import { takeUniqueOrThrow } from "../detail-app.get"
-import { CopyObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3"
+import { CopyObjectCommand, DeleteObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3"
 import { S3AppClient } from "~/server/services/S3AppClient"
 
 export default defineEventHandler(async (event) => {
@@ -21,6 +21,37 @@ export default defineEventHandler(async (event) => {
             return operators.and(operators.eq(fields.organizationsId, userOrg.organizationsId!), operators.eq(fields.name, appName!.toString()))
         },
     }).then(takeUniqueOrThrow)
+    const { temp, assets } = getStorageKeys(userOrg.organizationsId!, app.id, key)
+
+    // Processing the file
+    const s3 = new S3AppClient()
+    const tempSignedUrl = await s3.getSignedUrlGetObject(event, new GetObjectCommand({
+        Bucket: s3BucketName,
+        Key: temp,
+    }), 1800)
+    const response = await fetch(tempSignedUrl)
+    if (!response.ok) {
+        setResponseStatus(event, 400)
+        return
+    }
+    const arrayBuffer = await response.arrayBuffer() // WARNING: This will download to memory
+    const packageData = await readPackageFile(arrayBuffer)
+    if (!packageData) {
+        setResponseStatus(event, 400, 'Cannot read package')
+        return
+    }
+
+    await s3.copyObject(event, new CopyObjectCommand({
+        CopySource: `${s3BucketName}/${temp}`,
+        Bucket: s3BucketName,
+        Key: assets,
+    }))
+    await s3.deleteObject(event, new DeleteObjectCommand({
+        Bucket: s3BucketName,
+        Key: temp,
+    }))
+
+    // Inserting to db
     const lastArtifact = await db.query.artifacts.findFirst({
         orderBy(fields, operators) {
             return operators.desc(fields.releaseId)
@@ -37,23 +68,14 @@ export default defineEventHandler(async (event) => {
         createdAt: now,
         updatedAt: now,
         fileObjectKey: key,
-        versionCode2: '1',
-        versionName2: '1.0.0',
+        versionCode2: packageData?.versionCode?.toString()!,
+        versionName2: packageData?.versionName!,
         appsId: app.id,
         releaseNotes: releaseNotes,
         releaseId: newReleaseId,
+        extension: packageData?.extension,
+        packageName: packageData?.metadata?.packageName,
     })
-    const { temp, assets } = getStorageKeys(userOrg.organizationsId!, app.id, key)
-    const s3 = new S3AppClient()
-    await s3.copyObject(event, new CopyObjectCommand({
-        CopySource: `${s3BucketName}/${temp}`,
-        Bucket: s3BucketName,
-        Key: assets,
-    }))
-    await s3.deleteObject(event, new DeleteObjectCommand({
-        Bucket: s3BucketName,
-        Key: temp,
-    }))
 
     return {
         artifactId: artifactsId,

@@ -67,7 +67,9 @@ const detailApp = useFetch('/api/detail-app', {
         orgName: orgName,
     },
 })
-provide('detail-app', toOsType(detailApp.data.value?.osType))
+
+const osType = computed(() => toOsType(detailApp.data.value?.osType))
+provide('detail-app', osType)
 </script>
 
 <style>

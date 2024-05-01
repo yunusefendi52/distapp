@@ -15,6 +15,7 @@
 </template>
 
 <script setup lang="ts">
+import JSZip from 'jszip';
 import { UpdateGroupsRequest } from '~/server/api/update-artifact-groups.put';
 
 const releaseNotes = ref<string | null>(null)
@@ -25,8 +26,8 @@ const orgName = ref<string>('')
 const appName = ref<string>('')
 osType.value = dialogRef.value.data.osType
 prop.value = dialogRef.value.data.props
-orgName.value = dialogRef.value.data.orgName
-appName.value = dialogRef.value.data.appName
+orgName.value = dialogRef.value.data.props.orgName
+appName.value = dialogRef.value.data.props.appName
 
 const mimeTypeFromOsType = computed(() => getMimeTypeFromosType(osType.value ?? 'android'))
 const fileRef = ref<HTMLInputElement | null>(null)
@@ -96,6 +97,8 @@ const onUpload = async (file: File) => {
             releaseNotes: releaseNotes.value,
         },
     })
-    return data
+    return {
+        artifactId: data?.artifactId,
+    }
 };
 </script>
