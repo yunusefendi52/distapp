@@ -23,10 +23,10 @@ export const readPackageFile = async (data: File | Buffer | ArrayBuffer | string
     // it's android apk
     const androidManifestApkEntry = fileZip.file('AndroidManifest.xml')
     if (androidManifestApkEntry) {
+        extension = 'apk'
         if (process.server) {
             const androidManifestApk = await androidManifestApkEntry?.async('nodebuffer')
             if (androidManifestApk) {
-                extension = 'apk'
                 const ManifestParser = await import('~/utils/apkparser/manifest')
                 const manifestParser = new ManifestParser.default(androidManifestApk, {}).parse()
                 packageMetadata = {
