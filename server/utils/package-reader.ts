@@ -1,7 +1,6 @@
 import { parse } from "@plist/parse"
 import JSZip from "jszip"
-// @ts-ignore
-import ManifestParser from 'adbkit-apkreader/lib/apkreader/parser/manifest'
+import ManifestParser from '../apkparser/manifest'
 
 export const readPackageFile = async (data: File | Buffer | ArrayBuffer | string | Blob) => {
     var fileZip = new JSZip();

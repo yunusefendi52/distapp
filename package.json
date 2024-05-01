@@ -24,7 +24,6 @@
     "@plist/parse": "^1.1.0",
     "@tanstack/vue-query": "^5.28.9",
     "@xmldom/xmldom": "^0.8.10",
-    "adbkit-apkreader": "^3.2.0",
     "chart.js": "3.3.2",
     "drizzle-orm": "^0.30.7",
     "h3": "^1.11.1",
