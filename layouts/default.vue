@@ -10,6 +10,14 @@ const signout = () => {
 }
 
 const visible = ref(false)
+
+const route = useRoute()
+watchEffect(() => {
+    const path = route.path
+    if (path) {
+        visible.value = false
+    }
+})
 </script>
 
 <style scoped lang="scss">

@@ -14,20 +14,19 @@ const items = computed(() => [{
 const route = useRoute()
 const routePath = computed(() => route.path)
 const orgName = computed(() => route.params.orgName as string)
-
 </script>
 
 <template>
     <div class="p-2 flex gap-2 flex-column">
         <router-link v-for="(item, index) in items" :key="index" :to="item.route" custom
             v-slot="{ href, route, navigate, isActive, isExactActive }">
-            <a :active="item.route.endsWith(orgName) || routePath === route.path " :href="href" @click="navigate"
-                class="cursor-pointer">
+            <a :active="item.route.endsWith(orgName) || routePath === route.path" :href="href" @click="navigate" class="cursor-pointer">
                 <div class="flex flex-row px-3 py-2.5 gap-3 rounded-md" style="align-items: center;"
-                    :class="{ 'menu-active': item.route.endsWith(orgName) || routePath === route.path}">
+                    :class="{ 'menu-active': item.route.endsWith(orgName) || routePath === route.path }">
                     <i class="text-xl" :class="item.icon">
                     </i>
-                    <label :class="{ 'font-bold': item.route.endsWith(orgName) || routePath === route.path }">{{ item.label }}</label>
+                    <label :class="{ 'font-bold': item.route.endsWith(orgName) || routePath === route.path }">{{
+                        item.label }}</label>
                 </div>
             </a>
         </router-link>
