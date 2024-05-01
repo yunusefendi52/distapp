@@ -22,6 +22,7 @@ export default defineEventHandler(async (event) => {
             return operators.and(operators.eq(fields.organizationsId, userOrg.organizationsId!), operators.eq(fields.name, appName!.toString()))
         },
     }).then(takeUniqueOrThrow)
+    console.log('ffffff', releaseId)
     const releaseIdInt = parseInt(releaseId!.toString())
     const detailArtifact = await db.query.artifacts.findMany({
         where(fields, operators) {

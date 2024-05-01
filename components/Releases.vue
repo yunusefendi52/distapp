@@ -2,13 +2,13 @@
     <Button @click="upload" label="Upload" class="mb-3"></Button>
     <div class="card p-0">
         <DataTable :value="list" single @row-click="selectRow($event)" selectionMode="single">
-            <Column field="releaseId" header="Release Id" style="width: 15%"></Column>
-            <Column field="versionName2" header="Version Name"></Column>
-            <Column field="versionCode2" header="Version Code"></Column>
-            <Column field="groups" header="Groups">
+            <Column field="artifacts.releaseId" header="Release Id" style="width: 15%"></Column>
+            <Column field="artifacts.versionName2" header="Version Name"></Column>
+            <Column field="artifacts.versionCode2" header="Version Code"></Column>
+            <Column header="Groups">
                 <template #body="slotProps">
                     <label>
-                        {{ formatGroups(slotProps.data.groups) }}
+                        {{ slotProps.data.groups.names }}
                     </label>
                 </template>
             </Column>
@@ -69,6 +69,6 @@ const upload = () => {
 
 const selectRow = async (row: DataTableRowClickEvent) => {
     console.log(row.data)
-    await navigateTo(`/orgs/${props.orgName}/apps/${props.appName}/${row.data.releaseId}`)
+    await navigateTo(`/orgs/${props.orgName}/apps/${props.appName}/${row.data.artifacts.releaseId}`)
 }
 </script>

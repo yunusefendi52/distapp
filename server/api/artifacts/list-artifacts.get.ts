@@ -1,7 +1,8 @@
-import { and, eq } from "drizzle-orm"
+import { and, desc, eq, sql } from "drizzle-orm"
 import { artifacts, artifactsGroups, artifactsGroupsManager, organizations, organizationsPeople } from "~/server/db/schema"
 import { getStorageKeys } from "~/server/utils/utils"
 import { takeUniqueOrThrow } from "../detail-app.get"
+import { concat } from "drizzle-orm/sqlite-core/expressions"
 
 export default defineEventHandler(async (event) => {
     const db = event.context.drizzle
@@ -19,23 +20,25 @@ export default defineEventHandler(async (event) => {
             return operators.and(operators.eq(fields.organizationsId, userOrg.organizationsId!), operators.eq(fields.name, appName!.toString()))
         },
     }).then(takeUniqueOrThrow)
-    const artficats = await db.query.artifacts.findMany({
-        where(fields, operators) {
-            return operators.eq(fields.appsId, app.id)
-        },
-        orderBy(fields, operators) {
-            return operators.desc(fields.releaseId)
-        },
+    const groupsQuery = db.select({
+        artifactId: artifacts.id,
+        names: sql`group_concat(${artifactsGroups.name}, ', ')`.as('names'),
     })
-    const artifactGroups = await Promise.all(artficats.map(async e => {
-        const groups = await db.select()
-            .from(artifactsGroups)
-            .leftJoin(artifactsGroupsManager, eq(artifactsGroupsManager.artifactsGroupsId, artifactsGroups.id))
-            .where(eq(artifactsGroupsManager.artifactsId, e.id))
-        return {
-            ...e,
-            groups,
+        .from(artifacts)
+        .leftJoin(artifactsGroupsManager, and(eq(artifactsGroupsManager.artifactsId, artifacts.id)))
+        .leftJoin(artifactsGroups, and(eq(artifactsGroups.id, artifactsGroupsManager.artifactsGroupsId)))
+        .groupBy(artifacts.id)
+        .as('groups')
+    const artifactGroups = await db.select()
+        .from(artifacts)
+        .leftJoin(groupsQuery, eq(groupsQuery.artifactId, artifacts.id))
+        .where(eq(artifacts.appsId, app.id))
+        .orderBy(desc(artifacts.releaseId))
+    artifactGroups.forEach(v => {
+        v.artifacts.fileObjectKey = ''
+        if (v.groups) {
+            v.groups.artifactId = ''
         }
-    }))
+    })
     return artifactGroups
 })
