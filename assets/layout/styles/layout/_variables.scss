@@ -1,4 +1,8 @@
-/* General */
-$scale:14px;                    /* main font size */ 
-$borderRadius:8px;             /* border radius of layout element e.g. card, sidebar */ 
-$transitionDuration:.2s;        /* transition duration of layout elements e.g. sidebar, overlay menus */ 
+$scale: 14px;
+
+@media (min-width: 576px) {
+    $scale: 50px;
+}
+
+$borderRadius: 8px;
+$transitionDuration: .2s;

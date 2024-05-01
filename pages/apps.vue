@@ -93,36 +93,24 @@ const upperCase = (value: string | null | undefined) => {
 
 <template>
     <div class="card pt-2" style="padding: 0px;">
-        <!-- <div class="p-3 flex flex-row items-center">
-            <label class="text-xl font-bold flex-1">Apps</label>
-            <div class="flex flex-row gap-2">
-                <Button label="Primary" raised />
+        <div class="flex flex-col gap-3 px-3 py-3 sm:flex-row">
+            <div class="flex flex-row items-center gap-2 sm:flex-1">
+                <label class="text-2xl font-bold flex-1">Apps</label>
+                <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" v-if="pending" />
             </div>
-        </div> -->
-        <Toolbar style="border: 0px;" class="px-3">
-            <template #start>
-                <div class="flex flex-row items-center gap-2">
-                    <label class="text-2xl font-bold flex-1">Apps</label>
-                    <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" v-if="pending" />
-                </div>
-            </template>
-
-            <template #center>
-            </template>
-
-            <template #end>
-                <div class="flex flex-row gap-3">
-                    <form @submit="search">
-                        <IconField iconPosition="left">
-                            <InputIcon class="pi pi-search"> </InputIcon>
-                            <InputText placeholder="Search" name="search" />
-                        </IconField>
-                    </form>
+            <div class="flex flex-row gap-3">
+                <form @submit="search" class="flex-1 flex-shrink-0">
+                    <IconField iconPosition="left" styl>
+                        <InputIcon class="pi pi-search"> </InputIcon>
+                        <InputText placeholder="Search" name="search" />
+                    </IconField>
+                </form>
+                <div class="flex-shrink">
                     <SplitButton label="Add App" :model="items" @click="addApp" v-if="!isOrg"></SplitButton>
                     <Button label="Add App" @click="addApp" v-if="isOrg"></Button>
                 </div>
-            </template>
-        </Toolbar>
+            </div>
+        </div>
         <DataTable scrollable :value="apps" :rows="99999" responsiveLayout="scroll" @rowSelect="onRowSelect"
             selectionMode="single">
             <Column header="Name">
