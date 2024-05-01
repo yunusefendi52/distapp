@@ -47,3 +47,17 @@ export function formatBytes(bytes: number, decimals = 2, isBinary = false) {
 export const formatDate = (value?: string | null) => {
     return moment(value).format('LLL')
 }
+
+export const isIosDevice = () => /(iPad|iPhone|iPod)/g.test(navigator.userAgent) || (/(Mac OS)/g.test(navigator.userAgent) && "ontouchend" in document)
+
+export const generateManifestLink = (appName: string, orgName: string, releaseId: string, publicLink: string | undefined) => {
+    const data = {
+        appName,
+        orgName,
+        releaseId,
+        publicLink,
+    }
+    const dataStr = btoa(JSON.stringify(data))
+    const dd = encodeURIComponent(`?data=${dataStr}`)
+    return `itms-services://?action=download-manifest&url=${window.location.origin}/api/manifest.plist${dd}`
+}

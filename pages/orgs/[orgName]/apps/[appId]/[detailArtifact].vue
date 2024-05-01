@@ -69,8 +69,13 @@ const { data: detailArtifact, refresh, status: status2 } = useFetch('/api/artifa
 })
 
 const download = () => {
-    const url = `/api/artifacts/download-artifact?appName=${appName}&orgName=${orgName}&releaseId=${releaseId}`
-    window.open(url, '_blank')
+    if (isIosDevice()) {
+        const url = generateManifestLink(appName, orgName, releaseId, undefined)
+        document.location = url
+    } else {
+        const url = `/api/artifacts/download-artifact?appName=${appName}&orgName=${orgName}&releaseId=${releaseId}`
+        window.open(url, '_blank')
+    }
 }
 
 const { data: appGroups } = useFetch('/api/groups/list-groups', {

@@ -5,9 +5,14 @@ import { organizations, organizationsPeople } from "~/server/db/schema"
 import { and, eq } from "drizzle-orm"
 import { takeUniqueOrThrow } from "../detail-app.get"
 import { S3AppClient } from "~/server/services/S3AppClient"
+import type { EventHandlerRequest, H3Event } from "h3"
 
-export default defineEventHandler(async (event) => {
-    const { appName, orgName, releaseId } = getQuery(event)
+export const getArtifactFromInternal = async (
+    event: H3Event<EventHandlerRequest>,
+    orgName: string,
+    appName: string,
+    releaseId: string,
+) => {
     const db = event.context.drizzle
     const userId = event.context.auth.userId
     const userOrg = await db.select({
@@ -38,5 +43,20 @@ export default defineEventHandler(async (event) => {
         Key: assets,
         ResponseContentDisposition: `attachment; filename ="${app.name}${detailArtifact.extension ? `.${detailArtifact.extension}` : ''}"`,
     }), 1800)
+    return {
+        signedUrl,
+        userOrg,
+        app,
+        detailArtifact,
+    }
+}
+
+export default defineEventHandler(async (event) => {
+    const { appName, orgName, releaseId } = getQuery(event)
+    const { signedUrl } = await getArtifactFromInternal(
+        event,
+        orgName!.toString(),
+        appName!.toString(),
+        releaseId!.toString())
     await sendRedirect(event, signedUrl)
 })

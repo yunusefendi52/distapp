@@ -5,33 +5,16 @@ import { organizations, organizationsPeople } from "~/server/db/schema"
 import { and, eq } from "drizzle-orm"
 import { takeUniqueOrThrow } from "../detail-app.get"
 import { S3AppClient } from "~/server/services/S3AppClient"
+import { getArtifactFromPublicId } from './get-data.get'
+import type { EventHandlerRequest, H3Event } from "h3"
 
-export default defineEventHandler(async (event) => {
-    const query = getQuery(event)
-    const publicId = query.publicId?.toString()
-    const releaseIdStr = query.releaseId?.toString()
-    if (!publicId || !releaseIdStr) {
-        setResponseStatus(event, 401)
-        return
-    }
-    const releaseId = parseInt(releaseIdStr!)
-
+export const getArtifactLinkFromPublicIdAndReleaseId = async (
+    event: H3Event<EventHandlerRequest>,
+    publicId: string,
+    releaseId: number,
+) => {
     const db = event.context.drizzle
-    const artifactGroup = await db.query.artifactsGroups.findMany({
-        where(fields, operators) {
-            return operators.eq(fields.publicId, publicId)
-        },
-    }).then(takeUniqueOrThrow)
-    const app = await db.query.apps.findMany({
-        where(fields, operators) {
-            return operators.eq(fields.id, artifactGroup.appsId!)
-        },
-    }).then(takeUniqueOrThrow)
-    const org = await db.query.organizations.findMany({
-        where(fields, operators) {
-            return operators.eq(fields.id, app.organizationsId!)
-        },
-    }).then(takeUniqueOrThrow)
+    const { app, artifactGroup, org } = await getArtifactFromPublicId(event, publicId)
     const detailArtifact = await db.query.artifacts.findMany({
         where(fields, operators) {
             return operators.and(
@@ -47,5 +30,24 @@ export default defineEventHandler(async (event) => {
         Key: assets,
         ResponseContentDisposition: `attachment; filename ="${app.name}${detailArtifact.extension ? `.${detailArtifact.extension}` : ''}"`,
     }), 1800)
+    return {
+        signedUrl,
+        app,
+        org,
+        artifactGroup,
+        detailArtifact,
+    }
+}
+
+export default defineEventHandler(async (event) => {
+    const query = getQuery(event)
+    const publicId = query.publicId?.toString()
+    const releaseIdStr = query.releaseId?.toString()
+    if (!publicId || !releaseIdStr) {
+        setResponseStatus(event, 401)
+        return
+    }
+    const releaseId = parseInt(releaseIdStr!)
+    const { signedUrl } = await getArtifactLinkFromPublicIdAndReleaseId(event, publicId, releaseId)
     await sendRedirect(event, signedUrl)
 })

@@ -4,12 +4,15 @@ import { generateRandomPassword, getStorageKeys } from "~/server/utils/utils"
 import { takeUniqueOrThrow } from "../detail-app.get"
 import { GetObjectAttributesCommand, GetObjectTaggingCommand, HeadObjectCommand, ObjectAttributes } from "@aws-sdk/client-s3"
 import { S3AppClient, type AppHeadObjectCommandOutput } from "~/server/services/S3AppClient"
-import { readPackageFile } from "~/server/utils/package-reader"
+import type { EventHandlerRequest, H3Event } from "h3"
 
-export default defineEventHandler(async (event) => {
+export const getDetailArtifact = async (
+    event: H3Event<EventHandlerRequest>,
+    userId: string,
+    orgName: string,
+    appName: string,
+    releaseId: number | string) => {
     const db = event.context.drizzle
-    const userId = event.context.auth.userId
-    const { appName, orgName, releaseId } = getQuery(event)
     const userOrg = await db.select({
         organizationsId: organizations.id,
     })
@@ -22,7 +25,6 @@ export default defineEventHandler(async (event) => {
             return operators.and(operators.eq(fields.organizationsId, userOrg.organizationsId!), operators.eq(fields.name, appName!.toString()))
         },
     }).then(takeUniqueOrThrow)
-    console.log('ffffff', releaseId)
     const releaseIdInt = parseInt(releaseId!.toString())
     const detailArtifact = await db.query.artifacts.findMany({
         where(fields, operators) {
@@ -32,6 +34,24 @@ export default defineEventHandler(async (event) => {
             )
         },
     }).then(takeUniqueOrThrow)
+    return {
+        userOrg,
+        detailArtifact,
+        app,
+    }
+}
+
+export default defineEventHandler(async (event) => {
+    const db = event.context.drizzle
+    const userId = event.context.auth.userId
+    const { appName, orgName, releaseId } = getQuery(event)
+    const { userOrg, app, detailArtifact } = await getDetailArtifact(
+        event,
+        userId,
+        orgName!.toString(),
+        appName!.toString(),
+        parseInt(releaseId!.toString()),
+    )
     const s3 = new S3AppClient()
     const { assets } = getStorageKeys(userOrg.organizationsId!, app.id, detailArtifact.fileObjectKey)
     const [headObject, groups] = await Promise.all([
