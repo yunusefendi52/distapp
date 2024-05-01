@@ -2,7 +2,7 @@
     <Button class="mb-3" label="New Group" @click="visible = true"></Button>
 
     <div class="card p-0">
-        <DataTable :value="list" single>
+        <DataTable scrollable :value="list" single>
             <Column field="name" header="Group Name"></Column>
             <Column header="Public Link" style="width: 15%">
                 <template #body="{ data }">

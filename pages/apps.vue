@@ -123,7 +123,7 @@ const upperCase = (value: string | null | undefined) => {
                 </div>
             </template>
         </Toolbar>
-        <DataTable :value="apps" :rows="99999" responsiveLayout="scroll" @rowSelect="onRowSelect"
+        <DataTable scrollable :value="apps" :rows="99999" responsiveLayout="scroll" @rowSelect="onRowSelect"
             selectionMode="single">
             <Column header="Name">
                 <template #body="prop">

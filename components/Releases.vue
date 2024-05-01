@@ -1,7 +1,7 @@
 <template>
     <Button @click="upload" label="Upload" class="mb-3"></Button>
     <div class="card p-0">
-        <DataTable :value="list" single @row-click="selectRow($event)" selectionMode="single">
+        <DataTable scrollable :value="list" single @row-click="selectRow($event)" selectionMode="single">
             <Column field="artifacts.releaseId" header="Release Id" style="width: 15%"></Column>
             <Column field="artifacts.versionName2" header="Version Name"></Column>
             <Column field="artifacts.versionCode2" header="Version Code"></Column>
