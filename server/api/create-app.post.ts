@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { apps } from '../db/schema'
 import { generateId } from '../utils/utils'
 
