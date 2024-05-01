@@ -59,7 +59,7 @@ useSeoMeta({
 
 const download = (releaseId: number) => {
     if (isIosDevice()) {
-        const url = generateManifestLink('', '', releaseId.toString(), publicId.toString())
+        const url = generateManifestLink({}, releaseId.toString(), publicId.toString())
         document.location = url
     } else {
         const url = `/api/install/download?publicId=${publicId}&releaseId=${releaseId}`

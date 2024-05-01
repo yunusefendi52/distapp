@@ -52,11 +52,20 @@ export const getArtifactFromInternal = async (
 }
 
 export default defineEventHandler(async (event) => {
-    const { appName, orgName, releaseId } = getQuery(event)
-    const { signedUrl } = await getArtifactFromInternal(
+    const { appName, orgName, releaseId, manifestPlist } = getQuery(event)
+    const { signedUrl, app, detailArtifact, } = await getArtifactFromInternal(
         event,
         orgName!.toString(),
         appName!.toString(),
         releaseId!.toString())
+    if (manifestPlist) {
+        return {
+            signedUrl,
+            packageName: detailArtifact.packageName,
+            versionName: detailArtifact.versionName2,
+            displayName: app.displayName,
+        }
+    }
+
     await sendRedirect(event, signedUrl)
 })

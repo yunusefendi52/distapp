@@ -21,25 +21,15 @@ export default defineEventHandler(async (event) => {
 			app.displayName)
 	} else {
 		// Param from logged in user (without public id)
-		const orgName = data.orgName
-		const appName = data.appName
-		const { userOrg, app, detailArtifact } = await getArtifactFromInternal(
-			event,
-			orgName!.toString(),
-			appName!.toString(),
-			releaseId!.toString())
-		const { assets } = getStorageKeys(userOrg.organizationsId!, app.id, detailArtifact.fileObjectKey)
-		const s3 = new S3AppClient()
-		const signedUrl = await s3.getSignedUrlGetObject(event, new GetObjectCommand({
-			Bucket: s3BucketName,
-			Key: assets,
-			ResponseContentDisposition: `attachment; filename ="${app.name}${detailArtifact.extension ? `.${detailArtifact.extension}` : ''}"`,
-		}), 1800)
+		const packageName = data.packageName
+		const versionName = data.versionName
+		const displayName = data.displayName
+		const signedUrl = data.signedUrl
 		plist = generatePlist(
 			signedUrl,
-			detailArtifact.packageName!,
-			detailArtifact.versionName2,
-			app.displayName,
+			packageName,
+			versionName,
+			displayName,
 		)
 	}
 	setResponseHeader(event, 'Content-Type', "text/xml plist")

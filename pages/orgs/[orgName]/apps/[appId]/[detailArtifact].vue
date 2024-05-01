@@ -68,12 +68,17 @@ const { data: detailArtifact, refresh, status: status2 } = useFetch('/api/artifa
     },
 })
 
-const download = () => {
+const download = async () => {
+    const url = `/api/artifacts/download-artifact?appName=${appName}&orgName=${orgName}&releaseId=${releaseId}`
     if (isIosDevice()) {
-        const url = generateManifestLink(appName, orgName, releaseId, undefined)
-        document.location = url
+        const data = await $fetch(url, {
+            query: {
+                manifestPlist: true,
+            },
+        })
+        const manifestLink = generateManifestLink(data, releaseId, undefined)
+        document.location = manifestLink
     } else {
-        const url = `/api/artifacts/download-artifact?appName=${appName}&orgName=${orgName}&releaseId=${releaseId}`
         window.open(url, '_blank')
     }
 }
