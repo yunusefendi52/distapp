@@ -6,6 +6,7 @@ import { organizations, organizationsPeople } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { takeUniqueOrThrow } from "../detail-app.get";
 import { S3AppClient } from "~/server/services/S3AppClient";
+import { generateToken } from "~/server/utils/token-utils";
 
 export default defineEventHandler(async (event) => {
     const { orgName, appName } = await readBody(event)
@@ -25,6 +26,9 @@ export default defineEventHandler(async (event) => {
     }).then(takeUniqueOrThrow)
 
     const key = generateRandomPassword()
+    const token = generateToken(event, {
+        fileKey: key,
+    })
     var expires = 500;
     const { temp } = getStorageKeys(userOrg.organizationsId!, app.id, key)
     const s3 = new S3AppClient()
@@ -34,7 +38,7 @@ export default defineEventHandler(async (event) => {
         // ContentLength: limitUploadSizeMb.app.limitUploadSizeMb,
     }), expires)
     return {
-        file: key,
+        token,
         url: signedUrl,
     }
 })

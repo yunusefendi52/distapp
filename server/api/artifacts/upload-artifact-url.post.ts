@@ -4,9 +4,12 @@ import { getStorageKeys, s3BucketName } from "~/server/utils/utils"
 import { takeUniqueOrThrow } from "../detail-app.get"
 import { CopyObjectCommand, DeleteObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3"
 import { S3AppClient } from "~/server/services/S3AppClient"
+import { verifyToken } from "~/server/utils/token-utils"
 
 export default defineEventHandler(async (event) => {
-    const { key, appName, orgName, releaseNotes, packageMetadata, } = await readBody(event)
+    const { token, appName, orgName, releaseNotes, packageMetadata, } = await readBody(event)
+    const fileKey = (await verifyToken(event, token)).fileKey as string
+
     const userId = event.context.auth.userId
     const db = event.context.drizzle
     const userOrg = await db.select({
@@ -21,7 +24,7 @@ export default defineEventHandler(async (event) => {
             return operators.and(operators.eq(fields.organizationsId, userOrg.organizationsId!), operators.eq(fields.name, appName!.toString()))
         },
     }).then(takeUniqueOrThrow)
-    const { temp, assets } = getStorageKeys(userOrg.organizationsId!, app.id, key)
+    const { temp, assets } = getStorageKeys(userOrg.organizationsId!, app.id, fileKey)
     const packageData = packageMetadata as {
         versionCode: number,
         versionName: string,
@@ -60,7 +63,7 @@ export default defineEventHandler(async (event) => {
         id: artifactsId,
         createdAt: now,
         updatedAt: now,
-        fileObjectKey: key,
+        fileObjectKey: fileKey,
         versionCode2: packageData?.versionCode?.toString()!,
         versionName2: packageData?.versionName!,
         appsId: app.id,
