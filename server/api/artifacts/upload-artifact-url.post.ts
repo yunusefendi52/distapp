@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
     }).then(takeUniqueOrThrow)
     const { temp, assets } = getStorageKeys(userOrg.organizationsId!, app.id, key)
     const packageData = packageMetadata as {
-        versionCode: string,
+        versionCode: number,
         versionName: string,
         packageName: string,
         extension: string,
