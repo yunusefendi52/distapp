@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
     }).then(takeUniqueOrThrow)
 
     const key = generateRandomPassword()
-    const token = generateToken(event, {
+    const token = await generateToken(event, {
         fileKey: key,
     })
     var expires = 500;
