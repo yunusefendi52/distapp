@@ -4,14 +4,15 @@ import { getStorageKeys, s3BucketName } from "~/server/utils/utils"
 import { takeUniqueOrThrow } from "../detail-app.get"
 import { CopyObjectCommand, DeleteObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3"
 import { S3AppClient } from "~/server/services/S3AppClient"
-import { verifyToken } from "~/server/utils/token-utils"
+import { decryptText, verifyToken } from "~/server/utils/token-utils"
 
 export default defineEventHandler(async (event) => {
     const { token, appName, orgName, releaseNotes, packageMetadata, } = await readBody(event)
-    const fileKey = (await verifyToken(event, token)).fileKey as string
+    const fileKey = (decryptText(event, token)).fileKey as string
 
     const userId = event.context.auth.userId
     const db = event.context.drizzle
+    
     const userOrg = await db.select({
         organizationsId: organizations.id,
     })

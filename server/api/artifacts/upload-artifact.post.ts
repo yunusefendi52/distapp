@@ -6,7 +6,7 @@ import { organizations, organizationsPeople } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { takeUniqueOrThrow } from "../detail-app.get";
 import { S3AppClient } from "~/server/services/S3AppClient";
-import { generateToken } from "~/server/utils/token-utils";
+import { encryptText } from "~/server/utils/token-utils";
 
 export default defineEventHandler(async (event) => {
     const { orgName, appName } = await readBody(event)
@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
     }).then(takeUniqueOrThrow)
 
     const key = generateRandomPassword()
-    const token = await generateToken(event, {
+    const token = encryptText(event, {
         fileKey: key,
     })
     var expires = 500;

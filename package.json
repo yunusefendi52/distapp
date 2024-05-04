@@ -25,6 +25,7 @@
     "@tanstack/vue-query": "^5.28.9",
     "@xmldom/xmldom": "^0.8.10",
     "chart.js": "3.3.2",
+    "crypto-js": "^4.2.0",
     "drizzle-orm": "^0.30.7",
     "h3": "^1.11.1",
     "jose": "^5.2.4",
@@ -39,6 +40,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.18.9",
+    "@types/crypto-js": "^4.2.2",
     "@types/lodash": "^4.17.0",
     "@types/pg": "^8.11.4",
     "@types/uuid": "^9.0.8",
