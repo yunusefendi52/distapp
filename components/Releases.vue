@@ -1,5 +1,9 @@
 <template>
-    <Button @click="upload" label="Upload" class="mb-3"></Button>
+    <div class="flex flex-col gap-3 mb-3 sm:flex-row">
+        <Button @click="upload" label="Upload"></Button>
+        <MultiSelect label="Filter Groups" v-model="selectedGroup" :options="groups" optionLabel="name"
+            class="sm:w-[200px]" />
+    </div>
     <div class="card p-0">
         <DataTable scrollable :value="list" single @row-click="selectRow($event)" selectionMode="single">
             <Column field="artifacts.releaseId" header="Release Id" style="width: 15%"></Column>
@@ -37,10 +41,21 @@ const props = defineProps<{
     appName: string,
 }>()
 
+const { data: appGroups } = useFetch('/api/groups/list-groups', {
+    query: {
+        appName: props.appName,
+        orgName: props.orgName,
+    },
+})
+const groups = computed(() => appGroups.value ?? [])
+const selectedGroup = ref<any[]>([])
+const selectedGroupIds = computed(() => selectedGroup.value?.map(e => e.id) ?? [])
+
 const { data, refresh } = useFetch('/api/artifacts/list-artifacts', {
     query: {
         orgName: props.orgName,
         appName: props.appName,
+        groups: selectedGroupIds,
     },
 })
 const list = computed(() => data.value as any[])
@@ -71,4 +86,5 @@ const selectRow = async (row: DataTableRowClickEvent) => {
     console.log(row.data)
     await navigateTo(`/orgs/${props.orgName}/apps/${props.appName}/${row.data.artifacts.releaseId}`)
 }
+
 </script>

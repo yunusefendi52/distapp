@@ -1,4 +1,4 @@
-import { and, desc, eq, sql } from "drizzle-orm"
+import { and, desc, eq, inArray, sql } from "drizzle-orm"
 import { artifacts, artifactsGroups, artifactsGroupsManager, organizations, organizationsPeople } from "~/server/db/schema"
 import { getStorageKeys } from "~/server/utils/utils"
 import { takeUniqueOrThrow } from "../detail-app.get"
@@ -7,7 +7,8 @@ import { concat } from "drizzle-orm/sqlite-core/expressions"
 export default defineEventHandler(async (event) => {
     const db = event.context.drizzle
     const userId = event.context.auth.userId
-    const { appName, orgName } = getQuery(event)
+    const query = getQuery(event)
+    const { appName, orgName } = query
     const userOrg = await db.select({
         organizationsId: organizations.id,
     })
