@@ -10,7 +10,7 @@
             <MultiSelect v-model="selectedGroup" display="chip" :options="groups" optionLabel="name"
                 placeholder="Select Groups" />
         </div>
-        <Button label="Upload" @click="submit" :loading="isPending" />
+        <Button :label="isPending ? 'Uploading...' : 'Upload'" @click="submit" :loading="isPending" />
     </div>
 </template>
 
