@@ -2,6 +2,19 @@
 
 Distribute Android and iOS app. Alternative App Center Distribution with option to self-hosted your self
 
+```
+Still in development, see roadmap
+```
+
+### Roadmap
+- API Key
+- Manage user access
+- Manage groups
+
+### Screenshots
+
+[See here](./screenshots)
+
 ## Setup
 
 #### Ensure you have the required .env
