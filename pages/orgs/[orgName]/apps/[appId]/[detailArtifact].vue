@@ -8,13 +8,17 @@
         </div>
         <Button :loading="isDownloading" label="Download" @click="download"></Button>
     </div>
+    <ConfirmPopup></ConfirmPopup>
     <!-- <div>{{ detailArtifact }}</div> -->
     <div class="flex flex-col gap-3 mt-3 card p-3">
-        <div class="flex flex-col gap-1">
-            <label class="font-semibold text-xl">Version {{ detailArtifact?.versionName2 }} ({{
-                detailArtifact?.releaseId
-            }})</label>
-            <label class="text-lg">{{ formatDate(detailArtifact?.createdAt) }}</label>
+        <div class="flex flex-row items-center">
+            <div class="flex flex-col gap-1 flex-1">
+                <label class="font-semibold text-xl">Version {{ detailArtifact?.versionName2 }} ({{
+                    detailArtifact?.releaseId
+                }})</label>
+                <label class="text-lg">{{ formatDate(detailArtifact?.createdAt) }}</label>
+            </div>
+            <Button @click="confirmDelete($event)" icon="pi pi-trash" label="Delete" severity="danger" />
         </div>
         <div class="flex flex-col gap-2">
             <span class="font-semibold">Release Notes</span>
@@ -116,5 +120,22 @@ const { execute: saveGroups, status: saveGroupsStatus } = useAsyncData(() => {
 }, {
     immediate: false,
 })
+
+const confirm = useConfirm();
+const confirmDelete = (event: any) => {
+    confirm.require({
+        target: event.currentTarget,
+        message: 'Do you want to delete permanently this artifact?',
+        icon: 'pi pi-info-circle',
+        rejectClass: 'p-button-secondary p-button-outlined p-button-sm',
+        acceptClass: 'p-button-danger p-button-sm',
+        rejectLabel: 'Cancel',
+        acceptLabel: 'Delete',
+        accept: () => {
+        },
+        reject: () => {
+        }
+    });
+};
 
 </script>
