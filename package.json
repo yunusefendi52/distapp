@@ -23,6 +23,8 @@
     "@libsql/client": "^0.6.0",
     "@plist/parse": "^1.1.0",
     "@tanstack/vue-query": "^5.28.9",
+    "@vueuse/core": "^10.10.0",
+    "@vueuse/nuxt": "^10.10.0",
     "@xmldom/xmldom": "^0.8.10",
     "chart.js": "3.3.2",
     "crypto-js": "^4.2.0",

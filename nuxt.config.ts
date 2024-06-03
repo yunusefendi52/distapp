@@ -68,7 +68,7 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  modules: ['@hebilicious/vue-query-nuxt', 'nuxt-primevue'],
+  modules: ['@hebilicious/vue-query-nuxt', 'nuxt-primevue', '@vueuse/nuxt'],
   primevue: {
     options: { ripple: true },
     components: {
