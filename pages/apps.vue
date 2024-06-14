@@ -95,8 +95,15 @@ const upperCase = (value: string | null | undefined) => {
     <div class="card pt-2" style="padding: 0px;">
         <div class="flex flex-col gap-3 px-3 py-3 sm:flex-row">
             <div class="flex flex-row items-center gap-2 sm:flex-1">
-                <label class="text-2xl font-bold flex-1">Apps</label>
-                <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" v-if="pending" />
+                <div class="flex-1">
+                    <label class="text-2xl font-bold">Apps</label>
+                    <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" v-if="pending" />
+                </div>
+                <div>
+                    <NuxtLink :to="`/orgs/${orgNameParam}/settings`" append v-if="isOrg">
+                        <Button icon="pi pi-cog" severity="secondary" rounded aria-label="Settings" />
+                    </NuxtLink>
+                </div>
             </div>
             <div class="flex flex-row gap-3">
                 <form @submit="search" class="flex-1 flex-shrink-0">
