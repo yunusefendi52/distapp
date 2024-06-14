@@ -7,8 +7,13 @@
     <div class="card p-0">
         <DataTable scrollable :value="list" single @row-click="selectRow($event)" selectionMode="single">
             <Column field="artifacts.releaseId" header="Release Id" style="width: 15%"></Column>
-            <Column field="artifacts.versionName2" header="Version Name"></Column>
-            <Column field="artifacts.versionCode2" header="Version Code"></Column>
+            <Column field="artifacts.versionName2" header="Version">
+                <template #body="slotProps">
+                    <label>
+                        {{ `${slotProps.data.artifacts.versionName2} (${slotProps.data.artifacts.versionCode2})` }}
+                    </label>
+                </template>
+            </Column>
             <Column header="Groups">
                 <template #body="slotProps">
                     <label>
