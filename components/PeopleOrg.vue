@@ -1,8 +1,9 @@
 <template>
     <div class="flex gap-3 flex-col sm:flex-row items-center">
-        <Button :loading="createInviteStatus === 'pending'" @click="() => create()" label="Create Invite Code" />
+        <Button :loading="createInviteStatus === 'pending'" @click="() => create()" label="Create Invite Code"
+            v-if="data?.canChange" />
         <ProgressSpinner style="width: 22px; height: 22px; margin: unset;" strokeWidth="6"
-            v-if="status === 'pending' || changeRoleIsPending" />
+            v-if="status === 'pending' || changeRoleIsPending || deleteRoleIsPending" />
     </div>
     <div class="card p-0 mt-3">
         <DataTable scrollable :value="listOrgPeople" single selectionMode="single" :pt="{
@@ -27,13 +28,13 @@
                     </form>
                 </template>
             </Column>
-            <Column header="">
+            <Column header="" v-if="data?.canChange">
                 <template #body="prop">
-                    <form>
-                        <div>
-                            <Button icon="pi pi-trash" severity="secondary" aria-label="Delete" />
-                        </div>
-                    </form>
+                    <div>
+                        <Button icon="pi pi-trash" severity="secondary" aria-label="Delete" @click="deleteRoleConfirm({
+                            prop,
+                        }, $event)" />
+                    </div>
                 </template>
             </Column>
         </DataTable>
@@ -48,7 +49,7 @@
             <Button type="button" label="Copy Code" @click="copyLink(inviteLink)"></Button>
         </div>
     </Dialog>
-
+    <ConfirmPopup />
 </template>
 
 <script setup lang="ts">
@@ -97,7 +98,7 @@ const { mutate: changeRole, isPending: changeRoleIsPending } = useMutation({
     mutationFn: async (req: any) => {
         const roleId = req.dropdown.value.id
         const email = req.prop.data.email
-        await $fetch('/api/change-role', {
+        await $fetch('/api/org-people/change-role', {
             method: 'post',
             body: { roleId, email, orgName },
         })
@@ -111,4 +112,40 @@ const { mutate: changeRole, isPending: changeRoleIsPending } = useMutation({
         })
     },
 })
+
+const { mutate: deleteRole, isPending: deleteRoleIsPending } = useMutation({
+    mutationFn: async (req: any) => {
+        const email = req.prop.data.email
+        await $fetch('/api/org-people/remove-user-from-org', {
+            method: 'delete',
+            body: { email, orgName },
+        })
+        refresh()
+    },
+    onError(error, variables, context) {
+        toast.add({
+            severity: 'error',
+            detail: error.message,
+            life: 5000,
+        })
+    },
+})
+
+const confirm = useConfirm();
+const deleteRoleConfirm = (req: any, event: any) => {
+    confirm.require({
+        target: event.currentTarget,
+        message: 'Do you want to remove this user?',
+        icon: 'pi pi-info-circle',
+        rejectClass: 'p-button-secondary p-button-outlined p-button-sm',
+        acceptClass: 'p-button-danger p-button-sm',
+        rejectLabel: 'Cancel',
+        acceptLabel: 'Remove',
+        accept: () => {
+            deleteRole(req)
+        },
+        reject: () => {
+        }
+    });
+}
 </script>
