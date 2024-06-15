@@ -66,6 +66,7 @@ const joined = () => {
                     <div class="flex flex-col h-full">
                         <AppMenu class="flex-1" />
                         <div class="flex gap-3 p-2 flex-column">
+                            <Button label="Join Invite Code" @click="joinDialog = true" severity="secondary" />
                             <Button @click="signout" label="Sign Out"></Button>
                         </div>
                     </div>
