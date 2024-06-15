@@ -20,6 +20,8 @@ export default defineEventHandler(async (event) => {
 
     const people = await db.select({
         profileName: users.name,
+        email: users.email,
+        createdAt: organizationsPeople.createdAt,
     })
         .from(organizationsPeople)
         .leftJoin(users, eq(users.id, organizationsPeople.userId))

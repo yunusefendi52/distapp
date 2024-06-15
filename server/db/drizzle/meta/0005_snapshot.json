@@ -1,8 +1,6 @@
 {
-  "version": "5",
+  "version": "6",
   "dialect": "sqlite",
-  "id": "5bc14573-9771-4f3c-83cd-d9f43ede9dc4",
-  "prevId": "1632ba73-b6ae-4fb7-a520-b89a6965781f",
   "tables": {
     "apps": {
       "name": "apps",
@@ -64,15 +62,15 @@
         "apps_organizationsId_organizations_id_fk": {
           "name": "apps_organizationsId_organizations_id_fk",
           "tableFrom": "apps",
-          "tableTo": "organizations",
           "columnsFrom": [
             "organizationsId"
           ],
+          "tableTo": "organizations",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -152,15 +150,15 @@
         "artifacts_appsId_apps_id_fk": {
           "name": "artifacts_appsId_apps_id_fk",
           "tableFrom": "artifacts",
-          "tableTo": "apps",
           "columnsFrom": [
             "appsId"
           ],
+          "tableTo": "apps",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -212,15 +210,15 @@
         "artifactsGroups_appsId_apps_id_fk": {
           "name": "artifactsGroups_appsId_apps_id_fk",
           "tableFrom": "artifactsGroups",
-          "tableTo": "apps",
           "columnsFrom": [
             "appsId"
           ],
+          "tableTo": "apps",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -258,28 +256,28 @@
         "artifactsGroupsManager_artifactsId_artifacts_id_fk": {
           "name": "artifactsGroupsManager_artifactsId_artifacts_id_fk",
           "tableFrom": "artifactsGroupsManager",
-          "tableTo": "artifacts",
           "columnsFrom": [
             "artifactsId"
           ],
+          "tableTo": "artifacts",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "artifactsGroupsManager_artifactsGroupsId_artifactsGroups_id_fk": {
           "name": "artifactsGroupsManager_artifactsGroupsId_artifactsGroups_id_fk",
           "tableFrom": "artifactsGroupsManager",
-          "tableTo": "artifactsGroups",
           "columnsFrom": [
             "artifactsGroupsId"
           ],
+          "tableTo": "artifactsGroups",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -362,28 +360,28 @@
         "organizationsPeople_userId_users_id_fk": {
           "name": "organizationsPeople_userId_users_id_fk",
           "tableFrom": "organizationsPeople",
-          "tableTo": "users",
           "columnsFrom": [
             "userId"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "organizationsPeople_organizationId_organizations_id_fk": {
           "name": "organizationsPeople_organizationId_organizations_id_fk",
           "tableFrom": "organizationsPeople",
-          "tableTo": "organizations",
           "columnsFrom": [
             "organizationId"
           ],
+          "tableTo": "organizations",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -423,8 +421,9 @@
   },
   "enums": {},
   "_meta": {
-    "schemas": {},
     "tables": {},
     "columns": {}
-  }
+  },
+  "id": "5bc14573-9771-4f3c-83cd-d9f43ede9dc4",
+  "prevId": "1632ba73-b6ae-4fb7-a520-b89a6965781f"
 }

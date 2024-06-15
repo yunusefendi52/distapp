@@ -18,6 +18,11 @@ watchEffect(() => {
         visible.value = false
     }
 })
+
+const joinDialog = ref(false)
+const joined = () => {
+    location.reload()
+}
 </script>
 
 <style scoped lang="scss">
@@ -70,6 +75,7 @@ watchEffect(() => {
                     <AppMenu />
                 </div>
                 <div class="flex gap-3 p-2 flex-column">
+                    <Button label="Join Invite Code" @click="joinDialog = true" />
                     <Button @click="signout" label="Sign Out"></Button>
                 </div>
             </div>
@@ -82,4 +88,5 @@ watchEffect(() => {
             </div>
         </div>
     </div>
+    <LazyJoinInviteLink v-model="joinDialog" @joined="joined" />
 </template>

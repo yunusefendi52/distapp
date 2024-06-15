@@ -12,7 +12,7 @@
     "lint:fix": "eslint --fix --ext \".js,.vue\" --ignore-path .gitignore .",
     "format": "prettier --write \"**/*.{js,vue,d.ts}\"",
     "format:check": "prettier --check \"**/*.{js,vue,d.ts}\"",
-    "drizzle:generate": "drizzle-kit generate:sqlite",
+    "drizzle:generate": "drizzle-kit generate",
     "drizzle:migrate": "bun run server/db/migrate.ts",
     "deploy": "bun run build --preset=cloudflare-pages && npx wrangler pages deploy dist/"
   },

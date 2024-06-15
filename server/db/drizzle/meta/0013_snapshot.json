@@ -1,6 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
+  "id": "cf38b532-6517-4300-9e89-0c2837a4eb9c",
+  "prevId": "32142ec8-7d24-4703-9f3b-5524e3df033e",
   "tables": {
     "apps": {
       "name": "apps",
@@ -62,15 +64,15 @@
         "apps_organizationsId_organizations_id_fk": {
           "name": "apps_organizationsId_organizations_id_fk",
           "tableFrom": "apps",
+          "tableTo": "organizations",
           "columnsFrom": [
             "organizationsId"
           ],
-          "tableTo": "organizations",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -91,8 +93,21 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "''"
+          "autoincrement": false
+        },
+        "versionName2": {
+          "name": "versionName2",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "versionCode2": {
+          "name": "versionCode2",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
         },
         "releaseNotes": {
           "name": "releaseNotes",
@@ -120,6 +135,20 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false
+        },
+        "extension": {
+          "name": "extension",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "packageName": {
+          "name": "packageName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         },
         "appsId": {
@@ -151,15 +180,15 @@
         "artifacts_appsId_apps_id_fk": {
           "name": "artifacts_appsId_apps_id_fk",
           "tableFrom": "artifacts",
+          "tableTo": "apps",
           "columnsFrom": [
             "appsId"
           ],
-          "tableTo": "apps",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -188,6 +217,13 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "publicId": {
+          "name": "publicId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {
@@ -195,6 +231,13 @@
           "name": "artifactsGroups_id_unique",
           "columns": [
             "id"
+          ],
+          "isUnique": true
+        },
+        "artifactsGroups_publicId_unique": {
+          "name": "artifactsGroups_publicId_unique",
+          "columns": [
+            "publicId"
           ],
           "isUnique": true
         },
@@ -211,15 +254,15 @@
         "artifactsGroups_appsId_apps_id_fk": {
           "name": "artifactsGroups_appsId_apps_id_fk",
           "tableFrom": "artifactsGroups",
+          "tableTo": "apps",
           "columnsFrom": [
             "appsId"
           ],
-          "tableTo": "apps",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -257,28 +300,28 @@
         "artifactsGroupsManager_artifactsId_artifacts_id_fk": {
           "name": "artifactsGroupsManager_artifactsId_artifacts_id_fk",
           "tableFrom": "artifactsGroupsManager",
+          "tableTo": "artifacts",
           "columnsFrom": [
             "artifactsId"
           ],
-          "tableTo": "artifacts",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "artifactsGroupsManager_artifactsGroupsId_artifactsGroups_id_fk": {
           "name": "artifactsGroupsManager_artifactsGroupsId_artifactsGroups_id_fk",
           "tableFrom": "artifactsGroupsManager",
+          "tableTo": "artifactsGroups",
           "columnsFrom": [
             "artifactsGroupsId"
           ],
-          "tableTo": "artifactsGroups",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -345,6 +388,20 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {
@@ -361,28 +418,28 @@
         "organizationsPeople_userId_users_id_fk": {
           "name": "organizationsPeople_userId_users_id_fk",
           "tableFrom": "organizationsPeople",
+          "tableTo": "users",
           "columnsFrom": [
             "userId"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "organizationsPeople_organizationId_organizations_id_fk": {
           "name": "organizationsPeople_organizationId_organizations_id_fk",
           "tableFrom": "organizationsPeople",
+          "tableTo": "organizations",
           "columnsFrom": [
             "organizationId"
           ],
-          "tableTo": "organizations",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -404,6 +461,13 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {
@@ -411,6 +475,13 @@
           "name": "users_id_unique",
           "columns": [
             "id"
+          ],
+          "isUnique": true
+        },
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "columns": [
+            "email"
           ],
           "isUnique": true
         }
@@ -422,9 +493,11 @@
   },
   "enums": {},
   "_meta": {
+    "schemas": {},
     "tables": {},
     "columns": {}
   },
-  "id": "1632ba73-b6ae-4fb7-a520-b89a6965781f",
-  "prevId": "f69d4cd3-f48c-44b2-b71d-cff716b5671d"
+  "internal": {
+    "indexes": {}
+  }
 }

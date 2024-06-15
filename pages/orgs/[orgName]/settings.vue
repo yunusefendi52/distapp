@@ -12,7 +12,7 @@
             menu: 'remove-bg-tabmenu',
             menuitem: 'remove-bg-tabmenu',
         }" />
-        <div class="flex-1 mt-4">
+        <div class="flex-1 mt-3">
             <PeopleOrg v-if="tabIndex === 0" />
         </div>
     </div>

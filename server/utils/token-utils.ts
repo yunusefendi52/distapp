@@ -4,12 +4,23 @@ import Crypto from 'crypto-js'
 
 const alg = 'HS256'
 
-export const generateToken = async (
+type GenerateJwtConfig = (jwtOptions: jose.SignJWT) => jose.SignJWT
+
+export const generateToken = (
     event: H3Event<EventHandlerRequest>,
     data: any) => {
-    const token = await new jose.SignJWT(data).setProtectedHeader({ alg })
+    return generateTokenWithOptions(event, data, (v) => v)
+}
+
+export const generateTokenWithOptions = async (
+    event: H3Event<EventHandlerRequest>,
+    data: any,
+    configJwt: GenerateJwtConfig) => {
+    const jwtOptions = new jose.SignJWT(data).setProtectedHeader({ alg })
         .setIssuedAt()
-        .sign(getJwtKey(event))
+    configJwt(jwtOptions)
+    const token = await
+        jwtOptions.sign(getJwtKey(event))
     return token
 }
 

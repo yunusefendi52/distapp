@@ -1,8 +1,6 @@
 {
-  "version": "5",
+  "version": "6",
   "dialect": "sqlite",
-  "id": "a6c33e4d-fd90-4740-a2d1-67c63a71c5f8",
-  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "apps": {
       "name": "apps",
@@ -64,15 +62,15 @@
         "apps_organizationsId_organizations_id_fk": {
           "name": "apps_organizationsId_organizations_id_fk",
           "tableFrom": "apps",
-          "tableTo": "organizations",
           "columnsFrom": [
             "organizationsId"
           ],
+          "tableTo": "organizations",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -155,28 +153,28 @@
         "organizationsPeople_userId_users_id_fk": {
           "name": "organizationsPeople_userId_users_id_fk",
           "tableFrom": "organizationsPeople",
-          "tableTo": "users",
           "columnsFrom": [
             "userId"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "organizationsPeople_organizationId_organizations_id_fk": {
           "name": "organizationsPeople_organizationId_organizations_id_fk",
           "tableFrom": "organizationsPeople",
-          "tableTo": "organizations",
           "columnsFrom": [
             "organizationId"
           ],
+          "tableTo": "organizations",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -216,8 +214,9 @@
   },
   "enums": {},
   "_meta": {
-    "schemas": {},
     "tables": {},
     "columns": {}
-  }
+  },
+  "id": "a6c33e4d-fd90-4740-a2d1-67c63a71c5f8",
+  "prevId": "00000000-0000-0000-0000-000000000000"
 }
