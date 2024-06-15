@@ -2,13 +2,6 @@
 import AppHeader from './AppHeader.vue';
 import AppMenu from './AppMenu.vue';
 
-const cookie = useCookie('app-auth')
-
-const signout = () => {
-    cookie.value = null
-    navigateTo('/')
-}
-
 const visible = ref(false)
 
 const route = useRoute()
@@ -18,11 +11,6 @@ watchEffect(() => {
         visible.value = false
     }
 })
-
-const joinDialog = ref(false)
-const joined = () => {
-    location.reload()
-}
 </script>
 
 <style scoped lang="scss">
@@ -65,20 +53,14 @@ const joined = () => {
                 <Sidebar v-model:visible="visible">
                     <div class="flex flex-col h-full">
                         <AppMenu class="flex-1" />
-                        <div class="flex gap-3 p-2 flex-column">
-                            <Button label="Join Invite Code" @click="joinDialog = true" severity="secondary" />
-                            <Button @click="signout" label="Sign Out"></Button>
-                        </div>
+                        <LazyBottomMenu />
                     </div>
                 </Sidebar>
                 <div class="flex-1 overflow-auto">
                     <AppHeader />
                     <AppMenu />
                 </div>
-                <div class="flex gap-3 p-2 flex-column">
-                    <Button label="Join Invite Code" @click="joinDialog = true" severity="secondary" />
-                    <Button @click="signout" label="Sign Out"></Button>
-                </div>
+                <LazyBottomMenu />
             </div>
             <div class="flex-1 overflow-auto layout-content">
                 <div class="mb-3 flex flex-row gap-3 items-center header-mobile">
@@ -89,5 +71,4 @@ const joined = () => {
             </div>
         </div>
     </div>
-    <LazyJoinInviteLink v-model="joinDialog" @joined="joined" />
 </template>
