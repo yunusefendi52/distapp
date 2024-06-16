@@ -1,6 +1,8 @@
 import { resolve } from 'path'
 import { createCommonJS } from 'mlly'
 const { __dirname } = createCommonJS(import.meta.url)
+import path from 'path'
+import fs from 'fs'
 
 export default defineNuxtConfig({
   runtimeConfig: {
@@ -88,6 +90,13 @@ export default defineNuxtConfig({
         path: '/add-account',
         file: resolve(__dirname, 'pages/signin.vue'),
       })
-    }
-  }
+    },
+    'nitro:build:public-assets': (nitro) => {
+      const targetDir = path.join(nitro.options.output.serverDir, 'db/drizzle');
+      fs.cpSync('server/db/drizzle', targetDir, {
+        recursive: true,
+        force: true,
+      });
+    },
+  },
 })

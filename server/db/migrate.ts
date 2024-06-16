@@ -1,10 +1,17 @@
 import db from './db';
 import { migrate } from 'drizzle-orm/libsql/migrator';
+import path from 'path'
 
-// This will run migrations on the database, skipping the ones already applied
-await migrate(db(process.env, true), { migrationsFolder: `${import.meta.dirname}/drizzle` });
+export const runMigration = async () => {
+    if (process.env.NUXT_APP_MIGRATION_ENABLE !== 'true') {
+        console.log('⏩ Migration skipped')
+        return
+    }
+    var migrationDir = process.env.NUXT_APP_MIGRATION_DIR
+    migrationDir = path.join(migrationDir ? migrationDir : process.cwd(), 'server', 'db', 'drizzle')
+    console.log('🔄 Migration starting', )
 
-console.log('✅ Migration success')
+    await migrate(db(process.env, true), { migrationsFolder: migrationDir });
 
-// // Don't forget to close the connection, otherwise the script will hang
-// await connection.end();
+    console.log('✅ Migration success')
+}
