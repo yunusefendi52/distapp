@@ -34,10 +34,10 @@ const { mutateAsync, isPending } = useMutation({
         method: 'post',
         body: r,
     }),
-    onSuccess: async () => {
+    onSuccess: async (r) => {
         orgsStore.refresh()
         addOrgVisible.value = false
-        navigateTo(`/orgs/${orgNameNormalized.value}`)
+        navigateTo(`/orgs/${r.normalizedOrgName}`)
         orgName.value = ''
     },
 })
