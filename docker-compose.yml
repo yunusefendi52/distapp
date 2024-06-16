@@ -1,0 +1,39 @@
+services:
+  distapp:
+    build: .
+    ports:
+      - "3001:3000"
+    env_file:
+      - docker-compose.env
+  minio:
+    image: quay.io/minio/minio:RELEASE.2024-06-13T22-53-53Z
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: 7ebd63b0d9bb4218a837901ca0e571d4
+      MINIO_ROOT_PASSWORD: 7ebd63b0d9bb4218a837901ca0e571d4
+    volumes:
+      - minio:/data
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set myminio http://minio:9000 7ebd63b0d9bb4218a837901ca0e571d4 7ebd63b0d9bb4218a837901ca0e571d4;
+      /usr/bin/mc mb '-p' myminio/distapp;
+      exit 0;
+      "
+  db:
+    image: ghcr.io/tursodatabase/libsql-server:latest
+    platform: linux/amd64
+    ports:
+      - "8080:8080"
+      - "5001:5001"
+    volumes:
+      - db:/var/lib/sqld
+volumes:
+  db:
+  minio:
