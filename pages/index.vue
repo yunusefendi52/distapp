@@ -10,21 +10,31 @@ definePageMeta({
     layout: false,
 })
 
+const route = useRoute()
+const router = useRouter()
 const cookie = useCookie('app-auth')
 if (cookie.value) {
     if (process.client) {
+        const userToken = route.query.usr?.toString()
+        const userEmail = route.query.e?.toString()
         const userTokens = useLocalStorage<UserTokenInfo[]>(userTokensKey, [])
-        const newUserTokens = _.uniqBy([
-            ...userTokens.value,
-            {
-                email: 'Main Account',
-                token: cookie.value,
+        router.push({
+            query: {
             },
-        ], e => e.email)
-        userTokens.value = newUserTokens
-        setTimeout(() => { // why this need delay?
+        })
+        if (userToken && userEmail) {
+            const newUserTokens = _.uniqBy([
+                ...userTokens.value,
+                {
+                    email: userEmail,
+                    token: userToken,
+                },
+            ], e => e.email)
+            userTokens.value = newUserTokens
+        }
+        onMounted(() => {
             navigateTo('/apps')
-        }, 500)
+        })
     }
 } else {
     await navigateTo('/signin')

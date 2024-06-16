@@ -1,6 +1,7 @@
 import type { EventHandlerRequest, H3Event } from 'h3'
 import * as jose from 'jose'
 import { users } from '~/server/db/schema'
+import { userTokensHeaderKey } from '~/server/utils/utils'
 
 const alg = 'HS256'
 
@@ -94,16 +95,14 @@ export default defineEventHandler(async (event) => {
         return
     }
     const { token } = await generateUserToken(event, signInProvider, userId, userEmail, userRealName)
-    if (isAddAccount) {
-        const param = new URLSearchParams({
-            usr: token,
-            userEmail,
-        })
-        await sendRedirect(event, `/add-account?${param.toString()}`)
-    } else {
+    if (!isAddAccount) {
         signInUser(event, token)
-        await sendRedirect(event, '/')
     }
+    const param = new URLSearchParams({
+        usr: token,
+        e: userEmail,
+    })
+    await sendRedirect(event, `/?${param.toString()}`)
 })
 
 const getGoogleToken = async (event: H3Event<EventHandlerRequest>, host: string, code: string) => {

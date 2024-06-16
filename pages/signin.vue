@@ -9,7 +9,6 @@
         </form>
         <form method="get" action="/api/auth/signin-google">
             <input type="hidden" name="host" :value="host">
-            <input type="hidden" name="isAddAccount" :value="isAddAccount">
             <Button icon="pi pi-google" label="Sign In with Google" type="submit" class="w-full" />
         </form>
     </div>
@@ -17,9 +16,6 @@
 
 <script setup lang="ts">
 import _ from 'lodash';
-import { UserTokenInfo } from '~/server/models/UserTokenInfo';
-import { userTokensKey } from '~/server/utils/utils';
-
 
 const config = useRuntimeConfig()
 const adminKeyEnabled = ref(config.public.adminKey.enable)
@@ -29,9 +25,8 @@ definePageMeta({
 })
 
 const route = useRoute()
-const router = useRouter()
-const isAddAccount = computed(() => route.path == '/add-account')
 
+const isAddAccount = computed(() => route.path == '/add-account')
 if (!isAddAccount.value) {
     const cookie = useCookie('app-auth')
     if (cookie.value) {
@@ -60,28 +55,6 @@ const signin = (event: any) => {
 const host = ref('')
 if (process.client) {
     host.value = window.location.origin
-}
-
-if (isAddAccount.value) {
-    const userToken = route.query.usr?.toString()
-    const userEmail = route.query.userEmail?.toString()
-    if (userToken && userEmail) {
-        if (process.client) {
-            const userTokens = useLocalStorage<UserTokenInfo[]>(userTokensKey, [])
-            router.push({
-                query: {
-                },
-            })
-            const newUserTokens = _.uniqBy([
-                ...userTokens.value,
-                {
-                    email: userEmail,
-                    token: userToken,
-                },
-            ], e => e.email)
-            userTokens.value = newUserTokens
-        }
-    }
 }
 </script>
 

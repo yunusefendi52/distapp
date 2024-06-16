@@ -11,9 +11,22 @@ import { UserTokenInfo } from '~/server/models/UserTokenInfo';
 import { userTokensKey } from '~/server/utils/utils';
 
 const cookie = useCookie('app-auth')
+const cookiePayload = cookie.value ? decodeJwt(cookie.value) : undefined
+const userEmail = cookiePayload?.email?.toString()
 const signout = () => {
-    cookie.value = null
-    navigateTo('/')
+    if (process.client) {
+        const userTokens = useLocalStorage<UserTokenInfo[]>(userTokensKey, [])
+        try {
+            if (cookie.value) {
+                const newUserTokens = userTokens.value.filter(e => e.email !== userEmail)
+                userTokens.value = newUserTokens
+            }
+        } catch (e) {
+            console.error('Error decode on signout', e)
+        }
+        cookie.value = userTokens.value.find(e => new Boolean(e))?.token
+        navigateTo('/')
+    }
 }
 const joinDialog = ref(false)
 const joined = () => {
@@ -33,7 +46,7 @@ if (process.client) {
         items.value = [
             ...items.value,
             ...userTokens.value.map(e => ({
-                label: e.email,
+                label: `${e.email} ${e.email === userEmail ? '(Current)' : ''}`.trimEnd(),
                 icon: 'pi pi-user',
                 command: () => {
                     cookie.value = e.token

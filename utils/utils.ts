@@ -1,5 +1,6 @@
 import _ from "lodash"
 import moment from "moment"
+import * as jose from 'jose'
 
 export const toOsType = (osType?: "android" | "ios" | null | undefined): OsType => {
     switch (osType) {
@@ -59,4 +60,8 @@ export const generateManifestLink = (manifestData: any, releaseId: string, publi
     const dataStr = btoa(JSON.stringify(data))
     const dd = encodeURIComponent(`?data=${dataStr}`)
     return `itms-services://?action=download-manifest&url=${window.location.origin}/api/manifest.plist${dd}`
+}
+
+export const decodeJwt = (value: string) => {
+    return jose.decodeJwt(value)
 }
