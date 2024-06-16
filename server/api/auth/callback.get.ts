@@ -24,6 +24,7 @@ export const generateUserToken = async (
     await db.insert(users).values({
         name: userRealName,
         id: userId,
+        email: userEmail,
     }).onConflictDoNothing()
     return {
         token,
