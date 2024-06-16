@@ -50,7 +50,7 @@ if (process.client) {
                 icon: 'pi pi-user',
                 command: () => {
                     cookie.value = e.token
-                    location.reload()
+                    location.href = '/'
                 },
             }))
         ]
