@@ -73,7 +73,6 @@ export default defineEventHandler(async (event) => {
     var userRealName = 'hmm'
     if (signInProvider === 'google') {
         const code = query.code?.toString()!
-        console.log('codeee', { code })
         const host = jwtPayload.payload.host as string
         isAddAccount = jwtPayload.payload.isAddAccount as (boolean | undefined | null)
         const { accessToken } = await getGoogleToken(event, host, code)
