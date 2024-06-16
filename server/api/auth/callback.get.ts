@@ -1,6 +1,7 @@
 import type { EventHandlerRequest, H3Event } from 'h3'
 import * as jose from 'jose'
 import { users } from '~/server/db/schema'
+import { userTokensHeaderKey } from '~/server/utils/utils'
 
 const alg = 'HS256'
 
@@ -67,11 +68,13 @@ export default defineEventHandler(async (event) => {
 
     var userId: string | undefined = undefined
     var userEmail: string | undefined = undefined
+    var isAddAccount: boolean | undefined | null = undefined
     var userRealName = 'hmm'
     if (signInProvider === 'google') {
         const code = query.code?.toString()!
         console.log('codeee', { code })
         const host = jwtPayload.payload.host as string
+        isAddAccount = jwtPayload.payload.isAddAccount as (boolean | undefined | null)
         const { accessToken } = await getGoogleToken(event, host, code)
         const response = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
             headers: {
@@ -92,8 +95,14 @@ export default defineEventHandler(async (event) => {
         return
     }
     const { token } = await generateUserToken(event, signInProvider, userId, userEmail, userRealName)
-    signInUser(event, token)
-    await sendRedirect(event, '/')
+    if (!isAddAccount) {
+        signInUser(event, token)
+    }
+    const param = new URLSearchParams({
+        usr: token,
+        e: userEmail,
+    })
+    await sendRedirect(event, `/?${param.toString()}`)
 })
 
 const getGoogleToken = async (event: H3Event<EventHandlerRequest>, host: string, code: string) => {

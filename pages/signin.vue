@@ -15,6 +15,7 @@
 </template>
 
 <script setup lang="ts">
+import _ from 'lodash';
 
 const config = useRuntimeConfig()
 const adminKeyEnabled = ref(config.public.adminKey.enable)
@@ -23,9 +24,14 @@ definePageMeta({
     layout: 'auth-layout',
 })
 
-const cookie = useCookie('app-auth')
-if (cookie.value) {
-    await navigateTo('/')
+const route = useRoute()
+
+const isAddAccount = computed(() => route.path == '/add-account')
+if (!isAddAccount.value) {
+    const cookie = useCookie('app-auth')
+    if (cookie.value) {
+        await navigateTo('/')
+    }
 }
 
 const key = ref('')

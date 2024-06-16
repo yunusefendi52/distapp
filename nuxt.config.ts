@@ -75,7 +75,6 @@ export default defineNuxtConfig({
       exclude: ['Editor']
     }
   },
-  auth: { provider: { type: 'local' } },
   css: ['~/assets/css/main.css', 'primeicons/primeicons.css', 'primeflex/primeflex.scss', 'primevue/resources/primevue.min.css', '@/assets/styles.scss'],
   hooks: {
     'pages:extend'(pages) {
@@ -83,6 +82,11 @@ export default defineNuxtConfig({
         name: 'orgs',
         path: '/orgs/:orgName',
         file: resolve(__dirname, 'pages/apps.vue'),
+      })
+      pages.push({
+        name: 'add-account',
+        path: '/add-account',
+        file: resolve(__dirname, 'pages/signin.vue'),
       })
     }
   }

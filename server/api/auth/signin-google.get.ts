@@ -1,4 +1,3 @@
-import { Auth } from 'googleapis'
 import * as jose from 'jose'
 
 const alg = 'HS256'
@@ -6,6 +5,7 @@ const alg = 'HS256'
 export default defineEventHandler(async (event) => {
     const query = getQuery(event)
     const host = query.host?.toString()!
+    const isAddAccount = query.isAddAccount?.toString() === 'true'
     const config = useRuntimeConfig(event)
     
     const exp = new Date();
@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
     const token = await new jose.SignJWT({
         sub: 'google',
         'host': host,
+        'isAddAccount': isAddAccount,
     }).setProtectedHeader({ alg })
         .setIssuedAt()
         .setExpirationTime(exp)
