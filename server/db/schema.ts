@@ -5,6 +5,7 @@ import { sqliteTable, text, integer, uniqueIndex, unique } from 'drizzle-orm/sql
 export const users = sqliteTable('users', {
     id: text('id').primaryKey().unique(),
     name: text('name').notNull(),
+    email: text('email').unique(),
 })
 export const usersRelations = relations(users, (r) => ({
     organizationsPeople: r.many(organizationsPeople)
@@ -25,6 +26,12 @@ export const organizationsRelations = relations(organizations, (r) => ({
 export const organizationsPeople = sqliteTable('organizationsPeople', {
     userId: text('userId').references(() => users.id),
     organizationId: text('organizationId').references(() => organizations.id),
+    createdAt: integer('createdAt', {
+        mode: 'timestamp_ms',
+    }),
+    role: text('role', {
+        enum: ['admin', 'collaborator'],
+    }),
 }, (t) => ({
     userIdOrganizationId: unique().on(t.userId, t.organizationId),
 }))

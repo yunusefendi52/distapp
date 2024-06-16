@@ -77,11 +77,4 @@ provide('detail-app', osType)
 </script>
 
 <style>
-.remove-bg-tabmenu {
-    background: unset;
-}
-
-.remove-bg-tabmenu>a {
-    background: unset;
-}
 </style>

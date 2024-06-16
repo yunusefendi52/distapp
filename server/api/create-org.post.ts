@@ -16,6 +16,7 @@ export default defineEventHandler(async (event) => {
         await t.insert(organizationsPeople).values({
             userId: userId,
             organizationId: organizationId,
+            role: 'admin',
         })
     })
     return { ok: true }

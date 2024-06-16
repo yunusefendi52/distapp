@@ -1,8 +1,6 @@
 {
-  "version": "5",
+  "version": "6",
   "dialect": "sqlite",
-  "id": "f69d4cd3-f48c-44b2-b71d-cff716b5671d",
-  "prevId": "c509ef57-a289-4b38-a2ec-4a510f289925",
   "tables": {
     "apps": {
       "name": "apps",
@@ -64,15 +62,15 @@
         "apps_organizationsId_organizations_id_fk": {
           "name": "apps_organizationsId_organizations_id_fk",
           "tableFrom": "apps",
-          "tableTo": "organizations",
           "columnsFrom": [
             "organizationsId"
           ],
+          "tableTo": "organizations",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -155,28 +153,28 @@
         "organizationsPeople_userId_users_id_fk": {
           "name": "organizationsPeople_userId_users_id_fk",
           "tableFrom": "organizationsPeople",
-          "tableTo": "users",
           "columnsFrom": [
             "userId"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "organizationsPeople_organizationId_organizations_id_fk": {
           "name": "organizationsPeople_organizationId_organizations_id_fk",
           "tableFrom": "organizationsPeople",
-          "tableTo": "organizations",
           "columnsFrom": [
             "organizationId"
           ],
+          "tableTo": "organizations",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -216,8 +214,9 @@
   },
   "enums": {},
   "_meta": {
-    "schemas": {},
     "tables": {},
     "columns": {}
-  }
+  },
+  "id": "f69d4cd3-f48c-44b2-b71d-cff716b5671d",
+  "prevId": "c509ef57-a289-4b38-a2ec-4a510f289925"
 }

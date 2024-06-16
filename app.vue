@@ -13,6 +13,7 @@ if (process.client) {
         <NuxtPage />
         <DynamicDialog />
     </NuxtLayout>
+    <Toast />
 </template>
 
 <style lang="scss">
@@ -22,4 +23,13 @@ body,
     margin: 0px;
     height: 100%;
 }
+
+.remove-bg-tabmenu {
+    background: unset;
+}
+
+.remove-bg-tabmenu>a {
+    background: unset;
+}
+
 </style>

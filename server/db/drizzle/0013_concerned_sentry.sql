@@ -1,0 +1,1 @@
+ALTER TABLE `organizationsPeople` ADD `role` text;
