@@ -38,14 +38,13 @@
     "primeflex": "^3.3.0",
     "primeicons": "^6.0.1",
     "primevue": "^3.49.1",
-    "uuid": "^9.0.1"
+    "uuidv7": "^1.0.1"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.18.9",
     "@types/crypto-js": "^4.2.2",
     "@types/lodash": "^4.17.0",
     "@types/pg": "^8.11.4",
-    "@types/uuid": "^9.0.8",
     "autoprefixer": "^10.4.19",
     "drizzle-kit": "^0.22.7",
     "eslint": "^8.30.0",

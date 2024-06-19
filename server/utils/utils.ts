@@ -1,4 +1,4 @@
-import { v4 } from "uuid"
+import { uuidv7 } from "uuidv7"
 import type { EventHandlerRequest, H3Event } from "h3"
 import crypto from 'node:crypto'
 
@@ -20,7 +20,7 @@ export const getStorageKeys = (orgId: string, appId: string, key: string) => {
     }
 }
 
-export const generateId = () => v4()
+export const generateId = () => uuidv7()
 
 export const generateRandomPassword = (length = 60) => {
     let chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
