@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import 'primevue/resources/themes/aura-dark-green/theme.css'
-const { finish: finishNuxtLoading } = useLoadingIndicator()
-finishNuxtLoading()
-if (process.client) {
-    finishNuxtLoading()
-}
+// const { finish: finishNuxtLoading } = useLoadingIndicator()
+// finishNuxtLoading()
+// if (process.client) {
+//     finishNuxtLoading()
+// }
 </script>
 
 <template>
