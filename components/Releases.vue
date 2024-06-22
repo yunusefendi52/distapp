@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col gap-3 mb-3 sm:flex-row">
         <Button @click="upload" label="Upload"></Button>
-        <MultiSelect label="Filter Groups" v-model="selectedGroup" :options="groups" optionLabel="name"
+        <MultiSelect placeholder="Filter Groups" v-model="selectedGroup" :options="groups" optionLabel="name"
             class="sm:w-[200px]" />
     </div>
     <div class="card p-0">
