@@ -7,6 +7,12 @@ import { decryptText, verifyToken } from "~/server/utils/token-utils"
 
 export default defineEventHandler(async (event) => {
     const { token, appName, orgName, releaseNotes, packageMetadata, } = await readBody(event)
+    if (await roleEditNotAllowed(event, orgName)) {
+        throw createError({
+            message: 'Unauthorized',
+            statusCode: 401,
+        })
+    }
     const fileKey = (decryptText(event, token)).fileKey as string
 
     const userId = event.context.auth.userId

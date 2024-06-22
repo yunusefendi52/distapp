@@ -3,6 +3,12 @@ import { and, eq } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
     const { appName, orgName, groupName } = await readBody(event)
+    if (await roleEditNotAllowed(event, orgName)) {
+        throw createError({
+            message: 'Unauthorized',
+            statusCode: 401,
+        })
+    }
     const userId = event.context.auth.userId
     const db = event.context.drizzle
     const userOrg = await db.select({

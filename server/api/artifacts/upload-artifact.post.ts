@@ -9,6 +9,12 @@ import { encryptText } from "~/server/utils/token-utils";
 
 export default defineEventHandler(async (event) => {
     const { orgName, appName } = await readBody(event)
+    if (await roleEditNotAllowed(event, orgName)) {
+        throw createError({
+            message: 'Unauthorized',
+            statusCode: 401,
+        })
+    }
     const userId = event.context.auth.userId
     const db = event.context.drizzle
     const userOrg = await db.select({
