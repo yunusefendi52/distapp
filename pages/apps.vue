@@ -109,7 +109,7 @@ const upperCase = (value: string | null | undefined) => {
                 <form @submit="search" class="flex-1 flex-shrink-0">
                     <IconField iconPosition="left" styl>
                         <InputIcon class="pi pi-search"> </InputIcon>
-                        <InputText placeholder="Search" name="search" />
+                        <InputText style="width: 100%;" placeholder="Search" name="search" />
                     </IconField>
                 </form>
                 <div class="flex-shrink">
