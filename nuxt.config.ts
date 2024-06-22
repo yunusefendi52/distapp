@@ -40,10 +40,11 @@ export default defineNuxtConfig({
   imports: {
     presets: [{
       from: '@tanstack/vue-query',
-      imports: ['useMutation']
+      imports: ['useMutation'],
     }],
     dirs: [
       'server/stores',
+      'server/utils',
     ],
   },
   vite: {

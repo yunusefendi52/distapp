@@ -1,7 +1,6 @@
 import { organizations, organizationsPeople, users } from "../db/schema"
 import { and, asc, desc, eq } from 'drizzle-orm'
 import { takeUniqueOrThrow } from "./detail-app.get"
-import { getCurrentUserRole } from "./org-people/change-role.post"
 
 export default defineEventHandler(async (event) => {
     const userId = event.context.auth.userId
@@ -29,9 +28,9 @@ export default defineEventHandler(async (event) => {
         .leftJoin(users, eq(users.id, organizationsPeople.userId))
         .where(and(eq(organizationsPeople.organizationId, orgId.orgId)))
         .orderBy(asc(users.name))
-    const currentUserRole = await getCurrentUserRole(event, orgName, userId)
+    const canEdit = await roleEditAllowed(event, orgName)
     return {
-        canChange: currentUserRole.role === 'admin',
+        canChange: canEdit,
         people,
     }
 })

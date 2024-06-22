@@ -7,6 +7,12 @@ export default defineEventHandler(async (event) => {
     const { orgName } = await readBody(event)
     const userId = event.context.auth.userId
     const db = event.context.drizzle
+    if (await roleEditNotAllowed(event, orgName)) {
+        throw createError({
+            message: 'Unauthorized',
+            statusCode: 401,
+        })
+    }
     const org = await db.select({
         id: organizations.id,
     })
