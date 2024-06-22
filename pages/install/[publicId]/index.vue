@@ -42,19 +42,21 @@
 <script setup lang="ts">
 definePageMeta({
     layout: false,
+    server: false,
 })
 
 const route = useRoute()
 const { value: { publicId } } = computed(() => route.params)
 
-const { data } = await useFetch('/api/install/get-data', {
+const { data } = useFetch('/api/install/get-data', {
     query: {
         publicId,
     },
+    server: false,
 })
 
 useSeoMeta({
-    title: `DistApp - ${data.value?.app.name ?? ''}`
+    title: `DistApp - ${data.value?.app.name ?? ''}`,
 })
 
 const download = (releaseId: number) => {
