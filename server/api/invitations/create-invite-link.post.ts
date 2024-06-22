@@ -1,6 +1,5 @@
 import { and, eq } from "drizzle-orm"
 import { organizations, organizationsPeople } from "~/server/db/schema"
-import { takeUniqueOrThrow } from "../detail-app.get"
 import { generateTokenWithOptions } from "~/server/utils/token-utils"
 
 export default defineEventHandler(async (event) => {

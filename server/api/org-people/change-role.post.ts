@@ -1,6 +1,5 @@
 import { and, eq } from "drizzle-orm"
 import { organizations, organizationsPeople, users } from "../../db/schema"
-import { takeUniqueOrThrow } from "../detail-app.get"
 
 export default defineEventHandler(async (event) => {
     const db = event.context.drizzle

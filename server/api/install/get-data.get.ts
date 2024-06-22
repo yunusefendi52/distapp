@@ -1,6 +1,5 @@
 import { and, desc, eq } from "drizzle-orm"
 import { artifacts, artifactsGroupsManager, organizations, organizationsPeople } from "~/server/db/schema"
-import { takeUniqueOrThrow } from "../detail-app.get"
 import type { EventHandlerRequest, H3Event, H3EventContext } from "h3"
 
 export const getArtifactFromPublicId = async (event: H3Event<EventHandlerRequest>, publicId: string) => {

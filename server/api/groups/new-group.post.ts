@@ -1,6 +1,5 @@
 import { artifactsGroups, organizations, organizationsPeople } from "~/server/db/schema"
 import { and, eq } from 'drizzle-orm'
-import { takeUniqueOrThrow } from "../detail-app.get"
 
 export default defineEventHandler(async (event) => {
     const { appName, orgName, groupName } = await readBody(event)

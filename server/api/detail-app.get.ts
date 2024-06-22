@@ -1,11 +1,6 @@
 import { and, eq } from "drizzle-orm"
 import { apps, organizations, organizationsPeople } from "../db/schema"
 
-export const takeUniqueOrThrow = <T extends any[]>(values: T): T[number] => {
-    if (values.length !== 1) throw new Error(`Found non unique or inexistent value ${values}`)
-    return values[0]!
-}
-
 export default defineEventHandler(async (event) => {
     const userId = event.context.auth.userId
     const db = event.context.drizzle

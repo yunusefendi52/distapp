@@ -1,7 +1,6 @@
 import { and, desc, eq, inArray, like, sql } from "drizzle-orm"
 import { artifacts, artifactsGroups, artifactsGroupsManager, organizations, organizationsPeople } from "~/server/db/schema"
 import { getStorageKeys } from "~/server/utils/utils"
-import { takeUniqueOrThrow } from "../detail-app.get"
 import { concat } from "drizzle-orm/sqlite-core/expressions"
 
 export default defineEventHandler(async (event) => {

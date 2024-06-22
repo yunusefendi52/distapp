@@ -1,5 +1,4 @@
 import { organizations, organizationsPeople, organizationsPeopleRelations } from "~/server/db/schema"
-import { takeUniqueOrThrow } from "../detail-app.get"
 import { and, eq } from "drizzle-orm"
 
 export default defineEventHandler(async (event) => {

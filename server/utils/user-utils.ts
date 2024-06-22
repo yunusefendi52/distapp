@@ -1,7 +1,6 @@
 import type { EventHandlerRequest, H3Event } from "h3"
 import { organizations, organizationsPeople, users } from "../db/schema"
 import { and, eq } from "drizzle-orm"
-import { takeUniqueOrThrow } from "../api/detail-app.get"
 
 const getCurrentUserRole = async (
     event: H3Event<EventHandlerRequest>,

@@ -1,6 +1,5 @@
 import { organizations, organizationsPeople, users } from "../db/schema"
 import { and, asc, desc, eq } from 'drizzle-orm'
-import { takeUniqueOrThrow } from "./detail-app.get"
 
 export default defineEventHandler(async (event) => {
     const userId = event.context.auth.userId

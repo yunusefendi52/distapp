@@ -1,7 +1,6 @@
 import { and, eq } from "drizzle-orm"
 import { artifactsGroups, artifactsGroupsManager, organizations, organizationsPeople } from "~/server/db/schema"
 import { generateRandomPassword, getStorageKeys } from "~/server/utils/utils"
-import { takeUniqueOrThrow } from "../detail-app.get"
 import { GetObjectAttributesCommand, GetObjectTaggingCommand, HeadObjectCommand, ObjectAttributes } from "@aws-sdk/client-s3"
 import { S3AppClient, type AppHeadObjectCommandOutput } from "~/server/services/S3AppClient"
 import type { EventHandlerRequest, H3Event } from "h3"

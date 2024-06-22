@@ -1,7 +1,6 @@
 import { eq } from 'drizzle-orm'
 import { apps, organizations } from '../db/schema'
 import { generateId } from '../utils/utils'
-import { takeUniqueOrThrow } from './detail-app.get'
 
 export default defineEventHandler(async (event) => {
     const request = await readBody(event)

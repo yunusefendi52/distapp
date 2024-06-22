@@ -40,3 +40,8 @@ export const s3BucketName = 'distapp'
 
 export const userTokensKey = 'usr-k'
 export const userTokensHeaderKey = 'usr-k-sv'
+
+export const takeUniqueOrThrow = <T extends any[]>(values: T): T[number] => {
+    if (values.length !== 1) throw new Error(`Found non unique or inexistent value ${values}`)
+    return values[0]!
+}

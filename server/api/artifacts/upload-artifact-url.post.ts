@@ -1,7 +1,6 @@
 import { and, eq } from "drizzle-orm"
 import { artifacts, organizations, organizationsPeople } from "~/server/db/schema"
 import { getStorageKeys, s3BucketName } from "~/server/utils/utils"
-import { takeUniqueOrThrow } from "../detail-app.get"
 import { CopyObjectCommand, DeleteObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3"
 import { S3AppClient } from "~/server/services/S3AppClient"
 import { decryptText, verifyToken } from "~/server/utils/token-utils"

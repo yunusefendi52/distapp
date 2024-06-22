@@ -3,7 +3,6 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { GetObjectCommand } from "@aws-sdk/client-s3"
 import { organizations, organizationsPeople } from "~/server/db/schema"
 import { and, eq } from "drizzle-orm"
-import { takeUniqueOrThrow } from "../detail-app.get"
 import { S3AppClient } from "~/server/services/S3AppClient"
 import { getArtifactFromPublicId } from './get-data.get'
 import type { EventHandlerRequest, H3Event } from "h3"

@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import { takeUniqueOrThrow } from './detail-app.get'
 import { getArtifactLinkFromPublicIdAndReleaseId } from './install/download.get'
 import { getArtifactFromInternal } from './artifacts/download-artifact.get'
 import { S3AppClient } from '../services/S3AppClient'
