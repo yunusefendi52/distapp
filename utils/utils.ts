@@ -46,7 +46,7 @@ export function formatBytes(bytes: number, decimals = 2, isBinary = false) {
 }
 
 export const formatDate = (value?: string | null) => {
-    return moment(value).format('LLL')
+    return value ? moment(value).format('LLL') : '-'
 }
 
 export const isIosDevice = () => /(iPad|iPhone|iPod)/g.test(navigator.userAgent) || (/(Mac OS)/g.test(navigator.userAgent) && "ontouchend" in document)

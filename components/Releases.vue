@@ -21,10 +21,10 @@
                     </label>
                 </template>
             </Column>
-            <Column field="createdAt" header="Date">
+            <Column header="Date">
                 <template #body="slotProps">
                     <label>
-                        {{ formatDate(slotProps.data.createdAt) }}
+                        {{ formatDate(slotProps.data.artifacts.createdAt) }}
                     </label>
                 </template>
             </Column>
