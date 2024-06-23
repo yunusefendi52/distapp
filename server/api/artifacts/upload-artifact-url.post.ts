@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
 
     const userId = event.context.auth.userId
     const db = event.context.drizzle
-    
+
     const userOrg = await db.select({
         organizationsId: organizations.id,
     })
@@ -43,15 +43,8 @@ export default defineEventHandler(async (event) => {
     }
 
     const s3 = new S3AppClient()
-    await s3.copyObject(event, new CopyObjectCommand({
-        CopySource: `${s3BucketName}/${temp}`,
-        Bucket: s3BucketName,
-        Key: assets,
-    }))
-    await s3.deleteObject(event, new DeleteObjectCommand({
-        Bucket: s3BucketName,
-        Key: temp,
-    }))
+    await s3.copyObject(event, `${s3BucketName}/${temp}`, assets)
+    await s3.deleteObject(event, temp)
 
     // Inserting to db
     const lastArtifact = await db.query.artifacts.findFirst({

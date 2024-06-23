@@ -54,10 +54,7 @@ export default defineEventHandler(async (event) => {
     const s3 = new S3AppClient()
     const { assets } = getStorageKeys(userOrg.organizationsId!, app.id, detailArtifact.fileObjectKey)
     const [headObject, groups] = await Promise.all([
-        s3.getHeadObject(event, new HeadObjectCommand({
-            Bucket: s3BucketName,
-            Key: assets,
-        })).then(e => e as AppHeadObjectCommandOutput),
+        s3.getHeadObject(event, assets),
         db.select()
             .from(artifactsGroups)
             .leftJoin(artifactsGroupsManager, eq(artifactsGroupsManager.artifactsGroupsId, artifactsGroups.id))
@@ -68,7 +65,7 @@ export default defineEventHandler(async (event) => {
         fileObjectKey: undefined,
         fileMetadata: {
             md5: headObject.ETag,
-            contentLength: parseInt(headObject.ContentLength),
+            contentLength: headObject.ContentLength,
             contentType: headObject.ContentType,
         },
         groups,
