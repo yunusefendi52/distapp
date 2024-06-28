@@ -15,12 +15,15 @@ export const generateToken = (
 export const generateTokenWithOptions = async (
     event: H3Event<EventHandlerRequest>,
     data: any,
-    configJwt: GenerateJwtConfig) => {
+    configJwt: GenerateJwtConfig,
+    jwtKey: string | undefined = undefined) => {
     const jwtOptions = new jose.SignJWT(data).setProtectedHeader({ alg })
         .setIssuedAt()
     configJwt(jwtOptions)
     const token = await
-        jwtOptions.sign(getJwtKey(event))
+        jwtOptions.sign(jwtKey ? new TextEncoder().encode(
+            jwtKey,
+        ) : getJwtKey(event))
     return token
 }
 

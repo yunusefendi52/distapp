@@ -6,9 +6,6 @@
                 <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" />
             </div>
         </div>
-        <NuxtLink :to="`${appName}/settings`">
-            <Button icon="pi pi-cog" severity="secondary" />
-        </NuxtLink>
     </div>
     <div class="flex flex-col gap-3">
         <TabMenu v-model:active-index="active" :model="items" :pt="{
@@ -18,50 +15,29 @@
         <div :style="{
             display: active == 0 ? 'unset' : 'none',
         }">
-            <Releases :org-name="orgName" :app-name="appName" />
+
         </div>
         <div :style="{
             display: active == 1 ? 'unset' : 'none',
         }">
-            <Groups :org-name="orgName" :app-name="appName" />
+            <div class="flex flex-col items-start gap-3 w-full">
+                <Button @click="() => mutate()" :loading="isPending" label="Generate Token" />
+
+                <span class="break-all flex-wrap text-lg">{{ data?.token }}</span>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 const items = ref([
-    { label: 'Artifacts' },
-    { label: 'Groups' },
+    { label: 'App Info' },
+    { label: 'API Keys' },
 ])
 
-const { currentRoute, push } = useRouter();
-const { query, params } = useRoute()
-const tabs = [
-    'releases',
-    'groups'
-]
-const tabIndex = tabs.findIndex(e => e == query.tab as string)
-const active = ref(tabIndex !== -1 ? tabIndex : 0);
+const active = ref(0)
 
-watchEffect(() => {
-    const newTab = tabs[active.value]
-    push({
-        query: {
-            ...currentRoute.value.query,
-            tab: newTab,
-        },
-        replace: true,
-    })
-})
-onBeforeUnmount(() => {
-    push({
-        query: {
-            ...currentRoute.value.query,
-            tab: undefined,
-        },
-        replace: true,
-    })
-})
+const { params } = useRoute()
 
 const appName = params.appId as string
 const orgName = params.orgName as string
@@ -76,6 +52,19 @@ const { status } = detailApp
 
 const osType = computed(() => toOsType(detailApp.data.value?.osType))
 provide('detail-app', osType)
+
+// API Keys
+const { mutate, data, isPending } = useMutation({
+    mutationFn: async (r) => {
+        return await $fetch('/api/api-keys/generate-api-key', {
+            method: 'post',
+            body: {
+                orgName,
+                appName,
+            }
+        })
+    },
+})
 </script>
 
 <style></style>

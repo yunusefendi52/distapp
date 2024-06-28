@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     app: {
       enableDrizzleLogging: true,
       limitUploadSizeMb: 120,
+      apiAuthKey: '',
     },
     JWT_KEY: '',
     DB_URL: '',

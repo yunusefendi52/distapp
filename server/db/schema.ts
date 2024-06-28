@@ -132,3 +132,24 @@ export const artifactsGroupsManagerRelations = relations(artifactsGroupsManager,
         references: [artifactsGroups.id],
     }),
 }))
+
+// API Keys
+export const apiKeys = sqliteTable('apiKeys', {
+    id: text('id').primaryKey().unique(),
+    createdAt: integer('createdAt', {
+        mode: 'timestamp_ms',
+    }).notNull(),
+
+    organizationId: text('organizationId').references(() => organizations.id),
+    appsId: text('appsId').references(() => apps.id),
+})
+export const apiKeysRelations = relations(apiKeys, t => ({
+    apps: t.one(apps, {
+        fields: [apiKeys.appsId],
+        references: [apps.id],
+    }),
+    organizationId: t.one(organizations, {
+        fields: [apiKeys.organizationId],
+        references: [organizations.id],
+    }),
+}))
