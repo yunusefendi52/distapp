@@ -29,9 +29,12 @@ export const generateTokenWithOptions = async (
 
 export const verifyToken = async (
     event: H3Event<EventHandlerRequest>,
-    token: string): Promise<any> => {
+    token: string,
+    jwtKey: string | undefined = undefined): Promise<any> => {
     try {
-        const data = await jose.jwtVerify(token, getJwtKey(event))
+        const data = await jose.jwtVerify(token, jwtKey ? new TextEncoder().encode(
+            jwtKey,
+        ) : getJwtKey(event))
         return data.payload
     } catch {
         return undefined

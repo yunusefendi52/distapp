@@ -27,14 +27,7 @@ export default defineEventHandler(async (event) => {
         },
     }).then(takeUniqueOrThrow)
 
-    const key = generateRandomPassword()
-    const token = encryptText(event, {
-        fileKey: key,
-    })
-    var expires = 500;
-    const { temp } = getStorageKeys(userOrg.organizationsId!, app.id, key)
-    const s3 = new S3AppClient()
-    const signedUrl = await s3.getSignedUrlPutObject(event, temp, expires)
+    const { token, signedUrl } = await generateSignedUrlUpload(event, userOrg.organizationsId!, app.id)
     return {
         token,
         url: signedUrl,
