@@ -6,15 +6,14 @@ export const generateSignedUrlUpload = async (
     orgId: string,
     appId: string) => {
     const key = generateRandomPassword()
-    const token = encryptText(event, {
-        fileKey: key,
-    })
+    const id = generateId()
     var expires = 500;
-    const { temp } = getStorageKeys(orgId, appId, key)
+    const { assets } = getStorageKeys(orgId, appId, key)
     const s3 = new S3AppClient()
-    const signedUrl = await s3.getSignedUrlPutObject(event, temp, expires)
+    const signedUrl = await s3.getSignedUrlPutObject(event, assets, expires)
     return {
-        token,
+        uploadId: id,
+        fileKey: key,
         signedUrl,
     };
 }

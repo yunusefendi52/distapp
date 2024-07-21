@@ -1,8 +1,5 @@
-import { generateRandomPassword, getStorageKeys, s3BucketName } from "~/server/utils/utils";
-import { organizations, organizationsPeople } from "~/server/db/schema";
+import { organizations, organizationsPeople, uploadTemp } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
-import { S3AppClient } from "~/server/services/S3AppClient";
-import { encryptText } from "~/server/utils/token-utils";
 
 export default defineEventHandler(async (event) => {
     const { orgName, appName } = await readBody(event)
@@ -27,9 +24,16 @@ export default defineEventHandler(async (event) => {
         },
     }).then(takeUniqueOrThrow)
 
-    const { token, signedUrl } = await generateSignedUrlUpload(event, userOrg.organizationsId!, app.id)
+    const { uploadId, fileKey, signedUrl } = await generateSignedUrlUpload(event, userOrg.organizationsId!, app.id)
+    await db.insert(uploadTemp)
+        .values({
+            id: uploadId,
+            fileKey: fileKey,
+            createdAt: new Date(),
+            userId: userId,
+        })
     return {
-        token,
+        uploadId,
         url: signedUrl,
     }
 })

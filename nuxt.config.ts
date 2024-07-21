@@ -31,13 +31,19 @@ export default defineNuxtConfig({
       },
     },
   },
+
   nitro: {
     preset: 'cloudflare-pages',
     experimental: {
-      openAPI: true
+      openAPI: true,
+      tasks: true,
+    },
+    scheduledTasks: {
+      '*/5 * * * *': ['cleanupTempFile'],
     },
     // node: true,
   },
+
   imports: {
     presets: [{
       from: '@tanstack/vue-query',
@@ -48,11 +54,13 @@ export default defineNuxtConfig({
       'server/utils',
     ],
   },
+
   vite: {
     define: {
       global: {},
     },
   },
+
   app: {
     head: {
       title: 'DistApp',
@@ -66,20 +74,25 @@ export default defineNuxtConfig({
       // ]
     }
   },
+
   postcss: {
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
     },
   },
+
   modules: ['@hebilicious/vue-query-nuxt', 'nuxt-primevue', '@vueuse/nuxt'],
+
   primevue: {
     options: { ripple: true },
     components: {
       exclude: ['Editor']
     }
   },
+
   css: ['~/assets/css/main.css', 'primeicons/primeicons.css', 'primeflex/primeflex.scss', 'primevue/resources/primevue.min.css', '@/assets/styles.scss'],
+
   hooks: {
     'pages:extend'(pages) {
       pages.push({
@@ -101,4 +114,6 @@ export default defineNuxtConfig({
       });
     },
   },
+
+  compatibilityDate: '2024-07-21',
 })

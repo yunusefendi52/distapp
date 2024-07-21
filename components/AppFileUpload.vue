@@ -78,7 +78,7 @@ const submit = async () => {
 
 const onUpload = async (file: File) => {
     const packageMetadata = await readPackageFile(file)
-    const { url, token } = await $fetch('/api/artifacts/upload-artifact', {
+    const { url, uploadId } = await $fetch('/api/artifacts/upload-artifact', {
         method: 'post',
         body: {
             orgName: orgName.value,
@@ -93,7 +93,7 @@ const onUpload = async (file: File) => {
     const data = await $fetch('/api/artifacts/upload-artifact-url', {
         method: 'post',
         body: {
-            token,
+            uploadId,
             ...prop.value,
             releaseNotes: releaseNotes.value,
             packageMetadata,

@@ -47,23 +47,6 @@ export class S3AppClient {
         }))
         return result
     }
-
-    async copyObject(event: H3Event<EventHandlerRequest>, sourceKey: string, targetKey: string) {
-        const s3 = createS3(event)
-        await s3.send(new CopyObjectCommand({
-            Bucket: s3BucketName,
-            CopySource: sourceKey,
-            Key: targetKey,
-        }))
-    }
-
-    async deleteObject(event: H3Event<EventHandlerRequest>, key: string) {
-        const s3 = createS3(event)
-        await s3.send(new DeleteObjectCommand({
-            Bucket: s3BucketName,
-            Key: key
-        }))
-    }
 }
 
 export interface AppHeadObjectCommandOutput {

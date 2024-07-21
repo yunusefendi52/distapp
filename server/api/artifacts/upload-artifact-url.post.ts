@@ -1,22 +1,27 @@
 import { and, eq } from "drizzle-orm"
-import { artifacts, organizations, organizationsPeople } from "~/server/db/schema"
-import { getStorageKeys, s3BucketName } from "~/server/utils/utils"
-import { CopyObjectCommand, DeleteObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3"
-import { S3AppClient } from "~/server/services/S3AppClient"
-import { decryptText, verifyToken } from "~/server/utils/token-utils"
+import { artifacts, organizations, organizationsPeople, uploadTemp } from "~/server/db/schema"
 
 export default defineEventHandler(async (event) => {
-    const { token, appName, orgName, releaseNotes, packageMetadata, } = await readBody(event)
+    const { uploadId: uploadIdAny, appName, orgName, releaseNotes, packageMetadata, } = await readBody(event)
     if (await roleEditNotAllowed(event, orgName)) {
         throw createError({
             message: 'Unauthorized',
             statusCode: 401,
         })
     }
-    const fileKey = (decryptText(event, token)).fileKey as string
-
-    const userId = event.context.auth.userId
     const db = event.context.drizzle
+
+    const uploadId = uploadIdAny as string
+    const userId = event.context.auth.userId
+
+    const uploadTempWhere = and(
+        eq(uploadTemp.id, uploadId),
+        eq(uploadTemp.userId, userId),
+    )
+    const uploadTempData = await db.select()
+        .from(uploadTemp)
+        .where(uploadTempWhere)
+        .then(takeUniqueOrThrow)
 
     const userOrg = await db.select({
         organizationsId: organizations.id,
@@ -30,7 +35,6 @@ export default defineEventHandler(async (event) => {
             return operators.and(operators.eq(fields.organizationsId, userOrg.organizationsId!), operators.eq(fields.name, appName!.toString()))
         },
     }).then(takeUniqueOrThrow)
-    const { temp, assets } = getStorageKeys(userOrg.organizationsId!, app.id, fileKey)
     const packageData = packageMetadata as {
         versionCode: number,
         versionName: string,
@@ -41,10 +45,6 @@ export default defineEventHandler(async (event) => {
         setResponseStatus(event, 400, 'Cannot read package')
         return
     }
-
-    const s3 = new S3AppClient()
-    await s3.copyObject(event, `${s3BucketName}/${temp}`, assets)
-    await s3.deleteObject(event, temp)
 
     // Inserting to db
     const lastArtifact = await db.query.artifacts.findFirst({
@@ -58,18 +58,23 @@ export default defineEventHandler(async (event) => {
     const newReleaseId = (lastArtifact?.releaseId ?? 0) + 1
     const now = new Date()
     const artifactsId = generateId()
-    await db.insert(artifacts).values({
-        id: artifactsId,
-        createdAt: now,
-        updatedAt: now,
-        fileObjectKey: fileKey,
-        versionCode2: packageData?.versionCode?.toString()!,
-        versionName2: packageData?.versionName!,
-        appsId: app.id,
-        releaseNotes: releaseNotes,
-        releaseId: newReleaseId,
-        extension: packageData?.extension,
-        packageName: packageData?.packageName,
+    const fileKey = uploadTempData.fileKey
+    await db.transaction(async () => {
+        await db.delete(uploadTemp)
+            .where(uploadTempWhere)
+        await db.insert(artifacts).values({
+            id: artifactsId,
+            createdAt: now,
+            updatedAt: now,
+            fileObjectKey: fileKey,
+            versionCode2: packageData?.versionCode?.toString()!,
+            versionName2: packageData?.versionName!,
+            appsId: app.id,
+            releaseNotes: releaseNotes,
+            releaseId: newReleaseId,
+            extension: packageData?.extension,
+            packageName: packageData?.packageName,
+        })
     })
 
     return {
