@@ -26,7 +26,7 @@ definePageMeta({
 
 const route = useRoute()
 
-const isAddAccount = computed(() => route.path == '/add-account')
+const isAddAccount = computed(() => route.path.startsWith('/add-account'))
 if (!isAddAccount.value) {
     const cookie = useCookie('app-auth')
     if (cookie.value) {

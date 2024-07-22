@@ -2,7 +2,7 @@
     <Button class="mb-3" label="New Group" @click="visible = true"></Button>
 
     <div class="card p-0">
-        <DataTable scrollable :value="list" single>
+        <DataTable scrollable :value="list" single @row-click="selectRow($event)">
             <Column field="name" header="Group Name"></Column>
             <Column header="Public Link" style="width: 15%">
                 <template #body="{ data }">
@@ -35,6 +35,8 @@
 </template>
 
 <script setup lang="ts">
+import { DataTableRowClickEvent } from 'primevue/datatable';
+
 const props = defineProps<{
     orgName: string,
     appName: string,
@@ -72,6 +74,10 @@ const { mutate: saveNewGroup, isPending: savingNewGroup } = useMutation({
 const copyPublicLink = (data: any) => {
     const link = `${window.location.origin}/install/${data.publicId}`
     navigator.clipboard.writeText(link);
+}
+
+const selectRow = async (row: DataTableRowClickEvent) => {
+    console.log(row.data)
 }
 
 </script>
