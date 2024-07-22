@@ -29,6 +29,7 @@
     "chart.js": "3.3.2",
     "crypto-js": "^4.2.0",
     "drizzle-orm": "^0.31.2",
+    "get-random-values": "^3.0.0",
     "h3": "^1.11.1",
     "jose": "^5.2.4",
     "jszip": "^3.10.1",

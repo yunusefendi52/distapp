@@ -1,6 +1,6 @@
 import { uuidv7 } from "uuidv7"
 import type { EventHandlerRequest, H3Event } from "h3"
-import crypto from 'node:crypto'
+import getRandomValues from 'get-random-values'
 
 export const normalizeName = (value: string): string => {
     return value.replaceAll(' ', '-')
@@ -25,8 +25,8 @@ export const generateRandomPassword = (length = 60) => {
     let chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let password = '';
 
-    const array = new Uint32Array(chars.length);
-    crypto.getRandomValues(array);
+    const array = new Uint8Array(chars.length);
+    getRandomValues(array)
 
     for (let i = 0; i < length; i++) {
         password += chars[array[i] % chars.length];
