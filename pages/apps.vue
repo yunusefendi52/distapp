@@ -15,7 +15,7 @@ const onRowSelect = (event: any) => {
     const appName = event.data.name
     console.log(event.data)
     const orgName = event.data.organization.name
-    navigateTo(`/orgs/${orgName}/apps/${appName}`)
+    navigateTo(`/orgs/${orgName}/apps/${appName}/releases/`)
 };
 
 const addOrgVisible = ref(false)

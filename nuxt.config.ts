@@ -105,6 +105,11 @@ export default defineNuxtConfig({
         path: '/add-account',
         file: resolve(__dirname, 'pages/signin.vue'),
       })
+      pages.push({
+        name: 'orgNameAppIdTabName',
+        path: '/orgs/:orgName/apps/:appId/:tabName',
+        file: resolve(__dirname, 'pages/orgs/[orgName]/apps/[appId]/index.vue'),
+      })
     },
     'nitro:build:public-assets': (nitro) => {
       const targetDir = path.join(nitro.options.output.serverDir, 'db/drizzle');
