@@ -35,6 +35,7 @@ const items = ref([
 ])
 
 const { params } = useRoute()
+const router = useRouter()
 const tabName = params.tabName as string
 
 const tabs = [
@@ -52,7 +53,7 @@ const orgName = params.orgName as string
 if (import.meta.client) {
     watchEffect(() => {
         const tabName = tabs[active.value]
-        const newRoute = `/orgs/${orgName}/apps/${appName}/${tabName}/`
+        const newRoute = router.resolve(`../${tabName}/${location.search}`).href
         history.pushState({}, '', newRoute)
     })
 }
