@@ -53,7 +53,7 @@ const { data: appGroups } = useFetch('/api/groups/list-groups', {
     },
 })
 const groups = computed(() => appGroups.value ?? [])
-const selectedGroup = ref<any[]>([])
+const selectedGroup = ref<typeof appGroups.value>([])
 const selectedGroupIds = computed(() => selectedGroup.value?.map(e => e.id) ?? [])
 
 const { data, refresh } = useFetch('/api/artifacts/list-artifacts', {
@@ -63,7 +63,7 @@ const { data, refresh } = useFetch('/api/artifacts/list-artifacts', {
         groups: selectedGroupIds,
     },
 })
-const list = computed(() => data.value as any[])
+const list = computed(() => data.value)
 
 const dialog = useDialog();
 
