@@ -126,7 +126,7 @@ const upperCase = (value: string | null | undefined) => {
                 <template #body="prop">
                     <div class="flex flex-row gap-3 items-center px-3 py-2">
                         <div class="rounded flex items-center justify-center"
-                            style="height: 34px; width: 34px; background-color: #ece9fc; color: #2a1261">
+                            style="height: 34px; width: 34px; background-color: var(--p-primary-200); color: #2a1261">
                             <label class="text-2xl">{{ upperCase(prop.data.displayName[0]) }}</label>
                         </div>
                         <label class="font-semibold text-lg">{{ prop.data.displayName }}</label>
