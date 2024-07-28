@@ -26,7 +26,7 @@ const orgName = computed(() => route.params.orgName as string)
                 @click="navigate" class="cursor-pointer">
                 <div class="flex flex-row px-3 py-2.5 gap-3 rounded-md menu-hover" style="align-items: center;"
                     :class="{ 'menu-active': item.route.endsWith(orgName) || item.name === orgName || routePath === route.path }">
-                    <i class="text-xl" :class="item.icon">
+                    <i :class="item.icon" style="font-size: 1.25rem">
                     </i>
                     <label
                         :class="{ 'font-bold': item.route.endsWith(orgName) || item.name === orgName || routePath === route.path }">{{
