@@ -6,7 +6,7 @@
                 <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" />
             </div>
         </div>
-        <NuxtLink :to="`${appName}/settings`">
+        <NuxtLink :to="`../settings`">
             <Button icon="pi pi-cog" severity="secondary" />
         </NuxtLink>
     </div>
