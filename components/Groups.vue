@@ -2,7 +2,7 @@
     <Button class="mb-3" label="New Group" @click="visible = true"></Button>
 
     <div>
-        <DataTable show-gridlines scrollable :value="list" single @row-click="selectRow($event)">
+        <DataTable :show-gridlines="false" scrollable :value="list" single @row-click="selectRow($event)">
             <Column field="name" header="Group Name">
                 <template #body="{ data }">
                     <div class="flex flex-row gap-2 py-3">

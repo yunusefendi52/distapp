@@ -6,7 +6,7 @@
             v-if="status === 'pending' || changeRoleIsPending || deleteRoleIsPending" />
     </div>
     <div class="mt-3">
-        <DataTable show-gridlines scrollable :value="listOrgPeople" single selectionMode="single" :pt="{
+        <DataTable :show-gridlines="false" scrollable :value="listOrgPeople" single selectionMode="single" :pt="{
             menu: 'remove-bg-tabmenu',
             menuitem: 'remove-bg-tabmenu',
         }">
