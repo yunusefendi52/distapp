@@ -3,10 +3,12 @@
 
     <div class="card p-0">
         <DataTable scrollable :value="list" single @row-click="selectRow($event)">
-            <Column field="name" header="Group Name"></Column>
-            <Column header="Public Link" style="width: 15%">
+            <Column field="name" header="Group Name">
                 <template #body="{ data }">
-                    <Button :disabled="!data.publicId" icon="pi pi-copy" @click="copyPublicLink(data)" />
+                    <div class="flex flex-row gap-2 py-3">
+                        <span class="font-semibold text-xl">{{ data.name }}</span>
+                        <Badge value="PUBLIC" severity="info"></Badge>
+                    </div>
                 </template>
             </Column>
             <template #empty>
@@ -71,13 +73,8 @@ const { mutate: saveNewGroup, isPending: savingNewGroup } = useMutation({
     }
 })
 
-const copyPublicLink = (data: any) => {
-    const link = `${window.location.origin}/install/${data.publicId}`
-    navigator.clipboard.writeText(link);
-}
-
 const selectRow = async (row: DataTableRowClickEvent) => {
-    console.log(row.data)
+    navigateTo(`./${row.data.name}`)
 }
 
 </script>

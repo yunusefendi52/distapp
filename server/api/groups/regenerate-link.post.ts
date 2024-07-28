@@ -1,10 +1,8 @@
-import { organizations, organizationsPeople, organizationsPeopleRelations } from "~/server/db/schema"
 import { and, eq, sql } from "drizzle-orm"
+import { artifactsGroups, organizations, organizationsPeople } from "~/server/db/schema"
 
 export default defineEventHandler(async (event) => {
-    const query = getQuery(event)
-    const orgName = query.orgName?.toString()
-    const appName = query.appName?.toString()
+    const { appName, orgName, groupId } = await readBody<RegenerateLinkReq>(event)
     if (!orgName || !appName) {
         setResponseStatus(event, 400)
         return
@@ -25,17 +23,33 @@ export default defineEventHandler(async (event) => {
         },
     }).then(takeUniqueOrThrow)
 
-    const groupName = query.groupName?.toString() // optional
-    const groups = await db.query.artifactsGroups.findMany({
-        where: (t, o) => {
-            return o.and(
-                o.eq(t.appsId, app!.id),
-                groupName ? o.eq(t.name, groupName) : sql`true`,
-            )
-        },
-        orderBy(fields, operators) {
-            return operators.asc(fields.name)
-        },
-    })
-    return groups
+    const artifactGroupsWhere = and(
+        eq(artifactsGroups.id, groupId),
+        eq(artifactsGroups.appsId, app.id),
+    )
+    const group = await db.select()
+        .from(artifactsGroups)
+        .where(artifactGroupsWhere)
+        .then(takeUniqueOrThrow)
+    if (!group.publicId) {
+        throw createError({
+            statusCode: 400,
+            message: 'Your group is not public link'
+        })
+    }
+
+    await db.update(artifactsGroups).set({
+        publicId: generateRandomPassword(42),
+    }).where(artifactGroupsWhere)
+
+    return {
+        ok: true,
+        message: 'public link updated',
+    }
 })
+
+interface RegenerateLinkReq {
+    orgName: string
+    appName: string
+    groupId: string
+}

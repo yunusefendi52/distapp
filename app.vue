@@ -14,6 +14,7 @@ import 'primevue/resources/themes/aura-dark-green/theme.css'
         <DynamicDialog />
     </NuxtLayout>
     <Toast />
+    <ConfirmPopup />
 </template>
 
 <style lang="scss">
