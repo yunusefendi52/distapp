@@ -1,12 +1,3 @@
-<script setup lang="ts">
-import 'primevue/resources/themes/aura-dark-green/theme.css'
-// const { finish: finishNuxtLoading } = useLoadingIndicator()
-// finishNuxtLoading()
-// if (process.client) {
-//     finishNuxtLoading()
-// }
-</script>
-
 <template>
     <NuxtLoadingIndicator />
     <NuxtLayout>
@@ -17,20 +8,16 @@ import 'primevue/resources/themes/aura-dark-green/theme.css'
     <ConfirmPopup />
 </template>
 
+<script setup lang="ts">
+</script>
+
 <style lang="scss">
 html,
 body,
 #__nuxt {
     margin: 0px;
     height: 100%;
+    width: 100%;
+        background: var(--p-content-background);
 }
-
-.remove-bg-tabmenu {
-    background: unset;
-}
-
-.remove-bg-tabmenu>a {
-    background: unset;
-}
-
 </style>

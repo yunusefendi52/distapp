@@ -19,26 +19,30 @@ const orgName = computed(() => route.params.orgName as string)
 </script>
 
 <template>
-    <div class="p-2 flex gap-2 flex-column">
-        <router-link v-for="(item, index) in items" :key="index" :to="item.route" custom
+    <div class="px-3 py-4 flex gap-2 flex-col">
+        <NuxtLink v-for="(item, index) in items" :key="index" :to="item.route" custom
             v-slot="{ href, route, navigate, isActive, isExactActive }">
             <a :active="item.route.endsWith(orgName) || item.name === orgName || routePath === route.path" :href="href"
                 @click="navigate" class="cursor-pointer">
-                <div class="flex flex-row px-3 py-2.5 gap-3 rounded-md" style="align-items: center;"
+                <div class="flex flex-row px-3 py-2.5 gap-3 rounded-md menu-hover" style="align-items: center;"
                     :class="{ 'menu-active': item.route.endsWith(orgName) || item.name === orgName || routePath === route.path }">
                     <i class="text-xl" :class="item.icon">
                     </i>
                     <label
                         :class="{ 'font-bold': item.route.endsWith(orgName) || item.name === orgName || routePath === route.path }">{{
-                        item.label }}</label>
+    item.label }}</label>
                 </div>
             </a>
-        </router-link>
+        </NuxtLink>
     </div>
 </template>
 
 <style lang="scss" scoped>
 .menu-active {
-    background: var(--surface-border);
+    background: var(--p-navigation-item-focus-background);
+}
+
+.menu-hover:hover {
+    background: var(--p-navigation-item-focus-background);
 }
 </style>

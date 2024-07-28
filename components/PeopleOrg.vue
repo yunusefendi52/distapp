@@ -5,8 +5,8 @@
         <ProgressSpinner style="width: 22px; height: 22px; margin: unset;" strokeWidth="6"
             v-if="status === 'pending' || changeRoleIsPending || deleteRoleIsPending" />
     </div>
-    <div class="card p-0 mt-3">
-        <DataTable scrollable :value="listOrgPeople" single selectionMode="single" :pt="{
+    <div class="mt-3">
+        <DataTable show-gridlines scrollable :value="listOrgPeople" single selectionMode="single" :pt="{
             menu: 'remove-bg-tabmenu',
             menuitem: 'remove-bg-tabmenu',
         }">

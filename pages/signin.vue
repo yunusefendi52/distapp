@@ -1,8 +1,8 @@
 <template>
-    <div class="flex flex-column gap-4 login-container m-4">
-        <h4 class="text-center">DistApp</h4>
+    <div class="flex flex-col gap-4 login-container m-4">
+        <span class="text-3xl font-semibold text-center">DistApp</span>
         <form @submit.prevent="signin" v-if="adminKeyEnabled">
-            <div class="flex flex-column gap-2">
+            <div class="flex flex-col gap-2">
                 <InputText v-model="key" placeholder="Login Key" type="password" />
                 <Button type="submit" :loading="isPending" label="Sign In"></Button>
             </div>

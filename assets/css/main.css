@@ -1,11 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@layer tailwind-base, primevue, tailwind-utilities;
-
-@layer tailwind-base {
-    @tailwind base;
-}
-
-@layer tailwind-utilities {
-    @tailwind components;
-    @tailwind utilities;
+html,
+body {
+    font-size: 14px;
+    --p-datatable-header-cell-background: var(--p-content-background);
+    }
+    
+    .p-divider-vertical.divider-app::before {
+        border-left: 1px solid var(--p-datatable-border-color);
+    }
+    
+    .p-divider-vertical.divider-app {
+        margin: 0px !important;
+    }
+    
+    .p-divider-horizontal.divider-app::before {
+        border-top: 1px solid var(--p-datatable-border-color);
+    }
+    
+    .p-divider-horizontal.divider-app {
+        margin: 0px !important;
+    }
+    
+    .card {
+        border: 1px var(--p-datatable-border-color) solid;
+        border-radius: var(--p-border-radius-md);
+        padding: 15px;
 }

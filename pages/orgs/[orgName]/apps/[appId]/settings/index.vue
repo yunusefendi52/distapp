@@ -1,13 +1,13 @@
 <template>
-    <div class="flex flex-row items-center justify-center h-12">
+    <AppBarContainer>
         <div class="flex flex-row flex-1 gap-2 items-center">
-            <h4>{{ detailApp.data.value?.displayName }}</h4>
+            <span class="text-2xl font-bold">Apps Settings</span>
             <div v-if="status === 'pending'">
                 <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" />
             </div>
         </div>
-    </div>
-    <div class="flex flex-col gap-3">
+    </AppBarContainer>
+    <div class="flex flex-col gap-3 p-4">
         <TabMenu v-model:active-index="active" :model="items" :pt="{
             menu: 'remove-bg-tabmenu',
             menuitem: 'remove-bg-tabmenu',

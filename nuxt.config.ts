@@ -3,6 +3,7 @@ import { createCommonJS } from 'mlly'
 const { __dirname } = createCommonJS(import.meta.url)
 import path from 'path'
 import fs from 'fs'
+import PrimeVueTheme from '@primevue/themes/aura';
 
 export default defineNuxtConfig({
   runtimeConfig: {
@@ -64,15 +65,10 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: 'DistApp',
-      // link: [
-      //   {
-      //     id: 'theme-css',
-      //     rel: 'stylesheet',
-      //     type: 'text/css',
-      //     href: '/themes/aura-dark-green/theme.css'
-      //   }
-      // ]
-    }
+      htmlAttrs: {
+        class: ['dark'],
+      },
+    },
   },
 
   postcss: {
@@ -82,16 +78,36 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ['@hebilicious/vue-query-nuxt', 'nuxt-primevue', '@vueuse/nuxt'],
+  modules: [
+    '@hebilicious/vue-query-nuxt',
+    '@vueuse/nuxt',
+    '@primevue/nuxt-module',
+  ],
 
   primevue: {
-    options: { ripple: true },
-    components: {
-      exclude: ['Editor']
-    }
+    usePrimeVue: true,
+    options: {
+      ripple: true,
+      theme: {
+        preset: PrimeVueTheme,
+        options: {
+          darkModeSelector: '.dark',
+        },
+      },
+      pt: {
+        divider: {
+          root: {
+            'class': 'm-0 divider-app',
+          },
+        },
+      },
+    },
   },
 
-  css: ['~/assets/css/main.css', 'primeicons/primeicons.css', 'primeflex/primeflex.scss', 'primevue/resources/primevue.min.css', '@/assets/styles.scss'],
+  css: [
+    '~/assets/css/main.css',
+    'primeicons/primeicons.css',
+  ],
 
   hooks: {
     'pages:extend'(pages) {
@@ -119,6 +135,4 @@ export default defineNuxtConfig({
       });
     },
   },
-
-  compatibilityDate: '2024-07-21',
 })

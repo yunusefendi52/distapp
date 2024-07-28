@@ -1,7 +1,13 @@
 <template>
-    <div class="flex gap-3 p-2 flex-column">
+    <div class="flex gap-3 p-2 flex-col justify-stretch">
         <Button label="Join Invite Code" @click="joinDialog = true" severity="secondary" />
-        <SplitButton @click="signout" label="Sign Out" :model="items" menuButtonIcon="pi pi-ellipsis-h" />
+        <SplitButton :pt="{
+            pcButton: {
+                root: {
+                    'class': 'w-full',
+                },
+            },
+        }" @click="signout" label="Sign Out" :model="items" menuButtonIcon="pi pi-ellipsis-h" />
         <LazyJoinInviteLink v-model="joinDialog" @joined="joined" />
     </div>
 </template>

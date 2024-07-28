@@ -1,7 +1,7 @@
 <template>
-    <div class="flex flex-row items-center justify-center h-12">
+    <AppBarContainer>
         <div class="flex flex-row flex-1 gap-2 items-center">
-            <h4>{{ detailApp.data.value?.displayName }}</h4>
+            <span class="text-2xl font-bold">{{ detailApp.data.value?.displayName }}</span>
             <div v-if="status === 'pending'">
                 <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" />
             </div>
@@ -9,12 +9,9 @@
         <NuxtLink :to="`../settings`">
             <Button icon="pi pi-cog" severity="secondary" />
         </NuxtLink>
-    </div>
-    <div class="flex flex-col gap-3">
-        <TabMenu v-model:active-index="active" :model="items" :pt="{
-            menu: 'remove-bg-tabmenu',
-            menuitem: 'remove-bg-tabmenu',
-}">
+    </AppBarContainer>
+    <div class="flex flex-col gap-3 m-4">
+        <TabMenu v-model:active-index="active" :model="items">
             <template #item="{ item, props }">
                 <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" replace custom>
                     <a v-ripple :href="href" v-bind="props.action" @click="navigate">
@@ -38,7 +35,7 @@
 <script setup lang="ts">
 const items = ref([
     {
-        label: 'Artifacts',
+        label: 'Releases',
         route: '../releases/',
     },
     {

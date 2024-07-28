@@ -1,18 +1,13 @@
 <template>
-    <div class="flex flex-col">
-        <div class="flex flex-row items-center justify-center h-12 mb-2">
-            <div class="flex flex-row flex-1 gap-2 items-center">
-                <h4>{{ detailApp.data.value?.displayName ?? '-' }}</h4>
-            </div>
-            <!-- <NuxtLink :to="`../settings`">
-                <Button icon="pi pi-cog" severity="secondary" />
-            </NuxtLink> -->
-        </div>
+    <AppBarContainer>
+        <span class="text-2xl font-bold">{{ detailApp.data.value?.displayName ?? '-' }}</span>
+    </AppBarContainer>
+    <div class="p-4">
         <div class="card p-4 justify-center items-center flex flex-row gap-2">
             <div class="flex flex-col flex-1">
                 <span class="text-xl font-bold">{{ detailGroup?.name }}</span>
                 <span v-if="publicLink">Public link: <a class="underline" target="_blank" :href="publicLink">{{
-                    publicLink
+    publicLink
                         }}</a> </span>
             </div>
             <Button icon="pi pi-refresh" label="Regenerate Link" @click="regenerateLink" />

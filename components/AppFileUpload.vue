@@ -1,11 +1,11 @@
 <template>
-    <div class="flex flex-column gap-3">
+    <div class="flex flex-col gap-3">
         <input class="p-2 border rounded-lg" ref="fileRef" type="file" :accept="mimeTypeFromOsType">
-        <div class="flex flex-column gap-2">
+        <div class="flex flex-col gap-2">
             <label for="releasenotes">Release Notes</label>
             <InputText id="releasenotes" v-model="releaseNotes" aria-describedby="releasenotes-help" />
         </div>
-        <div class="flex flex-column gap-2">
+        <div class="flex flex-col gap-2">
             <label for="releasenotes">Groups</label>
             <MultiSelect v-model="selectedGroup" display="chip" :options="groups" optionLabel="name"
                 placeholder="Select Groups" />

@@ -64,6 +64,9 @@ const addApp = () => {
         props: {
             header: 'Add App',
             modal: true,
+            style: {
+                'width': '320px',
+            },
         },
         data: {
             'orgName': orgNameParam,
@@ -92,11 +95,11 @@ const upperCase = (value: string | null | undefined) => {
 </script>
 
 <template>
-    <div class="card pt-2" style="padding: 0px;">
-        <div class="flex flex-col gap-3 px-3 py-3 sm:flex-row">
+    <div>
+        <AppBarContainer>
             <div class="flex flex-row items-center gap-2 sm:flex-1">
                 <div class="flex-1 flex gap-3 items-center">
-                    <label class="text-2xl font-bold">Apps</label>
+                    <span class="text-2xl font-bold">Apps</span>
                     <ProgressSpinner style="width: 22px; height: 22px; margin: unset;" strokeWidth="6" v-if="pending" />
                 </div>
                 <div>
@@ -117,9 +120,8 @@ const upperCase = (value: string | null | undefined) => {
                     <Button label="Add App" @click="addApp" v-if="isOrg"></Button>
                 </div>
             </div>
-        </div>
-        <DataTable scrollable :value="apps" :rows="99999" responsiveLayout="scroll" @rowSelect="onRowSelect"
-            selectionMode="single">
+        </AppBarContainer>
+        <DataTable show-gridlines :value="apps" @rowSelect="onRowSelect" selectionMode="single" class="m-4">
             <Column header="Name">
                 <template #body="prop">
                     <div class="flex flex-row gap-3 items-center px-3 py-2">
@@ -151,7 +153,7 @@ const upperCase = (value: string | null | undefined) => {
 
     <Dialog v-model:visible="addOrgVisible" modal header="Add Organization">
         <form @submit.prevent="saveOrg">
-            <div class="flex flex-column gap-3 w-25rem">
+            <div class="flex flex-col gap-3 w-25rem">
                 <InputText name="name" v-model="orgName"></InputText>
                 <Button label="Save" type="submit" :loading="isPending"></Button>
             </div>

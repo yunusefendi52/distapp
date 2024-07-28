@@ -4,8 +4,8 @@
         <MultiSelect placeholder="Filter Groups" v-model="selectedGroup" :options="groups" optionLabel="name"
             class="sm:w-[200px]" />
     </div>
-    <div class="card p-0">
-        <DataTable scrollable :value="list" single @row-click="selectRow($event)" selectionMode="single">
+    <div>
+        <DataTable show-gridlines scrollable :value="list" single @row-click="selectRow($event)" selectionMode="single">
             <Column field="artifacts.releaseId" header="Release Id" style="width: 15%"></Column>
             <Column field="artifacts.versionName2" header="Version">
                 <template #body="slotProps">

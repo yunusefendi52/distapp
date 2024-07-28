@@ -1,8 +1,8 @@
 <template>
     <Button class="mb-3" label="New Group" @click="visible = true"></Button>
 
-    <div class="card p-0">
-        <DataTable scrollable :value="list" single @row-click="selectRow($event)">
+    <div>
+        <DataTable show-gridlines scrollable :value="list" single @row-click="selectRow($event)">
             <Column field="name" header="Group Name">
                 <template #body="{ data }">
                     <div class="flex flex-row gap-2 py-3">

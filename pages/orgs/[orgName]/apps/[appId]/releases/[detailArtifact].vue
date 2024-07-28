@@ -1,21 +1,21 @@
 <template>
-    <div class="flex flex-row items-center justify-center h-12">
+    <AppBarContainer>
         <div class="flex flex-row flex-1 gap-2 items-center">
-            <h4>{{ detailApp?.displayName }}</h4>
+            <span class="text-2xl font-bold">{{ detailApp?.displayName }}</span>
             <div v-if="status === 'pending' || status2 === 'pending'">
                 <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" />
             </div>
         </div>
         <Button :loading="isDownloading" label="Download" @click="download"></Button>
-    </div>
+    </AppBarContainer>
     <ConfirmPopup></ConfirmPopup>
     <!-- <div>{{ detailArtifact }}</div> -->
-    <div class="flex flex-col gap-3 mt-3 card p-3">
+    <div class="card flex flex-col gap-3 m-4">
         <div class="flex flex-row items-center">
             <div class="flex flex-col gap-1 flex-1">
                 <label class="font-semibold text-xl">Version {{ detailArtifact?.versionName2 }} ({{
                     detailArtifact?.releaseId
-                }})</label>
+                    }})</label>
                 <label class="text-lg">{{ formatDate(detailArtifact?.createdAt) }}</label>
             </div>
             <Button @click="confirmDelete($event)" icon="pi pi-trash" label="Delete" severity="danger" />
