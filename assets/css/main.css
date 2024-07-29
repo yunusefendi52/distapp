@@ -5,7 +5,20 @@
 html,
 body {
     font-size: 14px;
-    --p-datatable-header-cell-background: var(--p-content-background);
+    --p-datatable-header-cell-background: transparent;
+        --p-datatable-row-background: transparent;
+    }
+    
+    .p-datatable-table-container {
+        border-radius: var(--p-border-radius-md);
+    }
+    
+    .dark .p-datatable-table-container {
+        background: #202024;
+    }
+    
+    .p-datatable-table-container {
+        background: #e9eef3;
 }
 
 .p-divider-vertical.divider-app::before {
