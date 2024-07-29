@@ -28,7 +28,6 @@ const items: MenuItem[] = [{
 }]
 
 const orgName = ref('')
-const orgNameNormalized = computed(() => normalizeName(orgName.value))
 const { mutateAsync, isPending } = useMutation({
     mutationFn: (r: any) => $fetch('/api/create-org', {
         method: 'post',
@@ -44,7 +43,7 @@ const { mutateAsync, isPending } = useMutation({
 
 const saveOrg = async () => {
     await mutateAsync({
-        name: orgNameNormalized.value,
+        name: orgName.value,
         displayName: orgName.value,
     })
 }
