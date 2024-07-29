@@ -6,19 +6,21 @@ html,
 body {
     font-size: 14px;
     --p-datatable-header-cell-background: transparent;
-        --p-datatable-row-background: transparent;
-    }
-    
+    --p-datatable-row-background: transparent;
+}
+
+.p-datatable-table-container {
+    border-radius: var(--p-border-radius-md);
+}
+
+.p-datatable-table-container {
+    background: hsl(207, 26%, 95%);
+}
+
+@media (prefers-color-scheme: dark) {
     .p-datatable-table-container {
-        border-radius: var(--p-border-radius-md);
-    }
-    
-    .dark .p-datatable-table-container {
         background: #202024;
     }
-    
-    .p-datatable-table-container {
-        background: #e9eef3;
 }
 
 .p-divider-vertical.divider-app::before {

@@ -67,7 +67,6 @@ export default defineNuxtConfig({
       title: 'DistApp',
     },
   },
-
   postcss: {
     plugins: {
       tailwindcss: {},
@@ -87,9 +86,9 @@ export default defineNuxtConfig({
       ripple: true,
       theme: {
         preset: PrimeVueTheme,
-        options: {
-          darkModeSelector: '.dark',
-        },
+        // options: {
+        //   darkModeSelector: '.dark',
+        // },
       },
       pt: {
         divider: {
