@@ -65,9 +65,6 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: 'DistApp',
-      htmlAttrs: {
-        class: ['dark'],
-      },
     },
   },
 
