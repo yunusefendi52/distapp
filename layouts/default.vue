@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import AppHeader from './AppHeader.vue';
-import AppMenu from './AppMenu.vue';
-
 const visible = ref(false)
 
 const route = useRoute()

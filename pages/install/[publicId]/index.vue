@@ -1,20 +1,25 @@
 <template>
-    <div class="px-4 py-3" style="background-color: var(--surface-card);">
-        <label class="font-bold text-lg">DistApp</label>
-    </div>
+    <AppHeader />
     <div class="flex flex-col items-center">
-        <div class="container flex flex-col gap-3 p-3">
-            <div>
-                <h1>{{ data?.app.displayName }}</h1>
-                <h6>{{ data?.app.osType === 'ios' ? 'iOS' : 'Android' }} | {{ data?.org.displayName }} | {{
-                    data?.artifactGroup.name }}</h6>
+        <div v-if="pending">
+            <ProgressSpinner style="width: 50px; height: 50px; margin: unset;" strokeWidth="6" />
+        </div>
+        <div class="container flex flex-col gap-5 p-3" v-else>
+            <div class="flex flex-col justify-start gap-3">
+                <span class=" text-4xl">{{ data?.app.displayName }}</span>
+                <div class="flex justify-start gap-2">
+                    <Badge :value="data?.app.osType === 'ios' ? 'iOS' : 'Android'" severity="info" />
+                    <Badge :value="data?.org.displayName" severity="info" />
+                    <Badge :value="data?.artifactGroup.name" severity="info" />
+                </div>
             </div>
             <Panel v-for="item in data?.artifacts.map(e => e.artifacts!)" :key="item.id">
                 <template #header>
                     <div class="flex flex-row w-full">
-                        <div class="flex-1 flex flex-col">
-                            <a :name="item.releaseId" :href="'#' + item.releaseId" class="font-bold">Version {{
-                                item.versionName2 }}
+                        <div class="flex-1 flex flex-col gap-1">
+                            <a :name="item.releaseId" :href="'#' + item.releaseId" class="font-semibold text-lg">Version
+                                {{
+                                    item.versionName2 }}
                                 ({{
                                     item.releaseId
                                 }})</a>
@@ -48,7 +53,7 @@ definePageMeta({
 const route = useRoute()
 const { value: { publicId } } = computed(() => route.params)
 
-const { data } = useFetch('/api/install/get-data', {
+const { data, pending } = useFetch('/api/install/get-data', {
     query: {
         publicId,
     },
