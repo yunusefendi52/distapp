@@ -36,7 +36,7 @@
             </template>
         </TabMenu>
         <div class="px-4 py-2">
-            <NuxtPage />
+            <NuxtPage :osType="detailApp.data?.value?.osType" />
         </div>
     </div>
 </template>
@@ -78,9 +78,6 @@ const detailApp = useFetch('/api/detail-app', {
     },
 })
 const { status } = detailApp
-
-const osType = computed(() => toOsType(detailApp.data.value?.osType))
-provide('detail-app', osType)
 </script>
 
 <style></style>

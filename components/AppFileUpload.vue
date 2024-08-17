@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col gap-3">
+    <div class="flex flex-col gap-3" v-if="mimeTypeFromOsType">
         <input class="p-2 border rounded-lg" ref="fileRef" type="file" :accept="mimeTypeFromOsType">
         <div class="flex flex-col gap-2">
             <label for="releasenotes">Release Notes</label>
@@ -15,7 +15,6 @@
 </template>
 
 <script setup lang="ts">
-import JSZip from 'jszip';
 import { UpdateGroupsRequest } from '~/server/api/update-artifact-groups.put';
 
 const releaseNotes = ref<string | null>(null)
@@ -24,12 +23,12 @@ const osType = ref<OsType | null>(null)
 const prop = ref<any>(null)
 const orgName = ref<string>('')
 const appName = ref<string>('')
-osType.value = dialogRef.value.data.osType
 prop.value = dialogRef.value.data.props
+osType.value = dialogRef.value.data.props.osType
 orgName.value = dialogRef.value.data.props.orgName
 appName.value = dialogRef.value.data.props.appName
 
-const mimeTypeFromOsType = computed(() => getMimeTypeFromosType(osType.value ?? 'android'))
+const mimeTypeFromOsType = computed(() => osType.value ? getMimeTypeFromosType(osType.value) : undefined)
 const fileRef = ref<HTMLInputElement | null>(null)
 
 const { data: appGroups } = useFetch('/api/groups/list-groups', {

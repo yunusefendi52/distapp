@@ -56,9 +56,6 @@ const detailApp = useFetch('/api/detail-app', {
 })
 const { status } = detailApp
 
-const osType = computed(() => toOsType(detailApp.data.value?.osType))
-provide('detail-app', osType)
-
 // API Keys
 const { mutate, data, isPending } = useMutation({
     mutationFn: async (r) => {

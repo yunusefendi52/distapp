@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col gap-3 mb-3 sm:flex-row">
-        <Button @click="upload" outlined label="Upload"></Button>
+        <Button :loading="!osType" @click="upload" outlined label="Upload"></Button>
         <MultiSelect placeholder="Filter Groups" v-model="selectedGroup" :options="groups" optionLabel="name"
             class="sm:w-[200px]" />
     </div>
@@ -45,7 +45,11 @@ import { DataTableRowClickEvent } from 'primevue/datatable';
 const props = defineProps<{
     orgName: string,
     appName: string,
+    osType: 'android' | 'ios' | null | undefined,
 }>()
+watchEffect(() => {
+    console.log('release os type', props.osType)
+})
 
 const { data: appGroups } = useFetch('/api/groups/list-groups', {
     query: {
@@ -68,16 +72,18 @@ const list = computed(() => data.value)
 
 const dialog = useDialog();
 
-const osType = inject<ComputedRef<OsType>>('detail-app')
-
 const upload = () => {
+    if (!props.osType) {
+        return
+    }
+
     dialog.open(AppFileUpload, {
         props: {
             modal: true,
             header: 'Upload',
+            closeOnEscape: false,
         },
         data: {
-            osType,
             props,
         },
         onClose: (o) => {
