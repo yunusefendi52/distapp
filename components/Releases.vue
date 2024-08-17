@@ -90,7 +90,12 @@ const upload = () => {
 
 const selectRow = async (row: DataTableRowClickEvent) => {
     console.log(row.data)
-    await navigateTo(`./${row.data.artifacts.releaseId}`)
+    await navigateTo({
+        name: 'orgs-orgName-apps-appId-releases-detailArtifact',
+        params: {
+            detailArtifact: row.data.artifacts.releaseId,
+        },
+    })
 }
 
 </script>

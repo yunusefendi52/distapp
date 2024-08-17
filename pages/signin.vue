@@ -30,7 +30,9 @@ const isAddAccount = computed(() => route.path.startsWith('/add-account'))
 if (!isAddAccount.value) {
     const cookie = useCookie('app-auth')
     if (cookie.value) {
-        await navigateTo('/')
+        await navigateTo({
+            name: 'index',
+        })
     }
 }
 
@@ -44,7 +46,9 @@ const { mutate, isPending } = useMutation({
         },
     }),
     onSuccess: () => {
-        navigateTo('/')
+        navigateTo({
+            name: 'index',
+        })
     },
 })
 

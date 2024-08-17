@@ -31,7 +31,9 @@ const signout = () => {
             console.error('Error decode on signout', e)
         }
         cookie.value = userTokens.value.find(e => new Boolean(e))?.token
-        navigateTo('/')
+        navigateTo({
+            name: 'index',
+        })
     }
 }
 const joinDialog = ref(false)
@@ -43,7 +45,9 @@ const items = ref([{
     label: 'Add Account',
     icon: 'pi pi-add',
     command: () => {
-        navigateTo('/add-account')
+        navigateTo({
+            name: 'add-account',
+        })
     }
 }])
 if (process.client) {

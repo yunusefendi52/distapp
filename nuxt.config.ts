@@ -6,6 +6,7 @@ import fs from 'fs'
 import PrimeVueTheme from '@primevue/themes/aura';
 
 export default defineNuxtConfig({
+  devtools: { enabled: true },
   runtimeConfig: {
     app: {
       enableDrizzleLogging: true,

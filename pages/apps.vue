@@ -13,9 +13,14 @@ const orgsStore = await useOrgsStore()
 
 const onRowSelect = (event: any) => {
     const appName = event.data.name
-    console.log(event.data)
     const orgName = event.data.organization.name
-    navigateTo(`/orgs/${orgName}/apps/${appName}/releases/`)
+    navigateTo({
+        name: 'orgs-orgName-apps-appId',
+        params: {
+            orgName: orgName,
+            appId: appName,
+        },
+    })
 };
 
 const addOrgVisible = ref(false)
@@ -36,7 +41,12 @@ const { mutateAsync, isPending } = useMutation({
     onSuccess: async (r) => {
         orgsStore.refresh()
         addOrgVisible.value = false
-        navigateTo(`/orgs/${r.normalizedOrgName}`)
+        navigateTo({
+            name: 'orgs',
+            params: {
+                orgName: r.normalizedOrgName,
+            },
+        })
         orgName.value = ''
     },
 })
@@ -102,7 +112,12 @@ const upperCase = (value: string | null | undefined) => {
                     <ProgressSpinner style="width: 22px; height: 22px; margin: unset;" strokeWidth="6" v-if="pending" />
                 </div>
                 <div>
-                    <NuxtLink :to="`/orgs/${orgNameParam}/settings`" append v-if="isOrg">
+                    <NuxtLink :to="{
+                        name: 'orgs-orgName-settings',
+                        params: {
+                            orgName: orgNameParam
+                        },
+                    }" v-if="isOrg">
                         <Button icon="pi pi-cog" severity="secondary" rounded aria-label="Settings" />
                     </NuxtLink>
                 </div>

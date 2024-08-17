@@ -74,7 +74,12 @@ const { mutate: saveNewGroup, isPending: savingNewGroup } = useMutation({
 })
 
 const selectRow = async (row: DataTableRowClickEvent) => {
-    navigateTo(`./${row.data.name}`)
+    navigateTo({
+        name: 'orgs-orgName-apps-appId-groups-detailGroup',
+        params: {
+            detailGroup: row.data.name,
+        },
+    })
 }
 
 </script>

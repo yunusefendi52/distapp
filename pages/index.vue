@@ -33,10 +33,14 @@ if (cookie.value) {
             userTokens.value = newUserTokens
         }
         onMounted(() => {
-            navigateTo('/apps')
+            navigateTo({
+                name: 'apps',
+            })
         })
     }
 } else {
-    await navigateTo('/signin')
+    await navigateTo({
+        name: 'signin',
+    })
 }
 </script>
