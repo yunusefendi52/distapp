@@ -62,6 +62,8 @@
     "tailwindcss": "^3.4.3"
   },
   "trustedDependencies": [
-    "@hebilicious/vue-query-nuxt"
+    "@hebilicious/vue-query-nuxt",
+    "esbuild",
+    "vue-demi"
   ]
 }
