@@ -32,6 +32,14 @@ body {
     border-radius: var(--p-border-radius-md);
 }
 
+.p-datatable-table-container {
+    background-color: var(--p-surface-50);
+}
+
+.appdark .p-datatable-table-container {
+    background-color: var(--p-surface-900);
+}
+
 .p-divider-vertical.divider-app::before {
     border-left: 1px solid var(--p-datatable-border-color);
     left: unset !important;

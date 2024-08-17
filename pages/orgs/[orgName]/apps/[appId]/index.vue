@@ -10,7 +10,7 @@
             name: 'orgs-orgName-apps-appId-settings',
             params: params,
         }">
-            <Button icon="pi pi-cog" severity="secondary" />
+            <Button icon="pi pi-cog" outlined />
         </NuxtLink>
     </AppBarContainer>
     <div class="flex-1 flex flex-col gap-3">
