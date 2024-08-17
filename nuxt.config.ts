@@ -59,6 +59,7 @@ const Noir = definePreset(Aura, {
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  ssr: false,
   runtimeConfig: {
     app: {
       enableDrizzleLogging: true,
