@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
         where(fields, operators) {
             return operators.and(
                 userOrgIds.length ? operators.inArray(fields.organizationsId, userOrgIds) : operators.sql`false`,
-                search ? operators.like(fields.displayName, search) : undefined,
+                search ? operators.like(fields.displayName, `%${search}%`) : undefined,
             )
         },
         orderBy(fields, operators) {
