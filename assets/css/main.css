@@ -1,12 +1,22 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+@layer tailwind-base, primevue, tailwind-utilities;
+
+@layer tailwind-base {
+    @tailwind base;
+}
+
+@layer tailwind-utilities {
+    @tailwind components;
+    @tailwind utilities;
+}
 
 html,
 body {
-    font-size: 14px;
     --p-datatable-header-cell-background: transparent;
     --p-datatable-row-background: transparent;
+    font-family: 'Ubuntu';
+    font-size: 14px;
 }
 
 .p-datatable-table-container {
@@ -14,13 +24,8 @@ body {
 }
 
 .p-datatable-table-container {
-    background: hsl(207, 26%, 95%);
-}
-
-@media (prefers-color-scheme: dark) {
-    .p-datatable-table-container {
-        background: #202024;
-    }
+    border: 1px var(--p-datatable-border-color) solid;
+    border-radius: var(--p-border-radius-md);
 }
 
 .p-divider-vertical.divider-app::before {
@@ -45,4 +50,18 @@ body {
     border: 1px var(--p-datatable-border-color) solid;
     border-radius: var(--p-border-radius-md);
     padding: 15px;
+}
+
+/* Fix toggle button on dark */
+.appdark .p-togglebutton {
+    background: var(--p-surface-700) !important;
+    border-color: var(--p-surface-700) !important;
+}
+
+.appdark .p-togglebutton {
+    color: var(--p-surface-100) !important;
+}
+
+.appdark .p-togglebutton.p-togglebutton-checked::before {
+    background: var(--p-surface-950) !important;
 }

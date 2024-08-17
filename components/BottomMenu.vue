@@ -1,13 +1,14 @@
 <template>
     <div class="flex gap-3 p-2 flex-col justify-stretch">
-        <Button label="Join Invite Code" @click="joinDialog = true" severity="secondary" />
+        <Button icon="pi pi-moon" outlined @click="switchTheme" />
+        <Button label="Join Invite Code" @click="joinDialog = true" outlined />
         <SplitButton :pt="{
             pcButton: {
                 root: {
                     'class': 'w-full',
                 },
             },
-        }" @click="signout" label="Sign Out" :model="items" menuButtonIcon="pi pi-ellipsis-h" />
+        }" @click="signout" label="Sign Out" :model="items" menuButtonIcon="pi pi-ellipsis-h" outlined />
         <LazyJoinInviteLink v-model="joinDialog" @joined="joined" />
     </div>
 </template>
@@ -66,4 +67,6 @@ if (process.client) {
         ]
     })
 }
+
+const { switchTheme } = useAppTheme()
 </script>

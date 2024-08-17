@@ -23,7 +23,7 @@ const orgName = computed(() => route.params.orgName as string)
 </script>
 
 <template>
-    <div class="px-3 py-4 flex gap-2 flex-col">
+    <div class="px-3 py-4 flex gap-3 flex-col">
         <NuxtLink v-for="(item, index) in items" :key="index" :to="{
             name: item.routeName,
             params: item.routeParams,

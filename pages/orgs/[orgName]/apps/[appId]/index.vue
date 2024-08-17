@@ -8,77 +8,56 @@
         </div>
         <NuxtLink :to="{
             name: 'orgs-orgName-apps-appId-settings',
+            params: params,
         }">
             <Button icon="pi pi-cog" severity="secondary" />
         </NuxtLink>
     </AppBarContainer>
     <div class="flex flex-col gap-3 m-4">
-        <TabMenu v-model:active-index="active" :model="items">
-            <template #item="{ item, props }">
-                <NuxtLink v-if="item.routeName" v-slot="{ href, navigate }" :to="{
-                    name: item.routeName,
-                    params: {
-                        orgName: orgName,
-                        appId: appName,
-                        ...item.routeParams,
-                    },
-                }" replace custom>
-                    <a v-ripple :href="href" v-bind="props.action" @click="navigate">
-                        <span v-bind="props.icon" />
-                        <span v-bind="props.label">{{ item.label }}</span>
-                    </a>
+        <SelectButton v-model="activeTab" :options="items" optionLabel="label" aria-labelledby="label">
+            <template #option="slotProps">
+                <NuxtLink :to="{
+                    name: slotProps.option.routeName,
+                    params: params,
+                }">
+                    <span>{{ slotProps.option.label }}</span>
                 </NuxtLink>
-                <a v-else v-ripple :href="item.url" :target="item.target" v-bind="props.action">
-                    <span v-bind="props.icon" />
-                    <span v-bind="props.label">{{ item.label }}</span>
-                </a>
             </template>
-        </TabMenu>
+        </SelectButton>
         <div>
-            <Releases :org-name="orgName" :app-name="appName" v-if="active === 0" />
-            <Groups :org-name="orgName" :app-name="appName" v-else-if="active === 1" />
+            <NuxtPage />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+const { params, name } = useRoute()
+
 const items = ref([
     {
         label: 'Releases',
-        routeName: 'orgNameAppIdTabName',
-        routeParams: {
-            tabName: 'releases',
-        },
+        routeName: 'orgs-orgName-apps-appId-index-releases',
     },
     {
         label: 'Groups',
-        routeName: 'orgNameAppIdTabName',
-        routeParams: {
-            tabName: 'groups',
-        },
+        routeName: 'orgs-orgName-apps-appId-index-groups',
     },
 ])
 
-const { params } = useRoute()
-const router = useRouter()
-const tabName = params.tabName as string
-
-const tabs = [
-    'releases',
-    'groups'
-]
-const tabIndex = tabs.findIndex(e => e === tabName as string)
-if (tabIndex === -1) {
-    await navigateTo({
-        name: 'orgNameAppIdTabName',
-        params: {
-            tabName: tabs[0],
-        },
-    })
-}
-const active = ref(tabIndex !== -1 ? tabIndex : 0);
+const activeTab = ref()
 const appName = params.appId as string
 const orgName = params.orgName as string
+
+if (import.meta.client) {
+    watchEffect(() => {
+        if (!activeTab.value) {
+            activeTab.value = items.value.find(e => name === e.routeName) ?? items.value[0]
+            navigateTo({
+                name: activeTab.value.routeName,
+            })
+        }
+    })
+}
 
 const detailApp = useFetch('/api/detail-app', {
     query: {

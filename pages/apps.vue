@@ -14,6 +14,9 @@ const orgsStore = await useOrgsStore()
 const onRowSelect = (event: any) => {
     const appName = event.data.name
     const orgName = event.data.organization.name
+    if (!orgName || !appName) {
+        return
+    }
     navigateTo({
         name: 'orgs-orgName-apps-appId',
         params: {
@@ -115,7 +118,7 @@ const upperCase = (value: string | null | undefined) => {
                     <NuxtLink :to="{
                         name: 'orgs-orgName-settings',
                         params: {
-                            orgName: orgNameParam
+                            orgName: orgNameParam?.toString() ?? '',
                         },
                     }" v-if="isOrg">
                         <Button icon="pi pi-cog" severity="secondary" rounded aria-label="Settings" />

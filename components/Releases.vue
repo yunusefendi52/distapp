@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col gap-3 mb-3 sm:flex-row">
-        <Button @click="upload" label="Upload"></Button>
+        <Button @click="upload" outlined label="Upload"></Button>
         <MultiSelect placeholder="Filter Groups" v-model="selectedGroup" :options="groups" optionLabel="name"
             class="sm:w-[200px]" />
     </div>
@@ -89,7 +89,6 @@ const upload = () => {
 }
 
 const selectRow = async (row: DataTableRowClickEvent) => {
-    console.log(row.data)
     await navigateTo({
         name: 'orgs-orgName-apps-appId-releases-detailArtifact',
         params: {
