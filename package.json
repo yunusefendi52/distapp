@@ -20,7 +20,7 @@
     "@aws-sdk/client-s3": "^3.556.0",
     "@aws-sdk/s3-request-presigner": "^3.556.0",
     "@hebilicious/vue-query-nuxt": "^0.3.0",
-    "@libsql/client": "^0.6.2",
+    "@libsql/client": "^0.8.1",
     "@plist/parse": "^1.1.0",
     "@primevue/nuxt-module": "^4.0.2",
     "@primevue/themes": "^4.0.2",
