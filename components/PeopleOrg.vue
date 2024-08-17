@@ -1,10 +1,18 @@
 <template>
-    <div class="flex gap-3 flex-col sm:flex-row items-center">
-        <Button :loading="createInviteStatus === 'pending'" @click="() => create()" label="Create Invite Code"
-            v-if="data?.canChange" />
-        <ProgressSpinner style="width: 22px; height: 22px; margin: unset;" strokeWidth="6"
-            v-if="status === 'pending' || changeRoleIsPending || deleteRoleIsPending" />
-    </div>
+    <AppCard>
+        <div class="flex gap-2 flex-col items-start">
+            <span class="text-xs">Invitation Code</span>
+            <form ref="form" @submit.prevent="() => create()">
+                <div class="flex flex-row gap-2">
+                    <InputText name="email" placeholder="Enter email" />
+                    <Button :loading="createInviteStatus === 'pending'" type="submit" label="Create"
+                        v-if="data?.canChange" />
+                </div>
+            </form>
+        </div>
+    </AppCard>
+    <ProgressSpinner style="width: 22px; height: 22px; margin: unset;" strokeWidth="6"
+        v-if="status === 'pending' || changeRoleIsPending || deleteRoleIsPending" />
     <div class="mt-3">
         <DataTable :show-gridlines="false" scrollable :value="listOrgPeople" single selectionMode="single" :pt="{
             menu: 'remove-bg-tabmenu',
@@ -55,6 +63,8 @@
 <script setup lang="ts">
 import _ from 'lodash';
 
+const form = ref()
+
 const route = useRoute()
 const orgName = route.params.orgName
 
@@ -73,9 +83,11 @@ watchEffect(() => {
     }
 })
 const { execute: create, status: createInviteStatus } = useAsyncData(async () => {
+    const req = Object.fromEntries(new FormData(form.value).entries())
     const response = await $fetch('/api/invitations/create-invite-link', {
         body: {
             orgName,
+            ...req,
         },
         method: 'post',
     })

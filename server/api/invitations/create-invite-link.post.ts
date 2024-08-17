@@ -1,7 +1,18 @@
 import { generateTokenWithOptions } from "~/server/utils/token-utils"
 
 export default defineEventHandler(async (event) => {
-    const { orgName } = await readBody(event)
+    const { orgName, email } = await readBody<{
+        orgName: string,
+        email: string,
+
+    }>(event)
+    if (!email) {
+        throw createError({
+            message: 'Invalid request, need email',
+            statusCode: 400,
+        })
+    }
+
     const userId = event.context.auth.userId
     const db = event.context.drizzle
     if (await roleEditNotAllowed(event, orgName)) {
@@ -24,6 +35,7 @@ export default defineEventHandler(async (event) => {
         .then(takeUniqueOrThrow)
     const inviteLink = await generateTokenWithOptions(event, {
         id: org.id,
+        email: email,
     }, (v) => {
         return v.setExpirationTime('1 hour')
     })

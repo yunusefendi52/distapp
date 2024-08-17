@@ -7,13 +7,26 @@ export default defineEventHandler(async (event) => {
     return {}
 })
 
-export const addToOrg = async (event: H3Event<EventHandlerRequest>, orgId: string) => {
-    const userId = event.context.auth.userId
+export const addToOrg = async (event: H3Event<EventHandlerRequest>, orgId: string, email: string) => {
     const db = event.context.drizzle
-    console.log('request', { userId, orgId })
+    const user = await db.select({
+        userId: tables.users.id,
+        email: tables.users.email,
+    }).from(tables.users)
+        .where(and(
+            eq(tables.users.id, event.context.auth.userId),
+            eq(tables.users.email, email),
+        ))
+        .get()
+    if (!user) {
+        throw createError({
+            message: 'Thic code only valid for invited email only',
+            statusCode: 400,
+        })
+    }
     await db.insert(tables.organizationsPeople).values({
         organizationId: orgId,
-        userId: userId,
+        userId: user.userId,
         createdAt: new Date(),
         role: 'collaborator',
     })
