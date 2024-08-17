@@ -3,13 +3,19 @@ const { orgs } = await useOrgsStore()
 const dialogRef = inject<any>('dialogRef');
 
 const listOs = [
-    'android',
-    'ios'
+    {
+        label: 'Android',
+        value: 'android',
+    },
+    {
+        label: 'iOS',
+        value: 'ios',
+    },
 ]
 
 const selectedOrg = ref()
 const disableOrg = ref<boolean>(false)
-const selectedOs = ref(null)
+const selectedOs = ref<typeof listOs[0] | undefined>(undefined)
 const appName = ref(null)
 
 const orgName = dialogRef.value.data.orgName
@@ -28,7 +34,7 @@ const { mutateAsync, isPending } = useMutation({
 async function saveOrg() {
     await mutateAsync({
         name: appName.value,
-        osType: selectedOs.value!,
+        osType: selectedOs.value?.value,
         orgId: (selectedOrg.value as any).id,
     })
     dialogRef.value.close({
@@ -47,7 +53,7 @@ async function saveOrg() {
             </div>
             <div class="flex flex-col gap-2">
                 <label>OS Type</label>
-                <Dropdown v-model="selectedOs" :options="listOs" placeholder="Select OS Type" />
+                <Dropdown v-model="selectedOs" optionLabel="label" :options="listOs" placeholder="Select OS Type" />
             </div>
             <div class="flex flex-col gap-2">
                 <label>App Name</label>

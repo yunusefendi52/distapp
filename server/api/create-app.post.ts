@@ -3,6 +3,12 @@ import { generateId } from '../utils/utils'
 
 export default defineEventHandler(async (event) => {
     const request = await readBody(event)
+    if (!request.osType) {
+        throw createError({
+            message: 'Invalid request',
+            statusCode: 400,
+        })
+    }
     const db = event.context.drizzle
     const org = await db.select({
         orgName: tables.organizations.name,
