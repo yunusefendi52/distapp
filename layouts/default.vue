@@ -26,7 +26,7 @@ const joined = () => {
             </div>
             <LazyBottomMenu />
         </div>
-        <Divider layout="vertical" />
+        <AppDivider orientation="vertical" />
         <div class="flex-1 overflow-auto layout-content">
             <!-- <div class="mb-3 flex flex-row gap-3 items-center header-mobile">
                     <Button icon="pi pi-bars" @click="visible = !visible" />

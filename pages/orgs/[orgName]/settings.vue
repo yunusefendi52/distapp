@@ -3,7 +3,7 @@
         <span class="text-2xl font-bold">Settings</span>
     </AppBarContainer>
 
-    <div class="p-4">
+    <div class="px-4 py-2">
         <TabMenu v-model:active-index="tabIndex" :model="items" :pt="{
             menu: 'remove-bg-tabmenu',
             menuitem: 'remove-bg-tabmenu',

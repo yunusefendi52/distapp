@@ -13,18 +13,29 @@
             <Button icon="pi pi-cog" severity="secondary" />
         </NuxtLink>
     </AppBarContainer>
-    <div class="flex flex-col gap-3 m-4">
-        <SelectButton v-model="activeTab" :options="items" optionLabel="label" aria-labelledby="label">
-            <template #option="slotProps">
-                <NuxtLink :to="{
-                    name: slotProps.option.routeName,
-                    params: params,
-                }">
-                    <span>{{ slotProps.option.label }}</span>
+    <div class="flex-1 flex flex-col gap-3">
+        <TabMenu :activeIndex="activeTabIndex" :model="items" class="px-4 pt-2">
+            <template #item="{ item, props }">
+                <NuxtLink v-if="item.routeName" v-slot="{ href, navigate }" :to="{
+                    name: item.routeName,
+                    params: {
+                        orgName: orgName,
+                        appId: appName,
+                        ...item.routeParams,
+                    },
+                }" replace custom>
+                    <a v-ripple :href="href" v-bind="props.action" @click="navigate">
+                        <span v-bind="props.icon" />
+                        <span v-bind="props.label">{{ item.label }}</span>
+                    </a>
                 </NuxtLink>
+                <a v-else v-ripple :href="item.url" :target="item.target" v-bind="props.action">
+                    <span v-bind="props.icon" />
+                    <span v-bind="props.label">{{ item.label }}</span>
+                </a>
             </template>
-        </SelectButton>
-        <div>
+        </TabMenu>
+        <div class="px-4 py-2">
             <NuxtPage />
         </div>
     </div>
@@ -45,6 +56,7 @@ const items = ref([
 ])
 
 const activeTab = ref()
+const activeTabIndex = computed(() => items.value.indexOf(activeTab.value))
 const appName = params.appId as string
 const orgName = params.orgName as string
 

@@ -7,7 +7,7 @@
             </div>
         </div>
     </AppBarContainer>
-    <div class="flex flex-col gap-3 p-4">
+    <div class="flex flex-col gap-3 px-4 py-2">
         <TabMenu v-model:active-index="active" :model="items" :pt="{
             menu: 'remove-bg-tabmenu',
             menuitem: 'remove-bg-tabmenu',
@@ -23,7 +23,13 @@
             <div class="flex flex-col items-start gap-3 w-full">
                 <Button @click="() => mutate()" :loading="isPending" label="Generate Token" />
 
-                <span class="break-all flex-wrap text-lg">{{ data?.token }}</span>
+                <AppCard class="p-4" v-show="data">
+                    <span class="text-sm" style="color: var(--p-text-muted-color);">Keep this key safe</span>
+                    <div class="flex flex-row gap-4 items-center">
+                        <span class="flex-1 break-all flex-wrap text-xl">{{ data?.token }}</span>
+                        <Button icon="pi pi-copy" @click="() => copyText(data?.token)" />
+                    </div>
+                </AppCard>
             </div>
         </div>
     </div>
