@@ -1,6 +1,5 @@
-import { asc, desc, eq, gt, lt } from "drizzle-orm";
+import { lt } from "drizzle-orm";
 import db from "../db/db";
-import { uploadTemp } from "../db/schema";
 import { DeleteObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 export default defineTask({
@@ -17,9 +16,9 @@ export default defineTask({
         var threshold = new Date();
         threshold.setHours(threshold.getHours() - 1);
         const tempFiles = await drizzle.select()
-            .from(uploadTemp)
-            .where(lt(uploadTemp.createdAt, threshold))
-            .orderBy(asc(uploadTemp.createdAt))
+            .from(tables.uploadTemp)
+            .where(lt(tables.uploadTemp.createdAt, threshold))
+            .orderBy(asc(tables.uploadTemp.createdAt))
         if (tempFiles && tempFiles.length) {
             const s3 = new S3Client({
                 endpoint: env.NUXT_S3_ENDPOINT as string,
@@ -34,8 +33,8 @@ export default defineTask({
                     Bucket: s3BucketName,
                     Key: tempFile.fileKey,
                 }))
-                await drizzle.delete(uploadTemp)
-                    .where(eq(uploadTemp.id, tempFile.id))
+                await drizzle.delete(tables.uploadTemp)
+                    .where(eq(tables.uploadTemp.id, tempFile.id))
                 console.log('Deleted temp file', tempFile.id)
             }))
         }

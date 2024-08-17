@@ -1,6 +1,4 @@
 import type { EventHandlerRequest, H3Event } from "h3"
-import { organizations, organizationsPeople, users } from "../db/schema"
-import { and, eq } from "drizzle-orm"
 
 const getCurrentUserRole = async (
     event: H3Event<EventHandlerRequest>,
@@ -8,12 +6,12 @@ const getCurrentUserRole = async (
     userId: string) => {
     const db = event.context.drizzle
     const currentUserRole = await db.select({
-        role: organizationsPeople.role,
-    }).from(organizationsPeople)
-        .leftJoin(organizations, eq(organizations.id, organizationsPeople.organizationId))
+        role: tables.organizationsPeople.role,
+    }).from(tables.organizationsPeople)
+        .leftJoin(tables.organizations, eq(tables.organizations.id, tables.organizationsPeople.organizationId))
         .where(and(
-            eq(organizations.name, orgName),
-            eq(organizationsPeople.userId, userId),
+            eq(tables.organizations.name, orgName),
+            eq(tables.organizationsPeople.userId, userId),
         ))
         .then(takeUniqueOrThrow)
     return currentUserRole

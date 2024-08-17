@@ -1,5 +1,3 @@
-import { and, eq } from "drizzle-orm"
-import { artifactsGroups, artifactsGroupsManager, organizations, organizationsPeople } from "~/server/db/schema"
 import { generateRandomPassword, getStorageKeys } from "~/server/utils/utils"
 import { GetObjectAttributesCommand, GetObjectTaggingCommand, HeadObjectCommand, ObjectAttributes } from "@aws-sdk/client-s3"
 import { S3AppClient, type AppHeadObjectCommandOutput } from "~/server/services/S3AppClient"
@@ -13,11 +11,11 @@ export const getDetailArtifact = async (
     releaseId: number | string) => {
     const db = event.context.drizzle
     const userOrg = await db.select({
-        organizationsId: organizations.id,
+        organizationsId: tables.organizations.id,
     })
-        .from(organizationsPeople)
-        .leftJoin(organizations, eq(organizations.id, organizationsPeople.organizationId))
-        .where(and(eq(organizationsPeople.userId, userId), eq(organizations.name, orgName!.toString())))
+        .from(tables.organizationsPeople)
+        .leftJoin(tables.organizations, eq(tables.organizations.id, tables.organizationsPeople.organizationId))
+        .where(and(eq(tables.organizationsPeople.userId, userId), eq(tables.organizations.name, orgName!.toString())))
         .then(takeUniqueOrThrow)
     const app = await db.query.apps.findMany({
         where(fields, operators) {
@@ -56,9 +54,9 @@ export default defineEventHandler(async (event) => {
     const [headObject, groups] = await Promise.all([
         s3.getHeadObject(event, assets),
         db.select()
-            .from(artifactsGroups)
-            .leftJoin(artifactsGroupsManager, eq(artifactsGroupsManager.artifactsGroupsId, artifactsGroups.id))
-            .where(eq(artifactsGroupsManager.artifactsId, detailArtifact.id))
+            .from(tables.artifactsGroups)
+            .leftJoin(tables.artifactsGroupsManager, eq(tables.artifactsGroupsManager.artifactsGroupsId, tables.artifactsGroups.id))
+            .where(eq(tables.artifactsGroupsManager.artifactsId, detailArtifact.id))
     ])
     const response = {
         ...detailArtifact,

@@ -1,6 +1,3 @@
-import { organizations, organizationsPeople, organizationsPeopleRelations } from "~/server/db/schema"
-import { and, eq, sql } from "drizzle-orm"
-
 export default defineEventHandler(async (event) => {
     const query = getQuery(event)
     const orgName = query.orgName?.toString()
@@ -13,11 +10,11 @@ export default defineEventHandler(async (event) => {
     const db = event.context.drizzle
     const userId = event.context.auth.userId
     const userOrg = await db.select({
-        organizationsId: organizations.id,
+        organizationsId: tables.organizations.id,
     })
-        .from(organizationsPeople)
-        .leftJoin(organizations, eq(organizations.id, organizationsPeople.organizationId))
-        .where(and(eq(organizationsPeople.userId, userId), eq(organizations.name, orgName!.toString())))
+        .from(tables.organizationsPeople)
+        .leftJoin(tables.organizations, eq(tables.organizations.id, tables.organizationsPeople.organizationId))
+        .where(and(eq(tables.organizationsPeople.userId, userId), eq(tables.organizations.name, orgName!.toString())))
         .then(takeUniqueOrThrow)
     const app = await db.query.apps.findMany({
         where(fields, operators) {

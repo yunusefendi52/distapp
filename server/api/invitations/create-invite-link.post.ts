@@ -1,5 +1,3 @@
-import { and, eq } from "drizzle-orm"
-import { organizations, organizationsPeople } from "~/server/db/schema"
 import { generateTokenWithOptions } from "~/server/utils/token-utils"
 
 export default defineEventHandler(async (event) => {
@@ -13,15 +11,15 @@ export default defineEventHandler(async (event) => {
         })
     }
     const org = await db.select({
-        id: organizations.id,
+        id: tables.organizations.id,
     })
-        .from(organizations)
-        .innerJoin(organizationsPeople, and(
-            eq(organizationsPeople.organizationId, organizations.id),
-            eq(organizationsPeople.userId, userId)))
+        .from(tables.organizations)
+        .innerJoin(tables.organizationsPeople, and(
+            eq(tables.organizationsPeople.organizationId, tables.organizations.id),
+            eq(tables.organizationsPeople.userId, userId)))
         .where(and(
-            eq(organizations.name, orgName),
-            eq(organizationsPeople.userId, userId),
+            eq(tables.organizations.name, orgName),
+            eq(tables.organizationsPeople.userId, userId),
         ))
         .then(takeUniqueOrThrow)
     const inviteLink = await generateTokenWithOptions(event, {

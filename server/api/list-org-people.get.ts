@@ -1,4 +1,3 @@
-import { organizations, organizationsPeople, users } from "../db/schema"
 import { and, asc, desc, eq } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
@@ -7,26 +6,26 @@ export default defineEventHandler(async (event) => {
     const query = getQuery(event)
     const orgName = query.orgName?.toString() ?? ''
     const orgId = await db.select({
-        orgId: organizations.id,
-    }).from(organizations)
-        .leftJoin(organizationsPeople, eq(organizations.id, organizationsPeople.organizationId))
+        orgId: tables.organizations.id,
+    }).from(tables.organizations)
+        .leftJoin(tables.organizationsPeople, eq(tables.organizations.id, tables.organizationsPeople.organizationId))
         .where(and(
-            eq(organizations.name, orgName),
-            eq(organizationsPeople.userId, userId),
+            eq(tables.organizations.name, orgName),
+            eq(tables.organizationsPeople.userId, userId),
         ))
         .limit(1)
         .then(takeUniqueOrThrow)
 
     const people = await db.select({
-        profileName: users.name,
-        email: users.email,
-        createdAt: organizationsPeople.createdAt,
-        role: organizationsPeople.role,
+        profileName: tables.users.name,
+        email: tables.users.email,
+        createdAt: tables.organizationsPeople.createdAt,
+        role: tables.organizationsPeople.role,
     })
-        .from(organizationsPeople)
-        .leftJoin(users, eq(users.id, organizationsPeople.userId))
-        .where(and(eq(organizationsPeople.organizationId, orgId.orgId)))
-        .orderBy(asc(users.name))
+        .from(tables.organizationsPeople)
+        .leftJoin(tables.users, eq(tables.users.id, tables.organizationsPeople.userId))
+        .where(and(eq(tables.organizationsPeople.organizationId, orgId.orgId)))
+        .orderBy(asc(tables.users.name))
     const canEdit = await roleEditAllowed(event, orgName)
     return {
         canChange: canEdit,

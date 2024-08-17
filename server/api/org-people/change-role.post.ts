@@ -1,6 +1,3 @@
-import { and, eq } from "drizzle-orm"
-import { organizations, organizationsPeople, users } from "../../db/schema"
-
 export default defineEventHandler(async (event) => {
     const db = event.context.drizzle
     const currentUserId = event.context.auth.userId
@@ -14,9 +11,9 @@ export default defineEventHandler(async (event) => {
     }
 
     const userIdFromEmail = await db.select({
-        userId: users.id,
-    }).from(users)
-        .where(eq(users.email, email))
+        userId: tables.users.id,
+    }).from(tables.users)
+        .where(eq(tables.users.email, email))
         .then(takeUniqueOrThrow)
 
     if (currentUserId === userIdFromEmail.userId) {
@@ -27,16 +24,16 @@ export default defineEventHandler(async (event) => {
     }
 
     const orgIdFromOrgName = await db.select({
-        orgId: organizations.id,
-    }).from(organizations)
-        .where(eq(organizations.name, orgName))
+        orgId: tables.organizations.id,
+    }).from(tables.organizations)
+        .where(eq(tables.organizations.name, orgName))
         .then(takeUniqueOrThrow)
-    await db.update(organizationsPeople)
+    await db.update(tables.organizationsPeople)
         .set({
             role: roleId,
         }).where(and(
-            eq(organizationsPeople.userId, userIdFromEmail.userId),
-            eq(organizationsPeople.organizationId, orgIdFromOrgName.orgId),
+            eq(tables.organizationsPeople.userId, userIdFromEmail.userId),
+            eq(tables.organizationsPeople.organizationId, orgIdFromOrgName.orgId),
         ))
 
     return { ok: true }

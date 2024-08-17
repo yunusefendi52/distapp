@@ -1,6 +1,6 @@
 import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql/driver";
-import * as schema from '~/server/db/schema';
+import * as schema from '../db/schema'
 
 const db = (env: any, migrationMode: boolean = false) => drizzle(createClient({
     url: env.DB_URL ?? env.NUXT_DB_URL,

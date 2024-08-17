@@ -1,6 +1,3 @@
-import { and, eq } from "drizzle-orm"
-import { apiKeys, organizations, organizationsPeople } from "../../db/schema"
-
 export default defineEventHandler(async (event) => {
     const { app: { apiAuthKey } } = useRuntimeConfig(event)
     if (!apiAuthKey) {
@@ -22,8 +19,8 @@ export default defineEventHandler(async (event) => {
 
     const db = event.context.drizzle
     const keys = await db.select()
-        .from(apiKeys)
-        .where(eq(apiKeys.id, apiKeyPayload.id))
+        .from(tables.apiKeys)
+        .where(eq(tables.apiKeys.id, apiKeyPayload.id))
         .limit(2)
     if (keys.length > 1) {
         console.log('This shouldnt happen, check data integrity')

@@ -1,5 +1,4 @@
 import { v4 } from "uuid"
-import { organizations, organizationsPeople } from "../db/schema"
 import { generateId } from "../utils/utils"
 
 export default defineEventHandler(async (event) => {
@@ -9,12 +8,12 @@ export default defineEventHandler(async (event) => {
     const normalizedOrgName = `${normalizeName(name)}-${v4().substring(0, 7)}`
     await db.transaction(async t => {
         const organizationId = generateId()
-        await t.insert(organizations).values({
+        await t.insert(tables.organizations).values({
             id: organizationId,
             name: normalizedOrgName,
             displayName: displayName,
         })
-        await t.insert(organizationsPeople).values({
+        await t.insert(tables.organizationsPeople).values({
             userId: userId,
             organizationId: organizationId,
             role: 'admin',

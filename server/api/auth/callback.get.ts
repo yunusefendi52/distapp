@@ -1,7 +1,5 @@
 import type { EventHandlerRequest, H3Event } from 'h3'
 import * as jose from 'jose'
-import { users } from '~/server/db/schema'
-import { userTokensHeaderKey } from '~/server/utils/utils'
 
 const alg = 'HS256'
 
@@ -21,7 +19,7 @@ export const generateUserToken = async (
         .setIssuedAt()
         .sign(getJwtKey(event))
     const db = event.context.drizzle
-    await db.insert(users).values({
+    await db.insert(tables.users).values({
         name: userRealName,
         id: userId,
         email: userEmail,

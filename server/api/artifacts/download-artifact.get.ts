@@ -1,8 +1,6 @@
 import { getStorageKeys, s3BucketName } from "~/server/utils/utils"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { GetObjectCommand } from "@aws-sdk/client-s3"
-import { organizations, organizationsPeople } from "~/server/db/schema"
-import { and, eq } from "drizzle-orm"
 import { S3AppClient } from "~/server/services/S3AppClient"
 import type { EventHandlerRequest, H3Event } from "h3"
 
@@ -15,11 +13,11 @@ export const getArtifactFromInternal = async (
     const db = event.context.drizzle
     const userId = event.context.auth.userId
     const userOrg = await db.select({
-        organizationsId: organizations.id,
+        organizationsId: tables.organizations.id,
     })
-        .from(organizationsPeople)
-        .leftJoin(organizations, eq(organizations.id, organizationsPeople.organizationId))
-        .where(and(eq(organizationsPeople.userId, userId), eq(organizations.name, orgName!.toString())))
+        .from(tables.organizationsPeople)
+        .leftJoin(tables.organizations, eq(tables.organizations.id, tables.organizationsPeople.organizationId))
+        .where(and(eq(tables.organizationsPeople.userId, userId), eq(tables.organizations.name, orgName!.toString())))
         .then(takeUniqueOrThrow)
     const app = await db.query.apps.findMany({
         where(fields, operators) {

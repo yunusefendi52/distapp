@@ -1,6 +1,3 @@
-import { and, eq, sql } from "drizzle-orm"
-import { artifactsGroups, organizations, organizationsPeople } from "~/server/db/schema"
-
 export default defineEventHandler(async (event) => {
     const { appName, orgName, groupId } = await readBody<RegenerateLinkReq>(event)
     if (!orgName || !appName) {
@@ -11,11 +8,11 @@ export default defineEventHandler(async (event) => {
     const db = event.context.drizzle
     const userId = event.context.auth.userId
     const userOrg = await db.select({
-        organizationsId: organizations.id,
+        organizationsId: tables.organizations.id,
     })
-        .from(organizationsPeople)
-        .leftJoin(organizations, eq(organizations.id, organizationsPeople.organizationId))
-        .where(and(eq(organizationsPeople.userId, userId), eq(organizations.name, orgName!.toString())))
+        .from(tables.organizationsPeople)
+        .leftJoin(tables.organizations, eq(tables.organizations.id, tables.organizationsPeople.organizationId))
+        .where(and(eq(tables.organizationsPeople.userId, userId), eq(tables.organizations.name, orgName!.toString())))
         .then(takeUniqueOrThrow)
     const app = await db.query.apps.findMany({
         where(fields, operators) {
@@ -24,11 +21,11 @@ export default defineEventHandler(async (event) => {
     }).then(takeUniqueOrThrow)
 
     const artifactGroupsWhere = and(
-        eq(artifactsGroups.id, groupId),
-        eq(artifactsGroups.appsId, app.id),
+        eq(tables.artifactsGroups.id, groupId),
+        eq(tables.artifactsGroups.appsId, app.id),
     )
     const group = await db.select()
-        .from(artifactsGroups)
+        .from(tables.artifactsGroups)
         .where(artifactGroupsWhere)
         .then(takeUniqueOrThrow)
     if (!group.publicId) {
@@ -38,7 +35,7 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    await db.update(artifactsGroups).set({
+    await db.update(tables.artifactsGroups).set({
         publicId: generateRandomPassword(42),
     }).where(artifactGroupsWhere)
 

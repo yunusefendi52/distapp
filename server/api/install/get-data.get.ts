@@ -1,5 +1,3 @@
-import { and, desc, eq } from "drizzle-orm"
-import { artifacts, artifactsGroupsManager, organizations, organizationsPeople } from "~/server/db/schema"
 import type { EventHandlerRequest, H3Event, H3EventContext } from "h3"
 
 export const getArtifactFromPublicId = async (event: H3Event<EventHandlerRequest>, publicId: string) => {
@@ -37,10 +35,10 @@ export default defineEventHandler(async (event) => {
     const db = event.context.drizzle
     const { app, artifactGroup, org } = await getArtifactFromPublicId(event, publicId)
     const artifactList = await db.select()
-        .from(artifactsGroupsManager)
-        .leftJoin(artifacts, eq(artifacts.id, artifactsGroupsManager.artifactsId))
-        .where(eq(artifactsGroupsManager.artifactsGroupsId, artifactGroup.id))
-        .orderBy(desc(artifacts.createdAt))
+        .from(tables.artifactsGroupsManager)
+        .leftJoin(tables.artifacts, eq(tables.artifacts.id, tables.artifactsGroupsManager.artifactsId))
+        .where(eq(tables.artifactsGroupsManager.artifactsGroupsId, artifactGroup.id))
+        .orderBy(desc(tables.artifacts.createdAt))
         .limit(100)
     return {
         app,

@@ -1,18 +1,17 @@
-import { organizations, organizationsPeople } from "../db/schema"
 import { and, asc, eq } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
     const userId = event.context.auth.userId
     const db = event.context.drizzle
     const orgs = await db.select({
-        id: organizations.id,
-        name: organizations.name,
-        displayName: organizations.displayName,
+        id: tables.organizations.id,
+        name: tables.organizations.name,
+        displayName: tables.organizations.displayName,
     })
-        .from(organizations)
-        .innerJoin(organizationsPeople, and(
-            eq(organizationsPeople.organizationId, organizations.id),
-            eq(organizationsPeople.userId, userId)))
-        .orderBy(asc(organizations.name))
+        .from(tables.organizations)
+        .innerJoin(tables.organizationsPeople, and(
+            eq(tables.organizationsPeople.organizationId, tables.organizations.id),
+            eq(tables.organizationsPeople.userId, userId)))
+        .orderBy(asc(tables.organizations.name))
     return orgs
 })

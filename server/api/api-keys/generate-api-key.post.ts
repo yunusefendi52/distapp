@@ -1,6 +1,3 @@
-import { and, eq } from "drizzle-orm"
-import { apiKeys, organizations, organizationsPeople } from "../../db/schema"
-
 export default defineEventHandler(async (event) => {
     const { app: { apiAuthKey } } = useRuntimeConfig(event)
     if (!apiAuthKey) {
@@ -27,11 +24,11 @@ export default defineEventHandler(async (event) => {
     const userId = event.context.auth.userId
     const db = event.context.drizzle
     const userOrg = await db.select({
-        organizationsId: organizations.id,
+        organizationsId: tables.organizations.id,
     })
-        .from(organizationsPeople)
-        .leftJoin(organizations, eq(organizations.id, organizationsPeople.organizationId))
-        .where(and(eq(organizationsPeople.userId, userId), eq(organizations.name, orgName!.toString())))
+        .from(tables.organizationsPeople)
+        .leftJoin(tables.organizations, eq(tables.organizations.id, tables.organizationsPeople.organizationId))
+        .where(and(eq(tables.organizationsPeople.userId, userId), eq(tables.organizations.name, orgName!.toString())))
         .then(takeUniqueOrThrow)
     const app = await db.query.apps.findMany({
         where(fields, operators) {
@@ -43,7 +40,7 @@ export default defineEventHandler(async (event) => {
     const token = await generateTokenWithOptions(event, {
         id,
     }, v => v, apiAuthKey)
-    await db.insert(apiKeys).values({
+    await db.insert(tables.apiKeys).values({
         id: id,
         createdAt: new Date(),
         appsId: app.id,

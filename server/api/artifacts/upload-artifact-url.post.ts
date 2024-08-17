@@ -1,6 +1,3 @@
-import { and, eq } from "drizzle-orm"
-import { artifacts, organizations, organizationsPeople, uploadTemp } from "~/server/db/schema"
-
 export default defineEventHandler(async (event) => {
     const { uploadId: uploadIdAny, appName, orgName, releaseNotes, packageMetadata, } = await readBody(event)
     if (await roleEditNotAllowed(event, orgName)) {
@@ -15,20 +12,20 @@ export default defineEventHandler(async (event) => {
     const userId = event.context.auth.userId
 
     const uploadTempWhere = and(
-        eq(uploadTemp.id, uploadId),
-        eq(uploadTemp.userId, userId),
+        eq(tables.uploadTemp.id, uploadId),
+        eq(tables.uploadTemp.userId, userId),
     )
     const uploadTempData = await db.select()
-        .from(uploadTemp)
+        .from(tables.uploadTemp)
         .where(uploadTempWhere)
         .then(takeUniqueOrThrow)
 
     const userOrg = await db.select({
-        organizationsId: organizations.id,
+        organizationsId: tables.organizations.id,
     })
-        .from(organizationsPeople)
-        .leftJoin(organizations, eq(organizations.id, organizationsPeople.organizationId))
-        .where(and(eq(organizationsPeople.userId, userId), eq(organizations.name, orgName!.toString())))
+        .from(tables.organizationsPeople)
+        .leftJoin(tables.organizations, eq(tables.organizations.id, tables.organizationsPeople.organizationId))
+        .where(and(eq(tables.organizationsPeople.userId, userId), eq(tables.organizations.name, orgName!.toString())))
         .then(takeUniqueOrThrow)
     const app = await db.query.apps.findMany({
         where(fields, operators) {
@@ -60,9 +57,9 @@ export default defineEventHandler(async (event) => {
     const artifactsId = generateId()
     const fileKey = uploadTempData.fileKey
     await db.transaction(async () => {
-        await db.delete(uploadTemp)
+        await db.delete(tables.uploadTemp)
             .where(uploadTempWhere)
-        await db.insert(artifacts).values({
+        await db.insert(tables.artifacts).values({
             id: artifactsId,
             createdAt: now,
             updatedAt: now,
