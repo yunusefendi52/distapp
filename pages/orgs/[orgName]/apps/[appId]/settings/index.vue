@@ -20,17 +20,7 @@
         <div :style="{
             display: active == 1 ? 'unset' : 'none',
         }">
-            <div class="flex flex-col items-start gap-3 w-full">
-                <Button @click="() => mutate()" :loading="isPending" label="Generate Token" />
-
-                <AppCard class="p-4" v-show="data">
-                    <span class="text-sm" style="color: var(--p-text-muted-color);">Keep this key safe</span>
-                    <div class="flex flex-row gap-4 items-center">
-                        <span class="flex-1 break-all flex-wrap text-xl">{{ data?.token }}</span>
-                        <Button icon="pi pi-copy" @click="() => copyText(data?.token)" />
-                    </div>
-                </AppCard>
-            </div>
+            <LazyAppApiKeys />
         </div>
     </div>
 </template>
@@ -55,19 +45,6 @@ const detailApp = useFetch('/api/detail-app', {
     },
 })
 const { status } = detailApp
-
-// API Keys
-const { mutate, data, isPending } = useMutation({
-    mutationFn: async (r) => {
-        return await $fetch('/api/api-keys/generate-api-key', {
-            method: 'post',
-            body: {
-                orgName,
-                appName,
-            }
-        })
-    },
-})
 </script>
 
 <style></style>
