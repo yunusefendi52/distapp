@@ -24,7 +24,7 @@
                 <template #body="prop">
                     <form>
                         <div>
-                            <Dropdown :model-value="roles.find(e => e.id === prop.data.role)" name="role"
+                            <Select :model-value="roles.find(e => e.id === prop.data.role)" name="role"
                                 :options="roles" optionLabel="displayRole" placeholder="Select a role" @change="(v) => changeRole({
                                     dropdown: v,
                                     prop,

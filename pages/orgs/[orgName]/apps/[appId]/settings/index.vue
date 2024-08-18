@@ -12,23 +12,22 @@
             menu: 'remove-bg-tabmenu',
             menuitem: 'remove-bg-tabmenu',
         }" />
-        <div :style="{
-            display: active == 0 ? 'unset' : 'none',
-        }">
-
-        </div>
-        <div :style="{
-            display: active == 1 ? 'unset' : 'none',
-        }">
-            <LazyAppApiKeys />
-        </div>
+        <NuxtPage />
     </div>
 </template>
 
 <script setup lang="ts">
-const items = ref([
-    { label: 'App Info' },
-    { label: 'API Keys' },
+const items = ref<MenuItem[]>([
+    {
+        label: 'App Info',
+        routeName: 'app-info-settings',
+        command: navigateFromTab,
+    },
+    {
+        label: 'API Keys',
+        routeName: 'app-info-api-keys',
+        command: navigateFromTab,
+    },
 ])
 
 const active = ref(0)

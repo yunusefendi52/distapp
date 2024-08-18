@@ -56,3 +56,13 @@ export const generateManifestLink = (manifestData: any, releaseId: string, publi
 export const decodeJwt = (value: string) => {
     return jose.decodeJwt(value)
 }
+
+export type { MenuItem, MenuItemCommandEvent } from 'primevue/menuitem'
+import type { MenuItemCommandEvent } from 'primevue/menuitem'
+
+export const navigateFromTab = (event: MenuItemCommandEvent) => {
+    navigateTo({
+        name: event.item.routeName,
+        params: event.item.routeParams,
+    })
+}

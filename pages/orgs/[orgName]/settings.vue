@@ -9,24 +9,45 @@
             menuitem: 'remove-bg-tabmenu',
         }" />
         <div class="flex-1 mt-3">
-            <LazyInfoOrg v-if="tabIndex === 0" />
-            <LazyPeopleOrg v-if="tabIndex === 1" />
+            <NuxtPage />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-const detailOrg = useDetailGroup()
+definePageMeta({
+    name: 'orgs-orgName-settings',
+})
+
+const { name } = useRoute()
 
 const tabIndex = ref(0)
-const items = ref([
+const items = ref<MenuItem[]>([
     {
         label: 'Info',
         icon: 'pi pi-info-circle',
+        routeName: 'org-settings-info',
+        command: navigateFromTab,
     },
     {
         label: 'People',
         icon: 'pi pi-user',
+        routeName: 'orgs-orgName-settings-people',
+        command: navigateFromTab,
     },
-]);
+    {
+        label: 'Danger',
+        icon: 'pi pi-exclamation-triangle',
+        routeName: 'orgs-orgName-settings-danger',
+        command: navigateFromTab,
+    },
+])
+
+if (name === 'orgs-orgName-settings') {
+    navigateTo({
+        name: items.value[0].routeName,
+    })
+}
+
+const detailOrg = useDetailGroup()
 </script>
