@@ -21,7 +21,6 @@ export const roleEditAllowed = async (
     event: H3Event<EventHandlerRequest>,
     orgName: string) => {
     const userId = event.context.auth.userId
-    const db = event.context.drizzle
     const currentUserRole = await getCurrentUserRole(event, orgName, userId)
     return currentUserRole.role && currentUserRole.role === 'admin'
 }
