@@ -28,6 +28,8 @@ osType.value = dialogRef.value.data.props.osType
 orgName.value = dialogRef.value.data.props.orgName
 appName.value = dialogRef.value.data.props.appName
 
+const groupName = computed(() => dialogRef.value.data.groupName)
+
 const mimeTypeFromOsType = computed(() => osType.value ? getMimeTypeFromosType(osType.value) : undefined)
 const fileRef = ref<HTMLInputElement | null>(null)
 
@@ -38,7 +40,16 @@ const { data: appGroups } = useFetch('/api/groups/list-groups', {
     },
 })
 const groups = computed(() => appGroups.value ?? [])
-const selectedGroup = ref<any[]>()
+const selectedGroup = ref<typeof groups.value>()
+
+watchEffect(() => {
+    if (groupName.value) {
+        const s = groups.value.find(e => e.name === groupName.value)
+        if (s) {
+            selectedGroup.value = [s]
+        }
+    }
+})
 
 const { mutateAsync, isPending } = useMutation({
     mutationFn: async (file: File) => {

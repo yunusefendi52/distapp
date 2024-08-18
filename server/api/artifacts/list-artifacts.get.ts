@@ -3,6 +3,7 @@ export default defineEventHandler(async (event) => {
     const userId = event.context.auth.userId
     const query = getQuery(event)
     const { appName, orgName, groups } = query
+    const { groupName } = query as { groupName: string | undefined }
     const groupIds: string[] = Array.isArray(groups) ? groups : (groups ? [groups] : [])
     const userOrg = await db.select({
         organizationsId: tables.organizations.id,
@@ -16,6 +17,17 @@ export default defineEventHandler(async (event) => {
             return operators.and(operators.eq(fields.organizationsId, userOrg.organizationsId!), operators.eq(fields.name, appName!.toString()))
         },
     }).then(takeUniqueOrThrow)
+    if (groupName) {
+        const groupNameArtifact = await db.select({
+            groupId: tables.artifactsGroups.id,
+        }).from(tables.artifactsGroups)
+            .where(and(
+                eq(tables.artifactsGroups.appsId, app.id),
+                eq(tables.artifactsGroups.name, groupName),
+            ))
+            .then(takeUniqueOrThrow)
+        groupIds.push(groupNameArtifact.groupId)
+    }
     const groupsQuery = db.select({
         artifactId: tables.artifacts.id,
         names: sql`group_concat(${tables.artifactsGroups.name}, ', ')`.as('names'),

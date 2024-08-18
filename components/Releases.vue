@@ -1,8 +1,8 @@
 <template>
     <div class="flex flex-col gap-3 mb-3 sm:flex-row">
         <Button :loading="!osType" @click="upload" outlined label="Upload"></Button>
-        <MultiSelect placeholder="Filter Groups" v-model="selectedGroup" :options="groups" optionLabel="name"
-            class="sm:w-[200px]" />
+        <MultiSelect v-if="!groupName" placeholder="Filter Groups" v-model="selectedGroup" :options="groups"
+            optionLabel="name" class="sm:w-[200px]" />
     </div>
     <div>
         <DataTable :show-gridlines="false" scrollable :value="list" single @row-click="selectRow($event)"
@@ -46,10 +46,8 @@ const props = defineProps<{
     orgName: string,
     appName: string,
     osType: 'android' | 'ios' | null | undefined,
+    groupName?: string | undefined,
 }>()
-watchEffect(() => {
-    console.log('release os type', props.osType)
-})
 
 const { data: appGroups } = useFetch('/api/groups/list-groups', {
     query: {
@@ -66,6 +64,7 @@ const { data, refresh } = useFetch('/api/artifacts/list-artifacts', {
         orgName: props.orgName,
         appName: props.appName,
         groups: selectedGroupIds,
+        groupName: props.groupName,
     },
 })
 const list = computed(() => data.value)
@@ -85,6 +84,7 @@ const upload = () => {
         },
         data: {
             props,
+            groupName: props.groupName,
         },
         onClose: (o) => {
             if (o?.data?.success) {

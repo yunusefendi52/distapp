@@ -7,11 +7,14 @@
             <div class="flex flex-col flex-1">
                 <span class="text-xl font-bold">{{ detailGroup?.name }}</span>
                 <span v-if="publicLink">Public link: <a class="underline" target="_blank" :href="publicLink">{{
-    publicLink
+                    publicLink
                         }}</a> </span>
             </div>
             <Button icon="pi pi-refresh" label="Regenerate Link" @click="regenerateLink" />
         </div>
+    </div>
+    <div class="px-4">
+        <Releases :org-name="orgName" :app-name="appName" :os-type="'android'" :group-name="groupName" />
     </div>
 </template>
 
@@ -20,7 +23,7 @@ const route = useRoute()
 const params = route.params
 const appName = params.appId as string
 const orgName = params.orgName as string
-const groupName = params.detailGroup as string
+const groupName = computed(() => params.detailGroup as string)
 
 const detailApp = useFetch('/api/detail-app', {
     query: {
