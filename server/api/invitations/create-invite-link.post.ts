@@ -1,17 +1,21 @@
 import { generateTokenWithOptions } from "~/server/utils/token-utils"
 
 export default defineEventHandler(async (event) => {
-    const { orgName, email } = await readBody<{
+    var { orgName, email } = await readBody<{
         orgName: string,
         email: string,
 
     }>(event)
+    email = email.trim()
     if (!email) {
         throw createError({
             message: 'Invalid request, need email',
             statusCode: 400,
         })
     }
+
+    await z.string().email('Email is required')
+        .parseAsync(email)
 
     const userId = event.context.auth.userId
     const db = event.context.drizzle
