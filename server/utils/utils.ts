@@ -3,7 +3,7 @@ import type { EventHandlerRequest, H3Event } from "h3"
 import getRandomValues from 'get-random-values'
 
 export const normalizeName = (value: string): string => {
-    return value.replaceAll(' ', '-')
+    return value.trim().toLowerCase()
 }
 
 export const getJwtKey = (event: H3Event<EventHandlerRequest>) => {
