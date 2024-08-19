@@ -4,6 +4,7 @@ import { CreateAppDialog } from '#components'
 import { ListAppsRequest } from '~/server/api/list-apps.get';
 import _ from 'lodash'
 import { normalizeName } from '~/server/utils/utils';
+import { useAppDrawer } from '~/composables/useAppTheme';
 
 const { name: routeName, params } = useRoute()
 const orgNameParam = params.orgName
@@ -103,7 +104,6 @@ const search = (e: any) => {
 const upperCase = (value: string | null | undefined) => {
     return value?.toUpperCase()
 }
-
 </script>
 
 <template>
@@ -111,7 +111,7 @@ const upperCase = (value: string | null | undefined) => {
         <AppBarContainer>
             <div class="flex flex-row items-center gap-2 sm:flex-1">
                 <div class="flex-1 flex gap-3 items-center">
-                    <span class="text-2xl font-bold">Apps</span>
+                    <AppTitle title="Apps" />
                     <ProgressSpinner style="width: 22px; height: 22px; margin: unset;" strokeWidth="6" v-if="pending" />
                 </div>
                 <div>

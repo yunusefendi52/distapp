@@ -1,7 +1,7 @@
 <template>
     <AppBarContainer>
         <div class="flex flex-row flex-1 gap-2 items-center">
-            <span class="text-2xl font-bold">{{ detailApp?.displayName }}</span>
+            <AppTitle :title="detailApp?.displayName" />
             <div v-if="status === 'pending' || status2 === 'pending'">
                 <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" />
             </div>

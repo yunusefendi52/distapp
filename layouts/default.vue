@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { isOpen } = useAppDrawer()
 const visible = ref(false)
 
 const route = useRoute()
@@ -15,23 +16,23 @@ const joined = () => {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style lang="scss">
+.p-drawer-nb {
+    border: unset !important;
+    // border-right: 1px var(--p-content-border-color) solid !important;
+}
+</style>
 
 <template>
     <div class="h-full flex flex-row overflow-auto">
-        <div class="flex flex-col" style="width: 300px;">
-            <div class="flex-1 overflow-auto">
-                <AppHeader />
-                <AppMenu />
-            </div>
-            <LazyBottomMenu />
-        </div>
-        <AppDivider orientation="vertical" />
+        <Drawer class="p-drawer-nb" v-model:visible="isOpen" :block-scroll="true">
+            <template #container="{ closeCallback }">
+                <LazyAppDrawer />
+            </template>
+        </Drawer>
+        <LazyAppDrawer style="width: 300px;" class="hidden sm:inline-flex" />
+        <AppDivider orientation="vertical" class="hidden sm:inline-flex" />
         <div class="flex-1 overflow-auto layout-content">
-            <!-- <div class="mb-3 flex flex-row gap-3 items-center header-mobile">
-                    <Button icon="pi pi-bars" @click="visible = !visible" />
-                    <label class="font-bold text-lg">DistApp</label>
-                </div> -->
             <slot />
         </div>
     </div>

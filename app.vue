@@ -9,6 +9,7 @@
 </template>
 
 <script setup lang="ts">
+useAppTheme()
 </script>
 
 <style lang="scss">

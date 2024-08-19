@@ -16,3 +16,11 @@ export const useAppTheme = () => {
         switchTheme: toggle,
     }
 }
+
+export const useAppDrawer = () => {
+    const drawer = useState<boolean>()
+    return {
+        isOpen: drawer,
+    }
+}
+

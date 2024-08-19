@@ -1,7 +1,7 @@
 <template>
     <AppBarContainer>
         <div class="flex flex-row flex-1 gap-2 items-center">
-            <span class="text-2xl font-bold">{{ detailApp.data.value?.displayName }}</span>
+            <AppTitle :title="detailApp.data.value?.displayName" />
             <div v-if="status === 'pending'">
                 <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" />
             </div>
@@ -48,6 +48,7 @@ if (import.meta.client) {
             activeTab.value = items.value.find(e => name === e.routeName) ?? items.value[0]
             navigateTo({
                 name: activeTab.value.routeName,
+                replace: true,
             })
         }
     })
