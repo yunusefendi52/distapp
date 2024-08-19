@@ -5,28 +5,16 @@ import type { EventHandlerRequest, H3Event } from "h3"
 
 export const getDetailArtifact = async (
     event: H3Event<EventHandlerRequest>,
-    userId: string,
     orgName: string,
     appName: string,
     releaseId: number | string) => {
     const db = event.context.drizzle
-    const userOrg = await db.select({
-        organizationsId: tables.organizations.id,
-    })
-        .from(tables.organizationsPeople)
-        .leftJoin(tables.organizations, eq(tables.organizations.id, tables.organizationsPeople.organizationId))
-        .where(and(eq(tables.organizationsPeople.userId, userId), eq(tables.organizations.name, orgName!.toString())))
-        .then(takeUniqueOrThrow)
-    const app = await db.query.apps.findMany({
-        where(fields, operators) {
-            return operators.and(operators.eq(fields.organizationsId, userOrg.organizationsId!), operators.eq(fields.name, appName!.toString()))
-        },
-    }).then(takeUniqueOrThrow)
+    const { userApp, userOrg } = await getUserApp(event, orgName, appName)
     const releaseIdInt = parseInt(releaseId!.toString())
     const detailArtifact = await db.query.artifacts.findMany({
         where(fields, operators) {
             return operators.and(
-                operators.eq(fields.appsId, app.id),
+                operators.eq(fields.appsId, userApp.id),
                 operators.eq(fields.releaseId, releaseIdInt),
             )
         },
@@ -34,7 +22,7 @@ export const getDetailArtifact = async (
     return {
         userOrg,
         detailArtifact,
-        app,
+        app: userApp,
     }
 }
 
@@ -44,13 +32,12 @@ export default defineEventHandler(async (event) => {
     const { appName, orgName, releaseId } = getQuery(event)
     const { userOrg, app, detailArtifact } = await getDetailArtifact(
         event,
-        userId,
         orgName!.toString(),
         appName!.toString(),
         parseInt(releaseId!.toString()),
     )
     const s3 = new S3AppClient()
-    const { assets } = getStorageKeys(userOrg.organizationsId!, app.id, detailArtifact.fileObjectKey)
+    const { assets } = getStorageKeys(userOrg.org!.id!, app.id, detailArtifact.fileObjectKey)
     const [headObject, groups] = await Promise.all([
         s3.getHeadObject(event, assets),
         db.select()

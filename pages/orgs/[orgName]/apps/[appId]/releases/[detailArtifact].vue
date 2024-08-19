@@ -15,10 +15,11 @@
             <div class="flex flex-col gap-1 flex-1">
                 <label class="font-semibold text-xl">Version {{ detailArtifact?.versionName2 }} ({{
                     detailArtifact?.releaseId
-                    }})</label>
+                }})</label>
                 <label class="text-lg">{{ formatDate(detailArtifact?.createdAt) }}</label>
             </div>
-            <Button @click="confirmDelete($event)" icon="pi pi-trash" label="Delete" severity="danger" />
+            <Button :loading="isPending" @click="confirmDelete($event)" icon="pi pi-trash" label="Delete"
+                severity="danger" />
         </div>
         <div class="flex flex-col gap-2">
             <span class="font-semibold">Release Notes</span>
@@ -121,6 +122,24 @@ const { execute: saveGroups, status: saveGroupsStatus } = useAsyncData(() => {
     immediate: false,
 })
 
+const router = useRouter()
+
+const { mutate, isPending } = useMutation({
+    mutationFn: (r) => {
+        return $fetch.raw('/api/artifacts/delete-artifact', {
+            method: 'delete',
+            query: {
+                orgName,
+                appName,
+                releaseId,
+            },
+        })
+    },
+    onSuccess(data, variables, context) {
+        router.back()
+    },
+})
+
 const confirm = useConfirm();
 const confirmDelete = (event: any) => {
     confirm.require({
@@ -132,6 +151,7 @@ const confirmDelete = (event: any) => {
         rejectLabel: 'Cancel',
         acceptLabel: 'Delete',
         accept: () => {
+            mutate()
         },
         reject: () => {
         }

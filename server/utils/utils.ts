@@ -1,6 +1,7 @@
 import { uuidv7 } from "uuidv7"
 import type { EventHandlerRequest, H3Event } from "h3"
 import getRandomValues from 'get-random-values'
+import { S3Client } from "@aws-sdk/client-s3"
 
 export const normalizeName = (value: string): string => {
     return value.trim().toLowerCase()
@@ -15,8 +16,8 @@ export const getJwtKey = (event: H3Event<EventHandlerRequest>) => {
 
 export const getStorageKeys = (orgId: string, appId: string, key: string) => {
     return {
-        // assets: `assets/orgid-${orgId}-${appId}/${key}`,
-        assets: `assets/orgid-${orgId}/appid-${appId}/${key}`,
+        assets: `assets/orgid-${orgId}-${appId}/${key}`,
+        // assets: `assets/orgid-${orgId}/appid-${appId}/${key}`,
     }
 }
 

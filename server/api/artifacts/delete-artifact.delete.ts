@@ -1,0 +1,40 @@
+import { S3AppClient } from "~/server/services/S3AppClient"
+import { getDetailArtifact } from "./detail-artifact.get"
+import { DeleteObjectCommand } from "@aws-sdk/client-s3"
+
+export default defineEventHandler(async (event) => {
+    const db = event.context.drizzle
+    const { appName, orgName, releaseId } = getQuery(event)
+    if (await roleEditNotAllowed(event, orgName!.toString())) {
+        throw createError({
+            message: 'Unauthorized delete artifact',
+            statusCode: 401,
+        })
+    }
+    const { userOrg, app, detailArtifact } = await getDetailArtifact(
+        event,
+        orgName!.toString(),
+        appName!.toString(),
+        parseInt(releaseId!.toString()),
+    )
+    const { assets } = getStorageKeys(userOrg.org!.id, app.id, detailArtifact.fileObjectKey)
+    const s3 = createS3(event)
+    await s3.send(new DeleteObjectCommand({
+        Bucket: s3BucketName,
+        Key: assets,
+    }))
+    await db.batch([
+        db.delete(tables.artifactsGroupsManager)
+            .where(and(
+                eq(tables.artifactsGroupsManager.artifactsId, detailArtifact.id),
+            )),
+        db.delete(tables.artifacts)
+            .where(and(
+                eq(tables.artifacts.id, detailArtifact.id),
+                eq(tables.artifacts.appsId, app.id),
+            )),
+    ])
+    return {
+        deleted: new Date(),
+    }
+})
