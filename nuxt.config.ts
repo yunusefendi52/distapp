@@ -58,6 +58,7 @@ const Noir = definePreset(Aura, {
 })
 
 export default defineNuxtConfig({
+  compatibilityDate: '2024-08-20',
   devtools: { enabled: true },
   ssr: false,
   runtimeConfig: {
