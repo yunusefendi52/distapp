@@ -19,6 +19,6 @@ export default defineEventHandler(async (event) => {
                 : undefined
             ],
         ))
-        .orderBy(asc(tables.organizations.name))
+        .orderBy(asc(tables.organizations.displayName))
     return orgs
 })
