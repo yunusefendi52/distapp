@@ -1,7 +1,7 @@
 <template>
     <AppBarContainer>
         <div class="flex flex-row flex-1 gap-2 items-center">
-            <span class="text-2xl font-bold">Apps Settings</span>
+            <AppTitle title="Apps Settings" />
             <div v-if="status === 'pending'">
                 <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" />
             </div>
@@ -17,6 +17,8 @@
 </template>
 
 <script setup lang="ts">
+const route = useRoute()
+
 const items = ref<MenuItem[]>([
     {
         label: 'App Info',
@@ -30,7 +32,18 @@ const items = ref<MenuItem[]>([
     },
 ])
 
-const active = ref(0)
+const active = ref<number | undefined>(items.value.findIndex(e => e.routeName === route.name))
+if (import.meta.client) {
+    watchEffect(() => {
+        if (!active.value || active.value < 0) {
+            active.value = 0
+            navigateTo({
+                name: items.value[active.value].routeName,
+                replace: true,
+            })
+        }
+    })
+}
 
 const { params } = useRoute()
 

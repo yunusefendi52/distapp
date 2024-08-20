@@ -31,6 +31,7 @@ export default defineEventHandler(async (event) => {
             )
         },
         orderBy(fields, operators) {
+            // TODO: Move to display name
             return operators.asc(fields.name)
         },
     })
