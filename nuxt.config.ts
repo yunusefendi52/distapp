@@ -133,6 +133,7 @@ export default defineNuxtConfig({
     '@hebilicious/vue-query-nuxt',
     '@vueuse/nuxt',
     '@primevue/nuxt-module',
+    'nuxt-vue3-google-signin',
   ],
 
   primevue: {
@@ -180,5 +181,8 @@ export default defineNuxtConfig({
         force: true,
       });
     },
+  },
+  googleSignIn: {
+    clientId: process.env.NUXT_GOOGLE_CLIENT_ID,
   },
 })
