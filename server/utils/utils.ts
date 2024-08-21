@@ -1,7 +1,5 @@
 import { uuidv7 } from "uuidv7"
 import type { EventHandlerRequest, H3Event } from "h3"
-import getRandomValues from 'get-random-values'
-import { S3Client } from "@aws-sdk/client-s3"
 
 export const normalizeName = (value: string): string => {
     return value.trim().toLowerCase()
@@ -28,7 +26,7 @@ export const generateRandomPassword = (length = 60) => {
     let password = '';
 
     const array = new Uint8Array(chars.length);
-    getRandomValues(array)
+    crypto.getRandomValues(array)
 
     for (let i = 0; i < length; i++) {
         password += chars[array[i] % chars.length];

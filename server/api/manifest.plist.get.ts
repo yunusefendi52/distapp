@@ -1,8 +1,5 @@
 import _ from 'lodash'
 import { getArtifactLinkFromPublicIdAndReleaseId } from './install/download.get'
-import { getArtifactFromInternal } from './artifacts/download-artifact.get'
-import { S3AppClient } from '../services/S3AppClient'
-import { GetObjectCommand } from '@aws-sdk/client-s3'
 
 export default defineEventHandler(async (event) => {
 	const query = getQuery(event)

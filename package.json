@@ -17,8 +17,6 @@
     "deploy": "bun run build --preset=cloudflare-pages && npx wrangler pages deploy dist/"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.556.0",
-    "@aws-sdk/s3-request-presigner": "^3.556.0",
     "@hebilicious/vue-query-nuxt": "^0.3.0",
     "@libsql/client": "^0.8.1",
     "@plist/parse": "^1.1.0",
@@ -28,10 +26,11 @@
     "@vueuse/core": "^10.10.0",
     "@vueuse/nuxt": "^10.10.0",
     "@xmldom/xmldom": "^0.8.10",
+    "aws4fetch": "^1.0.19",
     "chart.js": "3.3.2",
     "crypto-js": "^4.2.0",
     "drizzle-orm": "^0.31.4",
-    "get-random-values": "^3.0.0",
+    "fast-xml-parser": "^4.4.1",
     "h3": "^1.11.1",
     "jose": "^5.2.4",
     "jszip": "^3.10.1",

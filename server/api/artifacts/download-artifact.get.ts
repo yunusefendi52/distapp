@@ -1,8 +1,6 @@
 import { getStorageKeys, s3BucketName } from "~/server/utils/utils"
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
-import { GetObjectCommand } from "@aws-sdk/client-s3"
-import { S3AppClient } from "~/server/services/S3AppClient"
 import type { EventHandlerRequest, H3Event } from "h3"
+import { S3Fetch } from "~/server/services/s3fetch"
 
 export const getArtifactFromInternal = async (
     event: H3Event<EventHandlerRequest>,
@@ -34,8 +32,8 @@ export const getArtifactFromInternal = async (
         },
     }).then(takeUniqueOrThrow)
     const { assets } = getStorageKeys(userOrg.organizationsId!, app.id, detailArtifact.fileObjectKey)
-    const s3 = new S3AppClient()
-    const signedUrl = await s3.getSignedUrlGetObject(event, assets, 1800, `attachment; filename ="${app.name}${detailArtifact.extension ? `.${detailArtifact.extension}` : ''}"`)
+    const s3 = new S3Fetch()
+    const signedUrl = await s3.getSignedUrlGetObject(assets, 1800, `attachment; filename ="${app.name}${detailArtifact.extension ? `.${detailArtifact.extension}` : ''}"`)
     return {
         signedUrl,
         userOrg,

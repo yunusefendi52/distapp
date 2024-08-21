@@ -1,7 +1,7 @@
 import { getStorageKeys, s3BucketName } from "~/server/utils/utils"
-import { S3AppClient } from "~/server/services/S3AppClient"
 import { getArtifactFromPublicId } from './get-data.get'
 import type { EventHandlerRequest, H3Event } from "h3"
+import { S3Fetch } from "~/server/services/s3fetch"
 
 export const getArtifactLinkFromPublicIdAndReleaseId = async (
     event: H3Event<EventHandlerRequest>,
@@ -19,8 +19,8 @@ export const getArtifactLinkFromPublicIdAndReleaseId = async (
         },
     }).then(takeUniqueOrThrow)
     const { assets } = getStorageKeys(org.id, app.id, detailArtifact.fileObjectKey)
-    const s3 = new S3AppClient()
-    const signedUrl = await s3.getSignedUrlGetObject(event, assets, 1800, `attachment; filename ="${app.name}${detailArtifact.extension ? `.${detailArtifact.extension}` : ''}"`)
+    const s3 = new S3Fetch()
+    const signedUrl = await s3.getSignedUrlGetObject(assets, 1800, `attachment; filename ="${app.name}${detailArtifact.extension ? `.${detailArtifact.extension}` : ''}"`)
     return {
         signedUrl,
         app,

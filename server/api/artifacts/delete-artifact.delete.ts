@@ -1,6 +1,5 @@
-import { S3AppClient } from "~/server/services/S3AppClient"
+import { S3Fetch } from "~/server/services/s3fetch"
 import { getDetailArtifact } from "./detail-artifact.get"
-import { DeleteObjectCommand } from "@aws-sdk/client-s3"
 
 export default defineEventHandler(async (event) => {
     const db = event.context.drizzle
@@ -18,11 +17,8 @@ export default defineEventHandler(async (event) => {
         parseInt(releaseId!.toString()),
     )
     const { assets } = getStorageKeys(userOrg.org!.id, app.id, detailArtifact.fileObjectKey)
-    const s3 = createS3(event)
-    await s3.send(new DeleteObjectCommand({
-        Bucket: s3BucketName,
-        Key: assets,
-    }))
+    const s3 = new S3Fetch()
+    await s3.deleteObject(assets)
     await db.batch([
         db.delete(tables.artifactsGroupsManager)
             .where(and(

@@ -1,6 +1,6 @@
 import { lt } from "drizzle-orm";
 import db from "../db/db";
-import { DeleteObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { S3Fetch } from "../services/s3fetch";
 
 export default defineTask({
     meta: {
@@ -20,19 +20,9 @@ export default defineTask({
             .where(lt(tables.uploadTemp.createdAt, threshold))
             .orderBy(asc(tables.uploadTemp.createdAt))
         if (tempFiles && tempFiles.length) {
-            const s3 = new S3Client({
-                endpoint: env.NUXT_S3_ENDPOINT as string,
-                region: 'auto',
-                credentials: {
-                    accessKeyId: env.NUXT_S3_ACCESS_KEY_ID as string,
-                    secretAccessKey: env.NUXT_S3_SECRET_ACCESS_KEY as string,
-                },
-            })
+            const s3 = new S3Fetch()
             await Promise.all(tempFiles.map(async tempFile => {
-                await s3.send(new DeleteObjectCommand({
-                    Bucket: s3BucketName,
-                    Key: tempFile.fileKey,
-                }))
+                await s3.deleteObject(tempFile.fileKey)
                 await drizzle.delete(tables.uploadTemp)
                     .where(eq(tables.uploadTemp.id, tempFile.id))
                 console.log('Deleted temp file', tempFile.id)

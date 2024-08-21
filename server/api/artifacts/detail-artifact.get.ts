@@ -1,7 +1,6 @@
-import { generateRandomPassword, getStorageKeys } from "~/server/utils/utils"
-import { GetObjectAttributesCommand, GetObjectTaggingCommand, HeadObjectCommand, ObjectAttributes } from "@aws-sdk/client-s3"
-import { S3AppClient, type AppHeadObjectCommandOutput } from "~/server/services/S3AppClient"
+import { getStorageKeys } from "~/server/utils/utils"
 import type { EventHandlerRequest, H3Event } from "h3"
+import { S3Fetch } from "~/server/services/s3fetch"
 
 export const getDetailArtifact = async (
     event: H3Event<EventHandlerRequest>,
@@ -36,10 +35,10 @@ export default defineEventHandler(async (event) => {
         appName!.toString(),
         parseInt(releaseId!.toString()),
     )
-    const s3 = new S3AppClient()
+    const s3 = new S3Fetch()
     const { assets } = getStorageKeys(userOrg.org!.id!, app.id, detailArtifact.fileObjectKey)
     const [headObject, groups] = await Promise.all([
-        s3.getHeadObject(event, assets),
+        s3.getHeadObject(assets),
         db.select()
             .from(tables.artifactsGroups)
             .leftJoin(tables.artifactsGroupsManager, eq(tables.artifactsGroupsManager.artifactsGroupsId, tables.artifactsGroups.id))
@@ -49,9 +48,9 @@ export default defineEventHandler(async (event) => {
         ...detailArtifact,
         fileObjectKey: undefined,
         fileMetadata: {
-            md5: headObject.ETag,
-            contentLength: headObject.ContentLength,
-            contentType: headObject.ContentType,
+            md5: headObject.etag,
+            contentLength: headObject.contentLength,
+            contentType: headObject.contentType,
         },
         groups,
     }
