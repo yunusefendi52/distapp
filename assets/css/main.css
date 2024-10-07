@@ -16,7 +16,7 @@ body {
     --p-datatable-header-cell-background: transparent;
     --p-datatable-row-background: transparent;
     font-family: 'Ubuntu';
-    font-size: 14px;
+    font-size: 15px;
 
     --p-tabmenu-active-bar-height: 2.5px;
     --p-content-border-color: var(----p-datatable-border-color);
