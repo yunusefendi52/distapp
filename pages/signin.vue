@@ -2,7 +2,7 @@
     <div class="flex items-center justify-center h-full">
         <div class="flex flex-col gap-4 login-container m-4">
             <span class="text-3xl font-semibold text-center">DistApp</span>
-            <div class="w-full flex justify-center">
+            <div class="w-full flex justify-center" style="color-scheme: auto;">
                 <GoogleSignInButton @success="handleLoginSuccess" @error="handleLoginError"></GoogleSignInButton>
             </div>
         </div>

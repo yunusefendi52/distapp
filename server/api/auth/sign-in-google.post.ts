@@ -5,9 +5,10 @@ const alg = 'HS256'
 
 export default defineEventHandler(async event => {
     const { token } = await readBody<{ token: string }>(event)
+    const { GOOGLE_CLIENT_ID } = useRuntimeConfig().public
     const payload = await verifyGoogleIdToken({
         idToken: token,
-        clientId: process.env.NUXT_GOOGLE_CLIENT_ID!,
+        clientId: GOOGLE_CLIENT_ID,
     })
     if (!payload) {
         throw createError({

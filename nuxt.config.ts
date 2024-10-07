@@ -76,12 +76,8 @@ export default defineNuxtConfig({
     adminKey: {
       key: '' // generate using openssl
     },
-    google: {
-      clientSecret: '',
-      clientId: '',
-      redirectUrl: '/api/auth/callback',
-    },
     public: {
+      GOOGLE_CLIENT_ID: '',
       adminKey: {
         enable: true,
       },
@@ -133,7 +129,6 @@ export default defineNuxtConfig({
     '@hebilicious/vue-query-nuxt',
     '@vueuse/nuxt',
     '@primevue/nuxt-module',
-    'nuxt-vue3-google-signin',
   ],
 
   primevue: {
@@ -181,8 +176,5 @@ export default defineNuxtConfig({
         force: true,
       });
     },
-  },
-  googleSignIn: {
-    clientId: process.env.NUXT_GOOGLE_CLIENT_ID,
   },
 })
