@@ -34,3 +34,4 @@ coverage
 .wrangler/tmp
 server/prisma-client/
 prisma/app.db*
+test-results/
