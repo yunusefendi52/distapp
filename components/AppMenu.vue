@@ -45,10 +45,20 @@ const orgName = computed(() => route.params.orgName as string)
 
 <style lang="scss" scoped>
 .menu-active {
-    background: var(--p-navigation-item-focus-background);
+    background: rgb(238, 238, 238);
 }
 
 .menu-hover:hover {
-    background: var(--p-navigation-item-focus-background);
+    background: rgb(238, 238, 238);
+}
+
+.appdark {
+    .menu-active {
+        background: var(--p-navigation-item-focus-background);
+    }
+
+    .menu-hover:hover {
+        background: var(--p-navigation-item-focus-background);
+    }
 }
 </style>

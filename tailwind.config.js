@@ -8,6 +8,9 @@ module.exports = {
     "./app.vue",
     "./error.vue",
   ],
+  darkMode: ['variant', [
+    '&:where(.appdark, .appdark *)',
+  ]],
   theme: {
     extend: {},
   },
