@@ -141,8 +141,8 @@ const upperCase = (value: string | null | undefined) => {
         <DataTable :show-gridlines="false" :value="apps" @rowSelect="onRowSelect" selectionMode="single" class="m-4">
             <Column header="Name">
                 <template #body="prop">
-                    <div class="flex flex-row gap-3 items-center px-3 py-2">
-                        <div class="rounded flex items-center justify-center"
+                    <div class="flex flex-row gap-5 items-center px-3 py-2">
+                        <div class="rounded flex items-center justify-center bg-gradient-to-r from-cyan-500 to-blue-500"
                             style="height: 34px; width: 34px; background-color: var(--p-primary-200); color: #2a1261">
                             <label class="text-2xl">{{ upperCase(prop.data.displayName[0]) }}</label>
                         </div>
