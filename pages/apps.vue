@@ -171,7 +171,7 @@ const upperCase = (value: string | null | undefined) => {
     <Dialog v-model:visible="addOrgVisible" modal header="Add Organization">
         <form @submit.prevent="saveOrg">
             <div class="flex flex-col gap-3 w-25rem">
-                <InputText name="name" v-model="orgName"></InputText>
+                <InputText data-testid="orgname" name="name" v-model="orgName"></InputText>
                 <Button label="Save" type="submit" :loading="isPending"></Button>
             </div>
         </form>

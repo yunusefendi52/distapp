@@ -2,7 +2,7 @@ import { uuidv7 } from "uuidv7"
 import type { EventHandlerRequest, H3Event } from "h3"
 
 export const normalizeName = (value: string): string => {
-    const vv = value.trim().toLowerCase()
+    const vv = value.trim().toLowerCase().replaceAll(' ', '-')
     if (!vv.length) {
         throw 'Value cannot be empty or whitespace'
     }

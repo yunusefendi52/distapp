@@ -14,7 +14,9 @@
     "format:check": "prettier --check \"**/*.{js,vue,d.ts}\"",
     "drizzle:generate": "drizzle-kit generate",
     "drizzle:migrate": "bun run server/db/migrate.ts",
-    "deploy": "bun run build --preset=cloudflare-pages && npx wrangler pages deploy dist/"
+    "deploy": "bun run build --preset=cloudflare-pages && npx wrangler pages deploy dist/",
+    "e2e": "playwright test",
+    "tests": "vitest test"
   },
   "dependencies": {
     "@hebilicious/vue-query-nuxt": "^0.3.0",
@@ -40,8 +42,10 @@
     "primeicons": "^7.0.0",
     "primevue": "^4.0.2",
     "uuidv7": "^1.0.1",
-    "zod": "^3.23.8",
-    "vue3-google-signin": "^2.0.0"
+    "vitest": "^2.1.2",
+    "vue3-google-signin": "^2.0.0",
+    "winston": "^3.15.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.18.9",
@@ -50,6 +54,7 @@
     "@types/crypto-js": "^4.2.2",
     "@types/lodash": "^4.17.0",
     "@types/pg": "^8.11.4",
+    "@vue/test-utils": "^2.4.6",
     "autoprefixer": "^10.4.19",
     "drizzle-kit": "^0.22.7",
     "eslint": "^8.30.0",
@@ -57,7 +62,9 @@
     "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.4.0",
+    "happy-dom": "^15.7.4",
     "nuxt": "3.12.4",
+    "playwright-core": "^1.48.0",
     "postcss": "^8.4.38",
     "prettier": "2.7.1",
     "sass": "^1.76.0",
