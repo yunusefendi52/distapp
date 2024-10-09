@@ -1,5 +1,8 @@
 export default defineEventHandler(async (event) => {
-    const { appName, orgName } = getQuery<{ appName: string, orgName: string }>(event)
+    const { appName, orgName } = await getValidatedQuery(event, z.object({
+        appName: z.string().trim().min(1).max(128),
+        orgName: z.string().trim().min(1).max(128),
+    }).parse)
 
     const db = event.context.drizzle
     const apiKeys = await db.select()

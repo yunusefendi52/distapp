@@ -1,5 +1,9 @@
 export default defineEventHandler(async (event) => {
-    const { apiKeyId, appName, orgName } = getQuery<{ apiKeyId: string, appName: string, orgName: string }>(event)
+    const { apiKeyId, appName, orgName } = await getValidatedQuery(event, z.object({
+        apiKeyId: z.string().trim().min(1).max(256),
+        appName: z.string().trim().min(1).max(128),
+        orgName: z.string().trim().min(1).max(128),
+    }).parse)
 
     const canEdit = await roleEditAllowed(event, orgName)
     if (!canEdit) {
