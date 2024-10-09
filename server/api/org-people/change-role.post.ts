@@ -1,7 +1,11 @@
 export default defineEventHandler(async (event) => {
     const db = event.context.drizzle
     const currentUserId = event.context.auth.userId
-    const { roleId, email, orgName } = await readBody(event)
+    const { roleId, email, orgName } = await readValidatedBody(event, z.object({
+        roleId: z.string().trim().min(1),
+        email: z.string().email(),
+        orgName: z.string().trim().min(1),
+    }).parse)
 
     if (await roleEditNotAllowed(event, orgName)) {
         throw createError({
