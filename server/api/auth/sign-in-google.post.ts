@@ -4,7 +4,9 @@ import * as jose from 'jose'
 const alg = 'HS256'
 
 export default defineEventHandler(async event => {
-    const { token } = await readBody<{ token: string }>(event)
+    const { token } = await readValidatedBody(event, z.object({
+        token: z.string().min(1)
+    }).parse)
     const { GOOGLE_CLIENT_ID } = useRuntimeConfig().public
     const payload = await verifyGoogleIdToken({
         idToken: token,
