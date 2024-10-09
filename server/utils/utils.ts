@@ -2,7 +2,11 @@ import { uuidv7 } from "uuidv7"
 import type { EventHandlerRequest, H3Event } from "h3"
 
 export const normalizeName = (value: string): string => {
-    return value.trim().toLowerCase()
+    const vv = value.trim().toLowerCase()
+    if (!vv.length) {
+        throw 'Value cannot be empty or whitespace'
+    }
+    return vv
 }
 
 export const getJwtKey = (event: H3Event<EventHandlerRequest>) => {

@@ -2,19 +2,17 @@ import { eq } from 'drizzle-orm'
 import { generateId } from '../utils/utils'
 
 export default defineEventHandler(async (event) => {
-    const request = await readBody(event)
-    if (!request.osType) {
-        throw createError({
-            message: 'Invalid request',
-            statusCode: 400,
-        })
-    }
+    const { name, orgId, osType } = await readValidatedBody(event, z.object({
+        name: z.string().min(1).max(128).trim().transform(normalizeName),
+        orgId: z.string().min(1).trim(),
+        osType: z.enum(['ios', 'android']),
+    }).parse)
     const db = event.context.drizzle
     const org = await db.select({
         orgName: tables.organizations.name,
     })
         .from(tables.organizations)
-        .where(eq(tables.organizations.id, request.orgId))
+        .where(eq(tables.organizations.id, orgId))
         .then(takeUniqueOrThrow)
     if (await roleEditNotAllowed(event, org.orgName)) {
         throw createError({
@@ -24,10 +22,10 @@ export default defineEventHandler(async (event) => {
     }
     await db.insert(tables.apps).values({
         id: generateId(),
-        displayName: request.name,
-        name: normalizeName(request.name),
-        osType: request.osType,
-        organizationsId: request.orgId,
+        displayName: name,
+        name: name,
+        osType: osType,
+        organizationsId: orgId,
     })
     return {}
 })
