@@ -5,14 +5,11 @@ export type UpdateGroupRequest = {
 }
 
 export default defineEventHandler(async (event) => {
-    var { currentOrgId, orgDisplayName, orgName } = await readBody<UpdateGroupRequest>(event)
-    orgDisplayName = orgDisplayName.trim()
-    orgName = orgName.trim()
-    if (!orgName || !orgDisplayName) {
-        throw createError({
-            message: 'Invalid request',
-        })
-    }
+    var { currentOrgId, orgDisplayName, orgName } = await readValidatedBody<UpdateGroupRequest>(event, z.object({
+        currentOrgId: z.string().trim().min(1),
+        orgDisplayName: z.string().trim().min(1),
+        orgName: z.string().trim().min(1),
+    }).parse)
 
     const db = event.context.drizzle
     const org = await db.select({

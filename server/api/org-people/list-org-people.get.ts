@@ -3,8 +3,9 @@ import { and, asc, desc, eq } from 'drizzle-orm'
 export default defineEventHandler(async (event) => {
     const userId = event.context.auth.userId
     const db = event.context.drizzle
-    const query = getQuery(event)
-    const orgName = query.orgName?.toString() ?? ''
+    const { orgName } = await getValidatedQuery(event, z.object({
+        orgName: z.string().trim().min(1),
+    }).parse)
     const orgId = await db.select({
         orgId: tables.organizations.id,
     }).from(tables.organizations)

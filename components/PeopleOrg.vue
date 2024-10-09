@@ -68,7 +68,7 @@ const form = ref()
 const route = useRoute()
 const orgName = route.params.orgName
 
-const { data, refresh, status } = useFetch('/api/list-org-people', {
+const { data, refresh, status } = useFetch('/api/org-people/list-org-people', {
     query: {
         orgName,
     },
