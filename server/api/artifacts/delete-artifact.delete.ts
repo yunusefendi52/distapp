@@ -3,8 +3,12 @@ import { getDetailArtifact } from "./detail-artifact.get"
 
 export default defineEventHandler(async (event) => {
     const db = event.context.drizzle
-    const { appName, orgName, releaseId } = getQuery(event)
-    if (await roleEditNotAllowed(event, orgName!.toString())) {
+    const { appName, orgName, releaseId } = await getValidatedQuery(event, z.object({
+        appName: z.string().trim().min(1).max(128),
+        orgName: z.string().trim().min(1).max(128),
+        releaseId: z.string().transform(v => parseInt(v)),
+    }).parse)
+    if (await roleEditNotAllowed(event, orgName)) {
         throw createError({
             message: 'Unauthorized delete artifact',
             statusCode: 401,
@@ -12,9 +16,9 @@ export default defineEventHandler(async (event) => {
     }
     const { userOrg, app, detailArtifact } = await getDetailArtifact(
         event,
-        orgName!.toString(),
-        appName!.toString(),
-        parseInt(releaseId!.toString()),
+        orgName,
+        appName,
+        releaseId,
     )
     const { assets } = getStorageKeys(userOrg.org!.id, app.id, detailArtifact.fileObjectKey)
     const s3 = new S3Fetch()

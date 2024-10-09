@@ -1,5 +1,8 @@
 export default defineEventHandler(async (event) => {
-    const { orgName, appName } = await readBody(event)
+    const { orgName, appName } = await readValidatedBody(event, z.object({
+        appName: z.string().trim().min(1).max(128),
+        orgName: z.string().trim().min(1).max(128),
+    }).parse)
     if (await roleEditNotAllowed(event, orgName)) {
         throw createError({
             message: 'Unauthorized',

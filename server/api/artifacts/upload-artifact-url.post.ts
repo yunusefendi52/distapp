@@ -1,5 +1,11 @@
 export default defineEventHandler(async (event) => {
-    const { uploadId: uploadIdAny, appName, orgName, releaseNotes, packageMetadata, } = await readBody(event)
+    const { uploadId, appName, orgName, releaseNotes, packageMetadata, } = await readValidatedBody(event, z.object({
+        uploadId: z.string().max(128),
+        appName: z.string().trim().min(1).max(128),
+        orgName: z.string().trim().min(1).max(128),
+        releaseNotes: z.string().nullish(),
+        packageMetadata: z.any(),
+    }).parse)
     if (await roleEditNotAllowed(event, orgName)) {
         throw createError({
             message: 'Unauthorized',
@@ -8,7 +14,6 @@ export default defineEventHandler(async (event) => {
     }
     const db = event.context.drizzle
 
-    const uploadId = uploadIdAny as string
     const userId = event.context.auth.userId
 
     const uploadTempWhere = and(
