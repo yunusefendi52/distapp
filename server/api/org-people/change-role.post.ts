@@ -2,7 +2,7 @@ export default defineEventHandler(async (event) => {
     const db = event.context.drizzle
     const currentUserId = event.context.auth.userId
     const { roleId, email, orgName } = await readValidatedBody(event, z.object({
-        roleId: z.string().trim().min(1),
+        roleId: z.enum(["admin", "collaborator"]),
         email: z.string().email(),
         orgName: z.string().trim().min(1),
     }).parse)
