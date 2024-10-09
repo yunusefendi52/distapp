@@ -5,12 +5,12 @@ export default defineEventHandler(async (event) => {
         appDisplayName,
         appName,
         currentOrgId,
-    } = await readBody<{
-        orgName: string,
-        appDisplayName: string,
-        appName: string,
-        currentOrgId: string,
-    }>(event)
+    } = await readValidatedBody(event, z.object({
+        orgName: z.string().trim().min(1).max(128),
+        appDisplayName: z.string().trim().min(1).max(128),
+        appName: z.string().trim().min(1).max(128),
+        currentOrgId: z.string().trim().min(1).max(128),
+    }).parse)
     if (await roleEditNotAllowed(event, orgName)) {
         throw createError({
             message: 'Unauthorized update app',
@@ -18,7 +18,6 @@ export default defineEventHandler(async (event) => {
         })
     }
     const { userApp, userOrg } = await getUserApp(event, orgName, currentOrgId)
-    console.log('111111', currentOrgId)
     const newAppName = normalizeName(appName)
     await db.update(tables.apps).set({
         displayName: appDisplayName.trim(),
