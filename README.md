@@ -44,3 +44,13 @@ ban install
 ```bash
 bun run dev
 ```
+
+### CLI Usage
+
+```sh
+curl -Ls "https://github.com/yunusefendi52/distapp/raw/refs/heads/main/cli/cli.sh" | sh /dev/stdin --distribute --file "$FILE_TO_ARTIFACT" --slug "$APP_SLUG" --apiKey "$API_KEY"
+```
+
+- `$FILE_TO_ARTIFACT` Can be apk, aab or ipa
+- `$APP_SLUG` Is a combination of org and app name, e.g `yedev/habit-tool`. You can copy slug in `App Settings` -> `App Info`
+- `$API_KEY` Add your API Key, created in `App Settings` -> `API Keys`
