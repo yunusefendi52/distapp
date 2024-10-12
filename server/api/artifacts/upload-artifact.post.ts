@@ -1,3 +1,4 @@
+import { count } from "drizzle-orm"
 import type { LibSQLDatabase } from "drizzle-orm/libsql"
 
 export async function findApiKey(
@@ -85,6 +86,18 @@ export default defineEventHandler(async (event) => {
         orgId = userOrg!.organizationsId!
         appId = app.id
         createdBy = userId
+    }
+
+    const artifactTotal = await db.select({
+        count: count(tables.artifacts),
+    }).from(tables.artifacts)
+        .where(eq(tables.artifacts.appsId, appId))
+        .then(takeUniqueOrThrow)
+    if (artifactTotal.count >= 10) {
+        throw createError({
+            message: 'Currently you are limited up to 10, remove previous artifact',
+            statusCode: 400,
+        })
     }
 
     const { uploadId, fileKey, signedUrl } = await generateSignedUrlUpload(event, orgId, appId)

@@ -7,7 +7,7 @@ export function updateMyFetchApiKey(value: string) {
 }
 export const myFetch = ofetch.create({
     onRequest(request) {
-        request.options.baseURL = process.env.DISTAPP_CLI_URL ?? 'https://distapp.pages.dev'
+        request.options.baseURL = process.env.DISTAPP_CLI_URL
         if (myFetchApiKey) {
             request.options.headers.append('API-KEY', myFetchApiKey)
         }

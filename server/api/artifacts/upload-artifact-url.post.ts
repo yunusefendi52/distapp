@@ -1,4 +1,4 @@
-import type { SQL } from "drizzle-orm"
+import { count, type SQL } from "drizzle-orm"
 import { findApiKey } from "./upload-artifact.post"
 
 export default defineEventHandler(async (event) => {
