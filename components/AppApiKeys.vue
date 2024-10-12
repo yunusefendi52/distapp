@@ -1,6 +1,12 @@
 <template>
     <div class="flex flex-col items-start gap-3 w-full">
         <Button @click="() => mutate()" :loading="isPending" label="Generate Token" />
+        <div>
+            See this how to use <NuxtLink class="underline"
+                href="https://github.com/yunusefendi52/distapp?tab=readme-ov-file#cli-usage">
+                CLI
+            </NuxtLink>
+        </div>
 
         <AppCard class="p-4" v-show="data">
             <span class="text-sm" style="color: var(--p-text-muted-color);">Keep this key safe</span>
