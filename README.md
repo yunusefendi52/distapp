@@ -48,7 +48,10 @@ bun run dev
 ### CLI Usage
 
 ```sh
-curl -Ls "https://github.com/yunusefendi52/distapp/raw/refs/heads/main/cli/cli.sh" | sh /dev/stdin --distribute --file "$FILE_TO_ARTIFACT" --slug "$APP_SLUG" --apiKey "$API_KEY"
+curl -Ls "https://github.com/yunusefendi52/distapp/raw/refs/heads/main/cli/cli.sh" | sh /dev/stdin --distribute \
+--file "$FILE_TO_ARTIFACT" \
+--slug "$APP_SLUG" \
+--apiKey "$API_KEY"
 ```
 
 - `$FILE_TO_ARTIFACT` Can be apk, aab or ipa

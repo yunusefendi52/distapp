@@ -13,12 +13,21 @@
                 <label for="appName">App Id</label>
                 <InputText name="appName" :value="data?.name" aria-describedby="app-name" />
             </div>
+            <div class="flex flex-col gap-2">
+                <label>Slug</label>
+                <div class="flex flex-row gap-2">
+                    <InputText :value="slug" readonly aria-describedby="app-name" class="flex-1" />
+                    <Button icon="pi pi-copy" @click="() => copyText(slug)" />
+                </div>
+            </div>
             <Button :loading="isPending" type="submit" class="sm:self-start" label="Save Changes" />
         </form>
     </div>
 </template>
 
 <script setup lang="ts">
+import { copyText } from '#imports'
+
 definePageMeta({
     name: 'app-info-settings',
 })
@@ -26,6 +35,7 @@ definePageMeta({
 const { params } = useRoute()
 const orgName = computed(() => params.orgName as string)
 const appName = computed(() => params.appId as string)
+const slug = computed(() => `${orgName.value}/${appName.value}`)
 
 const { data, execute } = useFetch('/api/detail-app', {
     query: {
