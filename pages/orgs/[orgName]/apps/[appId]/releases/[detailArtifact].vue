@@ -35,7 +35,7 @@
                 <MultiSelect v-model="selectedGroup" display="chip" :options="groups" optionLabel="name"
                     placeholder="Select Groups" />
                 <Button class="ml-3" @click="() => saveGroups()" :loading="saveGroupsStatus == 'pending'"
-                    label="Save Groups" />
+                    label="Update Groups" />
             </div>
         </div>
         <div class="flex flex-col gap-2">
