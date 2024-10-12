@@ -9,7 +9,13 @@
 </template>
 
 <script setup lang="ts">
-useAppTheme()
+const { appTheme } = useAppTheme()
+useHead({
+    htmlAttrs: {
+        class: [appTheme],
+    },
+    title: 'DistApp',
+})
 </script>
 
 <style lang="scss">
@@ -19,6 +25,6 @@ body,
     margin: 0px;
     height: 100%;
     width: 100%;
-        background: var(--p-content-background);
+    background: var(--p-content-background);
 }
 </style>
