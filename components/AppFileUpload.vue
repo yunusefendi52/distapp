@@ -87,30 +87,9 @@ const submit = async () => {
 
 
 const onUpload = async (file: File) => {
-    const packageMetadata = await readPackageFile(file)
-    const { url, uploadId } = await $fetch('/api/artifacts/upload-artifact', {
-        method: 'post',
-        body: {
-            orgName: orgName.value,
-            appName: appName.value,
-        },
-    })
-    await $fetch(url, {
-        method: 'put',
-        body: file,
-        redirect: "follow",
-    })
-    const data = await $fetch('/api/artifacts/upload-artifact-url', {
-        method: 'post',
-        body: {
-            uploadId,
-            ...prop.value,
-            releaseNotes: releaseNotes.value,
-            packageMetadata,
-        },
-    })
+    const data = await uploadArtifact(file, orgName.value, appName.value, releaseNotes.value)
     return {
-        artifactId: data?.artifactId,
+        artifactId: data!.artifactId,
     }
 };
 </script>

@@ -1,10 +1,11 @@
 import ManifestParser from '~/utils/apkparser/manifest'
 
 export default defineEventHandler(async (event) => {
-    if (!event.context.auth.userId) {
-        setResponseStatus(event, 401, 'Unauthorized')
-        return
-    }
+    // TODO: validate userid and key token
+    // if (!event.context.auth.userId) {
+    //     setResponseStatus(event, 401, 'Unauthorized')
+    //     return
+    // }
 
     const { base64 } = await readBody(event)
     const androidManifestApk = Buffer.from(base64, 'base64')

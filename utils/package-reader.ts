@@ -1,5 +1,6 @@
 import { parse } from "@plist/parse"
 import JSZip from "jszip"
+import { myFetch } from './upload-utils.js'
 
 export const readPackageFile = async (data: File | Buffer | ArrayBuffer | string | Blob) => {
     var fileZip = new JSZip();
@@ -37,7 +38,7 @@ export const readPackageFile = async (data: File | Buffer | ArrayBuffer | string
             }
         } else {
             const base64Manifest = await androidManifestApkEntry.async('base64')
-            packageMetadata = await $fetch('/api/manifest-parser-api', {
+            packageMetadata = await myFetch('/api/manifest-parser-api', {
                 method: 'post',
                 body: {
                     base64: base64Manifest,

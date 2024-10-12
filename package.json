@@ -56,6 +56,7 @@
     "@types/pg": "^8.11.4",
     "@vue/test-utils": "^2.4.6",
     "autoprefixer": "^10.4.19",
+    "bun-types": "^1.1.30",
     "drizzle-kit": "^0.22.7",
     "eslint": "^8.30.0",
     "eslint-config-prettier": "^8.5.0",
