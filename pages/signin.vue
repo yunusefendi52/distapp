@@ -1,7 +1,10 @@
 <template>
     <div class="flex items-center justify-center h-full">
-        <div class="flex flex-col gap-4 login-container m-4">
-            <span class="text-3xl font-semibold text-center">DistApp</span>
+        <div class="flex flex-col gap-8 login-container m-4">
+            <div class="flex flex-row gap-4 items-center justify-center">
+                <AppIcon class="h-12 fill-black dark:fill-white" />
+                <span class="text-3xl font-semibold text-center">DistApp</span>
+            </div>
             <div class="w-full flex justify-center" style="color-scheme: auto;">
                 <GoogleSignInButton @success="handleLoginSuccess" @error="handleLoginError"></GoogleSignInButton>
             </div>
@@ -10,6 +13,7 @@
 </template>
 
 <script setup lang="ts">
+import AppIcon from '~/public/appicon.svg'
 import {
     GoogleSignInButton,
     type CredentialResponse,
@@ -33,6 +37,7 @@ const handleLoginError = () => {
 
 definePageMeta({
     layout: 'auth-layout',
+    name: 'signin',
 })
 
 const route = useRoute()

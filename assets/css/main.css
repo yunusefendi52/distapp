@@ -19,7 +19,7 @@ body {
     font-size: 15px;
 
     --p-tabmenu-active-bar-height: 2.5px;
-    --p-content-border-color: var(----p-datatable-border-color);
+    --p-content-border-color: var(--p-datatable-border-color);
     --p-tabmenu-item-color: var(--p-text-color);
 }
 
