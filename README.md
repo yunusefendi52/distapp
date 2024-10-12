@@ -7,9 +7,9 @@ Still in development, see roadmap
 ```
 
 ### Roadmap
-- API Key
-- Manage user access
-- Manage groups
+- [x] API Key
+- [x] Manage user access
+- [x] Manage groups
 
 ### Screenshots
 
