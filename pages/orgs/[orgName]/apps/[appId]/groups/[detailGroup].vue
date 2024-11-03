@@ -12,7 +12,7 @@
     <div class="p-4">
         <div class="card p-4 items-center flex flex-col justify-stretch sm:flex-row sm:justify-center gap-2">
             <div class="flex flex-col flex-1">
-                <span class="text-xl font-bold">{{ detailGroup?.name }}</span>
+                <span class="text-xl font-bold">{{ detailGroup?.displayName || detailGroup?.name }}</span>
                 <span v-if="publicLink">Public link: <a class="underline break-all" target="_blank"
                         :href="publicLink">{{
                             publicLink
