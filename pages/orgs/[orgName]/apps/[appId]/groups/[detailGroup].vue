@@ -1,13 +1,21 @@
 <template>
     <AppBarContainer>
-        <span class="text-2xl font-bold">{{ detailApp.data.value?.displayName ?? '-' }}</span>
+        <div class="flex-1 flex flex-row items-center gap-2">
+            <div class="flex-1">
+                <span class=" text-2xl font-bold">{{ detailApp.data.value?.displayName ?? '-' }}</span>
+            </div>
+            <div>
+                <Button icon="pi pi-trash" severity="danger" @click="removeGroup" :loading="isPending" />
+            </div>
+        </div>
     </AppBarContainer>
     <div class="p-4">
-        <div class="card p-4 justify-center items-center flex flex-row gap-2">
+        <div class="card p-4 items-center flex flex-col justify-stretch sm:flex-row sm:justify-center gap-2">
             <div class="flex flex-col flex-1">
                 <span class="text-xl font-bold">{{ detailGroup?.name }}</span>
-                <span v-if="publicLink">Public link: <a class="underline" target="_blank" :href="publicLink">{{
-                    publicLink
+                <span v-if="publicLink">Public link: <a class="underline break-all" target="_blank"
+                        :href="publicLink">{{
+                            publicLink
                         }}</a> </span>
             </div>
             <Button icon="pi pi-refresh" label="Regenerate Link" @click="regenerateLink" />
@@ -70,6 +78,36 @@ const regenerateLink = (event: any) => {
         icon: 'pi pi-info-circle',
         accept: () => {
             regenerateLinkApi()
+        },
+        reject: () => {
+        }
+    });
+}
+
+const { mutate: removeGroupApi, isPending } = useMutation({
+    mutationFn: async () => {
+        await $fetch('/api/groups/delete-group', {
+            method: 'post',
+            body: {
+                appName,
+                orgName,
+                groupName: groupName.value,
+            },
+        })
+    },
+    onSuccess: () => {
+        navigateTo({
+            name: 'orgs-orgName-apps-appId-index-groups',
+        })
+    }
+})
+const removeGroup = (event: any) => {
+    confirm.require({
+        target: event.currentTarget,
+        message: 'Remove group?',
+        icon: 'pi pi-info-circle',
+        accept: () => {
+            removeGroupApi()
         },
         reject: () => {
         }
