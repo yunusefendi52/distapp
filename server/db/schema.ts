@@ -110,6 +110,7 @@ export const artifactsRelations = relations(artifacts, t => ({
 export const artifactsGroups = sqliteTable('artifactsGroups', {
     id: text('id').primaryKey().unique(),
     name: text('name').notNull(),
+    displayName: text('displayName'),
     appsId: text('appsId').references(() => apps.id, {
         onDelete: 'cascade',
     }),

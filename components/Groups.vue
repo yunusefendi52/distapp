@@ -2,11 +2,12 @@
     <Button class="mb-3" label="New Group" outlined @click="visible = true"></Button>
 
     <div>
-        <DataTable :show-gridlines="false" scrollable :value="list" single @row-click="selectRow($event)">
+        <DataTable :show-gridlines="false" scrollable :value="list" single @row-click="selectRow($event)"
+            selection-mode="single">
             <Column field="name" header="Group Name">
                 <template #body="{ data }">
                     <div class="flex flex-row gap-2 py-3">
-                        <span class="font-semibold text-xl">{{ data.name }}</span>
+                        <span class="font-semibold text-xl">{{ data.displayName || data.name }}</span>
                         <Badge value="PUBLIC" severity="info"></Badge>
                     </div>
                 </template>
@@ -26,9 +27,10 @@
             groupName: newGroupName,
         })">
             <div class="flex align-items-center gap-3 mb-3">
-                <InputText v-model="newGroupName" class="flex-auto" autocomplete="off" />
+                <InputText v-model="newGroupName" class="flex-auto" autocomplete="off" placeholder="Group Name"
+                    required />
             </div>
-            <div class="flex justify-content-end gap-2">
+            <div class="flex justify-content-end gap-2 mt-5">
                 <Button type="button" label="Cancel" severity="secondary" @click="visible = false"></Button>
                 <Button :loading="savingNewGroup" type="submit" label="Save"></Button>
             </div>
