@@ -13,10 +13,11 @@
     <div class="card flex flex-col gap-3 m-4">
         <div class="flex flex-row items-center">
             <div class="flex flex-col gap-1 flex-1">
-                <label class="font-semibold text-xl">Version {{ detailArtifact?.versionName2 }} ({{
-                    detailArtifact?.releaseId
-                    }})</label>
-                <label class="text-lg">{{ formatDate(detailArtifact?.createdAt) }}</label>
+                <span class="text-sm">Release Id {{ detailArtifact?.releaseId }}</span>
+                <span class="font-semibold text-xl">Version {{ detailArtifact?.versionName2 }} ({{
+                    detailArtifact?.versionCode2
+                    }})</span>
+                <span class="text-lg">{{ formatDate(detailArtifact?.createdAt) }}</span>
             </div>
             <Button :loading="isPending" @click="confirmDelete($event)" icon="pi pi-trash" label="Delete"
                 severity="danger" />
