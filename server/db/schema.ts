@@ -24,8 +24,12 @@ export const organizationsRelations = relations(organizations, (r) => ({
 
 // OrganizationsPeople
 export const organizationsPeople = sqliteTable('organizationsPeople', {
-    userId: text('userId').references(() => users.id),
-    organizationId: text('organizationId').references(() => organizations.id),
+    userId: text('userId').references(() => users.id, {
+        onDelete: 'cascade',
+    }),
+    organizationId: text('organizationId').references(() => organizations.id, {
+        onDelete: 'cascade',
+    }),
     createdAt: integer('createdAt', {
         mode: 'timestamp_ms',
     }),
@@ -54,7 +58,9 @@ export const apps = sqliteTable('apps', {
     osType: text('osType', {
         enum: ['android', 'ios']
     }),
-    organizationsId: text('organizationsId').references(() => organizations.id),
+    organizationsId: text('organizationsId').references(() => organizations.id, {
+        onDelete: 'cascade',
+    }),
 }, (t) => ({
     organizationsId_name: unique().on(t.organizationsId, t.name),
 }))
@@ -86,7 +92,9 @@ export const artifacts = sqliteTable('artifacts', {
     extension: text('extension'),
     packageName: text('packageName'),
 
-    appsId: text('appsId').references(() => apps.id),
+    appsId: text('appsId').references(() => apps.id, {
+        onDelete: 'cascade',
+    }),
 }, t => ({
     appsId_releaseId: unique().on(t.appsId, t.releaseId),
 }))
@@ -102,7 +110,9 @@ export const artifactsRelations = relations(artifacts, t => ({
 export const artifactsGroups = sqliteTable('artifactsGroups', {
     id: text('id').primaryKey().unique(),
     name: text('name').notNull(),
-    appsId: text('appsId').references(() => apps.id),
+    appsId: text('appsId').references(() => apps.id, {
+        onDelete: 'cascade',
+    }),
     publicId: text('publicId').unique(),
 }, t => ({
     appsId_releaseId: unique().on(t.appsId, t.name),
@@ -117,8 +127,12 @@ export const artifactsGroupsRelations = relations(artifactsGroups, t => ({
 
 // ArtifactsGroupsManger
 export const artifactsGroupsManager = sqliteTable('artifactsGroupsManager', {
-    artifactsId: text('artifactsId').notNull().references(() => artifacts.id),
-    artifactsGroupsId: text('artifactsGroupsId').notNull().references(() => artifactsGroups.id),
+    artifactsId: text('artifactsId').notNull().references(() => artifacts.id, {
+        onDelete: 'cascade',
+    }),
+    artifactsGroupsId: text('artifactsGroupsId').notNull().references(() => artifactsGroups.id, {
+        onDelete: 'cascade',
+    }),
 }, t => ({
     artifactsId_artifactsGroupsId: unique().on(t.artifactsId, t.artifactsGroupsId),
 }))
@@ -140,8 +154,12 @@ export const apiKeys = sqliteTable('apiKeys', {
         mode: 'timestamp_ms',
     }).notNull(),
 
-    organizationId: text('organizationId').references(() => organizations.id),
-    appsId: text('appsId').references(() => apps.id),
+    organizationId: text('organizationId').references(() => organizations.id, {
+        onDelete: 'cascade',
+    }),
+    appsId: text('appsId').references(() => apps.id, {
+        onDelete: 'cascade',
+    }),
 })
 export const apiKeysRelations = relations(apiKeys, t => ({
     apps: t.one(apps, {
