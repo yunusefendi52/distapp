@@ -2,7 +2,7 @@
     <AppBarContainer>
         <div class="flex-1 flex flex-row items-center gap-2">
             <div class="flex-1">
-                <span class=" text-2xl font-bold">{{ detailApp.data.value?.displayName ?? '-' }}</span>
+                <span class=" text-2xl font-bold">{{ `${detailApp.data.value?.displayName} - Groups` || '-' }}</span>
             </div>
             <div>
                 <Button icon="pi pi-trash" severity="danger" @click="removeGroup" :loading="isPending" />
