@@ -15,7 +15,7 @@
             <div class="flex flex-col gap-1 flex-1">
                 <label class="font-semibold text-xl">Version {{ detailArtifact?.versionName2 }} ({{
                     detailArtifact?.releaseId
-                }})</label>
+                    }})</label>
                 <label class="text-lg">{{ formatDate(detailArtifact?.createdAt) }}</label>
             </div>
             <Button :loading="isPending" @click="confirmDelete($event)" icon="pi pi-trash" label="Delete"
@@ -32,8 +32,8 @@
         <div class="flex flex-col gap-2">
             <span class="font-semibold">Groups</span>
             <div class="flex flex-row">
-                <MultiSelect v-model="selectedGroup" display="chip" :options="groups" optionLabel="name"
-                    placeholder="Select Groups" />
+                <MultiSelect v-model="selectedGroup" display="chip" :options="groups"
+                    :optionLabel="(w) => w.displayName || w.name" placeholder="Select Groups" />
                 <Button class="ml-3" @click="() => saveGroups()" :loading="saveGroupsStatus == 'pending'"
                     label="Update Groups" />
             </div>
