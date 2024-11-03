@@ -83,11 +83,6 @@ if (isLoggedIn.value) {
             ], e => e.email)
             userTokens.value = newUserTokens
         }
-        onMounted(() => {
-            navigateTo({
-                name: 'apps',
-            })
-        })
     }
 }
 </script>
