@@ -1,22 +1,14 @@
 export default defineEventHandler(async (event) => {
     const db = event.context.drizzle
-    const userId = event.context.auth.userId
-    const query = getQuery(event)
-    const { appName, orgName, groups } = query
-    const { groupName } = query as { groupName: string | undefined }
+    const query = await getValidatedQuery(event, z.object({
+        appName: z.string().trim().min(1).max(128),
+        orgName: z.string().trim().min(1).max(128),
+        groups: z.any(),
+        groupName: z.string().nullish(),
+    }).parse)
+    const { appName, orgName, groups, groupName } = query
     const groupIds: string[] = Array.isArray(groups) ? groups : (groups ? [groups] : [])
-    const userOrg = await db.select({
-        organizationsId: tables.organizations.id,
-    })
-        .from(tables.organizationsPeople)
-        .leftJoin(tables.organizations, eq(tables.organizations.id, tables.organizationsPeople.organizationId))
-        .where(and(eq(tables.organizationsPeople.userId, userId), eq(tables.organizations.name, orgName!.toString())))
-        .then(takeUniqueOrThrow)
-    const app = await db.query.apps.findMany({
-        where(fields, operators) {
-            return operators.and(operators.eq(fields.organizationsId, userOrg.organizationsId!), operators.eq(fields.name, appName!.toString()))
-        },
-    }).then(takeUniqueOrThrow)
+    const { userApp: app } = await getUserApp(event, orgName, appName)
     if (groupName) {
         const groupNameArtifact = await db.select({
             groupId: tables.artifactsGroups.id,
@@ -30,7 +22,7 @@ export default defineEventHandler(async (event) => {
     }
     const groupsQuery = db.select({
         artifactId: tables.artifacts.id,
-        names: sql`group_concat(${tables.artifactsGroups.name}, ', ')`.as('names'),
+        names: sql`group_concat(coalesce(${tables.artifactsGroups.displayName}, ${tables.artifactsGroups.name}), ', ')`.as('names'),
         groupIds: sql`json_group_array(${tables.artifactsGroups.id})`.as('groupIds'),
     })
         .from(tables.artifacts)
