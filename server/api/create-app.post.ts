@@ -20,12 +20,15 @@ export default defineEventHandler(async (event) => {
             statusCode: 401,
         })
     }
+    const now = new Date()
     await db.insert(tables.apps).values({
         id: generateId(),
         displayName: name,
         name: name,
         osType: osType,
         organizationsId: orgId,
+        createdAt: now,
+        updatedAt: now,
     })
     return {}
 })

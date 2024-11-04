@@ -1,11 +1,21 @@
-import { relations } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import { sqliteTable, text, integer, uniqueIndex, unique } from 'drizzle-orm/sqlite-core'
+
+const timeColumns = {
+    createdAt: integer('createdAt', {
+        mode: 'timestamp_ms',
+    }),
+    updatedAt: integer('updatedAt', {
+        mode: 'timestamp_ms',
+    }),
+}
 
 // Users
 export const users = sqliteTable('users', {
     id: text('id').primaryKey().unique(),
     name: text('name').notNull(),
     email: text('email').unique(),
+    ...timeColumns,
 })
 export const usersRelations = relations(users, (r) => ({
     organizationsPeople: r.many(organizationsPeople)
@@ -16,6 +26,7 @@ export const organizations = sqliteTable('organizations', {
     id: text('id').primaryKey().unique(),
     name: text('name').unique().notNull(),
     displayName: text('displayName').notNull(),
+    ...timeColumns,
 })
 export const organizationsRelations = relations(organizations, (r) => ({
     organizationsPeople: r.many(organizationsPeople),
@@ -61,6 +72,7 @@ export const apps = sqliteTable('apps', {
     organizationsId: text('organizationsId').references(() => organizations.id, {
         onDelete: 'cascade',
     }),
+    ...timeColumns,
 }, (t) => ({
     organizationsId_name: unique().on(t.organizationsId, t.name),
 }))
@@ -115,6 +127,7 @@ export const artifactsGroups = sqliteTable('artifactsGroups', {
         onDelete: 'cascade',
     }),
     publicId: text('publicId').unique(),
+    ...timeColumns,
 }, t => ({
     appsId_releaseId: unique().on(t.appsId, t.name),
 }))

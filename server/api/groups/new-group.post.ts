@@ -13,12 +13,15 @@ export default defineEventHandler(async (event) => {
     const userId = event.context.auth.userId
     const db = event.context.drizzle
     const { userApp: app } = await getUserApp(event, orgName, appName)
+    const now = new Date()
     await db.insert(tables.artifactsGroups).values({
         id: generateId(),
         name: normalizeName(groupName),
         displayName: groupName,
         appsId: app!.id,
         publicId: generateRandomPassword(42),
+        createdAt: now,
+        updatedAt: now,
     })
     return {
         ok: true,

@@ -1,3 +1,4 @@
+import { isNull } from "drizzle-orm"
 import type { EventHandlerRequest, H3Event } from "h3"
 import * as jose from 'jose'
 
@@ -47,11 +48,24 @@ export const generateUserToken = async (
         .setIssuedAt()
         .sign(getJwtKey(event))
     const db = event.context.drizzle
+    const now = new Date()
     await db.insert(tables.users).values({
         name: userRealName,
         id: userId,
         email: userEmail,
-    }).onConflictDoNothing()
+        createdAt: now,
+        updatedAt: now,
+    }).onConflictDoUpdate({ // Remove onConflictDoUpdate to onConflictDoNothing once createdAt and updatedAt all tables non zero
+        target: tables.users.id,
+        setWhere: and(
+            isNull(tables.users.createdAt),
+            isNull(tables.users.updatedAt),
+        ),
+        set: {
+            createdAt: now,
+            updatedAt: now,
+        },
+    })
     return {
         token,
     }

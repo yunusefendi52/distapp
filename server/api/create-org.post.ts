@@ -7,12 +7,15 @@ export default defineEventHandler(async (event) => {
         name: z.string().min(1).max(128).trim().transform(normalizeName),
         displayName: z.string().min(1).max(128).trim(),
     }).parse)
+    const now = new Date()
     await db.transaction(async t => {
         const organizationId = generateId()
         await t.insert(tables.organizations).values({
             id: organizationId,
             name: normalizedOrgName,
             displayName: displayName,
+            createdAt: now,
+            updatedAt: now,
         })
         await t.insert(tables.organizationsPeople).values({
             userId: userId,
@@ -21,7 +24,7 @@ export default defineEventHandler(async (event) => {
         })
     })
     return {
-        normalizedOrgName:'',
+        normalizedOrgName: '',
         ok: true,
     }
 })
