@@ -1,0 +1,1 @@
+ALTER TABLE `artifactsGroups` ADD `isPublic` integer DEFAULT false;

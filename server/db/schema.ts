@@ -1,5 +1,5 @@
 import { relations, sql } from 'drizzle-orm'
-import { sqliteTable, text, integer, uniqueIndex, unique } from 'drizzle-orm/sqlite-core'
+import { sqliteTable, text, integer, uniqueIndex, unique, index } from 'drizzle-orm/sqlite-core'
 
 const timeColumns = {
     createdAt: integer('createdAt', {
@@ -126,7 +126,10 @@ export const artifactsGroups = sqliteTable('artifactsGroups', {
     appsId: text('appsId').references(() => apps.id, {
         onDelete: 'cascade',
     }),
-    publicId: text('publicId').unique(),
+    publicId: text('publicId').unique(), // TODO: Add index?
+    isPublic: integer('isPublic', {
+        mode: 'boolean'
+    }).default(false),
     ...timeColumns,
 }, t => ({
     appsId_releaseId: unique().on(t.appsId, t.name),
