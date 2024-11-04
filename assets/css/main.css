@@ -77,3 +77,11 @@ body {
 .appdark .p-togglebutton.p-togglebutton-checked::before {
     background: var(--p-surface-950) !important;
 }
+
+.bg-color {
+    background-color: var(--p-surface-50);
+}
+
+.appdark .bg-color {
+    background-color: rgb(25, 25, 25);
+}
