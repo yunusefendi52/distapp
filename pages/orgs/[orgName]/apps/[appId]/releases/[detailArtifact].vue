@@ -16,7 +16,7 @@
                 <span class="text-sm">Release Id {{ detailArtifact?.releaseId }}</span>
                 <span class="font-semibold text-xl">Version {{ detailArtifact?.versionName2 }} ({{
                     detailArtifact?.versionCode2
-                    }})</span>
+                }})</span>
                 <span class="text-lg">{{ formatDate(detailArtifact?.createdAt) }}</span>
             </div>
             <Button :loading="isPending" @click="confirmDelete($event)" icon="pi pi-trash" label="Delete"
@@ -34,7 +34,7 @@
             <span class="font-semibold">Groups</span>
             <div class="flex flex-row">
                 <MultiSelect v-model="selectedGroup" display="chip" :options="groups"
-                    :optionLabel="(w) => w.displayName || w.name" placeholder="Select Groups" />
+                    :optionLabel="(w) => w.displayName || w.name" placeholder="Select Groups" filter />
                 <Button class="ml-3" @click="() => saveGroups()" :loading="saveGroupsStatus == 'pending'"
                     label="Update Groups" />
             </div>

@@ -2,7 +2,7 @@
     <div class="flex flex-col gap-3 mb-3 sm:flex-row">
         <Button :loading="!osType" @click="upload" outlined label="Upload"></Button>
         <MultiSelect v-if="!groupName" placeholder="Filter Groups" v-model="selectedGroup" :options="groups"
-            :optionLabel="(w) => w.displayName || w.name" class="sm:w-[200px]" />
+            :optionLabel="(w) => w.displayName || w.name" class="sm:w-[200px]" filter />
     </div>
     <div>
         <DataTable :show-gridlines="false" scrollable :value="list" single @row-click="selectRow($event)"

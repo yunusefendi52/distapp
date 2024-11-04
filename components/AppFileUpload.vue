@@ -8,7 +8,7 @@
         <div class="flex flex-col gap-2">
             <label for="releasenotes">Groups</label>
             <MultiSelect v-model="selectedGroup" display="chip" :options="groups" optionLabel="name"
-                placeholder="Select Groups" />
+                placeholder="Select Groups" filter />
         </div>
         <Button :label="isPending ? 'Uploading...' : 'Upload'" @click="submit" :loading="isPending" />
     </div>
