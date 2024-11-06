@@ -7,9 +7,10 @@ export const generateSignedUrlUpload = async (
     appId: string) => {
     const key = generateRandomPassword()
     const id = generateId()
-    var expires = 500;
     const { assets } = getStorageKeys(orgId, appId, key)
     const s3 = new S3Fetch()
+    // Upload always allowed to run to completion
+    var expires = 150;
     const signedUrl = await s3.getSignedUrlPutObject(assets, expires)
     return {
         uploadId: id,
