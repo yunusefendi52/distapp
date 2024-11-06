@@ -30,6 +30,12 @@ const items = ref<MenuItem[]>([
         routeName: 'app-info-api-keys',
         command: navigateFromTab,
     },
+    {
+        label: 'Danger',
+        icon: 'pi pi-exclamation-triangle',
+        routeName: 'settings-danger-app',
+        command: navigateFromTab,
+    },
 ])
 
 const active = ref<number | undefined>(items.value.findIndex(e => e.routeName === route.name))
