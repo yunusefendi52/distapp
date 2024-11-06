@@ -47,9 +47,6 @@ export class S3Fetch {
         const { client, S3_ENDPOINT } = createAwsClient()
         const resp = await client.fetch(`${S3_ENDPOINT}/${s3BucketName}/${key}`, {
             method: 'delete',
-            aws: {
-                signQuery: true,
-            },
         })
         if (!resp.ok) {
             throw createError({

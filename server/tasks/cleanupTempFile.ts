@@ -19,12 +19,15 @@ export default defineTask({
             .from(tables.uploadTemp)
             .where(lt(tables.uploadTemp.createdAt, threshold))
             .orderBy(asc(tables.uploadTemp.createdAt))
+            .limit(15)
         if (tempFiles && tempFiles.length) {
             const s3 = new S3Fetch()
             await Promise.all(tempFiles.map(async tempFile => {
-                await s3.deleteObject(tempFile.fileKey)
-                await drizzle.delete(tables.uploadTemp)
-                    .where(eq(tables.uploadTemp.id, tempFile.id))
+                await drizzle.transaction(async t => {
+                    await s3.deleteObject(tempFile.fileKey)
+                    await t.delete(tables.uploadTemp)
+                        .where(eq(tables.uploadTemp.id, tempFile.id))
+                })
                 console.log('Deleted temp file', tempFile.id)
             }))
         }
