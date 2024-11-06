@@ -95,7 +95,7 @@ export default defineEventHandler(async (event) => {
         .then(takeUniqueOrThrow)
     if (artifactTotal.count >= 10) {
         throw createError({
-            message: 'Currently you are limited up to 10, remove previous artifact',
+            message: 'Currently it\'s limited up to 10, we still tidying up, for now you can remove one of the previous artifact',
             statusCode: 400,
         })
     }
