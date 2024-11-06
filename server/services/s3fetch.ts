@@ -4,7 +4,7 @@ export class S3Fetch {
     async getSignedUrlPutObject(key: string, expiresIn: number): Promise<string> {
         const { client, S3_ENDPOINT } = createAwsClient()
         // TODO: add expires in???
-        const signedUrl = await client.sign(`${S3_ENDPOINT}/${s3BucketName}/${key}?X-Amz-Expires=5`, {
+        const signedUrl = await client.sign(`${S3_ENDPOINT}/${s3BucketName}/${key}`, {
             method: 'put',
             aws: {
                 signQuery: true,
