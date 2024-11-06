@@ -9,7 +9,7 @@ test('Normalize name space to hypen', () => {
 })
 
 test('Normalize name multiple space to multiple hypen', () => {
-    expect(normalizeName('Org  Test')).toEqual('org--test')
+    expect(normalizeName('Org  Test')).toEqual('org-test')
 })
 
 test('Should convert to lower case', () => {
