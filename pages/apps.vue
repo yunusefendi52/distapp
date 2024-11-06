@@ -162,7 +162,7 @@ const upperCase = (value: string | null | undefined) => {
             </Column>
             <template #empty>
                 <div class="flex items-center justify-center">
-                    <label>No data found</label>
+                    <label>No apps yet</label>
                 </div>
             </template>
         </DataTable>
