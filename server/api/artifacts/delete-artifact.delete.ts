@@ -22,18 +22,18 @@ export default defineEventHandler(async (event) => {
     )
     const { assets } = getStorageKeys(userOrg.org!.id, app.id, detailArtifact.fileObjectKey)
     const s3 = new S3Fetch()
-    await s3.deleteObject(assets)
-    await db.batch([
-        db.delete(tables.artifactsGroupsManager)
+    await db.transaction(async t => {
+        await s3.deleteObject(assets)
+        await t.delete(tables.artifactsGroupsManager)
             .where(and(
                 eq(tables.artifactsGroupsManager.artifactsId, detailArtifact.id),
-            )),
-        db.delete(tables.artifacts)
+            ))
+        await t.delete(tables.artifacts)
             .where(and(
                 eq(tables.artifacts.id, detailArtifact.id),
                 eq(tables.artifacts.appsId, app.id),
-            )),
-    ])
+            ))
+    })
     return {
         deleted: new Date(),
     }
