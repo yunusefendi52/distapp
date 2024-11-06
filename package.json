@@ -16,7 +16,8 @@
     "drizzle:migrate": "bun run server/db/migrate.ts",
     "deploy": "bun run build --preset=cloudflare-pages && npx wrangler pages deploy dist/",
     "e2e": "playwright test",
-    "tests": "vitest test"
+    "tests": "vitest test",
+    "build-cli": "bun build cli/cli.ts --target node > cli/cli.mjs"
   },
   "dependencies": {
     "@hebilicious/vue-query-nuxt": "^0.3.0",
