@@ -14,16 +14,20 @@ const { params: { orgName } } = useRoute()
 const form = ref<HTMLFormElement>()
 if (import.meta.client) {
     onMounted(() => {
-        form.value!.onsubmit = function (ev) {
-            const objectForm = getObjectForm(ev)
-            if (objectForm.orgName != orgName) {
-                alert("Org id is not valid")
-                return false;
+        if (form.value) {
+            form.value.onsubmit = function (ev) {
+                const objectForm = getObjectForm(ev)
+                if (objectForm.orgName != orgName) {
+                    alert("Org id is not valid")
+                    return false;
+                }
             }
         }
     })
     onUnmounted(() => {
-        form.value!.onsubmit = null;
+        if (form.value) {
+            form.value.onsubmit = null;
+        }
     })
 }
 </script>
