@@ -49,7 +49,7 @@ bun run dev
 ### CLI Usage
 
 ```sh
-curl -Ls "https://github.com/yunusefendi52/distapp/raw/refs/heads/main/cli/cli.sh" | sh /dev/stdin --distribute \
+curl -Ls "https://github.com/yunusefendi52/distapp/raw/refs/heads/main/cli/cli.sh" | sh -s -- --distribute \
 --file "$FILE_TO_ARTIFACT" \
 --slug "$APP_SLUG" \
 --apiKey "$API_KEY"
