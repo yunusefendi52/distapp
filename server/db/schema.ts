@@ -192,14 +192,3 @@ export const apiKeysRelations = relations(apiKeys, t => ({
         references: [organizations.id],
     }),
 }))
-
-export const uploadTemp = sqliteTable('uploadtemp', {
-    id: text('id').primaryKey().unique(),
-    fileKey: text('fileKey').unique().notNull(),
-    createdBy: text('createdBy'),
-    createdAt: integer('createdAt', {
-        mode: 'timestamp_ms',
-    }).notNull(),
-}, t => ({
-    id_createdBy: unique().on(t.id, t.createdBy),
-}))
