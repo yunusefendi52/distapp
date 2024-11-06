@@ -24,7 +24,7 @@ export default defineEventHandler(async event => {
     const { token: userToken } = await generateUserToken(event, 'google', userId, email, name)
     signInUser(event, userToken)
     const param = new URLSearchParams({
-        usr: token,
+        usr: userToken,
         e: email,
     })
     return {
