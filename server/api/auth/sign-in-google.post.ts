@@ -32,7 +32,7 @@ export default defineEventHandler(async event => {
     }
 })
 
-export const generateUserToken = async (
+const generateUserToken = async (
     event: H3Event<EventHandlerRequest>,
     signInProvider: string,
     userId: string,
@@ -40,32 +40,52 @@ export const generateUserToken = async (
     userRealName: string,
 ) => {
     userId = `${signInProvider}-${userId}`
+    const db = event.context.drizzle
+    const now = new Date()
+    const appUserId = generateId()
+    var user = await db.insert(tables.users).values({
+        name: userRealName,
+        id: appUserId,
+        providerUserId: userId,
+        email: userEmail,
+        createdAt: now,
+        updatedAt: now,
+    }).onConflictDoUpdate({ // Remove onConflictDoUpdate to onConflictDoNothing once createdAt and updatedAt all tables non zero
+        target: tables.users.providerUserId,
+        setWhere: and(
+            eq(tables.users.id, tables.users.providerUserId),
+            isNull(tables.users.createdAt),
+            isNull(tables.users.updatedAt),
+        ),
+        set: {
+            id: appUserId,
+            createdAt: now,
+            updatedAt: now,
+        },
+    }).returning({ id: tables.users.id })
+        .then(singleOrDefault)
+    if (!user) {
+        console.log('User returning null, maybe hits on conflict, try select again', userId)
+        user = await db.select({
+            id: tables.users.id,
+        }).from(tables.users)
+            .where(eq(tables.users.providerUserId, userId))
+            .then(singleOrDefault)
+    }
+    if (!user) {
+        const msg = 'User cannot be found or inserted'
+        console.error(msg)
+        throw createError({
+            message: msg,
+        })
+    }
     const token = await new jose.SignJWT({
-        sub: userId,
+        sub: user.id,
         'email': userEmail,
         'provider': signInProvider,
     }).setProtectedHeader({ alg })
         .setIssuedAt()
         .sign(getJwtKey(event))
-    const db = event.context.drizzle
-    const now = new Date()
-    await db.insert(tables.users).values({
-        name: userRealName,
-        id: userId,
-        email: userEmail,
-        createdAt: now,
-        updatedAt: now,
-    }).onConflictDoUpdate({ // Remove onConflictDoUpdate to onConflictDoNothing once createdAt and updatedAt all tables non zero
-        target: tables.users.id,
-        setWhere: and(
-            isNull(tables.users.createdAt),
-            isNull(tables.users.updatedAt),
-        ),
-        set: {
-            createdAt: now,
-            updatedAt: now,
-        },
-    })
     return {
         token,
     }

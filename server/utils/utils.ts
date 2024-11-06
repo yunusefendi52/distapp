@@ -45,8 +45,13 @@ export const userTokensKey = 'usr-k'
 export const userTokensHeaderKey = 'usr-k-sv'
 
 export const takeUniqueOrThrow = <T extends any[]>(values: T): T[number] => {
-    if (values.length !== 1) throw new Error(`Found non unique or inexistent value ${values}`)
+    if (values.length !== 1) throw new Error(`Found non unique or inexistent value ${values} - length ${values.length}`)
     return values[0]!
+}
+
+export const singleOrDefault = <T extends any[]>(values: T): T[number] | undefined => {
+    if (values.length > 1) throw new Error(`Found more than 1 value ${values} - length ${values.length}`)
+    return values.length ? values[0] : undefined
 }
 
 export { z } from "zod";

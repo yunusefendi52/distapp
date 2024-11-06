@@ -13,10 +13,13 @@ const timeColumns = {
 // Users
 export const users = sqliteTable('users', {
     id: text('id').primaryKey().unique(),
+    providerUserId: text('providerUserId').unique(),
     name: text('name').notNull(),
     email: text('email').unique(),
     ...timeColumns,
-})
+}, t => ({
+    idx_providerUserId: index('providerUserId').on(t.providerUserId),
+}))
 export const usersRelations = relations(users, (r) => ({
     organizationsPeople: r.many(organizationsPeople)
 }))
@@ -37,6 +40,7 @@ export const organizationsRelations = relations(organizations, (r) => ({
 export const organizationsPeople = sqliteTable('organizationsPeople', {
     userId: text('userId').references(() => users.id, {
         onDelete: 'cascade',
+        onUpdate: 'cascade',
     }),
     organizationId: text('organizationId').references(() => organizations.id, {
         onDelete: 'cascade',
