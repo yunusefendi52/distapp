@@ -25,13 +25,13 @@ if (orgName) {
 disableOrg.value = orgName != null
 
 const { mutateAsync, isPending } = useMutation({
-    mutationFn: (r: any) => $fetch('/api/create-app', {
+    mutationFn: (r: any) => $fetch.raw('/api/create-app', {
         method: 'post',
         body: r,
-    })
+    }).then(e => e._data)
 })
 
-async function saveOrg() {
+async function saveApp() {
     await mutateAsync({
         name: appName.value,
         osType: selectedOs.value?.value,
@@ -41,15 +41,29 @@ async function saveOrg() {
         refresh: true,
     });
 }
+
+const {
+    addOrgVisible,
+    saveOrg,
+    isPending: isPendingOrg,
+    orgName: orgNameRef,
+} = await useCreateOrg()
 </script>
 
 <template>
-    <form @submit.prevent="saveOrg">
+    <form @submit.prevent="saveApp">
         <div class="flex flex-col gap-3">
             <div class="flex flex-col gap-2">
                 <label>Organization</label>
-                <Dropdown name="org" v-model="selectedOrg" :options="orgs" optionLabel="displayName"
-                    :disabled="disableOrg" placeholder="Select organization" />
+                <Select name="org" v-model="selectedOrg" :options="orgs" optionLabel="displayName"
+                    :disabled="disableOrg" placeholder="Select organization">
+                    <template #footer>
+                        <div class="px-2 pb-2">
+                            <Button label="Add New" fluid severity="secondary" text size="small" icon="pi pi-plus"
+                                @click="() => addOrgVisible = true" />
+                        </div>
+                    </template>
+                </Select>
             </div>
             <div class="flex flex-col gap-2">
                 <label>OS Type</label>
@@ -62,4 +76,13 @@ async function saveOrg() {
             <Button label="Save" class="mt-3" :loading="isPending" type="submit" />
         </div>
     </form>
+
+    <Dialog v-model:visible="addOrgVisible" modal header="Add Organization">
+        <form @submit.prevent="saveOrg">
+            <div class="flex flex-col gap-3 w-25rem">
+                <InputText data-testid="orgname" name="name" v-model="orgNameRef"></InputText>
+                <Button label="Save" type="submit" :loading="isPendingOrg"></Button>
+            </div>
+        </form>
+    </Dialog>
 </template>

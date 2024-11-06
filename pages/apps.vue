@@ -4,7 +4,6 @@ import { CreateAppDialog } from '#components'
 import { ListAppsRequest } from '~/server/api/list-apps.get';
 import _ from 'lodash'
 import { normalizeName } from '~/server/utils/utils';
-import { useAppDrawer } from '~/composables/useAppTheme';
 
 const { name: routeName, params } = useRoute()
 const orgNameParam = params.orgName
@@ -26,41 +25,6 @@ const onRowSelect = (event: any) => {
         },
     })
 };
-
-const addOrgVisible = ref(false)
-
-const items: MenuItem[] = [{
-    label: 'Add Organization',
-    command: () => {
-        addOrgVisible.value = true
-    },
-}]
-
-const orgName = ref('')
-const { mutateAsync, isPending } = useMutation({
-    mutationFn: (r: any) => $fetch('/api/create-org', {
-        method: 'post',
-        body: r,
-    }),
-    onSuccess: async (r) => {
-        orgsStore.refresh()
-        addOrgVisible.value = false
-        navigateTo({
-            name: 'orgs',
-            params: {
-                orgName: r.normalizedOrgName,
-            },
-        })
-        orgName.value = ''
-    },
-})
-
-const saveOrg = async () => {
-    await mutateAsync({
-        name: orgName.value,
-        displayName: orgName.value,
-    })
-}
 
 const request = ref<ListAppsRequest | undefined>({
     orgName: orgNameParam as string | undefined,
@@ -125,16 +89,18 @@ const upperCase = (value: string | null | undefined) => {
                     </NuxtLink>
                 </div>
             </div>
-            <div class="flex flex-row gap-3">
+            <div class="flex flex-col sm:flex-row gap-3">
                 <form @submit="search" class="flex-1 flex-shrink-0">
                     <IconField iconPosition="left" styl>
                         <InputIcon class="pi pi-search"> </InputIcon>
                         <InputText style="width: 100%;" placeholder="Search" name="search" />
                     </IconField>
                 </form>
-                <div class="flex-shrink">
-                    <SplitButton label="Add App" :model="items" @click="addApp" v-if="!isOrg"></SplitButton>
-                    <Button label="Add App" @click="addApp" v-if="isOrg"></Button>
+                <div class="flex-shrink flex flex-row gap-2">
+                    <template v-if="!isOrg">
+                        <Button label="Add App" @click="addApp"></Button>
+                    </template>
+                    <Button label="Add App" @click="addApp" v-else></Button>
                 </div>
             </div>
         </AppBarContainer>
@@ -167,13 +133,4 @@ const upperCase = (value: string | null | undefined) => {
             </template>
         </DataTable>
     </div>
-
-    <Dialog v-model:visible="addOrgVisible" modal header="Add Organization">
-        <form @submit.prevent="saveOrg">
-            <div class="flex flex-col gap-3 w-25rem">
-                <InputText data-testid="orgname" name="name" v-model="orgName"></InputText>
-                <Button label="Save" type="submit" :loading="isPending"></Button>
-            </div>
-        </form>
-    </Dialog>
 </template>
