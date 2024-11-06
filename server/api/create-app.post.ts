@@ -3,7 +3,7 @@ import { generateId } from '../utils/utils'
 
 export default defineEventHandler(async (event) => {
     const { name, orgId, osType } = await readValidatedBody(event, z.object({
-        name: z.string().min(1).max(128).trim().transform(normalizeName),
+        name: z.string().min(1).max(128).trim(),
         orgId: z.string().min(1).trim(),
         osType: z.enum(['ios', 'android']),
     }).parse)
@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
     await db.insert(tables.apps).values({
         id: generateId(),
         displayName: name,
-        name: name,
+        name: normalizeName(name),
         osType: osType,
         organizationsId: orgId,
         createdAt: now,
