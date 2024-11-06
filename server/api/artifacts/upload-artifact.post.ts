@@ -100,16 +100,9 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    const { uploadId, fileKey, signedUrl } = await generateSignedUrlUpload(event, orgId, appId)
-    await db.insert(tables.uploadTemp)
-        .values({
-            id: uploadId,
-            fileKey: fileKey,
-            createdAt: new Date(),
-            createdBy: createdBy,
-        })
+    const { fileKey, signedUrl } = await generateSignedUrlUpload(event, orgId, appId)
     return {
-        uploadId,
+        fileKey,
         url: signedUrl,
     }
 })

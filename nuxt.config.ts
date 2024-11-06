@@ -91,7 +91,6 @@ export default defineNuxtConfig({
       tasks: true,
     },
     scheduledTasks: {
-      '*/5 * * * *': ['cleanupTempFile'],
     },
     // node: true,
   },

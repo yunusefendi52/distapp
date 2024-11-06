@@ -21,7 +21,7 @@ export async function uploadArtifact(
     releaseNotes: string | null,
 ) {
     const packageMetadata = await readPackageFile(file)
-    const { url, uploadId } = await myFetch('/api/artifacts/upload-artifact', {
+    const { url, fileKey } = await myFetch<{ url: string, fileKey: string, }>('/api/artifacts/upload-artifact', {
         method: 'post',
         body: {
             orgName: orgName,
@@ -39,7 +39,7 @@ export async function uploadArtifact(
     const data = await myFetch('/api/artifacts/upload-artifact-url', {
         method: 'post',
         body: {
-            uploadId,
+            fileKey,
             appName: appName,
             orgName: orgName,
             releaseNotes: releaseNotes ? releaseNotes : undefined,
