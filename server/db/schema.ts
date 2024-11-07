@@ -197,6 +197,8 @@ export const apiKeysRelations = relations(apiKeys, t => ({
 export const purgeAppArtifact = sqliteTable('purgeAppArtifact', {
     orgId: text('orgId'),
     appId: text('appId'),
+    hasArtifact: integer('hasArtifact'),
+    appName: integer('appName'),
     createdAt: integer('createdAt', {
         mode: 'timestamp_ms',
     }).default(sql`(unixepoch('subsecond') * 1000)`).notNull(),

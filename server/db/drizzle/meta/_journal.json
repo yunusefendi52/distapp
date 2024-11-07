@@ -239,6 +239,48 @@
       "when": 1730995866009,
       "tag": "0033_yellow_solo",
       "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "6",
+      "when": 1730996415754,
+      "tag": "0034_trigger-purge2",
+      "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "6",
+      "when": 1730997195892,
+      "tag": "0035_next_maestro",
+      "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "6",
+      "when": 1730997341455,
+      "tag": "0036_trigger-purge3",
+      "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "6",
+      "when": 1730997496290,
+      "tag": "0037_trigger-purge4",
+      "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "6",
+      "when": 1730997497750,
+      "tag": "0038_trigger-purge5",
+      "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "6",
+      "when": 1730997591184,
+      "tag": "0039_bouncy_kang",
+      "breakpoints": true
     }
   ]
 }
