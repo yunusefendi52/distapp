@@ -1,0 +1,1 @@
+CREATE INDEX `idx_createdAt` ON `purgeAppArtifact` (`createdAt`);

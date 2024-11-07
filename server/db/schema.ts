@@ -209,4 +209,5 @@ export const purgeAppArtifact = sqliteTable('purgeAppArtifact', {
     pk_orgId_appId: primaryKey({
         columns: [t.orgId, t.appId],
     }),
+    idx_createdAt: index('idx_createdAt').on(t.createdAt),
 }))
