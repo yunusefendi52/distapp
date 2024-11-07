@@ -1,5 +1,5 @@
 import { relations, sql } from 'drizzle-orm'
-import { sqliteTable, text, integer, uniqueIndex, unique, index } from 'drizzle-orm/sqlite-core'
+import { sqliteTable, text, integer, uniqueIndex, unique, index, primaryKey } from 'drizzle-orm/sqlite-core'
 
 const timeColumns = {
     createdAt: integer('createdAt', {
@@ -190,5 +190,21 @@ export const apiKeysRelations = relations(apiKeys, t => ({
     organizationId: t.one(organizations, {
         fields: [apiKeys.organizationId],
         references: [organizations.id],
+    }),
+}))
+
+// Purge Artifacts
+export const purgeAppArtifact = sqliteTable('purgeAppArtifact', {
+    orgId: text('orgId'),
+    appId: text('appId'),
+    createdAt: integer('createdAt', {
+        mode: 'timestamp_ms',
+    }).default(sql`(unixepoch('subsecond') * 1000)`).notNull(),
+    updatedAt: integer('updatedAt', {
+        mode: 'timestamp_ms',
+    }).default(sql`(unixepoch('subsecond') * 1000)`).notNull(),
+}, t => ({
+    pk_orgId_appId: primaryKey({
+        columns: [t.orgId, t.appId],
     }),
 }))

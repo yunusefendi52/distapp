@@ -218,6 +218,27 @@
       "when": 1730934357863,
       "tag": "0030_fantastic_puppet_master",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "6",
+      "when": 1730993975361,
+      "tag": "0031_trigger-purge",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "6",
+      "when": 1730994967201,
+      "tag": "0032_grey_vivisector",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "6",
+      "when": 1730995866009,
+      "tag": "0033_yellow_solo",
+      "breakpoints": true
     }
   ]
 }
