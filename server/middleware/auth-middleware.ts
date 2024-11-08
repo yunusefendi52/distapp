@@ -13,6 +13,9 @@ declare module 'h3' {
 
 
 export default defineEventHandler(async (event) => {
+  if (event.path === '/healthcheck') {
+    return
+  }
   const appAuth = getCookie(event, 'app-auth')
   if (appAuth) {
     try {

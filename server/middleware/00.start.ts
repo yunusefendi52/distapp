@@ -10,6 +10,9 @@ declare module 'h3' {
 }
 
 export default defineEventHandler(async (event) => {
+    if (event.path === '/healthcheck') {
+        return
+    }
     const env = event.context.cloudflare?.env ?? process.env
     const config = useRuntimeConfig(event)
     event.context = {
