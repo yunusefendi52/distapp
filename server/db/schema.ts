@@ -210,4 +210,5 @@ export const purgeAppArtifact = sqliteTable('purgeAppArtifact', {
         columns: [t.orgId, t.appId],
     }),
     idx_createdAt: index('idx_createdAt').on(t.createdAt),
+    idx_hasArtifact: index('idx_hasArtifact').on(t.hasArtifact),
 }))

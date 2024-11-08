@@ -22,10 +22,13 @@ export const getJwtKey = (event: H3Event<EventHandlerRequest>) => {
     )
 }
 
+export const getStorageKeysOrg = (orgId: string, appId: string) => {
+    return `assets/orgid-${orgId}-${appId}`
+}
+
 export const getStorageKeys = (orgId: string, appId: string, key: string) => {
     return {
-        assets: `assets/orgid-${orgId}-${appId}/${key}`,
-        // assets: `assets/orgid-${orgId}/appid-${appId}/${key}`,
+        assets: `${getStorageKeysOrg(orgId, appId)}/${key}`,
     }
 }
 
