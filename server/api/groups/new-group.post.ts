@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
         name: normalizeName(groupName),
         displayName: groupName,
         appsId: app!.id,
-        publicId: generateRandomPassword(32), // TODO: Should I force this to use the same as name in groups?
+        publicId: normalizeName(groupName),
         isPublic: isPublic,
         createdAt: now,
         updatedAt: now,

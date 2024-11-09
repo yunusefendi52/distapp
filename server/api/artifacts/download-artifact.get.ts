@@ -9,7 +9,9 @@ export const getArtifactFromInternal = async (
     releaseId: string,
     publicId: string,
 ) => {
-    const { app, org } = await getArtifactGroupFromPublicIdOrUser(event, orgName, appName, publicId)
+    const { app, org } = publicId
+        ? await getArtifactGroupFromPublicIdOrUser(event, orgName, appName, publicId)
+        : await getUserApp(event, orgName, appName).then(e => ({ app: e.userApp, org: e.userOrg }))
     const db = event.context.drizzle
     const releaseIdInt = parseInt(releaseId)
     const detailArtifact = await db.query.artifacts.findMany({
@@ -39,7 +41,6 @@ export default defineEventHandler(async (event) => {
         hasManifestPList: z.any(),
         publicId: z.string().nullable(),
     }).parse)
-    console.log('fdsafdsafdsa', publicId || 'ss')
     const { signedUrl, app, detailArtifact, } = await getArtifactFromInternal(
         event,
         orgName,
