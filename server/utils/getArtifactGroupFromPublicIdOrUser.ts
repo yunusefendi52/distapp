@@ -16,7 +16,6 @@ export const getArtifactGroupFromPublicIdOrUser = async (event: H3Event<EventHan
                     eq(tables.artifactsGroups.publicId, publicId),
                 ),
                 ...(userId ? [and(
-                    ne(tables.artifactsGroups.isPublic, true),
                     eq(tables.organizationsPeople.userId, userId),
                 )] : []),
             ),
