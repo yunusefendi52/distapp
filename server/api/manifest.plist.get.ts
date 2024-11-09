@@ -1,33 +1,22 @@
 import _ from 'lodash'
-import { getArtifactLinkFromPublicIdAndReleaseId } from './install/download.get'
+import { getArtifactFromInternal } from './artifacts/download-artifact.get'
 
 export default defineEventHandler(async (event) => {
 	const query = getQuery(event)
 	const data = JSON.parse(atob(query.data!.toString()))
-	let publicId = data.publicLink
-	const releaseId = data.releaseId
-
-	var plist: string | undefined = undefined
-	if (publicId) {
-		const { signedUrl, app, detailArtifact: artifact } = await getArtifactLinkFromPublicIdAndReleaseId(event, publicId, releaseId)
-		plist = generatePlist(
-			signedUrl,
-			artifact.packageName!,
-			artifact.versionName2,
-			app.displayName)
-	} else {
-		// Param from logged in user (without public id)
-		const packageName = data.packageName
-		const versionName = data.versionName
-		const displayName = data.displayName
-		const signedUrl = data.signedUrl
-		plist = generatePlist(
-			signedUrl,
-			packageName,
-			versionName,
-			displayName,
-		)
+	if (import.meta.dev) {
+		console.log('datatamanifest', data)
 	}
+	const publicId: string = data.publicLink
+	const orgName: string = data.orgName
+	const appName: string = data.appName
+	const releaseId = data.releaseId
+	const { signedUrl, app, detailArtifact: artifact } = await getArtifactFromInternal(event, orgName, appName, releaseId, publicId)
+	const plist = generatePlist(
+		signedUrl,
+		artifact.packageName!,
+		artifact.versionName2,
+		app.displayName)
 	setResponseHeader(event, 'Content-Type', "text/xml plist")
 	return plist
 })

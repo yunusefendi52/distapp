@@ -6,7 +6,8 @@
                 <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" />
             </div>
         </div>
-        <Button :loading="isDownloading" label="Download" @click="download"></Button>
+        <Button :loading="isDownloading" label="Download"
+            @click="() => download(releaseId, undefined)"></Button>
     </AppBarContainer>
     <ConfirmPopup></ConfirmPopup>
     <!-- <div>{{ detailArtifact }}</div> -->
@@ -74,28 +75,7 @@ const { data: detailArtifact, refresh, status: status2 } = useFetch('/api/artifa
     },
 })
 
-const isDownloading = ref(false)
-
-const download = async () => {
-    let url = `/api/artifacts/download-artifact?appName=${appName}&orgName=${orgName}&releaseId=${releaseId}`
-    if (isIosDevice()) {
-        try {
-            isDownloading.value = true
-            url = `${url}&manifestPlist=true`
-            const data = await $fetch(url, {
-                query: {
-                    manifestPlist: true,
-                },
-            })
-            const manifestLink = generateManifestLink(data, releaseId, undefined)
-            document.location = manifestLink
-        } finally {
-            isDownloading.value = false
-        }
-    } else {
-        window.open(url, '_blank')
-    }
-}
+const { download, isDownloading } = useDownloadArtifact(appName, orgName)
 
 const { data: appGroups } = useFetch('/api/groups/list-groups', {
     query: {

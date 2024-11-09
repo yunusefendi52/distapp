@@ -1,8 +1,9 @@
 export default defineEventHandler(async (event) => {
-    const { appName, orgName, groupName } = await readValidatedBody(event, z.object({
+    const { appName, orgName, groupName, isPublic } = await readValidatedBody(event, z.object({
         appName: z.string().max(256),
         orgName: z.string().max(256),
         groupName: z.string().max(256),
+        isPublic: z.boolean(),
     }).parse)
     if (await roleEditNotAllowed(event, orgName)) {
         throw createError({
@@ -19,7 +20,8 @@ export default defineEventHandler(async (event) => {
         name: normalizeName(groupName),
         displayName: groupName,
         appsId: app!.id,
-        publicId: generateRandomPassword(42),
+        publicId: generateRandomPassword(32), // TODO: Should I force this to use the same as name in groups?
+        isPublic: isPublic,
         createdAt: now,
         updatedAt: now,
     })

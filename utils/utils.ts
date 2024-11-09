@@ -42,9 +42,11 @@ export const formatDate = (value?: string | null) => {
 
 export const isIosDevice = () => /(iPad|iPhone|iPod)/g.test(navigator.userAgent) || (/(Mac OS)/g.test(navigator.userAgent) && "ontouchend" in document)
 
-export const generateManifestLink = (manifestData: any, releaseId: string, publicLink: string | undefined) => {
+export const generateManifestLink = (manifestData: any, orgName: string, appName: string, releaseId: string, publicLink: string | undefined) => {
     const data = {
         ...manifestData,
+        orgName,
+        appName,
         releaseId,
         publicLink,
     }

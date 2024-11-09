@@ -130,13 +130,14 @@ export const artifactsGroups = sqliteTable('artifactsGroups', {
     appsId: text('appsId').references(() => apps.id, {
         onDelete: 'cascade',
     }),
-    publicId: text('publicId').unique(), // TODO: Add index?
+    publicId: text('publicId'),
     isPublic: integer('isPublic', {
         mode: 'boolean'
     }).default(false),
     ...timeColumns,
 }, t => ({
     appsId_releaseId: unique().on(t.appsId, t.name),
+    appsId_name_publicId: unique().on(t.appsId, t.name, t.publicId),
 }))
 export const artifactsGroupsRelations = relations(artifactsGroups, t => ({
     artifactsGroupsManager: t.many(artifactsGroupsManager),

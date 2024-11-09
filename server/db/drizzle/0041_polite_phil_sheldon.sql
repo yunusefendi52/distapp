@@ -1,0 +1,2 @@
+CREATE UNIQUE INDEX `artifactsGroups_appsId_name_publicId_unique` ON `artifactsGroups` (`appsId`,`name`,`publicId`);--> statement-breakpoint
+CREATE INDEX `idx_hasArtifact` ON `purgeAppArtifact` (`hasArtifact`);

@@ -12,8 +12,13 @@
     <div class="p-4">
         <div class="card p-4 items-center flex flex-col justify-stretch sm:flex-row sm:justify-center gap-2">
             <div class="flex flex-col flex-1">
-                <span class="text-xl font-bold">{{ detailGroup?.displayName || detailGroup?.name }}</span>
-                <span v-if="publicLink">Public link: <a class="underline break-all" target="_blank"
+                <div class="flex flex-wrap gap-2 items-stretch">
+                    <span class="text-xl font-bold">{{ detailGroup?.displayName || detailGroup?.name }}</span>
+                    <div v-if="detailGroup?.isPublic">
+                        <Badge class="self-start" value="PUBLIC" severity="info" size="small"></Badge>
+                    </div>
+                </div>
+                <span v-if="publicLink">Install link: <a class="underline break-all" target="_blank"
                         :href="publicLink">{{
                             publicLink
                         }}</a> </span>
@@ -51,7 +56,7 @@ const detailGroup = computed(() => data.value?.find(e => e))
 
 const publicLink = computed(() => {
     return import.meta.client && detailGroup.value?.publicId
-        ? `${window.location.origin}/install/${detailGroup?.value?.publicId}`
+        ? `${window.location.origin}/install/${orgName}/apps/${appName}/${detailGroup?.value?.publicId}`
         : ''
 })
 

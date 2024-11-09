@@ -6,9 +6,11 @@
             selection-mode="single">
             <Column field="name" header="Group Name">
                 <template #body="{ data }">
-                    <div class="flex flex-row gap-2 py-3">
+                    <div class="flex flex-row gap-3 py-3">
                         <span class="font-semibold text-xl">{{ data.displayName || data.name }}</span>
-                        <Badge value="PUBLIC" severity="info"></Badge>
+                        <Badge :value="data.isPublic ? 'PUBLIC' : 'PRIVATE'"
+                            :severity="data.isPublic ? 'info' : 'contrast'">
+                        </Badge>
                     </div>
                 </template>
             </Column>
@@ -25,10 +27,15 @@
             appName: props.appName,
             orgName: props.orgName,
             groupName: newGroupName,
+            isPublic: isPublic,
         })">
             <div class="flex align-items-center gap-3 mb-3">
                 <InputText v-model="newGroupName" class="flex-auto" autocomplete="off" placeholder="Group Name"
                     required />
+            </div>
+            <div class="flex items-center gap-3 my-3">
+                <ToggleSwitch v-model="isPublic" name="isPublic" />
+                <label for="isPublic" class="text-sm"> Anyone with the link can access this group </label>
             </div>
             <div class="flex justify-content-end gap-2 mt-5">
                 <Button type="button" label="Cancel" severity="secondary" @click="visible = false"></Button>
@@ -54,6 +61,7 @@ const { data: list, refresh } = useFetch('/api/groups/list-groups', {
 })
 
 const newGroupName = ref('')
+const isPublic = ref(false)
 
 const visible = ref(false)
 watchEffect(() => {

@@ -1,4 +1,4 @@
-import { getStorageKeys, s3BucketName } from "~/server/utils/utils"
+import { getStorageKeys } from "~/server/utils/utils"
 import type { EventHandlerRequest, H3Event } from "h3"
 import { S3Fetch } from "~/server/services/s3fetch"
 
@@ -7,22 +7,11 @@ export const getArtifactFromInternal = async (
     orgName: string,
     appName: string,
     releaseId: string,
+    publicId: string,
 ) => {
+    const { app, org } = await getArtifactGroupFromPublicIdOrUser(event, orgName, appName, publicId)
     const db = event.context.drizzle
-    const userId = event.context.auth.userId
-    const userOrg = await db.select({
-        organizationsId: tables.organizations.id,
-    })
-        .from(tables.organizationsPeople)
-        .leftJoin(tables.organizations, eq(tables.organizations.id, tables.organizationsPeople.organizationId))
-        .where(and(eq(tables.organizationsPeople.userId, userId), eq(tables.organizations.name, orgName!.toString())))
-        .then(takeUniqueOrThrow)
-    const app = await db.query.apps.findMany({
-        where(fields, operators) {
-            return operators.and(operators.eq(fields.organizationsId, userOrg.organizationsId!), operators.eq(fields.name, appName!.toString()))
-        },
-    }).then(takeUniqueOrThrow)
-    const releaseIdInt = parseInt(releaseId!.toString())
+    const releaseIdInt = parseInt(releaseId)
     const detailArtifact = await db.query.artifacts.findMany({
         where(fields, operators) {
             return operators.and(
@@ -31,25 +20,33 @@ export const getArtifactFromInternal = async (
             )
         },
     }).then(takeUniqueOrThrow)
-    const { assets } = getStorageKeys(userOrg.organizationsId!, app.id, detailArtifact.fileObjectKey)
+    const { assets } = getStorageKeys(app.organizationsId!, app.id, detailArtifact.fileObjectKey)
     const s3 = new S3Fetch()
     const signedUrl = await s3.getSignedUrlGetObject(assets, 1800, `attachment; filename ="${app.name}${detailArtifact.extension ? `.${detailArtifact.extension}` : ''}"`)
     return {
         signedUrl,
-        userOrg,
+        userOrg: org,
         app,
         detailArtifact,
     }
 }
 
 export default defineEventHandler(async (event) => {
-    const { appName, orgName, releaseId, manifestPlist } = getQuery(event)
+    const { appName, orgName, releaseId, hasManifestPList, publicId } = await getValidatedQuery(event, z.object({
+        appName: z.string().min(1),
+        orgName: z.string().min(1),
+        releaseId: z.string().min(1),
+        hasManifestPList: z.any(),
+        publicId: z.string().nullable(),
+    }).parse)
+    console.log('fdsafdsafdsa', publicId || 'ss')
     const { signedUrl, app, detailArtifact, } = await getArtifactFromInternal(
         event,
-        orgName!.toString(),
-        appName!.toString(),
-        releaseId!.toString())
-    if (manifestPlist) {
+        orgName,
+        appName,
+        releaseId,
+        publicId || '')
+    if (hasManifestPList) {
         return {
             signedUrl,
             packageName: detailArtifact.packageName,
