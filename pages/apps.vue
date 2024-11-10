@@ -29,7 +29,7 @@ const onRowSelect = (event: any) => {
 const request = ref<ListAppsRequest | undefined>({
     orgName: orgNameParam as string | undefined,
 })
-const { data: apps, refresh, pending } = useFetch('/api/list-apps', {
+const { data: apps, refresh, status } = useFetch('/api/list-apps', {
     query: request,
     watch: [request],
 })
@@ -76,7 +76,8 @@ const upperCase = (value: string | null | undefined) => {
             <div class="flex flex-row items-center gap-2 sm:flex-1">
                 <div class="flex-1 flex gap-3 items-center">
                     <AppTitle title="Apps" />
-                    <ProgressSpinner style="width: 22px; height: 22px; margin: unset;" strokeWidth="6" v-if="pending" />
+                    <ProgressSpinner style="width: 22px; height: 22px; margin: unset;" strokeWidth="6"
+                        v-if="status === 'pending'" />
                 </div>
                 <div>
                     <NuxtLink :to="{

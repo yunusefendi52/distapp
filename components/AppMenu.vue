@@ -24,7 +24,9 @@ const orgName = computed(() => route.params.orgName as string)
 
 <template>
     <div class="px-3 py-4 flex gap-3 flex-col">
-        <NuxtLink v-for="(item, index) in items" :key="index" :to="{
+        <ProgressSpinner style="width: 22px; height: 22px; margin: unset;" strokeWidth="6" class="self-center"
+            v-if="orgsStore.status.value === 'pending'" />
+        <NuxtLink v-else v-for="(item, index) in items" :key="index" :to="{
             name: item.routeName,
             params: item.routeParams,
         }" custom v-slot="{ href, route, navigate, isActive, isExactActive }">
