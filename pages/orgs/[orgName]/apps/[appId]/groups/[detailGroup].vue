@@ -31,34 +31,31 @@
         <Releases :org-name="orgName" :app-name="appName" :os-type="'android'" :group-name="groupName" />
     </div>
 
-    <div class="card flex justify-center">
-        <Drawer v-model:visible="groupSettings" header="Group Settings" position="right" class="!w-[24rem]">
-            <form @submit.prevent="mutateArtifactGroupData">
-                <div class="flex flex-col gap-3 items-stretch">
-                    <input name="artifactGroupId" :value="detailGroup?.id" hidden />
-                    <input name="orgName" :value="orgName" hidden />
-                    <input name="appName" :value="appName" hidden />
-                    <div>
-                        <span class="font-medium block mb-2">Group Name</span>
-                        <InputGroup>
-                            <InputText name="groupDisplayName" :value="detailGroup?.displayName" fluid></InputText>
-                        </InputGroup>
-                    </div>
-                    <div class="flex items-center gap-3 my-3">
-                        <ToggleSwitch v-model="isPublic" :pt="{
-                            input: {
-                                'name': 'isPublic',
-                                value: isPublic ? 'true' : 'false',
-                            },
-                        }" />
-                        <label for="isPublic" class="text-sm"> Anyone with the link can access this group </label>
-                    </div>
-                    <Button type="submit" label="Update" class="self-start"
-                        :loading="updateArtifactGroupDataIsPending" />
+    <Drawer v-model:visible="groupSettings" header="Group Settings" position="right" class="!w-[24rem]">
+        <form @submit.prevent="mutateArtifactGroupData">
+            <div class="flex flex-col gap-3 items-stretch">
+                <input name="artifactGroupId" :value="detailGroup?.id" hidden />
+                <input name="orgName" :value="orgName" hidden />
+                <input name="appName" :value="appName" hidden />
+                <div>
+                    <span class="font-medium block mb-2">Group Name</span>
+                    <InputGroup>
+                        <InputText name="groupDisplayName" :value="detailGroup?.displayName" fluid></InputText>
+                    </InputGroup>
                 </div>
-            </form>
-        </Drawer>
-    </div>
+                <div class="flex items-center gap-3 my-3">
+                    <ToggleSwitch v-model="isPublic" :pt="{
+                        input: {
+                            'name': 'isPublic',
+                            value: isPublic ? 'true' : 'false',
+                        },
+                    }" />
+                    <label for="isPublic" class="text-sm"> Anyone with the link can access this group </label>
+                </div>
+                <Button type="submit" label="Update" class="self-start" :loading="updateArtifactGroupDataIsPending" />
+            </div>
+        </form>
+    </Drawer>
 </template>
 
 <script setup lang="ts">
