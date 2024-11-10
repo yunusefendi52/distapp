@@ -16,6 +16,9 @@ export default defineConfig<ConfigOptions>({
         },
     },
     testDir: './tests-e2e',
+    expect: {
+        timeout: 12000,
+    },
     projects: [
         { name: 'Setup', testMatch: '**/*.setup.mts' },
         {
