@@ -23,11 +23,41 @@
                             publicLink
                         }}</a> </span>
             </div>
-            <Button icon="pi pi-refresh" label="Regenerate Link" @click="regenerateLink" />
+            <Button icon="pi pi-pencil" @click="() => groupSettings = true" />
+            <!-- <Button icon="pi pi-refresh" label="Regenerate Link" @click="regenerateLink" /> -->
         </div>
     </div>
     <div class="px-4">
         <Releases :org-name="orgName" :app-name="appName" :os-type="'android'" :group-name="groupName" />
+    </div>
+
+    <div class="card flex justify-center">
+        <Drawer v-model:visible="groupSettings" header="Group Settings" position="right" class="!w-[24rem]">
+            <form @submit.prevent="mutateArtifactGroupData">
+                <div class="flex flex-col gap-3 items-stretch">
+                    <input name="artifactGroupId" :value="detailGroup?.id" hidden />
+                    <input name="orgName" :value="orgName" hidden />
+                    <input name="appName" :value="appName" hidden />
+                    <div>
+                        <span class="font-medium block mb-2">Group Name</span>
+                        <InputGroup>
+                            <InputText name="groupDisplayName" :value="detailGroup?.displayName" fluid></InputText>
+                        </InputGroup>
+                    </div>
+                    <div class="flex items-center gap-3 my-3">
+                        <ToggleSwitch v-model="isPublic" :pt="{
+                            input: {
+                                'name': 'isPublic',
+                                value: isPublic ? 'true' : 'false',
+                            },
+                        }" />
+                        <label for="isPublic" class="text-sm"> Anyone with the link can access this group </label>
+                    </div>
+                    <Button type="submit" label="Update" class="self-start"
+                        :loading="updateArtifactGroupDataIsPending" />
+                </div>
+            </form>
+        </Drawer>
     </div>
 </template>
 
@@ -118,5 +148,41 @@ const removeGroup = (event: any) => {
         }
     });
 }
+
+const groupSettings = ref(false)
+
+const isPublic = ref(detailGroup.value?.isPublic ?? false)
+watchEffect(() => {
+    isPublic.value = detailGroup.value?.isPublic ?? false
+})
+
+const { mutate: mutateArtifactGroupData, isPending: updateArtifactGroupDataIsPending } = useMutation({
+    mutationFn: async (r: Event) => {
+        const request = getObjectForm(r)
+        const e = await $fetch.raw('/api/groups/update-artifact-group-data', {
+            method: 'post',
+            body: request,
+        });
+        if (e.ok) {
+            groupSettings.value = false;
+            const artifactGroupName = e._data!.artifactGroupName
+            if (artifactGroupName === detailGroup.value?.name) {
+                executeListGroups()
+            }
+            else {
+                navigateTo({
+                    name: 'orgs-orgName-apps-appId-groups-detailGroup',
+                    replace: true,
+                    force: true,
+                    params: {
+                        orgName: orgName,
+                        appName: appName,
+                        detailGroup: artifactGroupName,
+                    },
+                })
+            }
+        }
+    },
+})
 
 </script>

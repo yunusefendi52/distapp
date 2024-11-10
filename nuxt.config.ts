@@ -174,6 +174,14 @@ export default defineNuxtConfig({
             'class': 'm-0 divider-app',
           },
         },
+        drawer: {
+          mask: {
+            class: 'p-3',
+          },
+          root: {
+            class: 'rounded-lg bg-clip-border p-1',
+          },
+        },
       },
     },
   },
