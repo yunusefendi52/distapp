@@ -24,14 +24,12 @@ const orgName = computed(() => route.params.orgName as string)
 
 <template>
     <div class="px-3 py-4 flex gap-3 flex-col">
-        <ProgressSpinner style="width: 22px; height: 22px; margin: unset;" strokeWidth="6" class="self-center"
-            v-if="orgsStore.status.value === 'pending'" />
-        <NuxtLink v-else v-for="(item, index) in items" :key="index" :to="{
+        <NuxtLink v-for="(item, index) in items" :key="index" :to="{
             name: item.routeName,
             params: item.routeParams,
         }" custom v-slot="{ href, route, navigate, isActive, isExactActive }">
             <a :active="item.routeParams?.orgName === orgName || item.name === orgName || routePath === route.path"
-                :href="href" @click="navigate" class="cursor-pointer">
+                :href="href" @click="navigate" class="cursor-pointer" :data-testid="`amenu-${index}`">
                 <div class="flex flex-row px-3 py-2.5 gap-3 rounded-md menu-hover" style="align-items: center;"
                     :class="{ 'menu-active': item.routeParams?.orgName == orgName || item.name === orgName || routePath === route.path }">
                     <i :class="item.icon" style="font-size: 1.25rem">
@@ -42,6 +40,8 @@ const orgName = computed(() => route.params.orgName as string)
                 </div>
             </a>
         </NuxtLink>
+        <ProgressSpinner style="width: 22px; height: 22px; margin: unset;" strokeWidth="6" class="self-center"
+            data-testid="menu-loading" v-if="orgsStore.status.value === 'pending'" />
     </div>
 </template>
 
