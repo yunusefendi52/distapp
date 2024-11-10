@@ -15,7 +15,7 @@
     "drizzle:generate": "drizzle-kit generate",
     "drizzle:migrate": "bun run server/db/migrate.ts",
     "deploy": "bun run build --preset=cloudflare-pages && npx wrangler pages deploy dist/",
-    "e2e": "playwright test",
+    "e2e": "NODE_OPTIONS=--require=dotenv/config playwright test",
     "tests": "vitest test",
     "build-cli": "bun build cli/cli.ts --target node > cli/cli.mjs"
   },
@@ -60,6 +60,7 @@
     "@vue/test-utils": "^2.4.6",
     "autoprefixer": "^10.4.19",
     "bun-types": "^1.1.30",
+    "dotenv": "^16.4.5",
     "drizzle-kit": "^0.27.1",
     "eslint": "^8.30.0",
     "eslint-config-prettier": "^8.5.0",

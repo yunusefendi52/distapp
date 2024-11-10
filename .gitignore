@@ -35,3 +35,4 @@ coverage
 server/prisma-client/
 prisma/app.db*
 test-results/
+playwright/.auth
