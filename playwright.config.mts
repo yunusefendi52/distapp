@@ -1,6 +1,10 @@
 import { defineConfig, devices } from '@playwright/test'
 import type { ConfigOptions } from '@nuxt/test-utils/playwright'
 
+if (!process.env.TEST_APP_URL) {
+    throw 'TEST_APP_URL is required'
+}
+
 export default defineConfig<ConfigOptions>({
     use: {
         nuxt: {
