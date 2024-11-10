@@ -1,14 +1,18 @@
+import { fileURLToPath } from 'node:url'
 import { defineConfig, devices } from '@playwright/test'
 import type { ConfigOptions } from '@nuxt/test-utils/playwright'
 
-if (!process.env.TEST_APP_URL) {
-    throw 'TEST_APP_URL is required'
-}
-
 export default defineConfig<ConfigOptions>({
+    webServer: {
+        command: 'bun run dev',
+        url: 'http://localhost:3000',
+        reuseExistingServer: !process.env.CI,
+        stdout: 'ignore',
+        stderr: 'pipe',
+    },
     use: {
         nuxt: {
-            host: process.env.TEST_APP_URL!,
+            host: 'http://localhost:3000',
         },
     },
     testDir: './tests-e2e',
