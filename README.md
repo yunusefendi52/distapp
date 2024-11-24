@@ -37,7 +37,7 @@ NUXT_PUBLIC_ADMIN_KEY_ENABLE=
 #### Make sure to install the dependencies:
 
 ```bash
-ban install
+bun install
 ```
 
 #### Development Server
