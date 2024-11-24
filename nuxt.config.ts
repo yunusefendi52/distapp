@@ -176,7 +176,9 @@ export default defineNuxtConfig({
         },
         drawer: {
           mask: {
-            class: 'p-3',
+            style: {
+              'padding': '10px',
+            },
           },
           root: {
             class: 'rounded-lg bg-clip-border p-1',
