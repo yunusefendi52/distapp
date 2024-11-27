@@ -21,6 +21,8 @@ body {
     --p-tabmenu-active-bar-height: 2.5px;
     --p-content-border-color: var(--p-datatable-border-color);
     --p-tabmenu-item-color: var(--p-text-color);
+
+    word-break: break-word;
 }
 
 .p-datatable-table-container {

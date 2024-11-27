@@ -169,6 +169,25 @@ export const artifactsGroupsManagerRelations = relations(artifactsGroupsManager,
     }),
 }))
 
+// Groups Tester
+export const groupTester = sqliteTable('grouptester', {
+    id: text('id').primaryKey().unique(),
+    testerId: text('testerId').notNull().references(() => users.id, {
+        onDelete: 'cascade',
+    }),
+    organizationId: text('organizationId').notNull().references(() => organizations.id, {
+        onDelete: 'cascade',
+    }),
+    appsId: text('appsId').notNull().references(() => apps.id, {
+        onDelete: 'cascade',
+    }),
+    artifactGroupId: text('artifactGroupId').notNull().references(() => artifactsGroups.id, {
+        onDelete: 'cascade',
+    }),
+}, t => ({
+    testerId_orgId_appId_groupId: uniqueIndex('testerId_orgId_appId_groupId').on(t.testerId, t.organizationId, t.appsId, t.artifactGroupId)
+}))
+
 // API Keys
 export const apiKeys = sqliteTable('apiKeys', {
     id: text('id').primaryKey().unique(),

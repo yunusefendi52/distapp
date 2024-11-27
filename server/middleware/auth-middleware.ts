@@ -3,6 +3,7 @@ import * as jose from 'jose'
 
 export type AuthData = {
   userId: string,
+  email: string | undefined,
 }
 
 declare module 'h3' {
@@ -24,7 +25,11 @@ export default defineEventHandler(async (event) => {
         deleteCookie(event, 'app-auth')
       } else {
         const userId = verifiedData.payload.sub
-        event.context.auth = { userId: userId! }
+        const email = verifiedData.payload.email as string | undefined
+        event.context.auth = {
+          userId: userId!,
+          email: email,
+        }
       }
     }
     catch (e) {

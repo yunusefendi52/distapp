@@ -23,6 +23,7 @@
                             publicLink
                         }}</a> </span>
             </div>
+            <Button icon="pi pi-user" @click="() => showManageApptester = true" />
             <Button icon="pi pi-pencil" @click="() => groupSettings = true" />
             <!-- <Button icon="pi pi-refresh" label="Regenerate Link" @click="regenerateLink" /> -->
         </div>
@@ -30,6 +31,8 @@
     <div class="px-4">
         <Releases :org-name="orgName" :app-name="appName" :os-type="'android'" :group-name="groupName" />
     </div>
+
+    <LazyManageAppTester v-model="showManageApptester" />
 
     <Drawer v-model:visible="groupSettings" header="Group Settings" position="right" class="!w-[24rem]">
         <form @submit.prevent="mutateArtifactGroupData">
@@ -147,6 +150,7 @@ const removeGroup = (event: any) => {
 }
 
 const groupSettings = ref(false)
+const showManageApptester = ref(false)
 
 const isPublic = ref(detailGroup.value?.isPublic ?? false)
 watchEffect(() => {
