@@ -62,7 +62,7 @@ definePageMeta({
 
 const route = useRoute()
 const router = useRouter()
-const cookie = useCookie('app-auth')
+const cookie = useCookie(cookieAuthKey)
 const isLoggedIn = computed(() => cookie.value ? true : false)
 if (isLoggedIn.value) {
     if (process.client) {

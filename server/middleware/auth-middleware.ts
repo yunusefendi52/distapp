@@ -17,12 +17,12 @@ export default defineEventHandler(async (event) => {
   if (event.path === '/healthcheck') {
     return
   }
-  const appAuth = getCookie(event, 'app-auth')
+  const appAuth = getCookie(event, cookieAuthKey)
   if (appAuth) {
     try {
       const verifiedData = await jose.jwtVerify(appAuth, getJwtKey(event))
       if (!verifiedData) {
-        deleteCookie(event, 'app-auth')
+        deleteCookie(event, cookieAuthKey)
       } else {
         const userId = verifiedData.payload.sub
         const email = verifiedData.payload.email as string | undefined
@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
     }
     catch (e) {
       console.log(e)
-      deleteCookie(event, 'app-auth')
+      deleteCookie(event, cookieAuthKey)
     }
   } else {
     console.log('user not logged in')

@@ -17,7 +17,7 @@
 import { UserTokenInfo } from '~/server/models/UserTokenInfo';
 import { userTokensKey } from '~/server/utils/utils';
 
-const cookie = useCookie('app-auth')
+const cookie = useCookie(cookieAuthKey)
 const cookiePayload = cookie.value ? decodeJwt(cookie.value) : undefined
 const userEmail = cookiePayload?.email?.toString()
 const signout = () => {

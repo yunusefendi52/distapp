@@ -76,7 +76,7 @@ useSeoMeta({
 
 const { download, isDownloading } = useDownloadArtifact(appName.toString(), orgName.toString())
 
-const cookie = useCookie('app-auth')
+const cookie = useCookie(cookieAuthKey)
 </script>
 
 <style scoped>

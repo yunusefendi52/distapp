@@ -12,5 +12,5 @@
 </template>
 
 <script setup lang="ts">
-const cookie = useCookie('app-auth')
+const cookie = useCookie(cookieAuthKey)
 </script>

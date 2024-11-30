@@ -6,7 +6,7 @@ const authFile = path.join(import.meta.dirname, '../../playwright/.auth/user.jso
 setup('authenticate', async ({ page }) => {
     const domain = process.env.TEST_APP_URL!.replaceAll('https://', '').replaceAll('http://', '').replaceAll(':3000', '')
     await page.context().addCookies([{
-        name: 'app-auth',
+        name: cookieAuthKey,
         value: process.env.TEST_APP_AUTH_COOKIES!,
         httpOnly: false,
         secure: true,

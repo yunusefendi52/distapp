@@ -44,7 +44,7 @@ const route = useRoute()
 
 const isAddAccount = computed(() => route.path.startsWith('/add-account'))
 if (!isAddAccount.value) {
-    const cookie = useCookie('app-auth')
+    const cookie = useCookie(cookieAuthKey)
     if (cookie.value) {
         await navigateTo({
             name: 'index',

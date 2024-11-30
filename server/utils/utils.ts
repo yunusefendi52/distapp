@@ -64,3 +64,5 @@ export const singleOrDefault = <T extends any[]>(values: T): T[number] | undefin
 }
 
 export { z } from "zod";
+
+export const cookieAuthKey = 'app-auth'

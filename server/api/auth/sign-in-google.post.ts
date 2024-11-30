@@ -94,7 +94,7 @@ const generateUserToken = async (
 export const signInUser = (
     event: H3Event<EventHandlerRequest>,
     token: string) => {
-    setCookie(event, 'app-auth', token, {
+    setCookie(event, cookieAuthKey, token, {
         httpOnly: false,
         secure: true,
         sameSite: 'lax',
