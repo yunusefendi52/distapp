@@ -13,7 +13,7 @@ setup('authenticate', async ({ page }) => {
         sameSite: 'Lax',
         path: '/',
         domain: domain,
-        expires: -1,
+        expires: 90 * 86400,
     }])
 
     await page.context().storageState({ path: authFile });
