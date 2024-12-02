@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
     const androidManifestApk = Buffer.from(base64, 'base64')
     const manifestParser = new ManifestParser(androidManifestApk, {}).parse()
     const packageMetadata = {
-        versionCode: manifestParser.versionCode,
+        versionCode: `${manifestParser.versionCode}`,
         versionName: manifestParser.versionName,
         packageName: manifestParser.package,
     }
