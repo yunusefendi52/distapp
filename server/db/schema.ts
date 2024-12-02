@@ -93,6 +93,7 @@ export const appsRelations = relations(apps, r => ({
 export const artifacts = sqliteTable('artifacts', {
     id: text('id').primaryKey().unique(),
     fileObjectKey: text('fileObjectKey').notNull(),
+    fileObjectApkKey: text('file_object_apk_key'),
     // versionName: text('fileObjectKey').notNull().default(''),
     // versionCode: text('fileObjectKey').notNull().default(''),
     versionName2: text('versionName2').notNull(),

@@ -316,6 +316,13 @@
       "when": 1732639777763,
       "tag": "0044_black_namora",
       "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "6",
+      "when": 1733156788800,
+      "tag": "0045_nostalgic_rafael_vega",
+      "breakpoints": true
     }
   ]
 }

@@ -14,32 +14,62 @@ export const myFetch = ofetch.create({
     }
 })
 
+export type UploadArtifactResponse = {
+    url: string,
+    fileKey: string,
+    apkUrl: {
+        apkSignedUrl: string,
+        apkFileKey: string,
+    } | undefined
+}
+
 export async function uploadArtifact(
     file: File | Buffer | ArrayBuffer | string | Blob,
     orgName: string,
     appName: string,
     releaseNotes: string | null,
+    fileApk: File | Buffer | ArrayBuffer | string | Blob | undefined,
 ) {
     const packageMetadata = await readPackageFile(file)
-    const { url, fileKey } = await myFetch<{ url: string, fileKey: string, }>('/api/artifacts/upload-artifact', {
+    if (!packageMetadata) {
+        throw 'Cannot read package file'
+    }
+    const { url, fileKey, apkUrl } = await myFetch<UploadArtifactResponse>('/api/artifacts/upload-artifact', {
         method: 'post',
         body: {
             orgName: orgName,
             appName: appName,
+            hasFileApk: fileApk ? true : false,
         },
         onResponseError(r) {
             console.error('Error ', r.error)
         },
     })
-    await myFetch(url, {
-        method: 'put',
-        body: file,
-        redirect: "follow",
-    })
+    async function uploadUrl() {
+        await myFetch(url, {
+            method: 'put',
+            body: file,
+            redirect: "follow",
+        })
+    }
+    async function uploadApkUrl() {
+        if (fileApk) {
+            if (!apkUrl) {
+                console.error('Something happen apkUrl is null')
+            }
+            await myFetch(apkUrl!.apkSignedUrl, {
+                method: 'put',
+                body: fileApk,
+                redirect: 'follow'
+            })
+        }
+    }
+    await Promise.all([uploadUrl(), uploadApkUrl()])
     const data = await myFetch('/api/artifacts/upload-artifact-url', {
         method: 'post',
         body: {
             fileKey,
+            apkFileKey: apkUrl?.apkFileKey,
             appName: appName,
             orgName: orgName,
             releaseNotes: releaseNotes ? releaseNotes : undefined,

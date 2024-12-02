@@ -46,7 +46,7 @@ async function start() {
         console.log("Distributing", {
             filePath,
         })
-        await uploadArtifact(file, orgName, appName, values.releaseNotes ? values.releaseNotes : null)
+        await uploadArtifact(file, orgName, appName, values.releaseNotes ? values.releaseNotes : null, undefined)
         console.log('Finished Distributing', {
             filePath,
         })

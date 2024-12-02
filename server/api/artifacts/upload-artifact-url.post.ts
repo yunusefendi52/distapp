@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const packageData = packageMetadata as {
-        versionCode: number,
+        versionCode: string,
         versionName: string,
         packageName: string,
         extension: string,

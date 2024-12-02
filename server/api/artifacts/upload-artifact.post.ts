@@ -40,9 +40,10 @@ export async function findApiKey(
 
 export default defineEventHandler(async (event) => {
     const db = event.context.drizzle
-    const { orgName, appName } = await readValidatedBody(event, z.object({
+    const { orgName, appName, hasFileApk } = await readValidatedBody(event, z.object({
         appName: z.string().trim().min(1).max(128),
         orgName: z.string().trim().min(1).max(128),
+        hasFileApk: z.boolean().default(false),
     }).parse)
 
     var orgId: string
@@ -100,9 +101,14 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    const { fileKey, signedUrl } = await generateSignedUrlUpload(event, orgId, appId)
+    const { fileKey, signedUrl } = await generateSignedUrlUpload(orgId, appId)
+    const apkUrl = hasFileApk ? await generateSignedUrlUpload(orgId, appId) : undefined
     return {
         fileKey,
         url: signedUrl,
-    }
+        apkUrl: apkUrl ? {
+            apkSignedUrl: apkUrl.signedUrl,
+            apkFileKey: apkUrl.fileKey,
+        } : undefined,
+    } satisfies UploadArtifactResponse
 })

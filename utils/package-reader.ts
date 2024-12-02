@@ -51,9 +51,12 @@ export const readPackageFile = async (data: File | Buffer | ArrayBuffer | string
     const androidManifestAabString = await fileZip.folder('base/manifest')?.file('AndroidManifest.xml')?.async('binarystring')
     if (androidManifestAabString) {
         extension = 'aab'
-        const versionCode = androidManifestAabString.match(/versionCode.*?(?=\")/g)?.toString().replaceAll('versionCode\x1A\x02', '')
-        const versionName = androidManifestAabString.match(/versionName.*?(?=\()/g)?.toString().replaceAll('versionName\x1A\x05', '')
-        const packageName = androidManifestAabString.match(/package.*?(?=\")/g)?.toString().replaceAll('package\x1A\x13', '')
+        const versionCode = androidManifestAabString.match(/versionCode.*?(?=\")/g)?.toString()
+            .replaceAll('versionCode\x1A\x02', '').replaceAll('versionCode', '').trim().replaceAll('\x1A\x03', '').trim()
+        const versionName = androidManifestAabString.match(/versionName.*?(?=\()/g)?.toString()
+            .replaceAll('versionName\x1A\x05', '').replaceAll('versionName', '').trim().replaceAll('\x1A\x06', '').trim()
+        const packageName = androidManifestAabString.match(/package.*?(?=\")/g)?.toString()
+            .replaceAll('package\x1A\x13', '').replaceAll('package', '').trim().replaceAll('\x1A', '').trim()
         packageMetadata = {
             versionCode: versionCode!,
             versionName: versionName!,
@@ -63,10 +66,10 @@ export const readPackageFile = async (data: File | Buffer | ArrayBuffer | string
     if (!packageMetadata) {
         return undefined
     }
-
+    const versionCodeNorm = packageMetadata?.versionCode?.match(/\d+/g)?.join('') ?? ''
     const packageDetail = {
         versionName: packageMetadata?.versionName!,
-        versionCode: parseInt(packageMetadata?.versionCode!),
+        versionCode: versionCodeNorm,
         extension: extension,
         packageName: packageMetadata.packageName,
     }
