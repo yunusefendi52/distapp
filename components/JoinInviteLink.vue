@@ -2,7 +2,7 @@
     <Dialog v-model:visible="model" modal header="Join Invite Code" :style="{ width: '25rem' }">
         <form @submit="joinInvite">
             <div class="flex items-center gap-2 mb-3">
-                <label for="username">Link</label>
+                <label for="username">Code</label>
                 <InputText name="link" class="flex-auto" autocomplete="off" autofocus />
             </div>
             <div class="w-full">
