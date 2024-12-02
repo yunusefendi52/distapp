@@ -73,35 +73,34 @@ const upperCase = (value: string | null | undefined) => {
 <template>
     <div>
         <AppBarContainer>
-            <div class="flex flex-row items-center gap-2 sm:flex-1">
-                <div class="flex-1 flex gap-3 items-center">
-                    <AppTitle title="Apps" />
-                    <ProgressSpinner style="width: 22px; height: 22px; margin: unset;" strokeWidth="6"
-                        v-if="status === 'pending'" />
+            <div class="flex flex-col md:flex-row gap-2">
+                <div class="flex flex-row items-center gap-2 flex-1">
+                    <div class="flex-1 flex gap-2 items-center">
+                        <AppTitle title="Apps" />
+                        <ProgressSpinner style="width: 22px; height: 22px; margin: unset;" strokeWidth="6"
+                            v-if="status === 'pending'" />
+                    </div>
+                    <div>
+                        <NuxtLink :to="{
+                            name: 'orgs-orgName-settings',
+                            params: {
+                                orgName: orgNameParam?.toString() ?? '',
+                            },
+                        }" v-if="isOrg">
+                            <Button icon="pi pi-cog" outlined aria-label="Settings" />
+                        </NuxtLink>
+                    </div>
                 </div>
-                <div>
-                    <NuxtLink :to="{
-                        name: 'orgs-orgName-settings',
-                        params: {
-                            orgName: orgNameParam?.toString() ?? '',
-                        },
-                    }" v-if="isOrg">
-                        <Button icon="pi pi-cog" outlined aria-label="Settings" />
-                    </NuxtLink>
-                </div>
-            </div>
-            <div class="flex flex-col sm:flex-row gap-3">
-                <form @submit="search" class="flex-1 flex-shrink-0">
-                    <IconField iconPosition="left" styl>
-                        <InputIcon class="pi pi-search"> </InputIcon>
-                        <InputText style="width: 100%;" placeholder="Search" name="search" />
-                    </IconField>
-                </form>
-                <div class="flex-shrink flex flex-row gap-2">
-                    <template v-if="!isOrg">
+                <div class="flex flex-row gap-3 items-center">
+                    <form @submit="search" class="flex-1 flex-shrink-0">
+                        <IconField iconPosition="left" styl>
+                            <InputIcon class="pi pi-search"> </InputIcon>
+                            <InputText style="width: 100%;" placeholder="Search" name="search" />
+                        </IconField>
+                    </form>
+                    <div class="flex-shrink flex flex-row gap-2">
                         <Button label="Add App" @click="addApp"></Button>
-                    </template>
-                    <Button label="Add App" @click="addApp" v-else></Button>
+                    </div>
                 </div>
             </div>
         </AppBarContainer>

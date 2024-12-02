@@ -1,17 +1,19 @@
 <template>
     <AppBarContainer>
-        <div class="flex flex-row flex-1 gap-2 items-center">
-            <AppTitle :title="detailApp.data.value?.displayName" />
-            <div v-if="status === 'pending'">
-                <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" />
+        <div class="flex flex-row items-center">
+            <div class="flex flex-row flex-1 gap-2 items-center">
+                <AppTitle :title="detailApp.data.value?.displayName" />
+                <div v-if="status === 'pending'">
+                    <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" />
+                </div>
             </div>
+            <NuxtLink :to="{
+                name: 'orgs-orgName-apps-appId-settings',
+                params: params,
+            }">
+                <Button icon="pi pi-cog" outlined />
+            </NuxtLink>
         </div>
-        <NuxtLink :to="{
-            name: 'orgs-orgName-apps-appId-settings',
-            params: params,
-        }">
-            <Button icon="pi pi-cog" outlined />
-        </NuxtLink>
     </AppBarContainer>
     <div class="flex-1 flex flex-col gap-3">
         <TabMenu :activeIndex="activeTabIndex" :model="items" class="px-4 pt-2" />

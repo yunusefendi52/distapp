@@ -1,6 +1,6 @@
 <template>
     <LazyAppDrawerButton />
-    <span class="text-2xl font-bold">{{ props.title }}</span>
+    <span class="text-2xl font-bold py-2">{{ props.title }}</span>
 </template>
 
 <script setup lang="ts">
