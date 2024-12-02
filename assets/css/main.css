@@ -81,9 +81,9 @@ body {
 }
 
 .bg-color {
-    background-color: var(--p-surface-50);
+    background: var(--p-surface-50);
 }
 
 .appdark .bg-color {
-    background-color: rgb(25, 25, 25);
+    background: rgb(25, 25, 25);
 }

@@ -30,7 +30,7 @@ const joined = () => {
                 <LazyAppDrawer />
             </template>
         </Drawer>
-        <LazyAppDrawer style="width: 300px;" class="hidden sm:inline-flex" />
+        <LazyAppDrawer style="width: 300px;" class="hidden sm:inline-flex bg-color" />
         <AppDivider orientation="vertical" class="hidden sm:inline-flex" />
         <div class="flex-1 overflow-auto layout-content">
             <slot />

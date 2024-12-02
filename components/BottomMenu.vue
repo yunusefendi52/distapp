@@ -1,6 +1,5 @@
 <template>
     <div class="flex gap-3 p-2 flex-col justify-stretch">
-        <Button icon="pi pi-moon" outlined @click="switchTheme" />
         <Button label="Join Invite Code" @click="joinDialog = true" outlined />
         <SplitButton :pt="{
             pcButton: {
@@ -67,6 +66,4 @@ if (process.client) {
         ]
     })
 }
-
-const { switchTheme } = useAppTheme()
 </script>

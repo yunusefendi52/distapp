@@ -2,7 +2,7 @@
     <div class="mb-16">
         <header class="">
             <nav class="flex w-full items-center">
-                <AppHeader />
+                <AppHeader class="flex-1" />
             </nav>
         </header>
 
