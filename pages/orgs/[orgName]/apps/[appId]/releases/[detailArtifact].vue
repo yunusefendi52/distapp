@@ -6,8 +6,7 @@
                 <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" />
             </div>
         </div>
-        <Button :loading="isDownloading" label="Download"
-            @click="() => download(releaseId, undefined)"></Button>
+        <Button :loading="isDownloading" label="Download" @click="() => download(releaseId, undefined)"></Button>
     </AppBarContainer>
     <ConfirmPopup></ConfirmPopup>
     <!-- <div>{{ detailArtifact }}</div> -->
@@ -17,7 +16,7 @@
                 <span class="text-sm">Release Id {{ detailArtifact?.releaseId }}</span>
                 <span class="font-semibold text-xl">Version {{ detailArtifact?.versionName2 }} ({{
                     detailArtifact?.versionCode2
-                }})</span>
+                    }})</span>
                 <span class="text-lg">{{ formatDate(detailArtifact?.createdAt) }}</span>
             </div>
             <Button :loading="isPending" @click="confirmDelete($event)" icon="pi pi-trash" label="Delete"
@@ -33,11 +32,11 @@
         </div>
         <div class="flex flex-col gap-2">
             <span class="font-semibold">Groups</span>
-            <div class="flex flex-row">
-                <MultiSelect v-model="selectedGroup" display="chip" :options="groups"
+            <div class="flex flex-col md:flex-row gap-2 items-center">
+                <MultiSelect class="w-full md:max-w-[24rem]" v-model="selectedGroup" display="chip" :options="groups"
                     :optionLabel="(w) => w.displayName || w.name" placeholder="Select Groups" filter />
-                <Button class="ml-3" @click="() => saveGroups()" :loading="saveGroupsStatus == 'pending'"
-                    label="Update Groups" />
+                <Button class="w-full md:w-[11rem]" @click="() => saveGroups()" :loading="saveGroupsStatus == 'pending'"
+                    label="Update Groups" outlined />
             </div>
         </div>
         <div class="flex flex-col gap-2">
@@ -52,7 +51,23 @@
     </div>
 </template>
 
+<style>
+.p-multiselect {
+    min-width: 17rem;
+}
+
+.p-multiselect-label {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.p-multiselect-token {
+    margin: 0.1rem;
+}
+</style>
+
 <script setup lang="ts">
+import { formatDate, formatBytes } from '#imports'
 import { UpdateGroupsRequest } from '~/server/api/update-artifact-groups.put';
 
 const { params } = useRoute()
@@ -89,7 +104,7 @@ watchEffect(() => {
     selectedGroup.value = detailArtifact.value?.groups.map(e => e.artifactsGroups) ?? []
 })
 const { execute: saveGroups, status: saveGroupsStatus } = useAsyncData(() => {
-    return $fetch('/api/update-artifact-groups', {
+    return $fetch.raw('/api/update-artifact-groups', {
         body: {
             artifactId: detailArtifact.value?.id ?? '',
             groupIds: selectedGroup.value?.map(e => e.id) ?? [],
