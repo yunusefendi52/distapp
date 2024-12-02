@@ -1,5 +1,6 @@
 <template>
-    <Button class="mr-3" :icon="appTheme === 'appdark' ? 'pi pi-sun' : 'pi pi-moon'" outlined @click="switchTheme" text />
+    <Button class="mr-3" :icon="appTheme === 'appdark' ? 'pi pi-moon' : 'pi pi-sun'" outlined @click="switchTheme"
+        text />
 </template>
 
 <script setup lang="ts">
