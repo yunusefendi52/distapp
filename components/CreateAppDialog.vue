@@ -51,7 +51,7 @@ const {
 </script>
 
 <template>
-    <form @submit.prevent="saveApp">
+    <form data-testid="createAppDialogForm" @submit.prevent="saveApp">
         <div class="flex flex-col gap-3">
             <div class="flex flex-col gap-2">
                 <label>Organization</label>
@@ -59,8 +59,8 @@ const {
                     :disabled="disableOrg" placeholder="Select organization">
                     <template #footer>
                         <div class="px-2 pb-2">
-                            <Button label="Add New" fluid severity="secondary" text size="small" icon="pi pi-plus"
-                                @click="() => addOrgVisible = true" />
+                            <Button data-testid="addNewOrgbtn" label="Add New" fluid severity="secondary" text
+                                size="small" icon="pi pi-plus" @click="() => addOrgVisible = true" />
                         </div>
                     </template>
                 </Select>
@@ -71,7 +71,7 @@ const {
             </div>
             <div class="flex flex-col gap-2">
                 <label>App Name</label>
-                <InputText v-model="appName"></InputText>
+                <InputText data-testid="inputAppName" v-model="appName"></InputText>
             </div>
             <Button label="Save" class="mt-3" :loading="isPending" type="submit" />
         </div>
@@ -81,7 +81,7 @@ const {
         <form @submit.prevent="saveOrg">
             <div class="flex flex-col gap-3 w-25rem">
                 <InputText data-testid="orgname" name="name" v-model="orgNameRef"></InputText>
-                <Button label="Save" type="submit" :loading="isPendingOrg"></Button>
+                <Button data-testid="orgsavebtn" label="Save" type="submit" :loading="isPendingOrg"></Button>
             </div>
         </form>
     </Dialog>
