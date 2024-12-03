@@ -30,7 +30,7 @@ export default defineEventHandler(async event => {
 })
 
 export function getLocalAuths(localAuths: string): { username: string, password: string }[] {
-    return localAuths.split(';').map(e => {
+    return localAuths.split(':').map(e => {
         const s = e.split('=')
         return {
             username: s[0],

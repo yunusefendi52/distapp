@@ -18,6 +18,11 @@ jobs:
   
 
     # E2E tests
+    - name: Install minio
+      run: |
+        wget https://dl.min.io/server/minio/release/linux-amd64/archive/minio_20241107005220.0.0_amd64.deb -O minio.deb
+        sudo dpkg -i minio.deb
+    - run: curl --proto '=https' --tlsv1.2 -LsSf https://github.com/tursodatabase/libsql/releases/download/libsql-server-v0.24.28/libsql-server-installer.sh | sh
     - name: Get installed Playwright version
       id: playwright-version
       run: |
@@ -36,5 +41,6 @@ jobs:
     - name: Setup e2e env
       run: echo "${{ secrets.ENV_TESTS_BASE64 }}" | base64 --decode >> .env
     - run: bun run e2e
+
     - name: Deploy
       run: curl -X POST https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/344ca361-b2d3-48e6-b896-ffa2dd1e9a1b

@@ -8,7 +8,7 @@
             <form class="w-full flex flex-col gap-3" v-if="LOCAL_AUTH_ENABLED" @submit.prevent="(e) => signInAuth(e)">
                 <InputText required name="username" placeholder="Username" fluid />
                 <InputText required name="password" placeholder="Password" type="password" fluid />
-                <Button type="submit" label="Sign In" :loading="isPending" />
+                <Button type="submit" data-testid="sign_in_btn" label="Sign In" :loading="isPending" />
             </form>
             <AppDivider :orientation="'horizontal'" v-if="LOCAL_AUTH_ENABLED" />
             <div class="w-full flex justify-center" style="color-scheme: auto;">

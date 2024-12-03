@@ -15,7 +15,8 @@
     "drizzle:generate": "drizzle-kit generate",
     "drizzle:migrate": "bun run server/db/migrate.ts",
     "deploy": "bun run build --preset=cloudflare-pages && npx wrangler pages deploy dist/",
-    "e2e": "NODE_OPTIONS=--require=dotenv/config playwright test",
+    "e2e": "playwright test",
+    "e2e-ui": "bun run e2e --ui-port=8080 --ui-host=127.0.0.1",
     "tests": "vitest test",
     "build-cli": "bun build cli/cli.ts --target node > cli/cli.mjs"
   },

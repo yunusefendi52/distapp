@@ -1,13 +1,12 @@
-import { fileURLToPath } from 'node:url'
 import { defineConfig, devices } from '@playwright/test'
 import type { ConfigOptions } from '@nuxt/test-utils/playwright'
 
 export default defineConfig<ConfigOptions>({
     webServer: {
-        command: 'bun run dev',
+        command: './setup-test.sh',
         url: 'http://localhost:3000',
         reuseExistingServer: !process.env.CI,
-        stdout: 'ignore',
+        stdout: 'pipe',
         stderr: 'pipe',
     },
     use: {
@@ -20,9 +19,10 @@ export default defineConfig<ConfigOptions>({
         timeout: 12000,
     },
     projects: [
-        { name: 'Setup', testMatch: '**/*.setup.mts' },
+        { name: 'setup', testMatch: '**/*.setup.mts' },
         {
             name: 'Chromium',
+            dependencies: ['setup'],
             use: {
                 ...devices['Desktop Chrome'],
                 storageState: 'playwright/.auth/user.json',

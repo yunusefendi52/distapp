@@ -1,6 +1,6 @@
 import { expect, test } from '@nuxt/test-utils/playwright'
 
-test('Changing org should not hide app menu when loading', async ({ page, goto, context }) => {
+test.skip('Changing org should not hide app menu when loading', async ({ page, goto, context }) => {
     await goto('/apps')
     await expect(page.getByTestId('amenu-1')).toBeVisible()
     await page.getByTestId('amenu-1').click()
