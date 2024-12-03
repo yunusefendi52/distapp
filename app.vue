@@ -9,12 +9,27 @@
 </template>
 
 <script setup lang="ts">
+const toast = useToast()
+
 const { appTheme } = useAppTheme()
 useHead({
     htmlAttrs: {
         class: [appTheme],
     },
     title: 'DistApp',
+})
+
+globalThis.$fetch = globalThis.$fetch.create({
+    onResponseError(response) {
+        if (!response.response.ok) {
+            toast.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: normalizeError(response),
+                life: 3000,
+            })
+        }
+    }
 })
 </script>
 

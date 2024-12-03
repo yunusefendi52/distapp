@@ -20,7 +20,7 @@ const cookie = useCookie(cookieAuthKey)
 const cookiePayload = cookie.value ? decodeJwt(cookie.value) : undefined
 const userEmail = cookiePayload?.email?.toString()
 const signout = () => {
-    if (process.client) {
+    if (import.meta.client) {
         const userTokens = useLocalStorage<UserTokenInfo[]>(userTokensKey, [])
         try {
             if (cookie.value) {
@@ -30,7 +30,7 @@ const signout = () => {
         } catch (e) {
             console.error('Error decode on signout', e)
         }
-        cookie.value = userTokens.value.find(e => new Boolean(e))?.token
+        cookie.value = userTokens.value.find(e => e ? true : false)?.token
         navigateTo({
             name: 'index',
         })
