@@ -61,6 +61,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-08-20',
   devtools: { enabled: true },
   ssr: false,
+  spaLoadingTemplate: true,
   runtimeConfig: {
     app: {
       enableDrizzleLogging: true,
