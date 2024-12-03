@@ -1,5 +1,6 @@
 import { readPackageFile } from '@/utils/package-reader.js'
 import { ofetch } from 'ofetch'
+import { normalizeError } from '~/utils/showErrorAlert.js'
 
 var myFetchApiKey: string
 export function updateMyFetchApiKey(value: string) {
@@ -42,7 +43,7 @@ export async function uploadArtifact(
             hasFileApk: fileApk ? true : false,
         },
         onResponseError(r) {
-            console.error('Error ', r.error)
+            console.error('Error ', normalizeError(r))
         },
     })
     async function uploadUrl() {
