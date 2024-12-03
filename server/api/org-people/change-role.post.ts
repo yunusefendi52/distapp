@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
     const currentUserId = event.context.auth.userId
     const { roleId, email, orgName } = await readValidatedBody(event, z.object({
         roleId: z.enum(["admin", "collaborator"]),
-        email: z.string().email(),
+        email: z.string().min(1).max(128),
         orgName: z.string().trim().min(1),
     }).parse)
 

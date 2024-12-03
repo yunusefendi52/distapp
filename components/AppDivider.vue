@@ -1,5 +1,5 @@
 <template>
-    <div :class="orientation === 'vertical' ? 'h-full' : 'w-full'" style="background: var(--p-datatable-border-color);"
+    <div :class="orientation === 'vertical' ? 'h-full' : 'w-full'" style="background: var(--p-content-border-color);"
         :style="{
             height: orientation === 'vertical' ? null : '1px',
             width: orientation === 'vertical' ? '1px' : null,

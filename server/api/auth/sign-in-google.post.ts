@@ -32,7 +32,7 @@ export default defineEventHandler(async event => {
     }
 })
 
-const generateUserToken = async (
+export const generateUserToken = async (
     event: H3Event<EventHandlerRequest>,
     signInProvider: string,
     userId: string,

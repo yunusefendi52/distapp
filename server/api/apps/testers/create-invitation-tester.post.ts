@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
         orgName: z.string().max(128),
         appName: z.string().max(128),
         groupName: z.string().max(128),
-        email: z.string().email(),
+        email: z.string().min(1).max(128),
     }).parse)
     email = email.trim()
 

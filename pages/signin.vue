@@ -5,6 +5,12 @@
                 <AppIcon class="h-12 fill-black dark:fill-white" />
                 <span class="text-3xl font-semibold text-center">DistApp</span>
             </div>
+            <form class="w-full flex flex-col gap-3" v-if="LOCAL_AUTH_ENABLED" @submit.prevent="(e) => signInAuth(e)">
+                <InputText required name="username" placeholder="Username" fluid />
+                <InputText required name="password" placeholder="Password" type="password" fluid />
+                <Button type="submit" label="Sign In" :loading="isPending" />
+            </form>
+            <AppDivider :orientation="'horizontal'" v-if="LOCAL_AUTH_ENABLED" />
             <div class="w-full flex justify-center" style="color-scheme: auto;">
                 <GoogleSignInButton @success="handleLoginSuccess" @error="handleLoginError"></GoogleSignInButton>
             </div>
@@ -19,6 +25,12 @@ import {
     type CredentialResponse,
 } from "vue3-google-signin";
 
+function handleSuccessSignIn(r: { param: string } | undefined) {
+    if (r) {
+        location.href = `/?${r.param}`
+    }
+}
+
 const handleLoginSuccess = async (response: CredentialResponse) => {
     const r = await $fetch('/api/auth/sign-in-google', {
         method: 'post',
@@ -26,10 +38,8 @@ const handleLoginSuccess = async (response: CredentialResponse) => {
             token: response.credential,
         },
     })
-    if (r) {
-        location.href = `/?${r.param}`
-    }
-};
+    handleSuccessSignIn(r)
+}
 
 const handleLoginError = () => {
     console.error("Login failed");
@@ -51,6 +61,26 @@ if (!isAddAccount.value) {
         })
     }
 }
+
+const { public: { LOCAL_AUTH_ENABLED } } = useRuntimeConfig()
+
+const { mutate: signInAuth, isPending } = useMutation({
+    mutationFn: async (r: any) => {
+        if (!LOCAL_AUTH_ENABLED) {
+            return
+        }
+
+        const request = getObjectForm(r)
+        await $fetch.raw('/api/auth/sign-in-auth', {
+            method: 'post',
+            body: request,
+        }).then(e => {
+            if (e.ok) {
+                handleSuccessSignIn(e._data)
+            }
+        })
+    },
+})
 </script>
 
 <style scoped>

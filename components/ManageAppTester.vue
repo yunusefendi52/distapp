@@ -4,7 +4,7 @@
             <AppCard class="flex flex-col gap-1 justify-stretch !p-2">
                 <form @submit.prevent="mutate">
                     <div class="flex flex-row gap-2">
-                        <InputText class="flex-1" name="email" placeholder="Email" type="email" size="small" />
+                        <InputText class="flex-1" name="email" placeholder="Email" size="small" />
                         <Button label="Create Invitation" size="small" :loading="isPending" type="submit" />
                     </div>
                     <div class="flex flex-row gap-2 mt-2 items-center" v-if="data">

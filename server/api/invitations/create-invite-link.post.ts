@@ -3,7 +3,7 @@ import { generateTokenWithOptions } from "~/server/utils/token-utils"
 export default defineEventHandler(async (event) => {
     var { orgName, email } = await readValidatedBody(event, z.object({
         orgName: z.string().max(128),
-        email: z.string().email(),
+        email: z.string().min(1).max(128),
     }).parse)
     email = email.trim()
     if (!email) {

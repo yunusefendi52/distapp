@@ -13,13 +13,22 @@
 
 html,
 body {
+    --p-content-border-color: var(--p-surface-200);
+}
+
+.appdark html,
+.appdark body {
+    --p-content-border-color: var(--p-surface-800);
+}
+
+html,
+body {
     --p-datatable-header-cell-background: transparent;
     --p-datatable-row-background: transparent;
     font-family: 'Inter';
     font-size: 15px;
 
     --p-tabmenu-active-bar-height: 2.5px;
-    --p-content-border-color: var(--p-datatable-border-color);
     --p-tabmenu-item-color: var(--p-text-color);
 
     word-break: break-word;
@@ -30,7 +39,7 @@ body {
 }
 
 .p-datatable-table-container {
-    border: 1px var(--p-datatable-border-color) solid;
+    border: 1px var(--p-content-border-color) solid;
     border-radius: var(--p-border-radius-md);
 }
 
@@ -43,7 +52,7 @@ body {
 }
 
 .p-divider-vertical.divider-app::before {
-    border-left: 1px solid var(--p-datatable-border-color);
+    border-left: 1px solid var(--p-content-border-color);
     left: unset !important;
 }
 
@@ -52,7 +61,7 @@ body {
 }
 
 .p-divider-horizontal.divider-app::before {
-    border-top: 1px solid var(--p-datatable-border-color);
+    border-top: 1px solid var(--p-content-border-color);
     left: unset !important;
 }
 
@@ -61,7 +70,7 @@ body {
 }
 
 .card {
-    border: 1px var(--p-datatable-border-color) solid;
+    border: 1px var(--p-content-border-color) solid;
     border-radius: var(--p-border-radius-md);
     padding: 15px;
 }

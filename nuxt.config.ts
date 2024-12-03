@@ -67,20 +67,16 @@ export default defineNuxtConfig({
       limitUploadSizeMb: 120,
       apiAuthKey: '',
     },
+    LOCAL_AUTHS: '',
     JWT_KEY: '',
     DB_URL: '',
     DB_AUTH_TOKEN: '',
     S3_ENDPOINT: '',
     S3_ACCESS_KEY_ID: '',
     S3_SECRET_ACCESS_KEY: '',
-    adminKey: {
-      key: '' // generate using openssl
-    },
     public: {
       GOOGLE_CLIENT_ID: '',
-      adminKey: {
-        enable: true,
-      },
+      LOCAL_AUTH_ENABLED: false,
     },
   },
 
