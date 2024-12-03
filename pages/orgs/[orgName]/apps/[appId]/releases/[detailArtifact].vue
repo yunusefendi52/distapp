@@ -54,21 +54,6 @@
     </div>
 </template>
 
-<style>
-.p-multiselect {
-    min-width: 17rem;
-}
-
-.p-multiselect-label {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.p-multiselect-token {
-    margin: 0.1rem;
-}
-</style>
-
 <script setup lang="ts">
 import { formatDate, formatBytes } from '#imports'
 import { UpdateGroupsRequest } from '~/server/api/update-artifact-groups.put';

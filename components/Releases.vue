@@ -36,11 +36,16 @@
             </template>
         </DataTable>
     </div>
+    <AppFileUpload v-model="showUpload" :dataProps="props" @on-success="() => {
+        showUpload = false
+        refresh()
+    }" />
 </template>
 
 <script setup lang="ts">
 import AppFileUpload from './AppFileUpload.vue';
 import { DataTableRowClickEvent } from 'primevue/datatable';
+import { formatDate } from '#imports';
 
 const props = defineProps<{
     orgName: string,
@@ -69,29 +74,12 @@ const { data, refresh } = useFetch('/api/artifacts/list-artifacts', {
 })
 const list = computed(() => data.value)
 
-const dialog = useDialog();
-
+const showUpload = ref(false)
 const upload = () => {
     if (!props.osType) {
         return
     }
-
-    dialog.open(AppFileUpload, {
-        props: {
-            modal: true,
-            header: 'Upload',
-            closeOnEscape: false,
-        },
-        data: {
-            props,
-            groupName: props.groupName,
-        },
-        onClose: (o) => {
-            if (o?.data?.success) {
-                refresh()
-            }
-        }
-    })
+    showUpload.value = true
 }
 
 const selectRow = async (row: DataTableRowClickEvent) => {

@@ -1,37 +1,48 @@
 <template>
-    <div class="flex flex-col gap-3" v-if="mimeTypeFromOsType">
-        <input class="p-2 border rounded-lg" ref="fileRef" type="file" :accept="mimeTypeFromOsType">
-        <div class="flex flex-col gap-2">
-            <label for="releasenotes">Release Notes</label>
-            <InputText id="releasenotes" v-model="releaseNotes" aria-describedby="releasenotes-help" />
+    <Drawer class="!w-[30rem]" position="right" header="Upload" v-model:visible="showUpload">
+        <div class="flex flex-col gap-3" v-if="mimeTypeFromOsType">
+            <div>
+                <InputFileUpload v-model="fileList" type="file" :accept="mimeTypeFromOsType" @change="checkFile" />
+            </div>
+            <div class="flex flex-col gap-2">
+                <label for="releasenotes">Release Notes</label>
+                <Textarea rows="4" id="releasenotes" v-model="releaseNotes" aria-describedby="releasenotes-help" />
+            </div>
+            <div class="flex flex-col gap-2">
+                <label for="releasenotes">Groups</label>
+                <MultiSelect v-model="selectedGroup" display="chip" :options="groups" optionLabel="name"
+                    placeholder="Select Groups" filter />
+            </div>
+            <Button class="self-end mt-4" :label="isPending ? 'Uploading...' : 'Upload'" @click="submit"
+                :loading="isPending" />
         </div>
-        <div class="flex flex-col gap-2">
-            <label for="releasenotes">Groups</label>
-            <MultiSelect v-model="selectedGroup" display="chip" :options="groups" optionLabel="name"
-                placeholder="Select Groups" filter />
-        </div>
-        <Button :label="isPending ? 'Uploading...' : 'Upload'" @click="submit" :loading="isPending" />
-    </div>
+    </Drawer>
 </template>
 
 <script setup lang="ts">
-import { UpdateGroupsRequest } from '~/server/api/update-artifact-groups.put';
+import { UpdateGroupsRequest } from '~/server/api/update-artifact-groups.put'
+
+const showUpload = defineModel<boolean>()
+const props = defineProps<{
+    dataProps: any,
+}>()
+const emit = defineEmits(['onSuccess'])
 
 const releaseNotes = ref<string | null>(null)
-const dialogRef = inject<any>('dialogRef');
-const osType = ref<OsType | null>(null)
-const prop = ref<any>(null)
-const orgName = ref<string>('')
-const appName = ref<string>('')
-prop.value = dialogRef.value.data.props
-osType.value = dialogRef.value.data.props.osType
-orgName.value = dialogRef.value.data.props.orgName
-appName.value = dialogRef.value.data.props.appName
-
-const groupName = computed(() => dialogRef.value.data.groupName)
+const osType = computed<OsType | null>(() => props.dataProps!.osType)
+const orgName = computed(() => props.dataProps!.orgName)
+const appName = computed(() => props.dataProps!.appName)
+const groupName = computed(() => props.dataProps.groupName)
 
 const mimeTypeFromOsType = computed(() => osType.value ? getMimeTypeFromosType(osType.value) : undefined)
-const fileRef = ref<HTMLInputElement | null>(null)
+const fileList = ref<FileList | undefined>()
+// const fileApkRef = ref<HTMLInputElement | null>(null)
+const showUploadFileApk = ref(false)
+const isFileAab = ref(false)
+function checkFile(event: Event) {
+    const input = event.target as HTMLInputElement
+    isFileAab.value = input.files?.item(0)?.name?.endsWith('.aab') || false
+}
 
 const { data: appGroups } = useFetch('/api/groups/list-groups', {
     query: {
@@ -52,8 +63,8 @@ watchEffect(() => {
 })
 
 const { mutateAsync, isPending } = useMutation({
-    mutationFn: async (file: File) => {
-        const { artifactId } = await onUpload(file, undefined)
+    mutationFn: async (param: { file: File, apkFile: File | undefined }) => {
+        const { artifactId } = await onUpload(param.file, param.apkFile)
         const groupIds = selectedGroup.value?.map(e => e.id) ?? []
         if (artifactId && groupIds && groupIds.length) {
             await $fetch('/api/update-artifact-groups', {
@@ -66,22 +77,24 @@ const { mutateAsync, isPending } = useMutation({
         }
     },
     onSuccess: () => {
-        if (fileRef.value) {
-            fileRef.value.value = ''
-            dialogRef.value.close({
-                success: true,
-            });
+        if (fileList.value) {
+            fileList.value = undefined
+            emit('onSuccess')
         }
     },
 })
 
 const submit = async () => {
-    const inputFile = fileRef.value as HTMLInputElement | null
-    const realFile = inputFile?.files && inputFile?.files.length ? inputFile.files[0] : undefined
+    const realFile = fileList.value?.length ? fileList.value[0] : undefined
     if (!realFile) {
         return
     }
-    mutateAsync(realFile)
+    // const inputApkFile = fileApkRef.value as HTMLInputElement | null
+    // const apkActualFile = inputApkFile?.files && inputApkFile?.files.length ? inputApkFile.files[0] : undefined
+    mutateAsync({
+        file: realFile,
+        apkFile: undefined,
+    })
 }
 
 const onUpload = async (file: File, apkFile: File | undefined) => {
