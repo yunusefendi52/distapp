@@ -32,9 +32,16 @@ export default defineEventHandler(async (event) => {
         }
       }
     }
-    catch (e) {
-      console.log(e)
+    catch (e: any) {
+      console.error(e)
       deleteCookie(event, cookieAuthKey)
+      if (e.code === 'ERR_JWS_SIGNATURE_VERIFICATION_FAILED') {
+        console.warn('Failed to verify jwt in auth, different key?')
+        const path = event.path
+        if (path !== '/') {
+          await sendRedirect(event, '/')
+        }
+      }
     }
   } else {
     console.log('user not logged in')
