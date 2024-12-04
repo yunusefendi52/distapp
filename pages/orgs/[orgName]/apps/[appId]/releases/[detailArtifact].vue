@@ -15,7 +15,7 @@
                 <span class="text-sm">Release Id {{ detailArtifact?.releaseId }}</span>
                 <span class="font-semibold text-xl">Version {{ detailArtifact?.versionName2 }} ({{
                     detailArtifact?.versionCode2
-                }})</span>
+                    }})</span>
                 <span class="text-lg">{{ formatDate(detailArtifact?.createdAt) }}</span>
             </div>
             <div class="flex flex-col gap-2 items-stretch">
@@ -111,7 +111,7 @@ const router = useRouter()
 const { mutate, isPending } = useMutation({
     mutationFn: (r) => {
         return $fetch.raw('/api/artifacts/delete-artifact', {
-            method: 'delete',
+            method: 'post',
             query: {
                 orgName,
                 appName,

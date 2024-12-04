@@ -70,8 +70,8 @@ const { mutate, data, isPending } = useMutation({
 
 const { mutate: deleteApiKeyApi } = useMutation({
     mutationFn: (r: any) => {
-        return $fetch('/api/api-keys/delete-api-key', {
-            method: 'delete',
+        return $fetch.raw('/api/api-keys/delete-api-key', {
+            method: 'post',
             query: {
                 orgName,
                 appName,

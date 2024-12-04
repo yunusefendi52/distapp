@@ -129,7 +129,7 @@ const { mutate: deleteRole, isPending: deleteRoleIsPending } = useMutation({
     mutationFn: async (req: any) => {
         const email = req.prop.data.email
         await $fetch('/api/org-people/remove-user-from-org', {
-            method: 'delete',
+            method: 'post',
             body: { email, orgName },
         })
         refresh()
