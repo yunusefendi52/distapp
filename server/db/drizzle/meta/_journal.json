@@ -323,6 +323,20 @@
       "when": 1733156788800,
       "tag": "0045_nostalgic_rafael_vega",
       "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "6",
+      "when": 1733353416715,
+      "tag": "0046_demonic_zemo",
+      "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "6",
+      "when": 1733353601093,
+      "tag": "0047_solid_cassandra_nova",
+      "breakpoints": true
     }
   ]
 }

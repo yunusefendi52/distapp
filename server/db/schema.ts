@@ -110,7 +110,7 @@ export const artifacts = sqliteTable('artifacts', {
     packageName: text('packageName'),
 
     appsId: text('appsId').references(() => apps.id, {
-        onDelete: 'cascade',
+        onDelete: 'set null',
     }),
 }, t => ({
     appsId_releaseId: unique().on(t.appsId, t.releaseId),
