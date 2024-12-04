@@ -46,6 +46,7 @@ const items = ref<MenuItem[]>([
 if (name === 'orgs-orgName-settings') {
     navigateTo({
         name: items.value[0].routeName,
+        replace: true,
     })
 }
 
