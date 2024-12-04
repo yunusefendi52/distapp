@@ -1,9 +1,11 @@
 <template>
-    <span class="text-lg">Do you really mean to delete this org? Type below "{{ orgName }}"</span>
+    <span class="text-lg">Do you really mean to delete this org? Type below "<span data-testid="org_name_span">{{
+        orgName
+            }}</span>"</span>
     <form ref="form" class="mt-5" action="/api/orgs/delete-org" method="get">
         <div class="flex flex-col gap-3 justify-start items-start">
-            <InputText name="orgName" placeholder='Here type your org id' required />
-            <Button type="submit" label="Delete" severity="danger" />
+            <InputText name="orgName" data-testid="orgName" placeholder='Here type your org id' required />
+            <Button type="submit" label="Delete" severity="danger" data-testid="deleteOrgBtn" />
         </div>
     </form>
 </template>
