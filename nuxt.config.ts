@@ -108,10 +108,6 @@ export default defineNuxtConfig({
     define: {
       global: {},
     },
-
-    optimizeDeps: {
-      noDiscovery: true,
-    },
   },
 
   app: {
