@@ -10,6 +10,7 @@ export default defineEventHandler(async (event) => {
         packageMetadata: z.any(),
     }).parse)
     var appId: string
+    var orgId: string
 
     const apiKey = getHeader(event, 'API-KEY')
     const db = event.context.drizzle
@@ -23,8 +24,9 @@ export default defineEventHandler(async (event) => {
         }
 
         const apiKeyPayload = await verifyToken(event, apiKey, apiAuthKey)
-        const { appsId } = await findApiKey(db, apiKeyPayload.id, orgName, appName)
+        const { appsId, organizationId } = await findApiKey(db, apiKeyPayload.id, orgName, appName)
         appId = appsId!
+        orgId = organizationId!
     } else {
         if (await roleEditNotAllowed(event, orgName)) {
             throw createError({
@@ -33,8 +35,9 @@ export default defineEventHandler(async (event) => {
             })
         }
 
-        const { userApp } = await getUserApp(event, orgName, appName)
+        const { userApp, userOrg } = await getUserApp(event, orgName, appName)
         appId = userApp.id
+        orgId = userOrg.org!.id
     }
 
     const packageData = packageMetadata as {
@@ -69,6 +72,7 @@ export default defineEventHandler(async (event) => {
         versionCode2: packageData?.versionCode?.toString()!,
         versionName2: packageData?.versionName!,
         appsId: appId,
+        organizationId: orgId,
         releaseNotes: releaseNotes,
         releaseId: newReleaseId,
         extension: packageData?.extension,

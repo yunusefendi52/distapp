@@ -1,0 +1,1 @@
+ALTER TABLE `artifacts` ALTER COLUMN "organizationId" TO "organizationId" text REFERENCES organizations(id) ON DELETE set null ON UPDATE no action;

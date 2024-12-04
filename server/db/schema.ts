@@ -112,6 +112,9 @@ export const artifacts = sqliteTable('artifacts', {
     appsId: text('appsId').references(() => apps.id, {
         onDelete: 'set null',
     }),
+    organizationId: text('organizationId').references(() => organizations.id, {
+        onDelete: 'set null',
+    }),
 }, t => ({
     appsId_releaseId: unique().on(t.appsId, t.releaseId),
 }))

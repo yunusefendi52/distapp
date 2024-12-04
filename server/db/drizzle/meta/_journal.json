@@ -337,6 +337,20 @@
       "when": 1733353601093,
       "tag": "0047_solid_cassandra_nova",
       "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "6",
+      "when": 1733354029190,
+      "tag": "0048_eager_vindicator",
+      "breakpoints": true
+    },
+    {
+      "idx": 49,
+      "version": "6",
+      "when": 1733354584990,
+      "tag": "0049_open_shockwave",
+      "breakpoints": true
     }
   ]
 }
