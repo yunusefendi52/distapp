@@ -11,12 +11,10 @@ export const getArtifactGroupFromPublicIdOrUser = async (event: H3Event<EventHan
             artifactsGroups: getTableColumns(tables.artifactsGroups),
             apps: getTableColumns(tables.apps),
             organizations: getTableColumns(tables.organizations),
-            organizationsPeople: getTableColumns(tables.organizationsPeople),
         })
             .from(tables.artifactsGroups)
             .leftJoin(tables.apps, eq(tables.apps.id, tables.artifactsGroups.appsId))
             .leftJoin(tables.organizations, eq(tables.organizations.id, tables.apps.organizationsId))
-            .leftJoin(tables.organizationsPeople, eq(tables.organizationsPeople.organizationId, tables.organizations.id))
             .leftJoin(tables.groupTester, eq(tables.groupTester.artifactGroupId, tables.artifactsGroups.id))
             .where(and(
                 usePublicId ? and(

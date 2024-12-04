@@ -70,8 +70,9 @@ const { data, status, error } = useFetch('/api/install/get-data', {
 })
 const artifacts = computed(() => data.value?.artifacts.map(e => e.artifacts!))
 
-useSeoMeta({
-    title: `DistApp - ${data.value?.app.name ?? ''}`,
+const title = computed(() => data.value?.app.displayName ? `Install ${data.value?.app.displayName ?? ''} - DistApp` : `DistApp`)
+useHead({
+    title: title,
 })
 
 const { download, isDownloading } = useDownloadArtifact(appName.toString(), orgName.toString())
