@@ -31,5 +31,7 @@ export default defineEventHandler(async (event) => {
             .where(eq(tables.organizations.id, org.id)),
     ])
 
-    await sendRedirect(event, '/apps')
+    return {
+        deleted: 1,
+    }
 })
