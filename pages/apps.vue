@@ -87,7 +87,7 @@ const upperCase = (value: string | null | undefined) => {
                                 orgName: orgNameParam?.toString() ?? '',
                             },
                         }" v-if="isOrg">
-                            <Button icon="pi pi-cog" outlined aria-label="Settings" />
+                            <Button icon="pi pi-cog" outlined aria-label="Settings" data-testid="settings_btn" />
                         </NuxtLink>
                     </div>
                 </div>

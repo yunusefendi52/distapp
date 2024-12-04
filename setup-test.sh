@@ -2,7 +2,7 @@
 
 dotenv() {
     set -a
-    [ -f .env ] && . .env.test
+    [ -f .env.test ] && . .env.test
     set +a
 }
 

@@ -38,8 +38,8 @@ test('Apps test', async ({ page, goto, context }) => {
 
     await test.step('User admin can delete org', async () => {
         await page.getByTestId('a_menus').getByText(orgName).click()
-        await page.getByLabel('Settings').click()
-        await page.getByLabel('Danger').click()
+        await page.getByTestId('settings_btn').click()
+        await page.getByRole('menuitem').nth(2).click()
         const orgId = await page.getByTestId('org_name_span').textContent()
         await page.getByTestId('orgName').fill(orgId!)
         await page.getByTestId('deleteOrgBtn').click()

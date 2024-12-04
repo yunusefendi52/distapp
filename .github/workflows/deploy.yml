@@ -38,8 +38,6 @@ jobs:
     - name: Install Playwright Browsers
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       run: bunx playwright install --with-deps
-    - name: Setup e2e env
-      run: echo "${{ secrets.ENV_TESTS_BASE64 }}" | base64 --decode >> .env
     - run: bun run e2e
 
     - name: Deploy
