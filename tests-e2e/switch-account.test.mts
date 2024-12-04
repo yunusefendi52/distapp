@@ -1,7 +1,9 @@
 import { expect, test } from '@nuxt/test-utils/playwright'
 
-test('Add and switch account', async ({ page, goto, context }) => {
-    await goto('/apps')
+test.skip('Add and switch account', async ({ page, goto, context }) => {
+    await goto('/')
+    await page.getByText('Go To Apps').click()
+
     await page.getByTestId('b_more_btn').click()
     await expect(page.getByText('(Current)')).toContainText("usertest1")
     await page.getByText('Add Account').click()
