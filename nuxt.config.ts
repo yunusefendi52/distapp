@@ -110,7 +110,7 @@ export default defineNuxtConfig({
     },
 
     optimizeDeps: {
-      exclude: process.env.WORKAROUND_FIX_BREAK_PLAYWRIGHT === '1' ? ['primevue'] : [],
+      noDiscovery: true,
     },
   },
 
