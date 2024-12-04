@@ -10,6 +10,7 @@ export default defineConfig<ConfigOptions>({
         stderr: 'pipe',
     },
     use: {
+        screenshot: 'only-on-failure',
         nuxt: {
             host: 'http://localhost:3000',
         },

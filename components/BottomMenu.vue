@@ -5,6 +5,12 @@
             pcButton: {
                 root: {
                     'class': 'w-full',
+                    'data-testid': 'b_sign_out_btn',
+                },
+            },
+            pcDropdown: {
+                root: {
+                    'data-testid': 'b_more_btn',
                 },
             },
         }" @click="signout" label="Sign Out" :model="items" menuButtonIcon="pi pi-ellipsis-h" outlined />
