@@ -9,7 +9,7 @@
                 <Textarea rows="4" id="releasenotes" v-model="releaseNotes" aria-describedby="releasenotes-help" />
             </div>
             <div class="flex flex-col gap-2">
-                <label for="releasenotes">Groups</label>
+                <label>Groups</label>
                 <MultiSelect v-model="selectedGroup" display="chip" :options="groups" optionLabel="name"
                     placeholder="Select Groups" filter />
             </div>
