@@ -1,7 +1,15 @@
 import { expect, test } from '@nuxt/test-utils/playwright'
 
-test.skip('Add and switch account', async ({ page, goto, context }) => {
+test.use({ storageState: { cookies: [], origins: [] } });
+
+test('Add and switch account', async ({ page, goto, context }) => {
     await goto('/')
+    await page.getByText('Get Started').click()
+    
+    await page.locator('[name="username"]').fill('usertest1')
+    await page.locator('[name="password"]').fill('a5756f781e0e433986364b82de545c3b')
+    await page.getByTestId('sign_in_btn').click()
+
     await page.getByText('Go To Apps').click()
 
     await page.getByTestId('b_more_btn').click()

@@ -56,7 +56,7 @@ const items = ref([{
         })
     }
 }])
-if (process.client) {
+if (import.meta.client) {
     const userTokens = useLocalStorage<UserTokenInfo[]>(userTokensKey, [])
     watchEffect(() => {
         items.value = [
