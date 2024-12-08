@@ -15,7 +15,7 @@ export class S3Fetch {
 
     async getSignedUrlGetObject(key: string, expiresIn: number, contentDisposition: string): Promise<string> {
         const { client, S3_ENDPOINT } = createAwsClient()
-        const signedUrl = await client.sign(`${S3_ENDPOINT}/${s3BucketName}/${key}?X-Amz-Expires=${expiresIn}&response-content-disposition=${contentDisposition}`, {
+        const signedUrl = await client.sign(`${S3_ENDPOINT}/${s3BucketName}/${key}?X-Amz-Expires=${expiresIn}&response-content-disposition=${contentDisposition}&response-content-type=application/octet-stream`, {
             aws: {
                 signQuery: true,
             },
