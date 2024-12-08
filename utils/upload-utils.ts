@@ -53,11 +53,14 @@ export async function uploadArtifact(
             redirect: "follow",
         })
     }
+    const generateBundleHeadless = fileApk === 'generate_bundle'
     async function uploadApkUrl() {
-        if (fileApk) {
-            if (!apkUrl) {
-                console.error('Something happen apkUrl is null')
-            }
+        if (!apkUrl) {
+            console.error('Something happen apkUrl is null')
+        }
+        if (generateBundleHeadless) {
+
+        } else if (fileApk) {
             await myFetch(apkUrl!.apkSignedUrl, {
                 method: 'put',
                 body: fileApk,
@@ -65,7 +68,12 @@ export async function uploadArtifact(
             })
         }
     }
-    await Promise.all([uploadUrl(), uploadApkUrl()])
+    if (generateBundleHeadless) {
+        await uploadUrl()
+        await uploadApkUrl()
+    } else {
+        await Promise.all([uploadUrl(), uploadApkUrl()])
+    }
     const data = await myFetch('/api/artifacts/upload-artifact-url', {
         method: 'post',
         body: {

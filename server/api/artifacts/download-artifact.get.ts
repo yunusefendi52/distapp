@@ -8,6 +8,7 @@ export const getArtifactFromInternal = async (
     appName: string,
     releaseId: string,
     publicId: string,
+    hasApk: boolean,
 ) => {
     const { app, org } = publicId
         ? await getArtifactGroupFromPublicIdOrUser(event, orgName, appName, publicId)
@@ -22,9 +23,11 @@ export const getArtifactFromInternal = async (
             )
         },
     }).then(takeUniqueOrThrow)
-    const { assets } = getStorageKeys(app.organizationsId!, app.id, detailArtifact.fileObjectKey)
+    const actuallyHasApk = hasApk && (detailArtifact.fileObjectApkKey ? true : false)
+    const { assets } = getStorageKeys(app.organizationsId!, app.id, actuallyHasApk ? detailArtifact.fileObjectApkKey! : detailArtifact.fileObjectKey)
     const s3 = new S3Fetch()
-    const signedUrl = await s3.getSignedUrlGetObject(assets, 1800, `attachment; filename ="${app.name}${detailArtifact.extension ? `.${detailArtifact.extension}` : ''}"`)
+    const artifactExt = actuallyHasApk ? 'apk' : detailArtifact.extension
+    const signedUrl = await s3.getSignedUrlGetObject(assets, 1800, `attachment; filename ="${app.name}${artifactExt ? `.${artifactExt}` : ''}"`)
     return {
         signedUrl,
         userOrg: org,
@@ -34,19 +37,21 @@ export const getArtifactFromInternal = async (
 }
 
 export default defineEventHandler(async (event) => {
-    const { appName, orgName, releaseId, hasManifestPList, publicId } = await getValidatedQuery(event, z.object({
+    const { appName, orgName, releaseId, hasManifestPList, publicId, hasApk } = await getValidatedQuery(event, z.object({
         appName: z.string().min(1),
         orgName: z.string().min(1),
         releaseId: z.string().min(1),
         hasManifestPList: z.any(),
         publicId: z.string().nullable(),
+        hasApk: z.string().transform(e => e === 'true'),
     }).parse)
     const { signedUrl, app, detailArtifact, } = await getArtifactFromInternal(
         event,
         orgName,
         appName,
         releaseId,
-        publicId || '')
+        publicId || '',
+        hasApk)
     if (hasManifestPList) {
         return {
             signedUrl,

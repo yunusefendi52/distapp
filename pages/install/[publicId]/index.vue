@@ -29,7 +29,8 @@
                             <!-- <span>30mbbb</span> -->
                         </div>
                         <div>
-                            <Button label="Download" @click="download(item.releaseId.toString(), publicId.toString())"
+                            <Button label="Download"
+                                @click="download(item.releaseId.toString(), publicId.toString(), true)"
                                 :loading="isDownloading" />
                         </div>
                     </div>

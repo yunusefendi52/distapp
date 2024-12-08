@@ -1,8 +1,8 @@
 export const useDownloadArtifact = (appName: string, orgName: string) => {
     const isDownloading = ref(false)
 
-    const download = async (releaseId: string, publicId: string | undefined) => {
-        let url = `/api/artifacts/download-artifact?appName=${appName}&orgName=${orgName}&releaseId=${releaseId}&publicId=${publicId || ''}`
+    const download = async (releaseId: string, publicId: string | undefined, hasApk: boolean) => {
+        let url = `/api/artifacts/download-artifact?appName=${appName}&orgName=${orgName}&releaseId=${releaseId}&publicId=${publicId || ''}&hasApk=${hasApk}`
         if (isIosDevice()) {
             try {
                 isDownloading.value = true

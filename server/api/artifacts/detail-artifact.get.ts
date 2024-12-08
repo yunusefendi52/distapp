@@ -47,6 +47,7 @@ export default defineEventHandler(async (event) => {
     const response = {
         ...detailArtifact,
         fileObjectKey: undefined,
+        hasApk: detailArtifact.fileObjectApkKey ? true : false,
         fileMetadata: {
             md5: headObject.etag,
             contentLength: headObject.contentLength,

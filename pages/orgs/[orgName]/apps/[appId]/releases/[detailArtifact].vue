@@ -10,7 +10,7 @@
     <ConfirmPopup></ConfirmPopup>
     <!-- <div>{{ detailArtifact }}</div> -->
     <div class="card flex flex-col gap-3 m-4">
-        <div class="flex flex-row items-center">
+        <div class="flex flex-col md:flex-row items-stretch gap-2">
             <div class="flex flex-col gap-1 flex-1">
                 <span class="text-sm">Release Id {{ detailArtifact?.releaseId }}</span>
                 <span class="font-semibold text-xl">Version {{ detailArtifact?.versionName2 }} ({{
@@ -18,9 +18,13 @@
                     }})</span>
                 <span class="text-lg">{{ formatDate(detailArtifact?.createdAt) }}</span>
             </div>
-            <div class="flex flex-col gap-2 items-stretch">
-                <Button :loading="isDownloading" label="Download"
-                    @click="() => download(releaseId, undefined)"></Button>
+            <div class="flex flex-col gap-2 items-stretch md:items-end">
+                <div class="flex flex-col md:flex-row gap-2">
+                    <Button :loading="isDownloading" label="Download AAB"
+                        @click="() => download(releaseId, undefined, false)"></Button>
+                    <Button :loading="isDownloading" label="Download APK" v-if="detailArtifact?.hasApk"
+                        @click="() => download(releaseId, undefined, true)"></Button>
+                </div>
                 <Button :loading="isPending" @click="confirmDelete($event)" icon="pi pi-trash" label="Delete"
                     severity="danger" />
             </div>

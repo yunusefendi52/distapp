@@ -75,6 +75,11 @@ export default defineNuxtConfig({
     S3_ENDPOINT: '',
     S3_ACCESS_KEY_ID: '',
     S3_SECRET_ACCESS_KEY: '',
+    BUNDLEAAB: {
+      KEYSTORE_BASE64: '',
+      KEYSTORE_PASS: '',
+      KEYSTORE_ALIAS: '',
+    },
     public: {
       GOOGLE_CLIENT_ID: '',
       LOCAL_AUTH_ENABLED: false,
