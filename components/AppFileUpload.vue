@@ -64,7 +64,7 @@ watchEffect(() => {
 
 const { mutateAsync, isPending } = useMutation({
     mutationFn: async (param: { file: File }) => {
-        const { artifactId } = await onUpload(param.file)
+        const { artifactId } = await onUpload(param.file, 'generate_bundle')
         const groupIds = selectedGroup.value?.map(e => e.id) ?? []
         if (artifactId && groupIds && groupIds.length) {
             await $fetch('/api/update-artifact-groups', {
@@ -94,8 +94,8 @@ const submit = async () => {
     })
 }
 
-const onUpload = async (file: File) => {
-    const data = await uploadArtifact(file, orgName.value, appName.value, releaseNotes.value, 'generate_bundle')
+const onUpload = async (file: File, fileApk: string) => {
+    const data = await uploadArtifact(file, orgName.value, appName.value, releaseNotes.value, fileApk)
     return {
         artifactId: data!.artifactId,
     }
