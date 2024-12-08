@@ -15,12 +15,12 @@
                 <span class="text-sm">Release Id {{ detailArtifact?.releaseId }}</span>
                 <span class="font-semibold text-xl">Version {{ detailArtifact?.versionName2 }} ({{
                     detailArtifact?.versionCode2
-                    }})</span>
+                }})</span>
                 <span class="text-lg">{{ formatDate(detailArtifact?.createdAt) }}</span>
             </div>
             <div class="flex flex-col gap-2 items-stretch md:items-end">
                 <div class="flex flex-col md:flex-row gap-2">
-                    <Button :loading="isDownloading" label="Download AAB"
+                    <Button :loading="isDownloading" :label="detailArtifact?.hasApk ? `Download AAB` : `Download`"
                         @click="() => download(releaseId, undefined, false)"></Button>
                     <Button :loading="isDownloading" label="Download APK" v-if="detailArtifact?.hasApk"
                         @click="() => download(releaseId, undefined, true)"></Button>
