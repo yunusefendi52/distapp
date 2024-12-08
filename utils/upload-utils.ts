@@ -55,12 +55,12 @@ export async function uploadArtifact(
     }
     const generateBundleHeadless = fileApk === 'generate_bundle'
     async function uploadApkUrl() {
-        if (!apkUrl) {
-            console.error('Something happen apkUrl is null')
-        }
         if (generateBundleHeadless) {
 
         } else if (fileApk) {
+            if (fileApk && !apkUrl) {
+                console.error('Something happen apkUrl is null')
+            }
             await myFetch(apkUrl!.apkSignedUrl, {
                 method: 'put',
                 body: fileApk,
