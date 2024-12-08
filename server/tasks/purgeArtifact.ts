@@ -1,4 +1,4 @@
-import { isNull, lt, ne } from "drizzle-orm";
+import { isNotNull, isNull, lt, ne } from "drizzle-orm";
 import db from "../db/db";
 import { S3Fetch } from "../services/s3fetch";
 
@@ -15,62 +15,49 @@ export default defineTask({
             ...env,
             enableLogging: false,
         })
-        const [purgeAppArtifact, purgeAppNonArtifact] = await Promise.all([
-            drizzle.select().from(tables.purgeAppArtifact)
-                .orderBy(desc(tables.purgeAppArtifact.createdAt))
-                .where(eq(tables.purgeAppArtifact.hasArtifact, 1))
-                .limit(1)
-                .then(singleOrDefault),
-            drizzle.select().from(tables.purgeAppArtifact)
-                .orderBy(asc(tables.purgeAppArtifact.hasArtifact))
-                .where(or(
-                    ne(tables.purgeAppArtifact.hasArtifact, 1),
-                    isNull(tables.purgeAppArtifact.hasArtifact),
-                ))
-                .limit(1)
-                .then(singleOrDefault),
-        ])
-        if (!purgeAppArtifact && !purgeAppNonArtifact) {
-            return {
-                result: {
-                    status: 'nothing to purge',
-                }
-            }
-        }
 
-        async function purgeArtifactInternal() {
-            if (purgeAppArtifact) {
-                await drizzle.transaction(async tx => {
-                    const hasArtifact = purgeAppArtifact.hasArtifact === 1 ? true : false
-                    if (hasArtifact) {
-                        console.log('Purge has artifact, will check storage', purgeAppArtifact.appId)
-                        const storageOrgPrefix = getStorageKeysOrg(purgeAppArtifact.orgId!, purgeAppArtifact.appId!)
-                        throw 'purging storage not implemented, keys ' + storageOrgPrefix
-                    }
-
-                    await tx.delete(tables.purgeAppArtifact)
-                        .where(and(
-                            eq(tables.purgeAppArtifact.orgId, purgeAppArtifact.orgId!),
-                            eq(tables.purgeAppArtifact.appId, purgeAppArtifact.appId!),
-                        ))
-                })
-            }
-        }
-        async function purgeNonArtifactInternal() {
-            if (purgeAppNonArtifact) {
-                await drizzle.delete(tables.purgeAppArtifact)
-                    .where(and(
-                        eq(tables.purgeAppArtifact.orgId, purgeAppNonArtifact.orgId!),
-                        eq(tables.purgeAppArtifact.appId, purgeAppNonArtifact.appId!),
-                    ))
-            }
-        }
-        const results = await Promise.allSettled([purgeArtifactInternal(), purgeNonArtifactInternal()])
-        results.forEach(e => {
-            console.log('Result purge artifact', e)
+        const artifacts = await drizzle.select({
+            key: tables.artifacts.fileObjectKey,
+            apkKey: tables.artifacts.fileObjectApkKey,
+            orgId: tables.artifacts.organizationId,
+            appId: tables.artifacts.appsId,
         })
+            .from(tables.artifacts)
+            .leftJoin(tables.apps, eq(tables.apps.id, tables.artifacts.appsId))
+            .where(and(
+                isNull(tables.apps.id),
+                isNotNull(tables.artifacts.organizationId),
+                isNotNull(tables.artifacts.appsId),
+            ))
+            .limit(15)
 
-        console.log('Finished purge artifact')
+        const s3 = new S3Fetch()
+        const results = await Promise.allSettled(artifacts.map(async (el) => {
+            const fileKey = getStorageKeys(el.orgId!, el.appId!, el.key)
+            const fileApkKeyAssets = el.apkKey ? getStorageKeys(el.orgId!, el.appId!, el.apkKey) : undefined
+            await s3.deleteObject(fileKey.assets)
+            if (fileApkKeyAssets) {
+                await s3.deleteObject(fileApkKeyAssets.assets)
+            }
+            await drizzle.transaction(async tx => {
+                await tx.delete(tables.artifacts)
+                    .where(and(
+                        eq(tables.artifacts.fileObjectKey, el.key),
+                        eq(tables.artifacts.organizationId, el.orgId!),
+                        eq(tables.artifacts.appsId, el.appId!),
+                    ))
+                if (el.apkKey) {
+                    await tx.delete(tables.artifacts)
+                        .where(and(
+                            eq(tables.artifacts.fileObjectApkKey, el.apkKey),
+                            eq(tables.artifacts.organizationId, el.orgId!),
+                            eq(tables.artifacts.appsId, el.appId!),
+                        ))
+                }
+            })
+        }))
+
+        console.log('Finished purge artifact', results)
 
         return {
             result: {

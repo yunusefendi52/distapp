@@ -2,6 +2,13 @@ import { count } from "drizzle-orm"
 import type { LibSQLDatabase } from "drizzle-orm/libsql"
 import { uuidv7 } from "uuidv7"
 
+export type UploadTempValue = {
+    fileKey: string
+    orgId: string
+    appId: string
+    apkFileKey?: string | undefined
+}
+
 export async function findApiKey(
     db: LibSQLDatabase<typeof tables>,
     apiKeyId: string,
@@ -116,7 +123,7 @@ export default defineEventHandler(async (event) => {
                 ...(apkUrl ? {
                     apkFileKey: apkUrl?.fileKey
                 } : undefined),
-            },
+            } satisfies UploadTempValue,
             group: 'upload_temp',
             createdAt: now,
             updatedAt: now,
