@@ -1,5 +1,6 @@
 import { count } from "drizzle-orm"
 import type { LibSQLDatabase } from "drizzle-orm/libsql"
+import { uuidv7 } from "uuidv7"
 
 export async function findApiKey(
     db: LibSQLDatabase<typeof tables>,
@@ -103,7 +104,25 @@ export default defineEventHandler(async (event) => {
 
     const { fileKey, signedUrl } = await generateSignedUrlUpload(orgId, appId)
     const apkUrl = hasFileApk ? await generateSignedUrlUpload(orgId, appId) : undefined
+    const uploadId = uuidv7()
+    const now = new Date()
+    await db.insert(tables.keyValue)
+        .values({
+            key: uploadId,
+            value: {
+                fileKey,
+                orgId: orgId,
+                appId: appId,
+                ...(apkUrl ? {
+                    apkFileKey: apkUrl?.fileKey
+                } : undefined),
+            },
+            group: 'upload_temp',
+            createdAt: now,
+            updatedAt: now,
+        })
     return {
+        uploadId,
         fileKey,
         url: signedUrl,
         apkUrl: apkUrl ? {

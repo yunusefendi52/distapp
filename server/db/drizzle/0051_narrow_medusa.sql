@@ -1,0 +1,1 @@
+ALTER TABLE `key_value` ADD `group` text DEFAULT 'default';

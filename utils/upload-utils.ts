@@ -16,6 +16,7 @@ export const myFetch = ofetch.create({
 })
 
 export type UploadArtifactResponse = {
+    uploadId: string,
     url: string,
     fileKey: string,
     apkUrl: {
@@ -35,7 +36,7 @@ export async function uploadArtifact(
     if (!packageMetadata) {
         throw 'Cannot read package file'
     }
-    const { url, fileKey, apkUrl } = await myFetch<UploadArtifactResponse>('/api/artifacts/upload-artifact', {
+    const { url, fileKey, apkUrl, uploadId } = await myFetch<UploadArtifactResponse>('/api/artifacts/upload-artifact', {
         method: 'post',
         body: {
             orgName: orgName,
@@ -77,6 +78,7 @@ export async function uploadArtifact(
     const data = await myFetch('/api/artifacts/upload-artifact-url', {
         method: 'post',
         body: {
+            uploadId,
             fileKey,
             apkFileKey: apkUrl?.apkFileKey,
             appName: appName,

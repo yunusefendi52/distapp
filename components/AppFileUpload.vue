@@ -63,8 +63,8 @@ watchEffect(() => {
 })
 
 const { mutateAsync, isPending } = useMutation({
-    mutationFn: async (param: { file: File }) => {
-        const { artifactId } = await onUpload(param.file, 'generate_bundle')
+    mutationFn: async (param: { file: File, fileApk: string | undefined }) => {
+        const { artifactId } = await onUpload(param.file, param.fileApk)
         const groupIds = selectedGroup.value?.map(e => e.id) ?? []
         if (artifactId && groupIds && groupIds.length) {
             await $fetch('/api/update-artifact-groups', {
@@ -89,12 +89,14 @@ const submit = async () => {
     if (!realFile) {
         return
     }
+    const generateFileApk = realFile.name.endsWith('.aab')
     mutateAsync({
         file: realFile,
+        fileApk: generateFileApk ? 'generate_bundle' : undefined,
     })
 }
 
-const onUpload = async (file: File, fileApk: string) => {
+const onUpload = async (file: File, fileApk: string | undefined) => {
     const data = await uploadArtifact(file, orgName.value, appName.value, releaseNotes.value, fileApk)
     return {
         artifactId: data!.artifactId,

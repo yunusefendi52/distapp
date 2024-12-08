@@ -1,7 +1,8 @@
 import { findApiKey } from "./upload-artifact.post"
 
 export default defineEventHandler(async (event) => {
-    const { fileKey, apkFileKey, appName, orgName, releaseNotes, packageMetadata, } = await readValidatedBody(event, z.object({
+    const { uploadId, fileKey, apkFileKey, appName, orgName, releaseNotes, packageMetadata, } = await readValidatedBody(event, z.object({
+        uploadId: z.string().max(128),
         fileKey: z.string().max(128),
         apkFileKey: z.string().max(128).nullish(),
         appName: z.string().trim().min(1).max(128),
@@ -63,21 +64,25 @@ export default defineEventHandler(async (event) => {
     const newReleaseId = (lastArtifact?.releaseId ?? 0) + 1
     const now = new Date()
     const artifactsId = generateId()
-    await db.insert(tables.artifacts).values({
-        id: artifactsId,
-        createdAt: now,
-        updatedAt: now,
-        fileObjectKey: fileKey,
-        fileObjectApkKey: apkFileKey,
-        versionCode2: packageData?.versionCode?.toString()!,
-        versionName2: packageData?.versionName!,
-        appsId: appId,
-        organizationId: orgId,
-        releaseNotes: releaseNotes,
-        releaseId: newReleaseId,
-        extension: packageData?.extension,
-        packageName: packageData?.packageName,
-    })
+    await db.batch([
+        db.delete(tables.keyValue)
+            .where(eq(tables.keyValue.key, uploadId)),
+        db.insert(tables.artifacts).values({
+            id: artifactsId,
+            createdAt: now,
+            updatedAt: now,
+            fileObjectKey: fileKey,
+            fileObjectApkKey: apkFileKey,
+            versionCode2: packageData?.versionCode?.toString()!,
+            versionName2: packageData?.versionName!,
+            appsId: appId,
+            organizationId: orgId,
+            releaseNotes: releaseNotes,
+            releaseId: newReleaseId,
+            extension: packageData?.extension,
+            packageName: packageData?.packageName,
+        }),
+    ])
 
     return {
         artifactId: artifactsId,

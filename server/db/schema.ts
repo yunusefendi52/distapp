@@ -236,3 +236,14 @@ export const purgeAppArtifact = sqliteTable('purgeAppArtifact', {
     idx_createdAt: index('idx_createdAt').on(t.createdAt),
     idx_hasArtifact: index('idx_hasArtifact').on(t.hasArtifact),
 }))
+
+export const keyValue = sqliteTable('key_value', {
+    key: text('key').primaryKey(),
+    group: text('group').default('default'),
+    value: text('value', {
+        mode: 'json',
+    }),
+    ...timeColumns,
+}, (t) => ({
+    key_value_group_key: unique().on(t.key, t.group),
+}))
