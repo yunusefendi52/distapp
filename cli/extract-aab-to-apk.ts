@@ -4,8 +4,8 @@ import { promises, createWriteStream, existsSync } from 'fs'
 import child_process from 'node:child_process'
 import { uuidv4 } from "uuidv7"
 const exec = util.promisify(child_process.exec)
-import { myFetch } from '../../utils/upload-utils.js'
-import type { BundleKeystoreResponse } from '../api/artifacts/get-bundle-keystore.get.js'
+import { myFetch } from '../utils/upload-utils.js'
+import type { BundleKeystoreResponse } from '../server/api/artifacts/get-bundle-keystore.get.js'
 import { Readable } from 'stream'
 import { ReadableStream } from 'stream/web'
 import { finished } from 'stream/promises'

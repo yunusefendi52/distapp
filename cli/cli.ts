@@ -2,7 +2,7 @@ import { uploadArtifact, updateMyFetchApiKey } from '../utils/upload-utils.js'
 import { promises } from "node:fs"
 import { resolve } from "node:path"
 import { parseArgs } from "node:util"
-import { extractAabToApk } from '~/server/utils/extract-aab-to-apk.js'
+import { extractAabToApk } from './extract-aab-to-apk.js'
 
 const args = parseArgs({
     options: {
