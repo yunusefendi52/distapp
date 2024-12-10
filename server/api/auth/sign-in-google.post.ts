@@ -98,6 +98,6 @@ export const signInUser = (
         httpOnly: false,
         secure: true,
         sameSite: 'lax',
-        maxAge: 90 * 86400,
+        maxAge: 34560000, // 365 days
     })
 }
