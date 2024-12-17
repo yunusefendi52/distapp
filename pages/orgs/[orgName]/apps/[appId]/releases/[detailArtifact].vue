@@ -11,7 +11,7 @@
     <div class="flex flex-row gap-1 flex-1 p-4 items-center">
         <span class="text-xl font-medium flex-1">Release {{ detailArtifact?.releaseId }}</span>
         <div class="flex flex-col gap-2 items-stretch md:items-end">
-            <div class="flex flex-col md:flex-row gap-2">
+            <div class="flex flex-row gap-2">
                 <Button :loading="isDownloading" :label="detailArtifact?.hasApk ? `Download AAB` : `Download`"
                     @click="() => download(releaseId, undefined, false)" size="small"></Button>
                 <Button :loading="isDownloading" label="Download APK" v-if="detailArtifact?.hasApk"
