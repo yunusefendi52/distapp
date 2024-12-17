@@ -32,6 +32,8 @@ body {
     --p-tabmenu-item-color: var(--p-text-color);
 
     word-break: break-word;
+
+    --p-tabmenu-tablist-background: unset !important;
 }
 
 .p-datatable-table-container {

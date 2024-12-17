@@ -21,6 +21,14 @@ const joined = () => {
     border: unset !important;
     // border-right: 1px var(--p-content-border-color) solid !important;
 }
+
+// .layout-content {
+//     background: rgb(255, 255, 255);
+// }
+
+.appdark .layout-content {
+    background: rgb(14, 14, 14);
+}
 </style>
 
 <template>

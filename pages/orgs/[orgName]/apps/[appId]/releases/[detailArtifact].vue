@@ -26,7 +26,7 @@
             </div>
         </div>
     </div>
-    <div class="card bg-[var(--p-surface-50)] dark:bg-[var(--p-surface-900)] flex flex-col gap-3 mx-4 mb-4">
+    <div class="card flex flex-col gap-3 mx-4 mb-4">
         <div class="flex flex-col md:flex-row items-stretch gap-2">
             <div class="flex flex-col gap-1 flex-1">
                 <!-- <span class="text-sm">Release Id {{ detailArtifact?.releaseId }}</span> -->
