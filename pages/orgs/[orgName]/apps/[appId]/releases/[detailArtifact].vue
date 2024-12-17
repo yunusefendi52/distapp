@@ -26,23 +26,19 @@
             </div>
         </div>
     </div>
-    <div class="card flex flex-col gap-3 mx-4 mb-4">
+    <div class="card flex flex-col gap-3 mx-4 mb-4" style="white-space: break-spaces;">
         <div class="flex flex-col md:flex-row items-stretch gap-2">
             <div class="flex flex-col gap-1 flex-1">
                 <!-- <span class="text-sm">Release Id {{ detailArtifact?.releaseId }}</span> -->
                 <span class="font-semibold text-xl">Version {{ detailArtifact?.versionName2 }} ({{
                     detailArtifact?.versionCode2
-                }})</span>
+                    }})</span>
                 <span class="text-lg">{{ formatDate(detailArtifact?.createdAt) }}</span>
             </div>
         </div>
         <div class="flex flex-col gap-2">
-            <span class="font-semibold">Release Notes</span>
-            <label>{{ detailArtifact?.releaseNotes ?? '-' }}</label>
-        </div>
-        <div class="flex flex-col gap-2">
             <span class="font-semibold">Downloads</span>
-            <label>{{ '-' }}</label>
+            <span>{{ '-' }}</span>
         </div>
         <div class="flex flex-col gap-2">
             <span class="font-semibold">Groups</span>
@@ -56,12 +52,20 @@
         <div class="flex flex-col gap-2">
             <span class="font-semibold">File metadata</span>
             <div class="flex flex-col">
-                <label>{{ `MD5: ${detailArtifact?.fileMetadata?.md5?.replaceAll('"', '')}` }}</label>
-                <label>{{ `File Extension: ${detailArtifact?.extension}`
-                    }}</label>
-                <label>{{ `File Size: ${formatBytes(detailArtifact?.fileMetadata?.contentLength ?? 0)}` }}</label>
+                <span>{{ `MD5: ${detailArtifact?.fileMetadata?.md5?.replaceAll('"', '')}` }}</span>
+                <span>{{ `File Extension: ${detailArtifact?.extension}`
+                    }}</span>
+                <span>{{ `File Size: ${formatBytes(detailArtifact?.fileMetadata?.contentLength || 0)}` }}</span>
             </div>
         </div>
+        <div class="flex flex-col gap-2">
+            <span class="font-semibold">Release Notes</span>
+            <span>{{ detailArtifact?.releaseNotes || '-' }}</span>
+        </div>
+    </div>
+    <div v-if="showEdit">
+        <DialogEditArtifact v-model="showEdit" :release-notes="detailArtifact?.releaseNotes ?? ''"
+            @on-edited="refreshData" />
     </div>
 </template>
 
@@ -175,6 +179,13 @@ const confirmDelete = (event: any) => {
 const menu = ref()
 const items = ref<MenuItem[]>([
     {
+        label: 'Edit',
+        icon: 'pi pi-pencil',
+        command: () => {
+            showEdit.value = true
+        },
+    },
+    {
         label: 'Delete',
         icon: 'pi pi-trash',
         command: (event: MenuItemCommandEvent) => {
@@ -187,4 +198,9 @@ const toggle = (event: Event) => {
     menu.value.toggle(event)
 }
 
+const showEdit = ref(false)
+
+const refreshData = () => {
+    refresh()
+}
 </script>
