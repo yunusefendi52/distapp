@@ -1,4 +1,5 @@
 <template>
+    <ConfirmDialog></ConfirmDialog>
     <AppBarContainer>
         <div class="flex flex-row flex-1 gap-2 items-center">
             <AppTitle :title="detailApp?.displayName" />
@@ -7,26 +8,32 @@
             </div>
         </div>
     </AppBarContainer>
-    <ConfirmPopup></ConfirmPopup>
-    <!-- <div>{{ detailArtifact }}</div> -->
-    <div class="card flex flex-col gap-3 m-4">
+    <div class="flex flex-row gap-1 flex-1 p-4 items-center">
+        <span class="text-xl font-medium flex-1">Release {{ detailArtifact?.releaseId }}</span>
+        <div class="flex flex-col gap-2 items-stretch md:items-end">
+            <div class="flex flex-col md:flex-row gap-2">
+                <Button :loading="isDownloading" :label="detailArtifact?.hasApk ? `Download AAB` : `Download`"
+                    @click="() => download(releaseId, undefined, false)" size="small"></Button>
+                <Button :loading="isDownloading" label="Download APK" v-if="detailArtifact?.hasApk"
+                    @click="() => download(releaseId, undefined, true)" size="small"></Button>
+                <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" aria-haspopup="true"
+                    aria-controls="overlay_menu" size=small />
+                <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" :pt="{
+                    root: {
+                        class: '!mt-3'
+                    },
+                }" />
+            </div>
+        </div>
+    </div>
+    <div class="card bg-[var(--p-surface-50)] dark:bg-[var(--p-surface-900)] flex flex-col gap-3 mx-4 mb-4">
         <div class="flex flex-col md:flex-row items-stretch gap-2">
             <div class="flex flex-col gap-1 flex-1">
-                <span class="text-sm">Release Id {{ detailArtifact?.releaseId }}</span>
+                <!-- <span class="text-sm">Release Id {{ detailArtifact?.releaseId }}</span> -->
                 <span class="font-semibold text-xl">Version {{ detailArtifact?.versionName2 }} ({{
                     detailArtifact?.versionCode2
                 }})</span>
                 <span class="text-lg">{{ formatDate(detailArtifact?.createdAt) }}</span>
-            </div>
-            <div class="flex flex-col gap-2 items-stretch md:items-end">
-                <div class="flex flex-col md:flex-row gap-2">
-                    <Button :loading="isDownloading" :label="detailArtifact?.hasApk ? `Download AAB` : `Download`"
-                        @click="() => download(releaseId, undefined, false)"></Button>
-                    <Button :loading="isDownloading" label="Download APK" v-if="detailArtifact?.hasApk"
-                        @click="() => download(releaseId, undefined, true)"></Button>
-                </div>
-                <Button :loading="isPending" @click="confirmDelete($event)" icon="pi pi-trash" label="Delete"
-                    severity="danger" />
             </div>
         </div>
         <div class="flex flex-col gap-2">
@@ -61,6 +68,7 @@
 <script setup lang="ts">
 import { formatDate, formatBytes } from '#imports'
 import { UpdateGroupsRequest } from '~/server/api/update-artifact-groups.put';
+import { MenuItem } from '#imports'
 
 const { params } = useRoute()
 const appName = params.appId as string
@@ -112,7 +120,16 @@ const { execute: saveGroups, status: saveGroupsStatus } = useAsyncData(() => {
 
 const router = useRouter()
 
-const { mutate, isPending } = useMutation({
+const isActive = ref(false)
+
+onMounted(() => {
+    isActive.value = true
+})
+onUnmounted(() => {
+    isActive.value = false
+})
+
+const { mutate: deleteArtifactApi, isPending } = useMutation({
     mutationFn: (r) => {
         return $fetch.raw('/api/artifacts/delete-artifact', {
             method: 'post',
@@ -124,14 +141,23 @@ const { mutate, isPending } = useMutation({
         })
     },
     onSuccess(data, variables, context) {
-        router.back()
+        if (isActive.value) {
+            router.replace({
+                name: 'orgs-orgName-apps-appId-index-releases',
+                params: {
+                    orgName: orgName,
+                    appId: appName,
+                },
+            })
+        }
     },
 })
 
 const confirm = useConfirm();
 const confirmDelete = (event: any) => {
     confirm.require({
-        target: event.currentTarget,
+        blockScroll: true,
+        header: 'Confirmation',
         message: 'Do you want to delete permanently this artifact?',
         icon: 'pi pi-info-circle',
         rejectClass: 'p-button-secondary p-button-outlined p-button-sm',
@@ -139,11 +165,26 @@ const confirmDelete = (event: any) => {
         rejectLabel: 'Cancel',
         acceptLabel: 'Delete',
         accept: () => {
-            mutate()
+            deleteArtifactApi()
         },
         reject: () => {
         }
     });
 };
+
+const menu = ref()
+const items = ref<MenuItem[]>([
+    {
+        label: 'Delete',
+        icon: 'pi pi-trash',
+        command: (event: MenuItemCommandEvent) => {
+            confirmDelete(event.originalEvent)
+        },
+    },
+])
+
+const toggle = (event: Event) => {
+    menu.value.toggle(event)
+}
 
 </script>
