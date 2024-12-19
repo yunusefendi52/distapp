@@ -157,7 +157,8 @@ export default defineNuxtConfig({
     '@hebilicious/vue-query-nuxt',
     '@vueuse/nuxt',
     '@primevue/nuxt-module',
-    'nuxt-svgo-loader'
+    'nuxt-svgo-loader',
+    "@nuxtjs/google-fonts"
   ],
 
   primevue: {
@@ -214,6 +215,14 @@ export default defineNuxtConfig({
         recursive: true,
         force: true,
       });
+    },
+  },
+  googleFonts: {
+    families: {
+      Inter: {
+        wght: [300, 400, 500, 600, 700],
+        ital: [300, 400, 500, 600, 700],
+      },
     },
   },
 })
