@@ -27,6 +27,7 @@ export type UploadArtifactResponse = {
 
 export async function uploadArtifact(
     file: File | Buffer | ArrayBuffer | string | Blob,
+    filename: string,
     orgName: string,
     appName: string,
     releaseNotes: string | null,
@@ -42,6 +43,7 @@ export async function uploadArtifact(
             orgName: orgName,
             appName: appName,
             hasFileApk: fileApk ? true : false,
+            filename: filename,
         },
         onResponseError(r) {
             console.error('Error ', normalizeError(r))
@@ -85,6 +87,7 @@ export async function uploadArtifact(
             orgName: orgName,
             releaseNotes: releaseNotes ? releaseNotes : undefined,
             packageMetadata,
+            filename: filename,
         },
     })
     return data

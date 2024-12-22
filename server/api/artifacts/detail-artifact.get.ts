@@ -48,6 +48,7 @@ export default defineEventHandler(async (event) => {
         ...detailArtifact,
         fileObjectKey: undefined,
         hasApk: detailArtifact.fileObjectApkKey ? true : false,
+        hasApkDDD: detailArtifact.fileObjectApkKey,
         fileMetadata: {
             md5: headObject.etag,
             contentLength: headObject.contentLength,

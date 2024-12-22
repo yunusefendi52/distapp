@@ -3,6 +3,7 @@ import { promises } from "node:fs"
 import { resolve } from "node:path"
 import { parseArgs } from "node:util"
 import { extractAabToApk } from './extract-aab-to-apk.js'
+import { basename, extname } from 'path'
 
 const args = parseArgs({
     options: {
@@ -43,6 +44,7 @@ async function start() {
     if (values.distribute) {
         const { orgName, appName } = slugToOrgApp(values.slug!)
         const filePath = resolve(values.file!)
+        const filename = basename(filePath, extname(filePath))
         const file = await promises.readFile(filePath)
         console.log("Distributing", {
             filePath,
@@ -57,7 +59,7 @@ async function start() {
                 disposeBundle = dispose
             }
             const bundleApkFile = bundleApkPath ? await promises.readFile(bundleApkPath) : undefined
-            await uploadArtifact(file, orgName, appName, values.releaseNotes ? values.releaseNotes : null, bundleApkFile)
+            await uploadArtifact(file, filename, orgName, appName, values.releaseNotes ? values.releaseNotes : null, bundleApkFile)
             console.log('Finished Distributing', {
                 filePath,
                 bundleApkPath,

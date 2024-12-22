@@ -48,10 +48,11 @@ export async function findApiKey(
 
 export default defineEventHandler(async (event) => {
     const db = event.context.drizzle
-    const { orgName, appName, hasFileApk } = await readValidatedBody(event, z.object({
+    const { orgName, appName, hasFileApk, filename } = await readValidatedBody(event, z.object({
         appName: z.string().trim().min(1).max(128),
         orgName: z.string().trim().min(1).max(128),
         hasFileApk: z.boolean().default(false),
+        filename: z.string().regex(filenameRegex, `Filename must have regex ${filenameRegex.source}`),
     }).parse)
 
     var orgId: string

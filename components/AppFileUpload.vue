@@ -89,17 +89,30 @@ const submit = async () => {
     if (!realFile) {
         return
     }
-    const generateFileApk = realFile.name.endsWith('.aab')
+    // const generateFileApk = realFile.name.endsWith('.aab')
     mutateAsync({
         file: realFile,
-        fileApk: generateFileApk ? 'generate_bundle' : undefined,
+        // fileApk: generateFileApk ? 'generate_bundle' : undefined,
+        fileApk: undefined,
     })
 }
 
+const toast = useToast()
+
 const onUpload = async (file: File, fileApk: string | undefined) => {
-    const data = await uploadArtifact(file, orgName.value, appName.value, releaseNotes.value, fileApk)
-    return {
-        artifactId: data!.artifactId,
+    try {
+        const data = await uploadArtifact(file, file.name.substring(0, file.name.lastIndexOf('.')), orgName.value, appName.value, releaseNotes.value, fileApk)
+        return {
+            artifactId: data!.artifactId,
+        }
+    } catch (e: any) {
+        toast.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: normalizeError(e),
+            life: 3000,
+        })
+        throw e
     }
 }
 </script>

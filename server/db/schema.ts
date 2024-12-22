@@ -108,6 +108,7 @@ export const artifacts = sqliteTable('artifacts', {
     releaseId: integer('releaseId').notNull(),
     extension: text('extension'),
     packageName: text('packageName'),
+    filename: text('filename'),
 
     appsId: text('appsId'),
     organizationId: text('organizationId'),

@@ -1,7 +1,7 @@
 import { findApiKey } from "./upload-artifact.post"
 
 export default defineEventHandler(async (event) => {
-    const { uploadId, fileKey, apkFileKey, appName, orgName, releaseNotes, packageMetadata, } = await readValidatedBody(event, z.object({
+    const { uploadId, fileKey, apkFileKey, appName, orgName, releaseNotes, packageMetadata, filename, } = await readValidatedBody(event, z.object({
         uploadId: z.string().max(128),
         fileKey: z.string().max(128),
         apkFileKey: z.string().max(128).nullish(),
@@ -9,6 +9,7 @@ export default defineEventHandler(async (event) => {
         orgName: z.string().trim().min(1).max(128),
         releaseNotes: z.string().nullish(),
         packageMetadata: z.any(),
+        filename: z.string().regex(filenameRegex, `Filename must have regex ${filenameRegex.source}`),
     }).parse)
     var appId: string
     var orgId: string
@@ -81,6 +82,7 @@ export default defineEventHandler(async (event) => {
             releaseId: newReleaseId,
             extension: packageData?.extension,
             packageName: packageData?.packageName,
+            filename: filename.substring(0, 32),
         }),
     ])
 

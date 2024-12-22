@@ -27,7 +27,7 @@ export const getArtifactFromInternal = async (
     const { assets } = getStorageKeys(app.organizationsId!, app.id, actuallyHasApk ? detailArtifact.fileObjectApkKey! : detailArtifact.fileObjectKey)
     const s3 = new S3Fetch()
     const artifactExt = actuallyHasApk ? 'apk' : detailArtifact.extension
-    const signedUrl = await s3.getSignedUrlGetObject(assets, 1800, `attachment; filename="${encodeURIComponent(app.name)}${artifactExt ? `.${artifactExt}` : ''}"`)
+    const signedUrl = await s3.getSignedUrlGetObject(assets, 1800, `attachment; filename="${encodeURIComponent(detailArtifact.filename || app.name)}${artifactExt ? `.${artifactExt}` : ''}"`)
     return {
         signedUrl,
         userOrg: org,
