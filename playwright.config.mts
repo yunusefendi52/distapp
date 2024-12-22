@@ -2,6 +2,7 @@ import { defineConfig, devices } from '@playwright/test'
 import type { ConfigOptions } from '@nuxt/test-utils/playwright'
 
 export default defineConfig<ConfigOptions>({
+    workers: 1,
     webServer: {
         command: './setup-test.sh',
         url: 'http://localhost:3000',
