@@ -11,7 +11,7 @@
                 name: 'orgs-orgName-apps-appId-settings',
                 params: params,
             }">
-                <Button icon="pi pi-cog" outlined />
+                <Button icon="pi pi-cog" outlined data-testid="settings_app_btn" />
             </NuxtLink>
         </div>
     </AppBarContainer>

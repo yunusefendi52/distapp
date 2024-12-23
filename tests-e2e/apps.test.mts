@@ -21,8 +21,14 @@ test('Apps test', async ({ page, goto, context }) => {
 
     const osTestTypes = ['Android', 'iOS']
     for (const osTestType of osTestTypes) {
+        const index = osTestTypes.indexOf(osTestType)
+
         const appName = `Habit Tool - ${osTestType} - ${generateTestId()}`
         await test.step(`User can create new app ${osTestType} from newly created org`, async () => {
+            if (index > 0) {
+                await page.getByText('All Apps').click()
+                await page.getByText('Add app').click()
+            }
             await page.getByText('Select organization').click()
             await page.getByLabel(orgName).getByText(orgName).click()
             await page.getByText('Select OS Type').click()
@@ -31,10 +37,18 @@ test('Apps test', async ({ page, goto, context }) => {
             await page.getByText('Save').click()
             await expect(page.getByText(appName)).toHaveCount(1)
             await expect(page.getByTestId('createAppDialogForm')).toBeHidden()
-            await page.getByText('Add app').click()
+        })
+
+        await test.step('User can create app API key', async () => {
+            await page.getByTestId('a_menus').getByText(orgName).click()
+            await page.getByText(appName).click()
+            await page.getByTestId('settings_app_btn').click()
+            await page.getByText('API Keys').click()
+            await page.getByText('Generate Token').click()
+            await expect(page.getByTestId('tkn_spn')).toContainText('ey')
+            const appApiKey = await page.getByTestId('tkn_spn').innerText()
         })
     }
-    await page.keyboard.press('Escape')
 
     await test.step('User admin can delete org', async () => {
         await page.getByTestId('a_menus').getByText(orgName).click()
