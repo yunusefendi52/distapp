@@ -49,7 +49,7 @@ function extract_test_artifacts() {
         echo "File $zip_file already exists. Skipping download."
     else
         curl -L -o $zip_file https://github.com/yunusefendi52/distapp_artifactory/releases/download/v1/tests_artifacts.zip
-        tar -xzf $zip_file -C "tests"
+        tar -xvf $zip_file -C "tests"
     fi
 }
 extract_test_artifacts
