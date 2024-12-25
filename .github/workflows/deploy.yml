@@ -22,16 +22,11 @@ jobs:
     # E2E tests
     - name: Install seaweedfs
       run: |
-        mkdir -p "$PWD/tools"
+        tools_folder="${{ github.workspace }}/bin_tools"
+        mkdir -p "$tools_folder"
         curl -L -o seaweedfs.tar.gz https://github.com/seaweedfs/seaweedfs/releases/download/3.80/linux_amd64.tar.gz
-        tar -xzf seaweedfs.tar.gz -C "$PWD/tools/"
-        "$PWD/tools" >> "$GITHUB_PATH"
-    - name: Download tests_artifacts
-      run: |
-        mkdir -p "$PWD/tools"
-        curl -L -o seaweedfs.tar.gz https://github.com/seaweedfs/seaweedfs/releases/download/3.80/linux_amd64.tar.gz
-        tar -xzf seaweedfs.tar.gz -C "$PWD/tools/" .
-        "$PWD/tools" >> "$GITHUB_PATH"
+        tar -xzf seaweedfs.tar.gz -C "$tools_folder"
+        echo "$tools_folder" >> "$GITHUB_PATH"
     - run: curl --proto '=https' --tlsv1.2 -LsSf https://github.com/tursodatabase/libsql/releases/download/libsql-server-v0.24.28/libsql-server-installer.sh | sh
     - name: Get installed Playwright version
       id: playwright-version
