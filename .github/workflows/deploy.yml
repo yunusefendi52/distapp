@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
+      with:
+        lfs: true
     - uses: oven-sh/setup-bun@v2
       with:
         bun-version-file: ".bun-version"
