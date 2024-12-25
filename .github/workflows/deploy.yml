@@ -27,6 +27,10 @@ jobs:
         curl -L -o seaweedfs.tar.gz https://github.com/seaweedfs/seaweedfs/releases/download/3.80/linux_amd64.tar.gz
         tar -xzf seaweedfs.tar.gz -C "$tools_folder"
         echo "$tools_folder" >> "$GITHUB_PATH"
+    - name: Download tests_artifacts
+      run: |
+        curl -L -o tests/tests_artifacts.zip https://github.com/yunusefendi52/distapp_artifactory/releases/download/v1/tests_artifacts.zip
+        tar -xzf tests/tests_artifacts.zip -C "tests"
     - run: curl --proto '=https' --tlsv1.2 -LsSf https://github.com/tursodatabase/libsql/releases/download/libsql-server-v0.24.28/libsql-server-installer.sh | sh
     - name: Get installed Playwright version
       id: playwright-version

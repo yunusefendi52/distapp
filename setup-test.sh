@@ -39,6 +39,21 @@ done
 
 popd
 
+test_temp_folder="tests/.temp"
+mkdir -p $test_temp_folder
+# Extract tests_artifacts
+echo "Extracting tests_artifacts"
+function extract_test_artifacts() {
+    zip_file="$test_temp_folder/tests_artifacts.zip"
+    if [ -f "$zip_file" ]; then
+        echo "File $zip_file already exists. Skipping download."
+    else
+        curl -L -o $zip_file https://github.com/yunusefendi52/distapp_artifactory/releases/download/v1/tests_artifacts.zip
+        tar -xzf $zip_file -C "tests"
+    fi
+}
+extract_test_artifacts
+
 echo "Finish setup test"
 
 bun run build --preset=bun
