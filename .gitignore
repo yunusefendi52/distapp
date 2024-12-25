@@ -39,3 +39,4 @@ playwright/.auth
 
 .temp
 tests/tests_artifacts
+__MACOSX

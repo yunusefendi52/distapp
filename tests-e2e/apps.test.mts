@@ -58,7 +58,7 @@ test('Apps test', async ({ page, goto, context }) => {
             appApiKey = await page.getByTestId('tkn_spn').innerText()
         })
 
-        const cliCommand = 'DISTAPP_CLI_URL="http://localhost:3000" bun run cli/cli.ts'
+        const cliCommand = 'DISTAPP_CLI_URL="http://localhost:3000" node cli/cli.mjs'
 
         if (osTestType === 'Android') {
             await test.step(`User can upload artifact ${osTestType} AAB with API keys using CLI`, async () => {
