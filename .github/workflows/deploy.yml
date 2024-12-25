@@ -4,12 +4,15 @@ on:
   workflow_dispatch:
   push:
     branches: [ main ]
+  pull_request:
 
 jobs:
   deploy:
     runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
+      with:
+        lfs: true
     - uses: oven-sh/setup-bun@v2
       with:
         bun-version-file: ".bun-version"
@@ -20,10 +23,13 @@ jobs:
   
 
     # E2E tests
-    - name: Install minio
+    - name: Install seaweedfs
       run: |
-        wget https://dl.min.io/server/minio/release/linux-amd64/archive/minio_20241107005220.0.0_amd64.deb -O minio.deb
-        sudo dpkg -i minio.deb
+        tools_folder="${{ github.workspace }}/bin_tools"
+        mkdir -p "$tools_folder"
+        curl -L -o seaweedfs.tar.gz https://github.com/seaweedfs/seaweedfs/releases/download/3.80/linux_amd64.tar.gz
+        tar -xzf seaweedfs.tar.gz -C "$tools_folder"
+        echo "$tools_folder" >> "$GITHUB_PATH"
     - run: curl --proto '=https' --tlsv1.2 -LsSf https://github.com/tursodatabase/libsql/releases/download/libsql-server-v0.24.28/libsql-server-installer.sh | sh
     - name: Get installed Playwright version
       id: playwright-version
@@ -43,6 +49,7 @@ jobs:
     - run: bun run e2e
 
     - name: Deploy
+      if: github.ref == 'refs/heads/main'
       run: curl -X POST https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/344ca361-b2d3-48e6-b896-ffa2dd1e9a1b
     
     - uses: actions/upload-artifact@v4

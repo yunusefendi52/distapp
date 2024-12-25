@@ -1,5 +1,8 @@
 import { expect, test } from '@nuxt/test-utils/playwright'
 import { uuidv4 } from 'uuidv7'
+import child_process from 'node:child_process'
+import util from 'util'
+const exec = util.promisify(child_process.exec)
 
 function generateTestId() {
     return uuidv4().slice(0, 8)
@@ -19,7 +22,7 @@ test('Apps test', async ({ page, goto, context }) => {
         await expect(page.getByText(orgName)).toHaveCount(2)
     })
 
-    const osTestTypes = ['Android', 'iOS']
+    const osTestTypes = ['Android', 'iOS'] as const
     for (const osTestType of osTestTypes) {
         const index = osTestTypes.indexOf(osTestType)
 
@@ -39,17 +42,70 @@ test('Apps test', async ({ page, goto, context }) => {
             await expect(page.getByTestId('createAppDialogForm')).toBeHidden()
         })
 
+        let appSlug: string
+        let appApiKey: string
+
         await test.step('User can create app API key', async () => {
             await page.getByTestId('a_menus').getByText(orgName).click()
             await page.getByText(appName).click()
             await page.getByTestId('settings_app_btn').click()
             await expect(page).toHaveURL(/.*app-info/)
+            appSlug = await page.getByTestId('slug_input').inputValue()
             await page.getByText('API Keys').click()
             await expect(page).toHaveURL(/.*api-keys/)
             await page.getByText('Generate Token').click()
             await expect(page.getByTestId('tkn_spn')).toContainText('ey')
-            const appApiKey = await page.getByTestId('tkn_spn').innerText()
+            appApiKey = await page.getByTestId('tkn_spn').innerText()
         })
+
+        const cliCommand = 'DISTAPP_CLI_URL="http://localhost:3000" node cli/cli.mjs'
+
+        if (osTestType === 'Android') {
+            await test.step(`User can upload artifact ${osTestType} AAB with API keys using CLI`, async () => {
+                const { stderr, stdout } = await exec(`${cliCommand} \\
+                    --distribute \\
+                    --file "tests/tests_artifacts/app-release.aab" \\
+                    --slug "${appSlug}" \\
+                    --apiKey "${appApiKey}"`)
+                expect(stderr).toBeFalsy()
+                expect(stdout).toContain('Finished Distributing')
+                expect(stdout).toContain('with generated APK')
+            })
+            await test.step(`User can upload artifact ${osTestType} APK with API keys using CLI`, async () => {
+                const { stderr, stdout } = await exec(`${cliCommand} \\
+                    --distribute \\
+                    --file "tests/tests_artifacts/app-arm64-v8a-release.apk" \\
+                    --slug "${appSlug}" \\
+                    --apiKey "${appApiKey}"`)
+                expect(stderr).toBeFalsy()
+                expect(stdout).toContain('Finished Distributing')
+                expect(stdout).not.toContain('with generated APK')
+            })
+            await test.step(`User should not able upload artifact arbitrary ZIP to ${osTestType}`, async () => {
+                await expect(exec(`${cliCommand} \\
+                --distribute \\
+                --file "tests/tests_artifacts/release.zip" \\
+                --slug "${appSlug}" \\
+                --apiKey "${appApiKey}"`)).rejects.toThrow(/Cannot read package file/)
+            })
+        } else if (osTestType === 'iOS') {
+            await test.step(`User can upload artifact ${osTestType} IPA with API keys using CLI`, async () => {
+                const { stderr, stdout } = await exec(`${cliCommand} \\
+                    --distribute \\
+                    --file "tests/tests_artifacts/testapp.ipa" \\
+                    --slug "${appSlug}" \\
+                    --apiKey "${appApiKey}"`)
+                expect(stderr).toBeFalsy()
+                expect(stdout).toContain('Finished Distributing')
+            })
+            await test.step(`User should not able to upload arbitrary file to ${osTestType}`, async () => {
+                await expect(exec(`${cliCommand} \\
+                    --distribute \\
+                    --file "tests/tests_artifacts/release.zip" \\
+                    --slug "${appSlug}" \\
+                    --apiKey "${appApiKey}"`)).rejects.toThrow(/Cannot read package file/)
+            })
+        }
     }
 
     await test.step('User admin can delete org', async () => {

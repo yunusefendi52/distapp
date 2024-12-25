@@ -16,7 +16,7 @@
             <div class="flex flex-col gap-2">
                 <label>Slug</label>
                 <div class="flex flex-row gap-2">
-                    <InputText :value="slug" readonly aria-describedby="app-name" class="flex-1" />
+                    <InputText :value="slug" readonly aria-describedby="slug" class="flex-1" data-testid="slug_input" />
                     <Button icon="pi pi-copy" @click="() => copyText(slug)" />
                 </div>
             </div>

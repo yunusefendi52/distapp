@@ -76,7 +76,7 @@ export default defineNuxtConfig({
     S3_ACCESS_KEY_ID: '',
     S3_SECRET_ACCESS_KEY: '',
     BUNDLEAAB: {
-      KEYSTORE_BASE64: '',
+      KEYSTORE_URL: '',
       KEYSTORE_PASS: '',
       KEYSTORE_ALIAS: '',
     },

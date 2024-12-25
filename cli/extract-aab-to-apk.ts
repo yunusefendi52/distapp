@@ -20,7 +20,9 @@ function getDateFilename(): string {
 }
 
 async function downloadFile(url: string, filepath: string) {
-    const response = await fetch(url);
+    const response = await fetch(url, {
+        redirect: 'follow',
+    });
     const body = Readable.fromWeb(response.body as ReadableStream);
     const tempFilepath = `${filepath}.tmp`
     const download_write_stream = createWriteStream(tempFilepath);
@@ -58,8 +60,11 @@ export async function extractAabToApk(aabPath: string) {
     }
     const keystorePass = bundleKeystoreResponse.appKeystorePass
     const keystoreAlias = bundleKeystoreResponse.appKeystoreAlias
-    const keystoreBase64 = bundleKeystoreResponse.appKeystoreBase64
-    await promises.writeFile(keystoreFile, Buffer.from(keystoreBase64, 'base64'))
+    var keystoreUrl = bundleKeystoreResponse.appKeystoreUrl
+    if (keystoreUrl.startsWith('/')) {
+        keystoreUrl = `${process.env.DISTAPP_CLI_URL}${keystoreUrl}`
+    }
+    await downloadFile(keystoreUrl, keystoreFile)
 
     await exec(`
     java -jar "${bundletoolJarPath}" build-apks --bundle=${aabPath} --output=${bundleApks} --mode=universal \\

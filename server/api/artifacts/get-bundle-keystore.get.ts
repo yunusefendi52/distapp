@@ -1,11 +1,11 @@
 export type BundleKeystoreResponse = {
     appKeystorePass: string
     appKeystoreAlias: string
-    appKeystoreBase64: string
+    appKeystoreUrl: string
 }
 
 export default defineEventHandler(async (event) => {
-    const { BUNDLEAAB: { KEYSTORE_BASE64, KEYSTORE_PASS, KEYSTORE_ALIAS } } = useRuntimeConfig(event)
+    const { BUNDLEAAB: { KEYSTORE_URL, KEYSTORE_PASS, KEYSTORE_ALIAS } } = useRuntimeConfig(event)
     const apiKey = getHeader(event, 'API-KEY')
     if (apiKey) {
         const { app: { apiAuthKey } } = useRuntimeConfig(event)
@@ -26,6 +26,6 @@ export default defineEventHandler(async (event) => {
     return {
         appKeystorePass: KEYSTORE_PASS,
         appKeystoreAlias: KEYSTORE_ALIAS,
-        appKeystoreBase64: KEYSTORE_BASE64,
+        appKeystoreUrl: KEYSTORE_URL,
     } satisfies BundleKeystoreResponse
 })
