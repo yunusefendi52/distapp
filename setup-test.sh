@@ -14,23 +14,23 @@ tempFolder=".temp"
 rm -rf $tempFolder
 mkdir -p $tempFolder
 
-minioFolder="$tempFolder/minio"
-mkdir -p "$minioFolder/distapp"
-minio server --address 127.0.0.1:9000 "$minioFolder" &
+seawFolder="$tempFolder/seaw"
+mkdir -p "$seawFolder/distapp"
+weed server -dir="$seawFolder" -s3 -s3.port=8333 -volume.preStopSeconds=0 -s3.allowedOrigins="*" -master.raftHashicorp &
 
-for i in {1..10}; do
-    curl -s -IL 127.0.0.1:9000
-    if [ $? -eq 0 ]; then
-        break
-    fi
-    sleep 1
-done
+# for i in {1..10}; do
+#     curl -s -IL 127.0.0.1:8333
+#     if [ $? -eq 0 ]; then
+#         break
+#     fi
+#     sleep 1
+# done
 
 mkdir -p "$tempFolder/sqld"
 pushd "$tempFolder/sqld"
-sqld --http-listen-addr "127.0.0.1:8888" --http-auth "basic:c3FsZDppOHJ3ZXlzNzBkN2Zh" &
+sqld --http-listen-addr "127.0.0.1:8889" --http-auth "basic:c3FsZDppOHJ3ZXlzNzBkN2Zh" &
 for i in {1..10}; do
-    curl -s -IL 127.0.0.1:8888
+    curl -s -IL 127.0.0.1:8889
     if [ $? -eq 0 ]; then
         break
     fi

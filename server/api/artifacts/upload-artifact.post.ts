@@ -99,7 +99,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const artifactTotal = await db.select({
-        count: count(tables.artifacts),
+        count: count(tables.artifacts.id),
     }).from(tables.artifacts)
         .where(eq(tables.artifacts.appsId, appId))
         .then(takeUniqueOrThrow)

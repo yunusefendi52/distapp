@@ -2,3 +2,7 @@
 cli/cli.mjs filter=lfs diff=lfs merge=lfs -text
 public/assets/distapp-dark.png filter=lfs diff=lfs merge=lfs -text
 public/assets/distapp-light.png filter=lfs diff=lfs merge=lfs -text
+tests/tests_artifacts/app-arm64-v8a-release.apk filter=lfs diff=lfs merge=lfs -text
+tests/tests_artifacts/app-release.aab filter=lfs diff=lfs merge=lfs -text
+tests/tests_artifacts/testapp.ipa filter=lfs diff=lfs merge=lfs -text
+tests/tests_artifacts/release.zip filter=lfs diff=lfs merge=lfs -text

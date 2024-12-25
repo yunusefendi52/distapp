@@ -60,10 +60,7 @@ async function start() {
             }
             const bundleApkFile = bundleApkPath ? await promises.readFile(bundleApkPath) : undefined
             await uploadArtifact(file, filename, orgName, appName, values.releaseNotes ? values.releaseNotes : null, bundleApkFile)
-            console.log('Finished Distributing', {
-                filePath,
-                bundleApkPath,
-            })
+            console.log(`Finished Distributing "${filePath}"` + (bundleApkPath ? 'with generated APK' : ''))
         } finally {
             await disposeBundle?.()
         }
