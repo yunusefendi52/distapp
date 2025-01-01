@@ -15,6 +15,14 @@
             <Button v-else icon=" pi pi-upload" text />
         </div>
     </AppCard>
+    <div class="mt-1 text-m" v-if="modelFile?.name.endsWith('.aab')">
+        <span class="text-sm dark:text-neutral-200">
+            <span class="">APK generation not supported here, use CLI for
+                now. </span>
+            <a href="https://github.com/yunusefendi52/distapp?tab=readme-ov-file#cli-usage" target="_blank">Learn
+                more.</a>
+        </span>
+    </div>
     <input ref="fileRef" :modelValue="model" class="hidden" type="file" :accept="prop.accept" @change="(e) => {
         onChange(e)
     }">
