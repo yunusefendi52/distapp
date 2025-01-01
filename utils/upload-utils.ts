@@ -62,7 +62,7 @@ export async function uploadArtifact(
 
         } else if (fileApk) {
             if (fileApk && !apkUrl) {
-                console.error('Something happen apkUrl is null')
+                console.error('Something happen apkUrl is null. Shouldnt happen')
             }
             await myFetch(apkUrl!.apkSignedUrl, {
                 method: 'put',

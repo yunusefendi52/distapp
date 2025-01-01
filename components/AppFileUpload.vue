@@ -3,6 +3,21 @@
         <div class="flex flex-col gap-3" v-if="mimeTypeFromOsType">
             <div>
                 <InputFileUpload v-model="fileList" type="file" :accept="mimeTypeFromOsType" @change="checkFile" />
+                <div v-if="isFileAab">
+                    <div class="text-m mb-2">
+                        <span class="text-sm dark:text-neutral-200">
+                            <span class="">APK generation not supported here, use CLI for
+                                now. </span>
+                            <a href="https://github.com/yunusefendi52/distapp?tab=readme-ov-file#cli-usage"
+                                target="_blank">Learn
+                                more.</a>
+                            <br>
+                            <span>If you have generated APK, attach it below.</span>
+                        </span>
+                    </div>
+                    <InputFileUpload v-model="fileApkRef" type="file" accept="application/vnd.android.package-archive"
+                        placeholder="Click to attach APK" />
+                </div>
             </div>
             <div class="flex flex-col gap-2">
                 <label for="releasenotes">Release Notes</label>
@@ -36,8 +51,7 @@ const groupName = computed(() => props.dataProps.groupName)
 
 const mimeTypeFromOsType = computed(() => osType.value ? getMimeTypeFromosType(osType.value) : undefined)
 const fileList = ref<FileList | undefined>()
-// const fileApkRef = ref<HTMLInputElement | null>(null)
-const showUploadFileApk = ref(false)
+const fileApkRef = ref<FileList | undefined>()
 const isFileAab = ref(false)
 function checkFile(event: Event) {
     const input = event.target as HTMLInputElement
@@ -63,7 +77,7 @@ watchEffect(() => {
 })
 
 const { mutateAsync, isPending } = useMutation({
-    mutationFn: async (param: { file: File, fileApk: string | undefined }) => {
+    mutationFn: async (param: { file: File, fileApk: File | undefined }) => {
         const { artifactId } = await onUpload(param.file, param.fileApk)
         const groupIds = selectedGroup.value?.map(e => e.id) ?? []
         if (artifactId && groupIds && groupIds.length) {
@@ -89,17 +103,16 @@ const submit = async () => {
     if (!realFile) {
         return
     }
-    // const generateFileApk = realFile.name.endsWith('.aab')
+    const realApkFile = fileApkRef.value?.length ? fileApkRef.value[0] : undefined
     mutateAsync({
         file: realFile,
-        // fileApk: generateFileApk ? 'generate_bundle' : undefined,
-        fileApk: undefined,
+        fileApk: realApkFile,
     })
 }
 
 const toast = useToast()
 
-const onUpload = async (file: File, fileApk: string | undefined) => {
+const onUpload = async (file: File, fileApk: File | undefined) => {
     try {
         const data = await uploadArtifact(file, file.name.substring(0, file.name.lastIndexOf('.')), orgName.value, appName.value, releaseNotes.value, fileApk)
         return {

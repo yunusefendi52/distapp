@@ -6,7 +6,7 @@
                     <span>{{ modelFile.name }}</span>
                     <span class="text-sm">{{ formatBytes(modelFile.size) }}</span>
                 </template>
-                <span v-else>Click to upload here</span>
+                <span v-else>{{ placeholder || 'Click to upload here' }}</span>
             </div>
             <Button v-if="modelFile" icon="pi pi-times" text @click="(e) => {
                 e.stopPropagation()
@@ -15,14 +15,6 @@
             <Button v-else icon=" pi pi-upload" text />
         </div>
     </AppCard>
-    <div class="mt-1 text-m" v-if="modelFile?.name.endsWith('.aab')">
-        <span class="text-sm dark:text-neutral-200">
-            <span class="">APK generation not supported here, use CLI for
-                now. </span>
-            <a href="https://github.com/yunusefendi52/distapp?tab=readme-ov-file#cli-usage" target="_blank">Learn
-                more.</a>
-        </span>
-    </div>
     <input ref="fileRef" :modelValue="model" class="hidden" type="file" :accept="prop.accept" @change="(e) => {
         onChange(e)
     }">
@@ -45,6 +37,7 @@ watchEffect(() => {
 const modelFile = computed(() => model.value && model.value.length ? model.value.item(0) : undefined)
 const prop = defineProps<{
     accept?: string,
+    placeholder?: string,
 }>()
 function onChange(event: Event) {
     const inputEl = event.target as HTMLInputElement
