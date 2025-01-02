@@ -59,12 +59,23 @@ export async function uploadArtifact(
     const generateBundleHeadless = fileApk === 'generate_bundle'
     async function uploadApkUrl() {
         if (generateBundleHeadless) {
-
+            await myFetch('/api/artifacts/generate-bundle-headless', {
+                timeout: 60 * 60000, // 60 minutes
+                keepalive: true,
+                body: {
+                    orgName,
+                    appName,
+                    fileKey,
+                    apkUrl,
+                },
+                method: 'put',
+            })
         } else if (fileApk) {
             if (fileApk && !apkUrl) {
                 console.error('Something happen apkUrl is null. Shouldnt happen')
             }
             await myFetch(apkUrl!.apkSignedUrl, {
+                timeout: 60 * 60000, // 60 minutes
                 method: 'put',
                 body: fileApk,
                 redirect: 'follow'

@@ -77,7 +77,7 @@ watchEffect(() => {
 })
 
 const { mutateAsync, isPending } = useMutation({
-    mutationFn: async (param: { file: File, fileApk: File | undefined }) => {
+    mutationFn: async (param: { file: File, fileApk: File | string | undefined }) => {
         const { artifactId } = await onUpload(param.file, param.fileApk)
         const groupIds = selectedGroup.value?.map(e => e.id) ?? []
         if (artifactId && groupIds && groupIds.length) {
@@ -106,13 +106,14 @@ const submit = async () => {
     const realApkFile = fileApkRef.value?.length ? fileApkRef.value[0] : undefined
     mutateAsync({
         file: realFile,
-        fileApk: realApkFile,
+        // fileApk: realApkFile,
+        fileApk: 'generate_bundle',
     })
 }
 
 const toast = useToast()
 
-const onUpload = async (file: File, fileApk: File | undefined) => {
+const onUpload = async (file: File, fileApk: File | string | undefined) => {
     try {
         const data = await uploadArtifact(file, file.name.substring(0, file.name.lastIndexOf('.')), orgName.value, appName.value, releaseNotes.value, fileApk)
         return {
