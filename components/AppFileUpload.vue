@@ -2,7 +2,8 @@
     <Drawer class="!w-[30rem]" position="right" header="Upload" v-model:visible="showUpload">
         <div class="flex flex-col gap-3" v-if="mimeTypeFromOsType">
             <div>
-                <InputFileUpload v-model="fileList" type="file" :accept="mimeTypeFromOsType" @change="checkFile" />
+                <InputFileUpload dataTestId="upload_input_btn" v-model="fileList" type="file"
+                    :accept="mimeTypeFromOsType" @change="checkFile" />
                 <div v-if="isFileAab">
                     <div class="text-m mb-2">
                         <span class="text-sm dark:text-neutral-200">
@@ -29,7 +30,7 @@
                     placeholder="Select Groups" filter />
             </div>
             <Button class="self-end mt-4" :label="isPending ? 'Uploading...' : 'Upload'" @click="submit"
-                :loading="isPending" />
+                data-testid="submit_upload_btn" :loading="isPending" />
         </div>
     </Drawer>
 </template>

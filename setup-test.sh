@@ -18,13 +18,13 @@ seawFolder="$tempFolder/seaw"
 mkdir -p "$seawFolder/distapp"
 weed server -dir="$seawFolder" -s3 -s3.port=8333 -volume.preStopSeconds=0 -s3.allowedOrigins="*" -master.raftHashicorp &
 
-# for i in {1..10}; do
-#     curl -s -IL 127.0.0.1:8333
-#     if [ $? -eq 0 ]; then
-#         break
-#     fi
-#     sleep 1
-# done
+for i in {1..10}; do
+    curl -s -IL 127.0.0.1:8333
+    if [ $? -eq 0 ]; then
+        break
+    fi
+    sleep 1
+done
 
 mkdir -p "$tempFolder/sqld"
 pushd "$tempFolder/sqld"
@@ -49,8 +49,8 @@ function extract_test_artifacts() {
         echo "File $zip_file already exists. Skipping download."
     else
         curl -L -o $zip_file https://github.com/yunusefendi52/distapp_artifactory/releases/download/v1/tests_artifacts.zip
-        unzip $zip_file -d "tests"
     fi
+    unzip -f $zip_file -d "tests"
 }
 extract_test_artifacts
 

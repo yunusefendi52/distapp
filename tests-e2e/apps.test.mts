@@ -54,14 +54,16 @@ test('Apps test', async ({ page, goto, context }) => {
             await page.getByText('API Keys').click()
             await expect(page).toHaveURL(/.*api-keys/)
             await page.getByText('Generate Token').click()
-            await expect(page.getByTestId('tkn_spn')).toContainText('ey')
+            await expect(page.getByTestId('tkn_spn')).toBeVisible()
             appApiKey = await page.getByTestId('tkn_spn').innerText()
+            expect(appApiKey).toContain('ey')
         })
 
         const cliCommand = 'DISTAPP_CLI_URL="http://localhost:3000" node cli/cli.mjs'
 
         if (osTestType === 'Android') {
             await test.step(`User can upload artifact ${osTestType} AAB with API keys using CLI`, async () => {
+                test.setTimeout(120_000)
                 const { stderr, stdout } = await exec(`${cliCommand} \\
                     --distribute \\
                     --file "tests/tests_artifacts/app-release.aab" \\
@@ -104,6 +106,25 @@ test('Apps test', async ({ page, goto, context }) => {
                     --file "tests/tests_artifacts/release.zip" \\
                     --slug "${appSlug}" \\
                     --apiKey "${appApiKey}"`)).rejects.toThrow(/Cannot read package file/)
+            })
+        }
+
+        if (osTestType === 'Android') {
+            await test.step('User can upload aab using GUI', async () => {
+                await page.getByTestId('a_menus').getByText(orgName).click()
+                await page.getByText(appName).click()
+                await page.getByTestId('d_upload').click()
+                await expect(page.getByTestId('upload_input_btn')).toBeVisible()
+                const fileChooserPromise = page.waitForEvent('filechooser')
+                await page.getByTestId('upload_input_btn').click()
+                const fileChooser = await fileChooserPromise
+                await fileChooser.setFiles('tests/tests_artifacts/app-release.aab')
+                await page.getByTestId('submit_upload_btn').click()
+
+                await page.waitForResponse(/generate-bundle-release/, {
+                    timeout: 120,
+                })
+                await expect(page.getByTestId('submit_upload_btn')).not.toBeVisible()
             })
         }
     }
