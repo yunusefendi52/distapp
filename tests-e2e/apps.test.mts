@@ -63,7 +63,9 @@ test('Apps test', async ({ page, goto, context }) => {
 
         if (osTestType === 'Android') {
             await test.step(`User can upload artifact ${osTestType} AAB with API keys using CLI`, async () => {
-                test.setTimeout(120_000)
+                // Needed to give some time time download bundletool
+                test.setTimeout(90_000)
+
                 const { stderr, stdout } = await exec(`${cliCommand} \\
                     --distribute \\
                     --file "tests/tests_artifacts/app-release.aab" \\
