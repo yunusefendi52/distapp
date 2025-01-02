@@ -32,13 +32,14 @@ async function downloadFile(url: string, filepath: string) {
 
 export async function extractAabToApk(aabPath: string) {
     const cwdRoot = process.cwd()
-    const bundeFilesDir = join(cwdRoot, '.temp', 'bundle_files')
+    const bundeFilesDir = join(cwdRoot, '.distapp-data', 'bundle_files')
     await promises.mkdir(bundeFilesDir, {
         recursive: true,
     })
 
     const bundletoolJarPath = join(bundeFilesDir, 'bundletool.jar')
-    if (!existsSync(bundletoolJarPath)) {
+    const bundletoolCheck = await exec(`java -jar "${bundletoolJarPath}" version || echo "Error check bundletool version"`)
+    if (!bundletoolCheck.stdout.includes('1.17.2')) {
         await downloadFile('https://github.com/google/bundletool/releases/download/1.17.2/bundletool-all-1.17.2.jar', bundletoolJarPath)
     }
 
