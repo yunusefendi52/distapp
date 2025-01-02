@@ -3,22 +3,7 @@
         <div class="flex flex-col gap-3" v-if="mimeTypeFromOsType">
             <div>
                 <InputFileUpload dataTestId="upload_input_btn" v-model="fileList" type="file"
-                    :accept="mimeTypeFromOsType" @change="checkFile" />
-                <div v-if="isFileAab">
-                    <div class="text-m mb-2">
-                        <span class="text-sm dark:text-neutral-200">
-                            <span class="">APK generation not supported here, use CLI for
-                                now. </span>
-                            <a href="https://github.com/yunusefendi52/distapp?tab=readme-ov-file#cli-usage"
-                                target="_blank">Learn
-                                more.</a>
-                            <br>
-                            <span>If you have generated APK, attach it below.</span>
-                        </span>
-                    </div>
-                    <InputFileUpload v-model="fileApkRef" type="file" accept="application/vnd.android.package-archive"
-                        placeholder="Click to attach APK" />
-                </div>
+                    :accept="mimeTypeFromOsType" />
             </div>
             <div class="flex flex-col gap-2">
                 <label for="releasenotes">Release Notes</label>
@@ -52,12 +37,6 @@ const groupName = computed(() => props.dataProps.groupName)
 
 const mimeTypeFromOsType = computed(() => osType.value ? getMimeTypeFromosType(osType.value) : undefined)
 const fileList = ref<FileList | undefined>()
-const fileApkRef = ref<FileList | undefined>()
-const isFileAab = ref(false)
-function checkFile(event: Event) {
-    const input = event.target as HTMLInputElement
-    isFileAab.value = input.files?.item(0)?.name?.endsWith('.aab') || false
-}
 
 const { data: appGroups } = useFetch('/api/groups/list-groups', {
     query: {
@@ -104,11 +83,11 @@ const submit = async () => {
     if (!realFile) {
         return
     }
-    const realApkFile = fileApkRef.value?.length ? fileApkRef.value[0] : undefined
+    const isFileAab = realFile.name?.endsWith('.aab') || false
     mutateAsync({
         file: realFile,
         // fileApk: realApkFile,
-        fileApk: 'generate_bundle',
+        fileApk: isFileAab ? 'generate_bundle' : undefined,
     })
 }
 

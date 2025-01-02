@@ -74,6 +74,8 @@ test('Apps test', async ({ page, goto, context }) => {
                 expect(stderr).toBeFalsy()
                 expect(stdout).toContain('Finished Distributing')
                 expect(stdout).toContain('with generated APK')
+
+                test.setTimeout(30_000)
             })
             await test.step(`User can upload artifact ${osTestType} APK with API keys using CLI`, async () => {
                 const { stderr, stdout } = await exec(`${cliCommand} \\
@@ -112,7 +114,7 @@ test('Apps test', async ({ page, goto, context }) => {
         }
 
         if (osTestType === 'Android') {
-            await test.step('User can upload aab using GUI', async () => {
+            await test.step('User can upload aab in website', async () => {
                 await page.getByTestId('a_menus').getByText(orgName).click()
                 await page.getByText(appName).click()
                 await page.getByTestId('d_upload').click()
@@ -121,12 +123,48 @@ test('Apps test', async ({ page, goto, context }) => {
                 await page.getByTestId('upload_input_btn').click()
                 const fileChooser = await fileChooserPromise
                 await fileChooser.setFiles('tests/tests_artifacts/app-release.aab')
+                
+                const generateBundleRespPromise = page.waitForResponse(r => r.url().includes('generate-bundle-headless'))
+                const uploadArtifactUrlPromise = page.waitForResponse(r => r.url().includes('upload-artifact-url'))
                 await page.getByTestId('submit_upload_btn').click()
-
-                await page.waitForResponse(/generate-bundle-release/, {
-                    timeout: 120,
-                })
                 await expect(page.getByTestId('submit_upload_btn')).not.toBeVisible()
+                const generateBundleResp = await generateBundleRespPromise
+                const uploadArtifactUrl = await uploadArtifactUrlPromise
+                expect(generateBundleResp.ok()).toBe(true)
+                expect(uploadArtifactUrl.ok()).toBe(true)
+            })
+            await test.step('User can upload apk in website', async () => {
+                await page.getByTestId('a_menus').getByText(orgName).click()
+                await page.getByText(appName).click()
+                await page.getByTestId('d_upload').click()
+                await expect(page.getByTestId('upload_input_btn')).toBeVisible()
+                const fileChooserPromise = page.waitForEvent('filechooser')
+                await page.getByTestId('upload_input_btn').click()
+                const fileChooser = await fileChooserPromise
+                await fileChooser.setFiles('tests/tests_artifacts/app-arm64-v8a-release.apk')
+                
+                const uploadArtifactUrlPromise = page.waitForResponse(r => r.url().includes('upload-artifact-url'))
+                await page.getByTestId('submit_upload_btn').click()
+                await expect(page.getByTestId('submit_upload_btn')).not.toBeVisible()
+                const uploadArtifactUrl = await uploadArtifactUrlPromise
+                expect(uploadArtifactUrl.ok()).toBe(true)
+            })
+        } else if (osTestType === 'iOS') {
+            await test.step('User can upload iOS ipa in website', async () => {
+                await page.getByTestId('a_menus').getByText(orgName).click()
+                await page.getByText(appName).click()
+                await page.getByTestId('d_upload').click()
+                await expect(page.getByTestId('upload_input_btn')).toBeVisible()
+                const fileChooserPromise = page.waitForEvent('filechooser')
+                await page.getByTestId('upload_input_btn').click()
+                const fileChooser = await fileChooserPromise
+                await fileChooser.setFiles('tests/tests_artifacts/testapp.ipa')
+                
+                const uploadArtifactUrlPromise = page.waitForResponse(r => r.url().includes('upload-artifact-url'))
+                await page.getByTestId('submit_upload_btn').click()
+                await expect(page.getByTestId('submit_upload_btn')).not.toBeVisible()
+                const uploadArtifactUrl = await uploadArtifactUrlPromise
+                expect(uploadArtifactUrl.ok()).toBe(true)
             })
         }
     }
