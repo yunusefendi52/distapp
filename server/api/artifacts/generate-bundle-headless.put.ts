@@ -1,17 +1,8 @@
-import { extractAabToApk } from "~/cli/extract-aab-to-apk"
 import { S3Fetch } from "~/server/services/s3fetch"
-import { existsSync, promises, createReadStream } from 'fs'
-import { join } from "path"
-import { downloadFile } from "~/server/services/downloadFile"
-import { uuidv4 } from "uuidv7"
-
-async function generateTempFolder(orgId: string, appId: string): Promise<string> {
-    const tempFolder = join(process.cwd(), '.temp', 'aab_gen', orgId, appId, uuidv4().substring(0, 13))
-    await promises.mkdir(tempFolder, {
-        recursive: true,
-    })
-    return tempFolder
-}
+import { generateBundleHandler } from "./generateBundleHandler"
+import promises from "node:fs/promises";
+import { join } from "node:path";
+import * as jose from 'jose'
 
 export default defineEventHandler(async event => {
     setHeader(event, 'connection', 'keep-alive')
@@ -33,42 +24,52 @@ export default defineEventHandler(async event => {
     const { assets } = getStorageKeys(userApp.organizationsId!, userApp.id, request.fileKey)
     const signedUrl = await s3.getSignedUrlGetObject(assets, 300, `attachment; filename="app.aab"`)
 
-    const aabGenFolderTemp = await generateTempFolder(userApp.organizationsId!, userApp.id)
-    const aabFilePath = join(aabGenFolderTemp, 'app.aab')
+    const { BUNDLEAAB: { KEYSTORE_URL, KEYSTORE_PASS, KEYSTORE_ALIAS } } = useRuntimeConfig(event)
 
-    try {
-        await downloadFile(signedUrl, aabFilePath)
-
-        const { bundleApk, dispose } = await extractAabToApk(aabFilePath, async (keystoreFile) => {
-            const { BUNDLEAAB: { KEYSTORE_URL, KEYSTORE_PASS, KEYSTORE_ALIAS } } = useRuntimeConfig(event)
-
-            await promises.copyFile(join('public', KEYSTORE_URL), keystoreFile)
-
-            if (!existsSync(keystoreFile)) {
-                throw 'keystoreFile not found, should not happen'
-            }
-
-            return {
-                appKeystorePass: KEYSTORE_PASS,
-                appKeystoreAlias: KEYSTORE_ALIAS,
-                appKeystoreUrl: KEYSTORE_URL,
-            }
-        })
-
-        try {
-            const bundleApkFile = await promises.readFile(bundleApk)
-            await $fetch.raw(request.apkUrl.apkSignedUrl, {
-                method: 'put',
-                body: bundleApkFile,
-                redirect: 'follow',
-            })
-        } finally {
-            dispose()
+    const isRunningServerless = import.meta.dev || navigator.userAgent === 'Cloudflare-Workers'
+    if (isRunningServerless) {
+        const origin = event.headers.get('origin')
+        var keystoreUrl = KEYSTORE_URL
+        if (keystoreUrl.startsWith('/')) {
+            keystoreUrl = `${origin}${keystoreUrl}`
         }
-    } finally {
-        await promises.rm(aabGenFolderTemp, {
-            force: true,
-            recursive: true,
+        const pKey = `-----BEGIN PRIVATE KEY-----
+${process.env.STANDBY_SERVER_PRIVATE_KEY}
+-----END PRIVATE KEY-----`
+        const algorithm = 'EdDSA'
+        const privateKey = await jose.importPKCS8(pKey, algorithm)
+        const requestData = await new jose.SignJWT({
+            signedUrl: signedUrl,
+            orgId: userApp.organizationsId!,
+            appId: userApp.id,
+            keystorePass: KEYSTORE_PASS,
+            keystoreAlias: KEYSTORE_ALIAS,
+            keystoreUrl: keystoreUrl,
+            apkSignedUrl: request.apkUrl.apkSignedUrl,
         })
+            .setProtectedHeader({
+                alg: algorithm,
+            })
+            .setIssuedAt()
+            .setExpirationTime('5m')
+            .sign(privateKey)
+        const verifierUrl = `${origin}/.known-jks/svc.pub`
+        const redirectUrl = new URLSearchParams({
+            verifierUrl,
+            r: requestData,
+        })
+        await sendRedirect(event, `${process.env.STANDBY_SERVER_URL}/gb?${redirectUrl}`, 303)
+    } else {
+        await generateBundleHandler(
+            signedUrl,
+            userApp.organizationsId!,
+            userApp.id,
+            KEYSTORE_PASS,
+            KEYSTORE_ALIAS,
+            KEYSTORE_URL,
+            request.apkUrl.apkSignedUrl,
+            async (keystoreFile) => {
+                await promises.copyFile(join('public', KEYSTORE_URL), keystoreFile)
+            })
     }
 })
