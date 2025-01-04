@@ -22,8 +22,8 @@ app.get('/genbndl', async (c) => {
     return
   }
   const publicKeyStr = `-----BEGIN PUBLIC KEY-----
-  ${verifierKey}
-  -----END PUBLIC KEY-----`
+${verifierKey}
+-----END PUBLIC KEY-----`
   const publicKey = await jose.importSPKI(publicKeyStr, 'EdDSA')
   const request = (await jose.jwtVerify(requestData, publicKey)).payload as {
     signedUrl: string,

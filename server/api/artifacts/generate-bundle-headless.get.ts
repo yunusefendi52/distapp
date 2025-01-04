@@ -26,7 +26,7 @@ export default defineEventHandler(async event => {
     const { BUNDLEAAB: { KEYSTORE_URL, KEYSTORE_PASS, KEYSTORE_ALIAS } } = useRuntimeConfig(event)
 
     // Need a better way to test this, currently only test without headless mode
-    const isRunningServerless = (typeof navigator !== 'undefined' && navigator.userAgent === 'Cloudflare-Workers')
+    const isRunningServerless = process.env.STANDBY_SERVER_ENABLED === '1' || (typeof navigator !== 'undefined' && navigator.userAgent === 'Cloudflare-Workers')
     if (isRunningServerless) {
         const origin = request.hostOrigin
         var keystoreUrl = KEYSTORE_URL
@@ -54,7 +54,14 @@ ${process.env.STANDBY_SERVER_PRIVATE_KEY}
             .setExpirationTime('5m')
             .sign(privateKey)
         const verifierUrl = `${origin}/.known-jks/svc${process.env.IS_RUNNING_TEST === '1' ? '-test' : ''}.pub`
-        const verifierKey = await $fetch<string>(verifierUrl)
+        const verifierKey = await $fetch<string>(verifierUrl, {
+            parseResponse(responseText) {
+                return responseText
+                    .replaceAll('-----BEGIN PUBLIC KEY-----', '')
+                    .replaceAll('-----END PUBLIC KEY-----', '')
+                    .trim()
+            },
+        })
         const redirectUrl = new URLSearchParams({
             verifierKey: verifierKey,
             r: requestData,
