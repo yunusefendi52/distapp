@@ -96,7 +96,7 @@ export const signInUser = (
     token: string) => {
     setCookie(event, cookieAuthKey, token, {
         httpOnly: false,
-        secure: true,
+        secure: !import.meta.dev,
         sameSite: 'lax',
         maxAge: 34560000, // 365 days
     })

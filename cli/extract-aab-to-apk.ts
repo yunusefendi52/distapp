@@ -1,14 +1,12 @@
 import util from 'util'
 import { join, basename, extname } from 'path'
-import { promises, createWriteStream, existsSync } from 'fs'
+import { promises, existsSync } from 'fs'
 import child_process from 'node:child_process'
 import { uuidv4 } from "uuidv7"
 const exec = util.promisify(child_process.exec)
 import { myFetch } from '../utils/upload-utils.js'
 import type { BundleKeystoreResponse } from '../server/api/artifacts/get-bundle-keystore.get.js'
-import { Readable } from 'stream'
-import { ReadableStream } from 'stream/web'
-import { finished } from 'stream/promises'
+import { downloadFile } from '~/server/services/downloadFile.js'
 
 function getDateFilename(): string {
     const today = new Date()
@@ -19,29 +17,40 @@ function getDateFilename(): string {
     return `${yyyy}_${mm}_${dd}_${today.getHours()}_${today.getMinutes()}`
 }
 
-async function downloadFile(url: string, filepath: string) {
-    const response = await fetch(url, {
-        redirect: 'follow',
-    });
-    const body = Readable.fromWeb(response.body as ReadableStream);
-    const tempFilepath = `${filepath}.tmp`
-    const download_write_stream = createWriteStream(tempFilepath);
-    await finished(body.pipe(download_write_stream));
-    await promises.rename(tempFilepath, filepath)
+async function getBundleKeystore(keystoreFile: string) {
+    const bundleKeystoreResponse: BundleKeystoreResponse | undefined = await myFetch('/api/artifacts/get-bundle-keystore')
+    if (!bundleKeystoreResponse) {
+        throw 'Error bundleKeystoreResponse'
+    }
+    var keystoreUrl = bundleKeystoreResponse.appKeystoreUrl
+    if (keystoreUrl.startsWith('/')) {
+        keystoreUrl = `${process.env.DISTAPP_CLI_URL}${keystoreUrl}`
+    }
+    await downloadFile(keystoreUrl, keystoreFile)
+    return bundleKeystoreResponse
 }
 
-export async function extractAabToApk(aabPath: string) {
+async function getBundletoolPath(bundeFilesDir: string): Promise<string> {
+    if (process.env.DISTAPP_BUNDLETOOL_PATH) {
+        return process.env.DISTAPP_BUNDLETOOL_PATH
+    } else {
+        const bundletoolJarPath = join(bundeFilesDir, 'bundletool.jar')
+        const bundletoolCheck = await exec(`java -jar "${bundletoolJarPath}" version || echo "Error check bundletool version"`)
+        if (!bundletoolCheck.stdout.includes('1.17.2')) {
+            await downloadFile('https://github.com/google/bundletool/releases/download/1.17.2/bundletool-all-1.17.2.jar', bundletoolJarPath)
+        }
+        return bundletoolJarPath
+    }
+}
+
+export async function extractAabToApk(aabPath: string, bundleKeystoreFetcher?: (keystoreFile: string) => Promise<BundleKeystoreResponse>) {
     const cwdRoot = process.cwd()
     const bundeFilesDir = join(cwdRoot, '.distapp-data', 'bundle_files')
     await promises.mkdir(bundeFilesDir, {
         recursive: true,
     })
 
-    const bundletoolJarPath = join(bundeFilesDir, 'bundletool.jar')
-    const bundletoolCheck = await exec(`java -jar "${bundletoolJarPath}" version || echo "Error check bundletool version"`)
-    if (!bundletoolCheck.stdout.includes('1.17.2')) {
-        await downloadFile('https://github.com/google/bundletool/releases/download/1.17.2/bundletool-all-1.17.2.jar', bundletoolJarPath)
-    }
+    const bundletoolJarPath = await getBundletoolPath(bundeFilesDir)
 
     const tempBundleDir = join(bundeFilesDir, `${getDateFilename()}_${uuidv4().replaceAll('-', '').slice(0, 12)}`)
     // console.log('extract_aab: ', {
@@ -55,24 +64,16 @@ export async function extractAabToApk(aabPath: string) {
     const actualApk = join(tempBundleDir, `${basename(aabPath, extname(aabPath))}.apk`)
     const keystoreFile = join(tempBundleDir, `app.jks`)
 
-    const bundleKeystoreResponse: BundleKeystoreResponse | undefined = await myFetch('/api/artifacts/get-bundle-keystore')
-    if (!bundleKeystoreResponse) {
-        throw 'Error bundleKeystoreResponse'
-    }
-    const keystorePass = bundleKeystoreResponse.appKeystorePass
-    const keystoreAlias = bundleKeystoreResponse.appKeystoreAlias
-    var keystoreUrl = bundleKeystoreResponse.appKeystoreUrl
-    if (keystoreUrl.startsWith('/')) {
-        keystoreUrl = `${process.env.DISTAPP_CLI_URL}${keystoreUrl}`
-    }
-    await downloadFile(keystoreUrl, keystoreFile)
+    const bundleKeystore = bundleKeystoreFetcher
+        ? await bundleKeystoreFetcher?.(keystoreFile)
+        : await getBundleKeystore(keystoreFile)
 
     await exec(`
     java -jar "${bundletoolJarPath}" build-apks --bundle=${aabPath} --output=${bundleApks} --mode=universal \\
         --ks="${keystoreFile}" \\
-        --ks-pass=pass:${keystorePass} \\
-        --ks-key-alias=${keystoreAlias} \\
-        --key-pass=pass:${keystorePass}
+        --ks-pass=pass:${bundleKeystore.appKeystorePass} \\
+        --ks-key-alias=${bundleKeystore.appKeystoreAlias} \\
+        --key-pass=pass:${bundleKeystore.appKeystorePass}
     `)
     await exec(`unzip -p "${bundleApks}" universal.apk > ${actualApk}`)
     await promises.rm(bundleApks, {

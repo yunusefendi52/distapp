@@ -1,0 +1,23 @@
+{
+  "lockfileVersion": 0,
+  "workspaces": {
+    "": {
+      "dependencies": {
+        "@hono/node-server": "^1.13.7",
+        "hono": "^4.6.15",
+      },
+      "devDependencies": {
+        "@types/node": "^20.11.17",
+      },
+    },
+  },
+  "packages": {
+    "@hono/node-server": ["@hono/node-server@1.13.7", "", { "peerDependencies": { "hono": "^4" } }, "sha512-kTfUMsoloVKtRA2fLiGSd9qBddmru9KadNyhJCwgKBxTiNkaAJEwkVN9KV/rS4HtmmNRtUh6P+YpmjRMl0d9vQ=="],
+
+    "@types/node": ["@types/node@20.17.11", "", { "dependencies": { "undici-types": "~6.19.2" } }, "sha512-Ept5glCK35R8yeyIeYlRIZtX6SLRyqMhOFTgj5SOkMpLTdw3SEHI9fHx60xaUZ+V1aJxQJODE+7/j5ocZydYTg=="],
+
+    "hono": ["hono@4.6.15", "", {}, "sha512-OiQwvAOAaI2JrABBH69z5rsctHDzFzIKJge0nYXgtzGJ0KftwLWcBXm1upJC23/omNRtnqM0gjRMbtXshPdqhQ=="],
+
+    "undici-types": ["undici-types@6.19.8", "", {}, "sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw=="],
+  }
+}

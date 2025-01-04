@@ -1,5 +1,5 @@
 <template>
-    <AppCard @click="clickUpload" class="cursor-pointer !py-3">
+    <AppCard @click="clickUpload" class="cursor-pointer !py-3" :data-testid="dataTestId">
         <div class="flex flex-row items-center">
             <div class="flex-1 flex flex-col">
                 <template v-if="modelFile">
@@ -38,6 +38,7 @@ const modelFile = computed(() => model.value && model.value.length ? model.value
 const prop = defineProps<{
     accept?: string,
     placeholder?: string,
+    dataTestId?: string,
 }>()
 function onChange(event: Event) {
     const inputEl = event.target as HTMLInputElement
