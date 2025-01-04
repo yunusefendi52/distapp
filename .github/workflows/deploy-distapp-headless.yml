@@ -2,9 +2,9 @@ name: Deploy Distapp Headless
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ main ]
-  pull_request:
+  # push:
+  #   branches: [ main ]
+  # pull_request:
 
 jobs:
   deploy:
