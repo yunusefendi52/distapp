@@ -7,6 +7,7 @@ export function updateMyFetchApiKey(value: string) {
     myFetchApiKey = value
 }
 export const myFetch = ofetch.create({
+    retry: false,
     onRequest(request) {
         request.options.baseURL = process.env.DISTAPP_CLI_URL
         if (myFetchApiKey) {
@@ -59,22 +60,31 @@ export async function uploadArtifact(
     const generateBundleHeadless = fileApk === 'generate_bundle'
     async function uploadApkUrl() {
         if (generateBundleHeadless) {
-            await myFetch('/api/artifacts/generate-bundle-headless', {
+            await myFetch.raw('/api/artifacts/generate-bundle-headless', {
                 timeout: 60 * 60000, // 60 minutes
                 keepalive: true,
-                body: {
+                query: {
                     orgName,
                     appName,
                     fileKey,
-                    apkUrl,
+                    apkFileKey: apkUrl?.apkFileKey,
+                    apkSignedUrl: apkUrl?.apkSignedUrl,
+                    hostOrigin: window.origin,
                 },
-                method: 'put',
+                // mode: 'no-cors',
+                redirect: 'follow',
+                method: 'get',
+            }).then(e => {
+                if (!e.ok) {
+                    throw `Error bundle ${e.status} - ${e.statusText}`
+                }
+                return e
             })
         } else if (fileApk) {
             if (fileApk && !apkUrl) {
                 console.error('Something happen apkUrl is null. Shouldnt happen')
             }
-            await myFetch(apkUrl!.apkSignedUrl, {
+            await myFetch.raw(apkUrl!.apkSignedUrl, {
                 timeout: 60 * 60000, // 60 minutes
                 method: 'put',
                 body: fileApk,

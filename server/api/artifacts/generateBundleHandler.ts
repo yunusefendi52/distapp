@@ -2,10 +2,10 @@ import { existsSync } from "fs";
 import promises from "node:fs/promises";
 import { join } from "path/posix";
 import { uuidv4 } from "uuidv7";
-import { extractAabToApk } from "~/cli/extract-aab-to-apk";
-import { downloadFile } from "~/server/services/downloadFile";
+import { extractAabToApk } from "../../../cli/extract-aab-to-apk";
+import { downloadFile } from "../../../server/services/downloadFile";
 
-export async function generateTempFolder(orgId: string, appId: string): Promise<string> {
+async function generateTempFolder(orgId: string, appId: string): Promise<string> {
     const tempFolder = join(process.cwd(), '.temp', 'aab_gen', orgId, appId, uuidv4().substring(0, 13))
     await promises.mkdir(tempFolder, {
         recursive: true,

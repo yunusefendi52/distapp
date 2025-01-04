@@ -1,18 +1,15 @@
 {
   "name": "distapp-headless",
-  "version": "1.0.50",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/distapp-headless-svc.ts",
-    "build": "bun build src/distapp-headless-svc.ts --target=node --format=cjs --outdir dist"
+    "dev": "DEV=1 bun run --watch src/distapp-headless.ts",
+    "build": "bun build src/distapp-headless.ts --target node --format cjs --outdir dist"
   },
   "dependencies": {
-    "@elysiajs/cors": "^1.2.0",
-    "elysia": "latest",
-    "jose": "^5.9.6"
+    "@hono/node-server": "^1.13.7",
+    "hono": "^4.6.15"
   },
   "devDependencies": {
-    "bun-types": "latest"
-  },
-  "module": "src/index.js"
+    "@types/node": "^20.11.17"
+  }
 }

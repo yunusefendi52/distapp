@@ -57,4 +57,4 @@ extract_test_artifacts
 echo "Finish setup test"
 
 bun run build --preset=bun
-HOST=localhost bun run .output/server/index.mjs
+IS_RUNNING_TEST=1 HOST=localhost bun run .output/server/index.mjs

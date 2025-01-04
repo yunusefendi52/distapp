@@ -30,6 +30,19 @@ async function getBundleKeystore(keystoreFile: string) {
     return bundleKeystoreResponse
 }
 
+async function getBundletoolPath(bundeFilesDir: string): Promise<string> {
+    if (process.env.DISTAPP_BUNDLETOOL_PATH) {
+        return process.env.DISTAPP_BUNDLETOOL_PATH
+    } else {
+        const bundletoolJarPath = join(bundeFilesDir, 'bundletool.jar')
+        const bundletoolCheck = await exec(`java -jar "${bundletoolJarPath}" version || echo "Error check bundletool version"`)
+        if (!bundletoolCheck.stdout.includes('1.17.2')) {
+            await downloadFile('https://github.com/google/bundletool/releases/download/1.17.2/bundletool-all-1.17.2.jar', bundletoolJarPath)
+        }
+        return bundletoolJarPath
+    }
+}
+
 export async function extractAabToApk(aabPath: string, bundleKeystoreFetcher?: (keystoreFile: string) => Promise<BundleKeystoreResponse>) {
     const cwdRoot = process.cwd()
     const bundeFilesDir = join(cwdRoot, '.distapp-data', 'bundle_files')
@@ -37,11 +50,7 @@ export async function extractAabToApk(aabPath: string, bundleKeystoreFetcher?: (
         recursive: true,
     })
 
-    const bundletoolJarPath = join(bundeFilesDir, 'bundletool.jar')
-    const bundletoolCheck = await exec(`java -jar "${bundletoolJarPath}" version || echo "Error check bundletool version"`)
-    if (!bundletoolCheck.stdout.includes('1.17.2')) {
-        await downloadFile('https://github.com/google/bundletool/releases/download/1.17.2/bundletool-all-1.17.2.jar', bundletoolJarPath)
-    }
+    const bundletoolJarPath = await getBundletoolPath(bundeFilesDir)
 
     const tempBundleDir = join(bundeFilesDir, `${getDateFilename()}_${uuidv4().replaceAll('-', '').slice(0, 12)}`)
     // console.log('extract_aab: ', {
