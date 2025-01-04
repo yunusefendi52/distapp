@@ -50,7 +50,7 @@ function extract_test_artifacts() {
     else
         curl -L -o $zip_file https://github.com/yunusefendi52/distapp_artifactory/releases/download/v1/tests_artifacts.zip
     fi
-    unzip -f $zip_file -d "tests"
+    unzip -o $zip_file -d "tests"
 }
 extract_test_artifacts
 
