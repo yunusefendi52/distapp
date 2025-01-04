@@ -1,7 +1,7 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
-import { generateBundleHandler } from "../../server/api/artifacts/generateBundleHandler.js"
+import { generateBundleHandler } from "../../server/services/generateBundleHandler.js"
 import { downloadFile } from "../../server/services/downloadFile.js"
 import * as jose from 'jose'
 

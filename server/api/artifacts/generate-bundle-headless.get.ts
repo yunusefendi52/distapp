@@ -1,7 +1,6 @@
 import { S3Fetch } from "~/server/services/s3fetch"
-import { generateBundleHandler } from "./generateBundleHandler"
-import promises from "node:fs/promises";
-import { join } from "node:path";
+import promises from "node:fs/promises"
+import { join } from "node:path"
 import * as jose from 'jose'
 
 export default defineEventHandler(async event => {
@@ -68,18 +67,26 @@ ${process.env.STANDBY_SERVER_PRIVATE_KEY}
         })
         await sendRedirect(event, `${process.env.STANDBY_SERVER_URL}/genbndl?${redirectUrl}`, 302)
     } else {
-        await generateBundleHandler(
-            signedUrl,
-            userApp.organizationsId!,
-            userApp.id,
-            KEYSTORE_PASS,
-            KEYSTORE_ALIAS,
-            KEYSTORE_URL,
-            request.apkSignedUrl,
-            async (keystoreFile) => {
-                await promises.copyFile(join('public', KEYSTORE_URL), keystoreFile)
+        if (import.meta.preset !== 'cloudflare-pages') {
+            const { generateBundleHandler } = await import('../../services/generateBundleHandler')
+            await generateBundleHandler(
+                signedUrl,
+                userApp.organizationsId!,
+                userApp.id,
+                KEYSTORE_PASS,
+                KEYSTORE_ALIAS,
+                KEYSTORE_URL,
+                request.apkSignedUrl,
+                async (keystoreFile: string) => {
+                    await promises.copyFile(join('public', KEYSTORE_URL), keystoreFile)
+                })
+            // For compatibility to test
+            await sendRedirect(event, `/genbndl`, 302)
+        } else {
+            throw createError({
+                statusCode: 400,
+                message: 'No bundle handler',
             })
-        // For compatibility to test
-        await sendRedirect(event, `/genbndl`, 302)
+        }
     }
 })

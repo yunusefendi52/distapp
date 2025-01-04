@@ -1,9 +1,9 @@
 import { existsSync } from "fs";
 import promises from "node:fs/promises";
-import { join } from "path/posix";
+import { join } from "path";
 import { uuidv4 } from "uuidv7";
-import { extractAabToApk } from "../../../cli/extract-aab-to-apk";
-import { downloadFile } from "../../../server/services/downloadFile";
+import { extractAabToApk } from "../../cli/extract-aab-to-apk";
+import { downloadFile } from "../../server/services/downloadFile";
 
 async function generateTempFolder(orgId: string, appId: string): Promise<string> {
     const tempFolder = join(process.cwd(), '.temp', 'aab_gen', orgId, appId, uuidv4().substring(0, 13))
