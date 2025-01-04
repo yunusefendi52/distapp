@@ -4,7 +4,7 @@ import { join } from "path";
 import { uuidv4 } from "uuidv7";
 import { extractAabToApk } from "../../cli/extract-aab-to-apk";
 import { downloadFile } from "../../server/services/downloadFile";
-import { createReadStream } from "node:fs";
+import { myFetch } from '../../utils/upload-utils.js'
 
 async function generateTempFolder(orgId: string, appId: string): Promise<string> {
     const tempFolder = join(process.cwd(), '.temp', 'aab_gen', orgId, appId, uuidv4().substring(0, 13))
@@ -45,8 +45,8 @@ export async function generateBundleHandler(
         });
 
         try {
-            const bundleApkFile = createReadStream(bundleApk);
-            await $fetch.raw(apkSignedUrl, {
+            const bundleApkFile = await promises.readFile(bundleApk);
+            await myFetch.raw(apkSignedUrl, {
                 method: 'put',
                 body: bundleApkFile,
                 redirect: 'follow',
