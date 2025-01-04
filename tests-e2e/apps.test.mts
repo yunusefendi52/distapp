@@ -131,7 +131,7 @@ test('Apps test', async ({ page, goto, context }) => {
                 const generateBundleResp = await generateBundleRespPromise
                 const uploadArtifactUrl = await uploadArtifactUrlPromise
                 const gbResp = await gbRespPromise
-                expect(generateBundleResp.status()).toBe(303)
+                expect(generateBundleResp.status()).toBe(302)
                 expect(gbResp.ok()).toBe(true)
                 expect(uploadArtifactUrl.ok()).toBe(true)
                 await expect(page.getByTestId('submit_upload_btn'), {
