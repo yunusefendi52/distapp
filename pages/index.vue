@@ -23,6 +23,7 @@
                             <Button :label="isLoggedIn ? 'Go To Apps' : 'Get Started'" />
                         </NuxtLink>
                     </div>
+                    <span class="text-sm italic font-light">Beta testing</span>
                 </div>
                 <div class="flex justify-center items-center flex-1 p-5 sm:p-0 sm:mr-10">
                     <img class="distapp-dark border border-white/15 rounded-lg" src="/assets/distapp-dark.png">

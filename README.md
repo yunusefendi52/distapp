@@ -10,7 +10,7 @@ Still in development, see roadmap
 - [x] API Key
 - [x] Manage user access
 - [x] Manage groups
-- [ ] Auto convert aab to apk
+- [x] Auto convert aab to apk
 
 ### Screenshots
 
