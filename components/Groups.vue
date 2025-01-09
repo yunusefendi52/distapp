@@ -1,5 +1,5 @@
 <template>
-    <Button class="mb-3" label="New Group" outlined @click="visible = true"></Button>
+    <Button class="mb-3" label="New Group" @click="visible = true"></Button>
 
     <div>
         <DataTable :show-gridlines="false" scrollable :value="list" single @row-click="selectRow($event)"
