@@ -1,6 +1,5 @@
 <template>
-    <div class="flex gap-3 p-2 flex-col justify-stretch">
-        <Button label="Join Invite Code" @click="joinDialog = true" outlined />
+    <div class="flex gap-3 p-3 flex-col justify-stretch">
         <SplitButton :pt="{
             pcButton: {
                 root: {
@@ -14,13 +13,13 @@
                 },
             },
         }" @click="signout" label="Sign Out" :model="items" menuButtonIcon="pi pi-ellipsis-h" outlined />
-        <LazyJoinInviteLink v-model="joinDialog" @joined="joined" />
     </div>
 </template>
 
 <script setup lang="ts">
 import { UserTokenInfo } from '~/server/models/UserTokenInfo';
 import { userTokensKey } from '~/server/utils/utils';
+import { navigateTo } from '#imports'
 
 const cookie = useCookie(cookieAuthKey)
 const cookiePayload = cookie.value ? decodeJwt(cookie.value) : undefined

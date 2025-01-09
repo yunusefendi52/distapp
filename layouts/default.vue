@@ -9,11 +9,6 @@ watchEffect(() => {
         visible.value = false
     }
 })
-
-const joinDialog = ref(false)
-const joined = () => {
-    location.reload()
-}
 </script>
 
 <style lang="scss">
@@ -38,11 +33,10 @@ const joined = () => {
                 <LazyAppDrawer />
             </template>
         </Drawer>
-        <LazyAppDrawer style="width: 300px;" class="hidden sm:inline-flex bg-color" />
+        <LazyAppDrawer style="width: 320px;" class="hidden sm:inline-flex bg-color" />
         <AppDivider orientation="vertical" class="hidden sm:inline-flex" />
         <div class="flex-1 overflow-auto layout-content">
             <slot />
         </div>
     </div>
-    <LazyJoinInviteLink v-model="joinDialog" @joined="joined" />
 </template>

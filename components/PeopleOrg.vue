@@ -24,8 +24,8 @@
                 <template #body="prop">
                     <form>
                         <div>
-                            <Select :model-value="roles.find(e => e.id === prop.data.role)" name="role"
-                                :options="roles" optionLabel="displayRole" placeholder="Select a role" @change="(v) => changeRole({
+                            <Select :model-value="roles.find(e => e.id === prop.data.role)" name="role" :options="roles"
+                                optionLabel="displayRole" placeholder="Select a role" @change="(v) => changeRole({
                                     dropdown: v,
                                     prop,
                                 })" class="w-full md:w-14rem" v-if="data?.canChange" />
@@ -47,14 +47,14 @@
             </Column>
         </DataTable>
     </div>
-    <Dialog v-model:visible="createIsVisible" modal header="Invite Code Created" :style="{ width: '25rem' }">
+    <Dialog v-model:visible="createIsVisible" modal header="Invitation Created" :style="{ width: '28rem' }">
         <div class="flex flex-col gap-2 mb-4 w-full">
-            <span class="p-text-secondary block">This code only active for 1 hour</span>
-            <span style="word-wrap: break-word;">{{ inviteLink }}</span>
+            <span style="word-break: break-all;">{{ inviteLink }}</span>
+            <span class="italic">Link active for 1 hour</span>
         </div>
         <div class="flex justify-content-end gap-3">
             <Button type="button" label="Ok, got it" severity="secondary" @click="createIsVisible = false"></Button>
-            <Button type="button" label="Copy Code" @click="copyLink(inviteLink)"></Button>
+            <Button type="button" label="Copy Link" @click="copyLink(inviteLink)"></Button>
         </div>
     </Dialog>
     <ConfirmPopup />
@@ -91,7 +91,11 @@ const { execute: create, status: createInviteStatus } = useAsyncData(async () =>
         },
         method: 'post',
     })
-    inviteLink.value = response.inviteLink
+    const params = new URLSearchParams({
+        c: response.inviteLink,
+    })
+    const link = `${window.origin}/invitation?${params}`
+    inviteLink.value = link
     createIsVisible.value = true
 }, {
     immediate: false,
