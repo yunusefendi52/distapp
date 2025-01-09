@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col gap-3 mb-3 sm:flex-row">
-        <Button data-testid="d_upload" :loading="!osType" @click="upload" outlined label="Upload"></Button>
+        <Button data-testid="d_upload" :loading="!osType" @click="upload" label="Upload"></Button>
         <MultiSelect v-if="!groupName" placeholder="Filter Groups" v-model="selectedGroup" :options="groups"
             :optionLabel="(w) => w.displayName || w.name" class="sm:w-[200px]" filter />
     </div>
