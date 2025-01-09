@@ -13,7 +13,7 @@ const listOs = [
     },
 ]
 
-const selectedOrg = ref()
+const selectedOrg = ref<typeof orgs.value[0]>()
 const disableOrg = ref<boolean>(false)
 const selectedOs = ref<typeof listOs[0] | undefined>(undefined)
 const appName = ref(null)
@@ -35,7 +35,7 @@ async function saveApp() {
     await mutateAsync({
         name: appName.value,
         osType: selectedOs.value?.value,
-        orgId: (selectedOrg.value as any).id,
+        orgId: selectedOrg.value!.id,
     })
     dialogRef.value.close({
         refresh: true,
@@ -47,7 +47,17 @@ const {
     saveOrg,
     isPending: isPendingOrg,
     orgName: orgNameRef,
+    onCreateOrgData,
 } = await useCreateOrg()
+
+watchEffect(() => {
+    const createdData = onCreateOrgData.value
+    const orgsValue = orgs.value
+    console.log('changeddd', { createdData, orgsValue })
+    if (createdData && orgsValue) {
+        selectedOrg.value = orgsValue.find(v => v.name === createdData.normalizedOrgName)
+    }
+})
 </script>
 
 <template>

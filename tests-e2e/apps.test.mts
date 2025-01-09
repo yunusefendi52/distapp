@@ -18,7 +18,6 @@ test('Apps test', async ({ page, goto, context }) => {
         await page.getByTestId('addNewOrgbtn').click()
         await page.getByTestId('orgname').fill(orgName)
         await page.getByTestId('orgsavebtn').click()
-        await page.getByText('Select organization').click()
         await expect(page.getByText(orgName)).toHaveCount(2)
     })
 
@@ -31,9 +30,11 @@ test('Apps test', async ({ page, goto, context }) => {
             if (index > 0) {
                 await page.getByText('All Apps').click()
                 await page.getByText('Add app').click()
+
+                // First time created organization already selected org
+                await page.getByText('Select organization').click()
+                await page.getByLabel(orgName).getByText(orgName).click()
             }
-            await page.getByText('Select organization').click()
-            await page.getByLabel(orgName).getByText(orgName).click()
             await page.getByText('Select OS Type').click()
             await page.getByLabel(osTestType).click()
             await page.getByTestId('inputAppName').fill(appName)

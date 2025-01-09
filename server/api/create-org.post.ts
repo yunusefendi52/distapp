@@ -24,7 +24,6 @@ export default defineEventHandler(async (event) => {
         })
     })
     return {
-        normalizedOrgName: '',
-        ok: true,
+        normalizedOrgName: normalizedOrgName,
     }
 })

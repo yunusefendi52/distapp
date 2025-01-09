@@ -2,7 +2,7 @@ export const useCreateOrg = async () => {
 
     const addOrgVisible = ref(false)
     const orgName = ref('')
-    const { mutateAsync, isPending } = useMutation({
+    const { mutateAsync, isPending, data } = useMutation({
         mutationFn: (r: any) => $fetch.raw('/api/create-org', {
             method: 'post',
             body: r,
@@ -10,12 +10,6 @@ export const useCreateOrg = async () => {
         onSuccess: async (r) => {
             orgsStore.refresh()
             addOrgVisible.value = false
-            navigateTo({
-                name: 'orgs',
-                params: {
-                    orgName: r.normalizedOrgName,
-                },
-            })
             orgName.value = ''
         },
     })
@@ -34,5 +28,6 @@ export const useCreateOrg = async () => {
         orgName,
         isPending,
         saveOrg,
+        onCreateOrgData: data,
     }
 }
