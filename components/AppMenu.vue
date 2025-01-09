@@ -46,21 +46,25 @@ const orgName = computed(() => route.params.orgName as string)
 </template>
 
 <style lang="scss" scoped>
+$menuActiveColorLight: rgb(229, 229, 229);
+
 .menu-active {
-    background: rgb(238, 238, 238);
+    background: $menuActiveColorLight;
 }
 
 .menu-hover:hover {
-    background: rgb(238, 238, 238);
+    background: $menuActiveColorLight;
 }
 
 .appdark {
+    $menuActiveColorDark: var(--p-navigation-item-focus-background);
+
     .menu-active {
-        background: var(--p-navigation-item-focus-background);
+        background: $menuActiveColorDark;
     }
 
     .menu-hover:hover {
-        background: var(--p-navigation-item-focus-background);
+        background: $menuActiveColorDark;
     }
 }
 </style>
