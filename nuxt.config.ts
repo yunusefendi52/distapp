@@ -61,7 +61,7 @@ const title = 'DistApp • Manage and distribute Android or iOS app'
 const description = 'Manage and distribute Android or iOS app'
 export default defineNuxtConfig({
   compatibilityDate: '2024-08-20',
-  devtools: { enabled: false },
+  devtools: { enabled: true },
   ssr: false,
   routeRules: {
     '/': {
