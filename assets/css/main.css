@@ -109,3 +109,11 @@ body {
 .p-multiselect-token {
     margin: 0.1rem;
 }
+
+html:not([class*=appdark]) .bottom-menu {
+    --p-button-outlined-primary-border-color: rgb(210,210,210);
+}
+
+.bottom-menu {
+    --p-button-outlined-primary-border-color: rgb(90,90,90);
+}
