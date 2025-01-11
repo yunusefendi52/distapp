@@ -9,8 +9,6 @@ const { name: routeName, params } = useRoute()
 const orgNameParam = params.orgName
 const isOrg = computed(() => routeName === 'orgs')
 
-const orgsStore = await useOrgsStore()
-
 const onRowSelect = (event: any) => {
     const appName = event.data.name
     const orgName = event.data.organization.name
@@ -68,6 +66,8 @@ const search = (e: any) => {
 const upperCase = (value: string | null | undefined) => {
     return value?.toUpperCase()
 }
+
+useTitleApp('Apps')
 </script>
 
 <template>

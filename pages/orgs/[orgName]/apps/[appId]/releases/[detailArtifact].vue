@@ -2,7 +2,7 @@
     <ConfirmDialog></ConfirmDialog>
     <AppBarContainer>
         <div class="flex flex-row flex-1 gap-2 items-center">
-            <AppTitle :title="detailApp?.displayName" />
+            <AppTitle :title="title" />
             <div v-if="status === 'pending' || status2 === 'pending'">
                 <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" />
             </div>
@@ -203,4 +203,6 @@ const showEdit = ref(false)
 const refreshData = () => {
     refresh()
 }
+
+const title = useTitleApp(computed(() => detailApp.value?.displayName))
 </script>

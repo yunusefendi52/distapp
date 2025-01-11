@@ -1,7 +1,7 @@
 <template>
     <AppBarContainer>
         <div class="flex flex-row flex-1 gap-2 items-center">
-            <AppTitle title="Apps Settings" />
+            <AppTitle :title="title" />
             <div v-if="status === 'pending'">
                 <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" />
             </div>
@@ -60,6 +60,8 @@ const detailApp = useFetch('/api/detail-app', {
     },
 })
 const { status } = detailApp
+
+const title = useTitleApp('Apps Settings')
 </script>
 
 <style></style>

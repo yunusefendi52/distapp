@@ -16,8 +16,8 @@ useHead({
     htmlAttrs: {
         class: [appTheme],
     },
-    title: 'DistApp',
 })
+useTitleApp('')
 
 globalThis.$fetch = globalThis.$fetch.create({
     onResponseError(response) {

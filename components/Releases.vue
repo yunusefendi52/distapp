@@ -90,5 +90,4 @@ const selectRow = async (row: DataTableRowClickEvent) => {
         },
     })
 }
-
 </script>

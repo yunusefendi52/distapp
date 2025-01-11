@@ -1,6 +1,6 @@
 <template>
     <AppBarContainer>
-        <span class="text-2xl font-bold">{{ detailOrg?.displayName }} Settings</span>
+        <span class="text-2xl font-bold">{{ title }} Settings</span>
     </AppBarContainer>
 
     <div class="px-4 py-2">
@@ -47,4 +47,5 @@ if (route.name === 'orgs-orgName-settings') {
 }
 
 const detailOrg = useDetailGroup()
+const title = useTitleApp(computed(() => detailOrg.value?.displayName))
 </script>

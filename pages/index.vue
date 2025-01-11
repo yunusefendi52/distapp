@@ -61,6 +61,10 @@ definePageMeta({
     layout: false,
 })
 
+useHead({
+    title: 'DistApp • Manage and distribute Android or iOS app',
+})
+
 const route = useRoute()
 const router = useRouter()
 const cookie = useCookie(cookieAuthKey)
