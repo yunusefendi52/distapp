@@ -62,28 +62,7 @@ definePageMeta({
 })
 
 const title = 'DistApp • Manage and distribute Android or iOS app'
-const description = 'Manage and distribute Android or iOS app'
 useHead({
-    meta: [{
-        name: 'description',
-        content: 'Manage and distribute Android or iOS app. App Center Alternative',
-    }, {
-        name: 'keywords',
-        content: 'distapp, dist, app, app center, appcenter, ios, android, microsoft, alternative app center, alternative',
-    }, {
-        name: 'author',
-        content: 'DistApp',
-    },
-    { property: 'og:title', content: title },
-    { property: 'og:description', content: description },
-    { property: 'og:image', content: 'https://distapp.lhf.my.id/assets/distapp-dark.png' },
-    { property: 'og:url', content: 'https://distapp.lhf.my.id' },
-    { property: 'og:type', content: 'website' },
-    { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: title },
-    { name: 'twitter:description', content: description },
-    { name: 'twitter:image', content: 'https://distapp.lhf.my.id/assets/distapp-dark.png' }
-    ],
     title: title,
 })
 
