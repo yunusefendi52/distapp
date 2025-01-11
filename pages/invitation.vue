@@ -1,7 +1,7 @@
 <template>
     <div class="flex max-w-xl flex-col mx-auto justify-stretch p-10">
         <div class="flex flex-col">
-            <span class="text-3xl font-medium">Invitation</span>
+            <span class="text-3xl font-medium">{{ title }}</span>
 
             <form class="mt-6" @submit="joinInvite">
                 <div class="flex flex-col gap-2 mb-3">
@@ -36,4 +36,6 @@ const { mutate: joinInvite, isPending: joinIsPending } = useMutation({
         location.replace('/apps')
     },
 })
+
+const title = useTitleApp('Invitation')
 </script>
