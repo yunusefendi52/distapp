@@ -30,8 +30,10 @@ test('Add and switch account', async ({ page, goto, context }) => {
     await expect(page.getByText('usertest1')).toHaveText('usertest1')
 
     // Lets switch account
+    const currentUrl = page.url()
     await page.getByText('usertest1').click()
-    await page.getByText('Go To Apps').click()
+    await expect(page.getByTestId('b_more_btn')).toBeVisible()
+    await expect(page).toHaveURL(currentUrl)
 
     // Check if switch succeeded
     await page.getByTestId('b_more_btn').click()

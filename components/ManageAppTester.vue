@@ -38,7 +38,7 @@ const isVisible = defineModel<boolean>()
 
 const { params: { appId, orgName, detailGroup: groupName } } = useRoute()
 
-const { data: listTester, status: listTesterStatus, execute: getListTester } = useFetch('/api/apps/testers/list-tester', {
+const { data: listTester, execute: getListTester } = useFetch('/api/apps/testers/list-tester', {
     method: 'get',
     query: {
         orgName,
