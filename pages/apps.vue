@@ -9,6 +9,8 @@ const { name: routeName, params } = useRoute()
 const orgNameParam = params.orgName
 const isOrg = computed(() => routeName === 'orgs')
 
+await useOrgsStore()
+
 const onRowSelect = (event: any) => {
     const appName = event.data.name
     const orgName = event.data.organization.name
