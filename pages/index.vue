@@ -26,8 +26,8 @@
                     <span class="text-sm italic font-light">Beta testing</span>
                 </div>
                 <div class="flex justify-center items-center flex-1 p-5 sm:p-0 sm:mr-10">
-                    <img class="distapp-dark border border-white/15 rounded-lg" src="/assets/distapp-dark.png">
-                    <img class="distapp-light border border-black/15 rounded-lg" src="/assets/distapp-light.png">
+                    <img class="distapp-dark border border-white/15 rounded-lg" src="/assets/distapp-dark.webp">
+                    <img class="distapp-light border border-black/15 rounded-lg" src="/assets/distapp-light.webp">
                 </div>
             </div>
         </div>

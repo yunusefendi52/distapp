@@ -1,4 +1,4 @@
 *.lockb binary diff=lockb
 cli/cli.mjs filter=lfs diff=lfs merge=lfs -text
-public/assets/distapp-dark.png filter=lfs diff=lfs merge=lfs -text
-public/assets/distapp-light.png filter=lfs diff=lfs merge=lfs -text
+public/assets/distapp-dark.webp filter=lfs diff=lfs merge=lfs -text
+public/assets/distapp-light.webp filter=lfs diff=lfs merge=lfs -text

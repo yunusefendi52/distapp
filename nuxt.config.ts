@@ -61,7 +61,7 @@ const title = 'DistApp • Manage and distribute Android or iOS app'
 const description = 'Manage and distribute Android or iOS app'
 export default defineNuxtConfig({
   compatibilityDate: '2024-08-20',
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   ssr: false,
   routeRules: {
     '/': {
@@ -169,13 +169,13 @@ export default defineNuxtConfig({
       },
       { property: 'og:title', content: title },
       { property: 'og:description', content: description },
-      { property: 'og:image', content: 'https://distapp.lhf.my.id/assets/distapp-dark.png' },
+      { property: 'og:image', content: 'https://distapp.lhf.my.id/assets/distapp-dark.webp' },
       { property: 'og:url', content: 'https://distapp.lhf.my.id' },
       { property: 'og:type', content: 'website' },
       { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:title', content: title },
       { name: 'twitter:description', content: description },
-      { name: 'twitter:image', content: 'https://distapp.lhf.my.id/assets/distapp-dark.png' },
+      { name: 'twitter:image', content: 'https://distapp.lhf.my.id/assets/distapp-dark.webp' },
       ],
     },
   },
