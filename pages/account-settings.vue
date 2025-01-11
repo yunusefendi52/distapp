@@ -21,6 +21,8 @@
 <script setup lang="ts">
 const title = useTitleApp('Account Settings')
 
+const route = useRoute()
+
 const items = ref<MenuItem[]>([
     {
         label: 'Profile',
@@ -33,8 +35,12 @@ const items = ref<MenuItem[]>([
     //     command: navigateFromTab,
     // },
 ])
-navigateTo({
-    name: items.value[0].routeName,
-    replace: true,
+watchEffect(() => {
+    if (route.name === 'account-settings') {
+        navigateTo({
+            name: items.value[0].routeName,
+            replace: true,
+        })
+    }
 })
 </script>
