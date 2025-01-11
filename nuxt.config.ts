@@ -119,7 +119,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'DistApp',
+      title: title,
       link: [{
         rel: 'apple-touch-icon',
         sizes: '180x180',
