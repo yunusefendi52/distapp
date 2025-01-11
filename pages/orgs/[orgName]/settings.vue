@@ -4,10 +4,7 @@
     </AppBarContainer>
 
     <div class="px-4 py-2">
-        <TabMenu v-model:active-index="tabIndex" :model="items" :pt="{
-            menu: 'remove-bg-tabmenu',
-            menuitem: 'remove-bg-tabmenu',
-        }" />
+        <AppTabMenu v-model:tab-index="tabIndex" :items="items" />
         <div class="flex-1 mt-3">
             <NuxtPage />
         </div>
@@ -19,8 +16,7 @@ definePageMeta({
     name: 'orgs-orgName-settings',
 })
 
-const { name } = useRoute()
-
+const route = useRoute()
 const tabIndex = ref(0)
 const items = ref<MenuItem[]>([
     {
@@ -43,7 +39,7 @@ const items = ref<MenuItem[]>([
     },
 ])
 
-if (name === 'orgs-orgName-settings') {
+if (route.name === 'orgs-orgName-settings') {
     navigateTo({
         name: items.value[0].routeName,
         replace: true,

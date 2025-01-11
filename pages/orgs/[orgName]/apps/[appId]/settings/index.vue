@@ -8,10 +8,7 @@
         </div>
     </AppBarContainer>
     <div class="flex flex-col gap-3 px-4 py-2">
-        <TabMenu v-model:active-index="active" :model="items" :pt="{
-            menu: 'remove-bg-tabmenu',
-            menuitem: 'remove-bg-tabmenu',
-        }" />
+        <AppTabMenu v-model:tab-index="tabIndex" :items="items" />
         <NuxtPage />
     </div>
 </template>
@@ -38,13 +35,13 @@ const items = ref<MenuItem[]>([
     },
 ])
 
-const active = ref<number | undefined>(items.value.findIndex(e => e.routeName === route.name))
+const tabIndex = ref<number>(0)
 if (import.meta.client) {
     watchEffect(() => {
-        if (!active.value || active.value < 0) {
-            active.value = 0
+        if (!tabIndex.value) {
+            tabIndex.value = 0
             navigateTo({
-                name: items.value[active.value].routeName,
+                name: items.value[tabIndex.value].routeName,
                 replace: true,
             })
         }
