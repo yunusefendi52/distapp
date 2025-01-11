@@ -66,7 +66,7 @@ const description = 'Manage and distribute Android or iOS app'
 useHead({
     meta: [{
         name: 'description',
-        content: 'Manage and distribute Android or iOS app',
+        content: 'Manage and distribute Android or iOS app. App Center Alternative',
     }, {
         name: 'keywords',
         content: 'distapp, dist, app, app center, appcenter, ios, android, microsoft, alternative app center, alternative',
