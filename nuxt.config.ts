@@ -128,6 +128,9 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: title,
+      htmlAttrs: {
+        lang: 'en',
+      },
       link: [{
         rel: 'apple-touch-icon',
         sizes: '180x180',
