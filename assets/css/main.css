@@ -12,6 +12,7 @@
 html,
 body {
     --p-content-border-color: var(--p-surface-200);
+    font-variant-ligatures: none;
 }
 
 .appdark html,
