@@ -1,0 +1,1 @@
+ALTER TABLE `users_subs` DROP COLUMN `subscription_id`;

@@ -1,0 +1,1 @@
+DROP INDEX IF EXISTS `users_subs_customer_id_unique`;

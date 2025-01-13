@@ -20,6 +20,7 @@ useHead({
 useTitleApp('')
 
 globalThis.$fetch = globalThis.$fetch.create({
+    retry: false,
     onResponseError(response) {
         if (!response.response.ok) {
             toast.add({

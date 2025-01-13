@@ -29,11 +29,11 @@ const items = ref<MenuItem[]>([
         routeName: 'account-settings-profile',
         command: navigateFromTab,
     },
-    // {
-    //     label: 'Billing',
-    //     routeName: 'account-settings-billing',
-    //     command: navigateFromTab,
-    // },
+    {
+        label: 'Billing',
+        routeName: 'account-settings-billing',
+        command: navigateFromTab,
+    },
 ])
 watchEffect(() => {
     if (route.name === 'account-settings') {

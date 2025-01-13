@@ -1,0 +1,1 @@
+ALTER TABLE `users_subs` ADD `cancel_at_period_end` integer;

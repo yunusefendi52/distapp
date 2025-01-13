@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@hebilicious/vue-query-nuxt": "^0.3.0",
+    "@lemonsqueezy/lemonsqueezy.js": "^4.0.0",
     "@libsql/client": "^0.14.0",
     "@plist/parse": "^1.1.0",
     "@primevue/nuxt-module": "4.0.2",

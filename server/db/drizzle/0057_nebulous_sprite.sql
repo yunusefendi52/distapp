@@ -1,0 +1,1 @@
+ALTER TABLE `users_subs` ADD `subscription_id` text NOT NULL;
