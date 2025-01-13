@@ -54,6 +54,7 @@ export default defineEventHandler(async event => {
                 updatedAt: updatedAt,
                 endsAt: attributes.ends_at ? new Date(attributes.ends_at) : null,
                 webhookEventName: webhookEvent.meta.event_name,
+                webhookEventId: webhookEvent.meta.webhook_id,
             }
             // console.info('newSubnewSubnewSub', { newSub, data: webhookEvent.data.id })
             await db.insert(tables.users_subs)

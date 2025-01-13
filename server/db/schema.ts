@@ -43,6 +43,7 @@ export const users_subs = sqliteTable('users_app_subs', {
     renewsAt: integer('renews_at', {
         mode: 'timestamp_ms',
     }),
+    webhookEventId: text('webhook_id'),
     webhookEventName: text('hook_event_name'),
     ...timeColumns,
 }, t => ({
