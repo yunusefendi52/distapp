@@ -1,19 +1,12 @@
-import crypto from 'crypto'
+import { verifyWebhookRequest } from "./verifyWebhookRequest"
 
 export type SubsStatusType = typeof tables.users_subs.status.enumValues[number]
 
 export default defineEventHandler(async event => {
     const rawBody = (await readRawBody(event))!
     const secretKey = getLsTestMode() ? process.env.NUXT_LEMONSQUEEZY_WEBHOOK_SECRET_TEST! : process.env.NUXT_LEMONSQUEEZY_WEBHOOK_SECRET_PROD!
-    const hmac = crypto.createHmac('sha256', secretKey)
-    const digest = Buffer.from(hmac.update(rawBody).digest('hex'), 'utf8')
-    const signature = Buffer.from(
-        getHeader(event, 'X-Signature')!,
-        'utf8'
-    )
-
-    // @ts-ignore
-    if (!crypto.timingSafeEqual(digest, signature)) {
+    const signaturePayload = getHeader(event, 'X-Signature')!
+    if (!verifyWebhookRequest(signaturePayload, secretKey, rawBody)) {
         setResponseStatus(event, 404, 'invalid request data request')
         return
     }
