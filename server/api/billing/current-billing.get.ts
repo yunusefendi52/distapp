@@ -12,6 +12,11 @@ export default defineEventHandler(async event => {
     const productVariant = await getVariant(getProductVariandId(), {
         include: ['price-model', 'product'],
     })
+    if (productVariant.error) {
+        throw createError({
+            message: `Error get variant current ${productVariant.error.message}`
+        })
+    }
     var userSub = await getUserSub()
     const returnedSub = await getUserSubsription(event.context.auth.email!)
     return {
