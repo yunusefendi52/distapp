@@ -1,8 +1,8 @@
 import { listSubscriptions } from "@lemonsqueezy/lemonsqueezy.js"
-import { checkLsTestMode } from "../plugins/lemon-squeezy.plugin"
+import { getLsTestMode } from "../plugins/lemon-squeezy.plugin"
 
 export function getProductVariandId() {
-    return checkLsTestMode ? process.env.NUXT_LEMONSQUEEZY_VARIANT_ID_TEST! : process.env.NUXT_LEMONSQUEEZY_VARIANT_ID_PROD!
+    return getLsTestMode() ? process.env.NUXT_LEMONSQUEEZY_VARIANT_ID_TEST! : process.env.NUXT_LEMONSQUEEZY_VARIANT_ID_PROD!
 }
 
 export async function getUserSubsription(email: string) {

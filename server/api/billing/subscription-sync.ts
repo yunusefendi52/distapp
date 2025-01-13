@@ -1,11 +1,11 @@
 import crypto from 'crypto'
-import { checkLsTestMode } from '~/server/plugins/lemon-squeezy.plugin'
+import { getLsTestMode } from '~/server/plugins/lemon-squeezy.plugin'
 
 export type SubsStatusType = typeof tables.users_subs.status.enumValues[number]
 
 export default defineEventHandler(async event => {
     const rawBody = (await readRawBody(event))!
-    const secretKey = checkLsTestMode ? process.env.NUXT_LEMONSQUEEZY_WEBHOOK_SECRET_TEST! : process.env.NUXT_LEMONSQUEEZY_WEBHOOK_SECRET_PROD!
+    const secretKey = getLsTestMode() ? process.env.NUXT_LEMONSQUEEZY_WEBHOOK_SECRET_TEST! : process.env.NUXT_LEMONSQUEEZY_WEBHOOK_SECRET_PROD!
     const hmac = crypto.createHmac('sha256', secretKey)
     const digest = Buffer.from(hmac.update(rawBody).digest('hex'), 'utf8')
     const signature = Buffer.from(
