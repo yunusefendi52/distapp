@@ -8,7 +8,7 @@ export async function verifyWebhookRequest(
     rawBody: string) {
     const key = await crypto.subtle.importKey(
         'raw',
-        encoder.encode(secretKey + 'a'),
+        encoder.encode(secretKey),
         { name: 'HMAC', hash: 'SHA-256' },
         false,
         ['verify']
