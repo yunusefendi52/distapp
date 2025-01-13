@@ -1,19 +1,42 @@
-const crypto = require('node:crypto')
+const encoder = new TextEncoder()
 
-export function verifyWebhookRequest(
+// https://stackoverflow.com/a/67884134/7855627
+
+export async function verifyWebhookRequest(
     signaturePayload: string,
     secretKey: string,
     rawBody: string) {
-    const hmac = crypto.createHmac('sha256', secretKey)
-    const digest = Buffer.from(hmac.update(rawBody).digest('hex'), 'utf8')
-    const signature = Buffer.from(
-        signaturePayload,
-        'utf8'
+    const key = await crypto.subtle.importKey(
+        'raw',
+        encoder.encode(secretKey + 'a'),
+        { name: 'HMAC', hash: 'SHA-256' },
+        false,
+        ['verify']
     )
+    const receivedMac = hexStringToArrayBuffer(signaturePayload)
+    const verified = await crypto.subtle.verify(
+        'HMAC',
+        key,
+        receivedMac!,
+        encoder.encode(rawBody)
+    )
+    return verified
+}
 
-    if (crypto.timingSafeEqual(digest, signature)) {
-        return true
-    } else {
-        return false
+function hexStringToArrayBuffer(hexString: string) {
+    hexString = hexString.replace(/^0x/, '')
+
+    if (hexString.length % 2 != 0) {
+        return
     }
+
+    if (hexString.match(/[G-Z\s]/i)) {
+        return
+    }
+
+    return new Uint8Array(
+        hexString.match(/[\dA-F]{2}/gi)!.map(function (s) {
+            return parseInt(s, 16)
+        })
+    ).buffer
 }

@@ -6,9 +6,11 @@ export default defineEventHandler(async event => {
     const rawBody = (await readRawBody(event))!
     const secretKey = getLsTestMode() ? process.env.NUXT_LEMONSQUEEZY_WEBHOOK_SECRET_TEST! : process.env.NUXT_LEMONSQUEEZY_WEBHOOK_SECRET_PROD!
     const signaturePayload = getHeader(event, 'X-Signature')!
-    if (!verifyWebhookRequest(signaturePayload, secretKey, rawBody)) {
-        setResponseStatus(event, 404, 'invalid request data request')
-        return
+    if (!await verifyWebhookRequest(signaturePayload, secretKey, rawBody)) {
+        throw createError({
+            message: 'Invalid request data sync',
+            statusCode: 400,
+        })
     }
     const webhookEvent: WebhookEvent = JSON.parse(rawBody)
     if (!webhookEvent.meta) {
