@@ -1,8 +1,25 @@
-import { listSubscriptions } from "@lemonsqueezy/lemonsqueezy.js"
-import { getLsTestMode } from "../plugins/lemon-squeezy.plugin"
+import { lemonSqueezySetup, listSubscriptions } from "@lemonsqueezy/lemonsqueezy.js"
 
 export function getProductVariandId() {
     return getLsTestMode() ? process.env.NUXT_LEMONSQUEEZY_VARIANT_ID_TEST! : process.env.NUXT_LEMONSQUEEZY_VARIANT_ID_PROD!
+}
+
+export function getLsTestMode() {
+    return process.env.NUXT_LEMONSQUEEZY_TEST_MODE === 'true'
+}
+
+export function setupLemonSqueezy() {
+    const apiKey = getLsTestMode()
+        ? process.env.NUXT_LEMONSQUEEZY_TEST_API_KEY
+        : process.env.NUXT_LEMONSQUEEZY_PROD_API_KEY
+    if (!apiKey) {
+        return
+    }
+
+    lemonSqueezySetup({
+        apiKey,
+        onError: (error) => console.error("Error lemonsqueezy!", error),
+    })
 }
 
 export async function getUserSubsription(email: string) {

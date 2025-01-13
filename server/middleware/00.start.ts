@@ -22,4 +22,6 @@ export default defineEventHandler(async (event) => {
             enableLogging: config.app.enableDrizzleLogging,
         }),
     }
+
+    setupLemonSqueezy()
 })

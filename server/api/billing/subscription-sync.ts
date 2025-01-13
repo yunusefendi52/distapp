@@ -1,5 +1,4 @@
 import crypto from 'crypto'
-import { getLsTestMode } from '~/server/plugins/lemon-squeezy.plugin'
 
 export type SubsStatusType = typeof tables.users_subs.status.enumValues[number]
 
