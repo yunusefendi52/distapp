@@ -59,7 +59,7 @@ export default defineEventHandler(async event => {
             await db.insert(tables.users_subs)
                 .values(newSub)
                 .onConflictDoUpdate({
-                    target: tables.users_subs.customerId,
+                    target: tables.users_subs.subscriptionId,
                     set: newSub,
                     setWhere: updatedAt ? sql`COALESCE(${tables.users_subs.updatedAt}, 0) < ${updatedAt.getTime()}` : undefined,
                 })
