@@ -1,3 +1,5 @@
+import { getListApikeys } from "./list-api-keys.get"
+
 export default defineEventHandler(async (event) => {
     const { app: { apiAuthKey } } = useRuntimeConfig(event)
     if (!apiAuthKey) {
@@ -24,21 +26,16 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    const userId = event.context.auth.userId
     const db = event.context.drizzle
-    const userOrg = await db.select({
-        organizationsId: tables.organizations.id,
-    })
-        .from(tables.organizationsPeople)
-        .leftJoin(tables.organizations, eq(tables.organizations.id, tables.organizationsPeople.organizationId))
-        .where(and(eq(tables.organizationsPeople.userId, userId), eq(tables.organizations.name, orgName!.toString())))
-        .then(takeUniqueOrThrow)
-    const app = await db.query.apps.findMany({
-        where(fields, operators) {
-            return operators.and(operators.eq(fields.organizationsId, userOrg.organizationsId!), operators.eq(fields.name, appName!.toString()))
-        },
-        limit: 2,
-    }).then(takeUniqueOrThrow)
+    const { userApp, userOrg } = await getUserApp(event, orgName, appName)
+    const listApiKeys = await getListApikeys(event, userApp.name, userOrg.org!.name, 'count')
+    const { APP_LIMIT_API_KEYS } = useRuntimeConfig(event)
+    if (listApiKeys?.count! >= APP_LIMIT_API_KEYS) {
+        throw createError({
+            message: `You can only create ${APP_LIMIT_API_KEYS} keys`,
+        })
+    }
+
     const id = generateId()
     const token = await generateTokenWithOptions(event, {
         id,
@@ -46,8 +43,8 @@ export default defineEventHandler(async (event) => {
     await db.insert(tables.apiKeys).values({
         id: id,
         createdAt: new Date(),
-        appsId: app.id,
-        organizationId: userOrg.organizationsId,
+        appsId: userApp.id,
+        organizationId: userOrg.org!.id,
     })
 
     return {
