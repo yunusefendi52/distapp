@@ -3,6 +3,12 @@ import { verifyWebhookRequest } from "./verifyWebhookRequest"
 export type SubsStatusType = typeof tables.users_subs.status.enumValues[number]
 
 export default defineEventHandler(async event => {
+    const query = getQuery(event)
+    if (query.enabled?.toString() === '0') {
+        setResponseStatus(event, 204, 'webhook disabled')
+        return
+    }
+
     const rawBody = (await readRawBody(event))!
     const secretKey = getLsTestMode() ? process.env.NUXT_LEMONSQUEEZY_WEBHOOK_SECRET_TEST! : process.env.NUXT_LEMONSQUEEZY_WEBHOOK_SECRET_PROD!
     const signaturePayload = getHeader(event, 'X-Signature')!
