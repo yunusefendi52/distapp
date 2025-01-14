@@ -48,12 +48,21 @@ export async function findApiKey(
 
 export default defineEventHandler(async (event) => {
     const db = event.context.drizzle
-    const { orgName, appName, hasFileApk, filename } = await readValidatedBody(event, z.object({
+    const { orgName, appName, hasFileApk, filename, fileSize, fileSizeApk } = await readValidatedBody(event, z.object({
         appName: z.string().trim().min(1).max(128),
         orgName: z.string().trim().min(1).max(128),
         hasFileApk: z.boolean().default(false),
         filename: z.string().regex(filenameRegex, `Filename must have regex ${filenameRegex.source}`),
+        fileSize: z.number(),
+        fileSizeApk: z.number().nullish(),
     }).parse)
+
+    const { APP_LIMIT_UPLOAD_SIZE } = useRuntimeConfig(event)
+    if (fileSize >= APP_LIMIT_UPLOAD_SIZE || (hasFileApk && fileSizeApk ? fileSizeApk >= APP_LIMIT_UPLOAD_SIZE : false)) {
+        throw createError({
+            message: `Maximum file size is ${APP_LIMIT_UPLOAD_SIZE} bytes`,
+        })
+    }
 
     var orgId: string
     var appId: string
@@ -110,8 +119,9 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    const { fileKey, signedUrl } = await generateSignedUrlUpload(orgId, appId)
-    const apkUrl = hasFileApk ? await generateSignedUrlUpload(orgId, appId) : undefined
+    // Always limit file size when user upload directly
+    const { fileKey, signedUrl } = await generateSignedUrlUpload(orgId, appId, fileSize)
+    const apkUrl = hasFileApk && fileSizeApk ? await generateSignedUrlUpload(orgId, appId, fileSizeApk) : undefined
     const uploadId = uuidv7()
     const now = new Date()
     await db.insert(tables.keyValue)

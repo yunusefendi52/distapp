@@ -26,25 +26,43 @@ export type UploadArtifactResponse = {
     } | undefined
 }
 
+function getSizeFromFile(
+    input: File | Buffer | any
+) {
+    let sizeInBytes: number | undefined = undefined
+
+    if (input && input instanceof File) {
+        sizeInBytes = input.size
+    } else if (input && input.length) {
+        sizeInBytes = input.length
+    }
+
+    return sizeInBytes
+}
+
 export async function uploadArtifact(
-    file: File | Buffer | ArrayBuffer | string | Blob,
+    file: File | Buffer,
     filename: string,
     orgName: string,
     appName: string,
     releaseNotes: string | null,
-    fileApk: File | Buffer | ArrayBuffer | string | Blob | undefined,
+    fileApk: File | Buffer | 'generate_bundle' | undefined,
 ) {
     const packageMetadata = await readPackageFile(file)
     if (!packageMetadata) {
         throw 'Cannot read package file'
     }
+    const fileSize = getSizeFromFile(file)
+    const fileSizeApk = getSizeFromFile(fileApk)
     const { url, fileKey, apkUrl, uploadId } = await myFetch<UploadArtifactResponse>('/api/artifacts/upload-artifact', {
         method: 'post',
         body: {
             orgName: orgName,
             appName: appName,
-            hasFileApk: fileApk ? true : false,
+            hasFileApk: fileApk && fileApk !== 'generate_bundle' ? true : false,
             filename: filename,
+            fileSize,
+            fileSizeApk,
         },
         onResponseError(r) {
             console.error('Error ', normalizeError(r))
@@ -58,8 +76,14 @@ export async function uploadArtifact(
         })
     }
     const generateBundleHeadless = fileApk === 'generate_bundle'
+    let headlessApkFileKey: string | undefined = undefined
+    let headlessUploadId: string | undefined = undefined
     async function uploadApkUrl() {
         if (generateBundleHeadless) {
+            if (apkUrl) {
+                throw 'Not invalid upload URL. Should not have one'
+            }
+
             await myFetch.raw('/api/artifacts/generate-bundle-headless', {
                 timeout: 60 * 60000, // 60 minutes
                 keepalive: true,
@@ -67,8 +91,6 @@ export async function uploadArtifact(
                     orgName,
                     appName,
                     fileKey,
-                    apkFileKey: apkUrl?.apkFileKey,
-                    apkSignedUrl: apkUrl?.apkSignedUrl,
                     hostOrigin: window.origin,
                 },
                 // mode: 'no-cors',
@@ -78,6 +100,8 @@ export async function uploadArtifact(
                 if (!e.ok) {
                     throw `Error bundle ${e.status} - ${e.statusText}`
                 }
+                headlessApkFileKey = e._data.headlessApkFileKey
+                headlessUploadId = e._data.headlessUploadIdHeadless
                 return e
             })
         } else if (fileApk) {
@@ -98,17 +122,25 @@ export async function uploadArtifact(
     } else {
         await Promise.all([uploadUrl(), uploadApkUrl()])
     }
+    const apkFileKey = apkUrl?.apkFileKey || headlessApkFileKey
+    if (generateBundleHeadless && !headlessApkFileKey) {
+        throw 'Server error upload apk file'
+    }
+    if (generateBundleHeadless && !headlessUploadId) {
+        throw 'Server error upload id file'
+    }
     const data = await myFetch('/api/artifacts/upload-artifact-url', {
         method: 'post',
         body: {
             uploadId,
             fileKey,
-            apkFileKey: apkUrl?.apkFileKey,
+            apkFileKey: apkFileKey,
             appName: appName,
             orgName: orgName,
             releaseNotes: releaseNotes ? releaseNotes : undefined,
             packageMetadata,
             filename: filename,
+            headlessUploadId,
         },
     })
     return data

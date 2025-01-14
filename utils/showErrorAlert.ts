@@ -2,13 +2,14 @@ import { FetchError, type FetchContext } from 'ofetch'
 
 export function normalizeError(error: FetchContext | FetchError): string {
     function getFetchError(): FetchError | undefined {
-        if ('data' in error) {
+        const errorAny: any = error
+        if (errorAny.data) {
             return error as FetchError
         } else {
-            return undefined
+            return errorAny
         }
     }
-    const message: string = error.response?._data?.message || error.response?.statusText || getFetchError()?.data?.message || 'Unexpected happen'
+    const message: string = error.response?._data?.message || error.response?.statusText || getFetchError()?.data?.message || getFetchError() || 'Unexpected happen'
     if (message.includes(`undefined (reading 'userId')`)) {
         return 'Unauthorized. Try login again'
     }

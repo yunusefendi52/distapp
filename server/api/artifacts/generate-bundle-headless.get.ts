@@ -2,27 +2,44 @@ import { S3Fetch } from "~/server/services/s3fetch"
 import promises from "node:fs/promises"
 import { join } from "node:path"
 import * as jose from 'jose'
+import type { UploadTempValue } from "./upload-artifact.post"
 
 export default defineEventHandler(async event => {
     setHeader(event, 'connection', 'keep-alive')
     setHeader(event, 'content-type', 'text/plain')
 
+    const db = event.context.drizzle
+
     const request = await getValidatedQuery(event, z.object({
         orgName: z.string().min(1).max(128),
         appName: z.string().min(1).max(128),
         fileKey: z.string().min(1),
-        apkSignedUrl: z.string().min(1),
-        apkFileKey: z.string().min(1),
         hostOrigin: z.string().nullish()
     }).parseAsync)
 
     const { userApp } = await getUserApp(event, request.orgName, request.appName)
+    const apkSignedUrl = await generateSignedUrlUpload(userApp.organizationsId!, userApp.id, 'allow_no_limit')
 
     const s3 = new S3Fetch()
     const { assets } = getStorageKeys(userApp.organizationsId!, userApp.id, request.fileKey)
     const signedUrl = await s3.getSignedUrlGetObject(assets, 300, `attachment; filename="app.aab"`)
 
     const { BUNDLEAAB: { KEYSTORE_URL, KEYSTORE_PASS, KEYSTORE_ALIAS } } = useRuntimeConfig(event)
+
+    const uploadIdHeadless = generateId()
+    const now = new Date()
+    await db.insert(tables.keyValue)
+        .values({
+            key: uploadIdHeadless,
+            value: {
+                fileKey: apkSignedUrl.fileKey,
+                orgId: userApp.organizationsId!,
+                appId: userApp.id,
+            } satisfies UploadTempValue,
+            group: 'upload_temp_headless',
+            createdAt: now,
+            updatedAt: now,
+        })
 
     // Need a better way to test this, currently only test without headless mode
     const isRunningServerless = process.env.STANDBY_SERVER_ENABLED === '1' || (typeof navigator !== 'undefined' && navigator.userAgent === 'Cloudflare-Workers')
@@ -45,7 +62,9 @@ ${process.env.STANDBY_SERVER_PRIVATE_KEY}
             keystorePass: KEYSTORE_PASS,
             keystoreAlias: KEYSTORE_ALIAS,
             keystoreUrl: keystoreUrl,
-            apkSignedUrl: request.apkSignedUrl,
+            apkSignedUrl: apkSignedUrl.signedUrl,
+            apkFileKey: apkSignedUrl.fileKey,
+            uploadIdHeadless,
         })
             .setProtectedHeader({
                 alg: algorithm,
@@ -76,12 +95,16 @@ ${process.env.STANDBY_SERVER_PRIVATE_KEY}
                 KEYSTORE_PASS,
                 KEYSTORE_ALIAS,
                 KEYSTORE_URL,
-                request.apkSignedUrl,
+                apkSignedUrl.signedUrl,
                 async (keystoreFile: string) => {
                     await promises.copyFile(join('public', KEYSTORE_URL), keystoreFile)
                 })
+            const params = new URLSearchParams({
+                apkFileKey: apkSignedUrl.fileKey,
+                uploadIdHeadless,
+            })
             // For compatibility to test
-            await sendRedirect(event, `/genbndl`, 302)
+            await sendRedirect(event, `/genbndl?${params}`, 302)
         } else {
             throw createError({
                 statusCode: 400,

@@ -1,13 +1,19 @@
 import { AwsClient } from "aws4fetch"
 
 export class S3Fetch {
-    async getSignedUrlPutObject(key: string, expiresIn: number): Promise<string> {
+    async getSignedUrlPutObject(key: string, expiresIn: number, fileSize: number | 'allow_no_limit'): Promise<string> {
         const { client, S3_ENDPOINT } = createAwsClient()
         const signedUrl = await client.sign(`${S3_ENDPOINT}/${s3BucketName}/${key}?X-Amz-Expires=${expiresIn}`, {
             method: 'put',
             aws: {
                 signQuery: true,
+                allHeaders: true,
             },
+            headers: fileSize === 'allow_no_limit'
+                ? undefined
+                : {
+                    'content-length': `${fileSize}`,
+                },
         })
         return signedUrl.url
     }

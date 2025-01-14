@@ -33,6 +33,8 @@ ${verifierKey}
     keystoreAlias: string,
     keystoreUrl: string,
     apkSignedUrl: string,
+    apkFileKey: string,
+    uploadIdHeadless: string,
   }
   if (process.env.DEV) {
     console.info('Request', {
@@ -49,7 +51,11 @@ ${verifierKey}
     request.apkSignedUrl, async (keystoreFile) => {
       await downloadFile(request.keystoreUrl, keystoreFile)
     })
-  return c.text('ok')
+
+  return c.json({
+    headlessApkFileKey: request.apkFileKey,
+    headlessUploadIdHeadless: request.uploadIdHeadless,
+  }, 200)
 })
 
 app.get('/healthz', (c) => {
