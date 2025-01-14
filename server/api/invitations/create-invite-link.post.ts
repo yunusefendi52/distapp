@@ -1,4 +1,5 @@
 import { generateTokenWithOptions } from "~/server/utils/token-utils"
+import { getListOrg } from "../org-people/list-org-people.get"
 
 export default defineEventHandler(async (event) => {
     var { orgName, email } = await readValidatedBody(event, z.object({
@@ -33,6 +34,13 @@ export default defineEventHandler(async (event) => {
             eq(tables.organizationsPeople.userId, userId),
         ))
         .then(takeUniqueOrThrow)
+    const peopleCount = await getListOrg(db, org.id, 'count').then(e => e?.count || 0)
+    const { APP_LIMIT_INVITE_ORGS } = useRuntimeConfig(event)
+    if (peopleCount >= APP_LIMIT_INVITE_ORGS) {
+        throw createError({
+            message: `You can only invite ${APP_LIMIT_INVITE_ORGS} people. Please contact us if you need to add more people`,
+        })
+    }
     const inviteLink = await generateTokenWithOptions(event, {
         id: org.id,
         email: email,

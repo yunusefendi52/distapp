@@ -3,6 +3,7 @@ import type { EventHandlerRequest, H3Event } from "h3"
 export const getUserOrg = async (
     event: H3Event<EventHandlerRequest>,
     orgName: string,
+    orgId?: string,
 ) => {
     const db = event.context.drizzle
     const userOrg = await db.select({
@@ -10,7 +11,7 @@ export const getUserOrg = async (
     })
         .from(tables.organizationsPeople)
         .leftJoin(tables.organizations, eq(tables.organizations.id, tables.organizationsPeople.organizationId))
-        .where(and(eq(tables.organizationsPeople.userId, event.context.auth.userId), eq(tables.organizations.name, orgName!.toString())))
+        .where(and(eq(tables.organizationsPeople.userId, event.context.auth.userId), orgId ? eq(tables.organizations.id, orgId) : eq(tables.organizations.name, orgName)))
         .then(takeUniqueOrThrow)
     return userOrg
 }
