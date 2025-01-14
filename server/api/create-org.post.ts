@@ -20,7 +20,8 @@ export default defineEventHandler(async (event) => {
         await t.insert(tables.organizationsPeople).values({
             userId: userId,
             organizationId: organizationId,
-            role: 'admin',
+            createdAt: now,
+            role: 'owner',
         })
     })
     return {

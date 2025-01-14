@@ -4,8 +4,8 @@ export default defineEventHandler(async (event) => {
     }).parse)
     const db = event.context.drizzle
     const userId = event.context.auth.userId
-    const canEdit = await roleEditAllowed(event, orgName)
-    if (!canEdit) {
+    const currentUserRole = await getCurrentUserRole(event, orgName, userId)
+    if (currentUserRole.role !== 'owner') {
         throw createError({
             message: 'You cannot do this to org',
             statusCode: 400,

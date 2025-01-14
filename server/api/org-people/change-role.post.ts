@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
     }).from(tables.organizations)
         .where(eq(tables.organizations.name, orgName))
         .then(takeUniqueOrThrow)
-    await db.update(tables.organizationsPeople)
+    const result = await db.update(tables.organizationsPeople)
         .set({
             role: roleId,
         }).where(and(

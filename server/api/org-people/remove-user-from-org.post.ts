@@ -1,3 +1,5 @@
+import { ne } from "drizzle-orm"
+
 export default defineEventHandler(async (event) => {
     const db = event.context.drizzle
     const currentUserId = event.context.auth.userId
@@ -27,11 +29,12 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    await db.delete(tables.organizationsPeople)
+    const resultSet = await db.delete(tables.organizationsPeople)
         .where(and(
             eq(tables.organizationsPeople.organizationId, orgIdFromOrgName.orgId),
             eq(tables.organizationsPeople.userId, userIdFromEmail.userId),
+            ne(tables.organizationsPeople.role, 'owner'),
         ))
 
-    return { ok: true }
+    return { ok: resultSet.rowsAffected > 0 }
 })

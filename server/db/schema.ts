@@ -75,7 +75,7 @@ export const organizationsPeople = sqliteTable('organizationsPeople', {
         mode: 'timestamp_ms',
     }),
     role: text('role', {
-        enum: ['admin', 'collaborator'],
+        enum: ['owner', 'admin', 'collaborator'],
     }),
 }, (t) => ({
     userIdOrganizationId: unique().on(t.userId, t.organizationId),

@@ -1,6 +1,6 @@
 import type { EventHandlerRequest, H3Event } from "h3"
 
-const getCurrentUserRole = async (
+export const getCurrentUserRole = async (
     event: H3Event<EventHandlerRequest>,
     orgName: string,
     userId: string) => {
@@ -22,7 +22,7 @@ export const roleEditAllowed = async (
     orgName: string) => {
     const userId = event.context.auth.userId
     const currentUserRole = await getCurrentUserRole(event, orgName, userId)
-    return currentUserRole.role && currentUserRole.role === 'admin'
+    return currentUserRole.role && (currentUserRole.role === 'admin' || currentUserRole.role === 'owner')
 }
 
 export const roleEditNotAllowed = async (
