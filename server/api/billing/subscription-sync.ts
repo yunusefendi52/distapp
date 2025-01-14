@@ -68,7 +68,7 @@ export default defineEventHandler(async event => {
                 .onConflictDoUpdate({
                     target: tables.users_subs.subscriptionId,
                     set: newSub,
-                    setWhere: updatedAt ? sql`COALESCE(${tables.users_subs.updatedAt}, 0) < ${updatedAt.getTime()}` : undefined,
+                    setWhere: updatedAt ? sql`COALESCE(${tables.users_subs.updatedAt}, 0) <= ${updatedAt.getTime()}` : undefined,
                 })
         } else {
             console.log('webhook subs sync not implemented', webhookEvent)
