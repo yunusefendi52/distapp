@@ -18,21 +18,41 @@
 import { UserTokenInfo } from '~/server/models/UserTokenInfo';
 import { userTokensKey } from '~/server/utils/utils';
 
-const signout = () => {
+const confirm = useConfirm()
+
+const signout = (event: any) => {
     if (import.meta.client) {
-        const userTokens = useLocalStorage<UserTokenInfo[]>(userTokensKey, [])
-        try {
-            if (cookie.value) {
-                const newUserTokens = userTokens.value.filter(e => e.email !== userEmail.value)
-                userTokens.value = newUserTokens
+        confirm.require({
+            target: event.currentTarget!,
+            message: 'Are you sure you want to logout?',
+            icon: 'pi pi-info-circle',
+            rejectProps: {
+                label: 'Cancel',
+                severity: 'secondary',
+                outlined: true
+            },
+            acceptProps: {
+                label: 'Yes',
+                severity: 'danger'
+            },
+            accept: () => {
+                const userTokens = useLocalStorage<UserTokenInfo[]>(userTokensKey, [])
+                try {
+                    if (cookie.value) {
+                        const newUserTokens = userTokens.value.filter(e => e.email !== userEmail.value)
+                        userTokens.value = newUserTokens
+                    }
+                } catch (e) {
+                    console.error('Error decode on signout', e)
+                }
+                cookie.value = userTokens.value.find(e => e ? true : false)?.token
+                navigateTo({
+                    name: 'index',
+                })
+            },
+            reject: () => {
             }
-        } catch (e) {
-            console.error('Error decode on signout', e)
-        }
-        cookie.value = userTokens.value.find(e => e ? true : false)?.token
-        navigateTo({
-            name: 'index',
-        })
+        });
     }
 }
 
