@@ -7,9 +7,7 @@
 </template>
 
 <script setup lang="ts">
-const { orientation } = withDefaults(defineProps<{
+const { orientation = 'vertical' } = defineProps<{
     orientation: 'vertical' | 'horizontal',
-}>(), {
-    orientation: 'vertical',
-})
+}>()
 </script>
