@@ -42,6 +42,7 @@ test('Add and switch account', async ({ page, goto, context }) => {
 
     // Lets try logout current account
     await page.getByTestId('b_sign_out_btn').click()
+    await page.getByText('Yes').click()
 
     // Go to apps and should switch to first account if any
     await page.getByText('Go To Apps').click()
