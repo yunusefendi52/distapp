@@ -1,4 +1,5 @@
 import type { JoinTesterPayload } from "~/server/models/JoinTesterPayload"
+import { getListApikeys } from "./list-tester.get"
 
 export default defineEventHandler(async (event) => {
     var { orgName, appName, groupName, email } = await readValidatedBody(event, z.object({
@@ -17,6 +18,14 @@ export default defineEventHandler(async (event) => {
     }
     const { app: { apiAuthKey } } = useRuntimeConfig(event)
     const { userApp, userOrg } = await getUserApp(event, orgName, appName)
+    const testers = await getListApikeys(event, userApp.organizationsId!, userApp.id, groupName, 'count')
+    const { APP_LIMIT_APPS_GROUPS_TESTER } = useRuntimeConfig(event)
+    if (testers?.count! >= APP_LIMIT_APPS_GROUPS_TESTER) {
+        throw createError({
+            message: `The number of testers in group ${groupName} has reached the limit ${APP_LIMIT_APPS_GROUPS_TESTER} testers`,
+        })
+    }
+
     const testerInviteLink = await generateTokenWithOptions(event, {
         email: email,
         orgName: userOrg.org!.name,
