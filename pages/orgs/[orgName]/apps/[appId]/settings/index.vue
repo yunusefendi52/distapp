@@ -8,7 +8,7 @@
         </div>
     </AppBarContainer>
     <div class="flex flex-col gap-3 px-4 py-2">
-        <AppTabMenu v-model:tab-index="tabIndex" :items="items" />
+        <AppTabMenu :items="items" />
         <NuxtPage />
     </div>
 </template>
@@ -35,13 +35,11 @@ const items = ref<MenuItem[]>([
     },
 ])
 
-const tabIndex = ref<number>(0)
 if (import.meta.client) {
     watchEffect(() => {
-        if (!tabIndex.value) {
-            tabIndex.value = 0
+        if (route.name === 'orgs-orgName-apps-appId-settings') {
             navigateTo({
-                name: items.value[tabIndex.value].routeName,
+                name: items.value[0].routeName,
                 replace: true,
             })
         }
