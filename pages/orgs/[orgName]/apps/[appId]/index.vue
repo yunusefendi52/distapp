@@ -25,6 +25,7 @@
 
 <script setup lang="ts">
 const { params, name } = useRoute()
+const route = useRoute()
 
 const items = ref<MenuItem[]>([
     {
@@ -39,13 +40,18 @@ const items = ref<MenuItem[]>([
     },
 ])
 
-const activeTabIndex = ref(0)
+const activeTabIndex = ref<number>()
 const appName = params.appId as string
 const orgName = params.orgName as string
 
-navigateTo({
-    name: items.value[activeTabIndex.value].routeName,
-    replace: true,
+watchEffect(() => {
+    if (route.name === 'orgs-orgName-apps-appId') {
+        activeTabIndex.value = 0
+        navigateTo({
+            name: items.value[activeTabIndex.value!].routeName,
+            replace: true,
+        })
+    }
 })
 
 const detailApp = useFetch('/api/detail-app', {

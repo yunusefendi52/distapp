@@ -1,3 +1,5 @@
+import { getListGroups } from "./list-groups.get"
+
 export default defineEventHandler(async (event) => {
     const { appName, orgName, groupName, isPublic } = await readValidatedBody(event, z.object({
         appName: z.string().max(256),
@@ -11,9 +13,15 @@ export default defineEventHandler(async (event) => {
             statusCode: 401,
         })
     }
-    const userId = event.context.auth.userId
     const db = event.context.drizzle
     const { userApp: app } = await getUserApp(event, orgName, appName)
+    const groups = await getListGroups(event, orgName, appName, undefined, 'count')
+    var { APP_LIMIT_APPS_GROUP } = useRuntimeConfig(event)
+    if (groups?.count! >= APP_LIMIT_APPS_GROUP) {
+        throw createError({
+            message: `The number of groups has reached the limit of ${APP_LIMIT_APPS_GROUP} groups`,
+        })
+    }
     const now = new Date()
     await db.insert(tables.artifactsGroups).values({
         id: generateId(),
