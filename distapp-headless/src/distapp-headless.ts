@@ -4,6 +4,8 @@ import { cors } from 'hono/cors'
 import { generateBundleHandler } from "../../server/services/generateBundleHandler.js"
 import { downloadFile } from "../../server/services/downloadFile.js"
 import * as jose from 'jose'
+import promises from 'node:fs/promises'
+import { join } from 'node:path'
 
 const app = new Hono()
 app.use('*', async (c, next) => {
@@ -14,16 +16,13 @@ app.use('*', async (c, next) => {
 })
 
 app.get('/genbndl', async (c) => {
-  const verifierKey = c.req.query('verifierKey')
   const requestData = c.req.query('r')
-  if (!verifierKey || !requestData) {
+  if (!requestData) {
     c.status(400)
     c.text('Invalid requst, check again')
     return
   }
-  const publicKeyStr = `-----BEGIN PUBLIC KEY-----
-${verifierKey}
------END PUBLIC KEY-----`
+  const publicKeyStr: string = await promises.readFile(join(process.cwd(), 'src', 'keys', 'svc.pub'), { encoding: 'utf8' })
   const publicKey = await jose.importSPKI(publicKeyStr, 'EdDSA')
   const request = (await jose.jwtVerify(requestData, publicKey)).payload as {
     signedUrl: string,
@@ -36,12 +35,12 @@ ${verifierKey}
     apkFileKey: string,
     uploadIdHeadless: string,
   }
-  if (process.env.DEV) {
-    console.info('Request', {
-      request,
-      requestData,
-    })
-  }
+  // if (process.env.DEV) {
+  //   console.info('Request', {
+  //     request,
+  //     requestData,
+  //   })
+  // }
   await generateBundleHandler(request.signedUrl,
     request.orgId,
     request.appId,

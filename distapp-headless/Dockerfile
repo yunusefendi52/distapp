@@ -13,6 +13,7 @@ ENV DISTAPP_BUNDLETOOL_PATH=${DISTAPP_BUNDLETOOL_PATH}
 
 RUN [ -f ${DISTAPP_BUNDLETOOL_PATH} ] || curl -L -o ${DISTAPP_BUNDLETOOL_PATH} "https://github.com/google/bundletool/releases/download/1.17.2/bundletool-all-1.17.2.jar"
 
+COPY src/keys/ src/keys/
 COPY dist/distapp-headless.js .
 
 EXPOSE 3010
