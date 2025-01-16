@@ -20,6 +20,10 @@ export default defineEventHandler(async event => {
             message: 'User already has subscription',
         })
     }
+    
+    throw createError({
+        message: 'Billing is in still in development. Check again later.',
+    })
 
     const variantId = getProductVariandId()
     const user = await db.select()
