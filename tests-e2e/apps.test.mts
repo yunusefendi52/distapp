@@ -13,7 +13,7 @@ test('Apps test', async ({ page, goto, context }) => {
 
     await test.step('User can create organization', async () => {
         await goto('/apps')
-        await page.getByText('Add app').click()
+        await page.getByLabel('Add App').first().click()
         await page.getByText('Select organization').click()
         await page.getByTestId('addNewOrgbtn').click()
         await page.getByTestId('orgname').fill(orgName)
@@ -29,7 +29,7 @@ test('Apps test', async ({ page, goto, context }) => {
         await test.step(`User can create new app ${osTestType} from newly created org`, async () => {
             if (index > 0) {
                 await page.getByText('All Apps').click()
-                await page.getByText('Add app').click()
+                await page.getByLabel('Add App').first().click()
 
                 // First time created organization already selected org
                 await page.getByText('Select organization').click()
