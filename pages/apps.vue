@@ -106,7 +106,7 @@ useTitleApp('Apps')
                 </div>
             </div>
         </AppBarContainer>
-        <DataTable :show-gridlines="false" :value="apps" @rowSelect="onRowSelect" selectionMode="single" class="m-4">
+        <DataTable :show-gridlines="false" :value="[]" @rowSelect="onRowSelect" selectionMode="single" class="m-4">
             <Column header="Name">
                 <template #body="prop">
                     <div class="flex flex-row gap-5 items-center px-3 py-2">
@@ -129,8 +129,9 @@ useTitleApp('Apps')
                 </template>
             </Column>
             <template #empty>
-                <div class="flex items-center justify-center">
-                    <label>No apps yet</label>
+                <div class="flex items-center justify-center py-10 flex-col gap-2">
+                    <label class="">No apps yet. Add app by clicking button below</label>
+                    <Button label="Add App" @click="addApp" severity="secondary"></Button>
                 </div>
             </template>
         </DataTable>
