@@ -30,7 +30,8 @@
                                     prop,
                                 })" class="w-full md:w-14rem" v-if="data?.canChange && prop.data.role !== 'owner'" />
                             <div v-else>
-                                <span>{{ roles.find(e => e.id === prop.data.role)?.displayRole || prop.data.role === 'owner' ? 'Owner' : '' }}</span>
+                                <span>{{ roles.find(e => e.id === prop.data.role)?.displayRole || (prop.data.role ===
+                                    'owner' ? 'Owner' : '') }}</span>
                             </div>
                         </div>
                     </form>

@@ -30,3 +30,7 @@ export const roleEditNotAllowed = async (
     orgName: string) => {
     return !(await roleEditAllowed(event, orgName))
 }
+
+export async function getUserPlan(event: H3Event<EventHandlerRequest>) {
+    
+}
