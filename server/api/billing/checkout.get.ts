@@ -10,7 +10,7 @@ export default defineEventHandler(async event => {
     const { checkoutOrigin } = getQuery(event)
     const db = event.context.drizzle
     const activeSub = await getUserSubFromDb(event)
-    if (!activeSub) {
+    if (activeSub) {
         console.warn('User has already subscription', { userId: event.context.auth.userId, })
         throw createError({
             message: 'User already has subscription',
