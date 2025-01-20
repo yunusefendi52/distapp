@@ -449,6 +449,34 @@
       "when": 1736824094894,
       "tag": "0063_conscious_enchantress",
       "breakpoints": true
+    },
+    {
+      "idx": 64,
+      "version": "6",
+      "when": 1737334239996,
+      "tag": "0064_tired_blade",
+      "breakpoints": true
+    },
+    {
+      "idx": 65,
+      "version": "6",
+      "when": 1737384827900,
+      "tag": "0065_loose_gauntlet",
+      "breakpoints": true
+    },
+    {
+      "idx": 66,
+      "version": "6",
+      "when": 1737387173228,
+      "tag": "0066_pale_tiger_shark",
+      "breakpoints": true
+    },
+    {
+      "idx": 67,
+      "version": "6",
+      "when": 1737388858263,
+      "tag": "0067_wonderful_silhouette",
+      "breakpoints": true
     }
   ]
 }

@@ -1,34 +1,18 @@
-import { getVariant } from "@lemonsqueezy/lemonsqueezy.js"
+import { defineEventHandler } from 'h3'
 
 export default defineEventHandler(async event => {
-    const userId = event.context.auth.userId
-    const db = event.context.drizzle
-    async function getUserSub() {
-        return await db.select()
-            .from(tables.users_subs)
-            .where(eq(tables.users_subs.userId, userId))
-            .then(singleOrDefault)
-    }
-    const productVariant = await getVariant(getProductVariandId(), {
-        include: ['price-model', 'product'],
-    })
-    if (productVariant.error) {
-        throw createError({
-            message: `Error get variant current ${productVariant.error.message}`
-        })
-    }
-    var userSub = await getUserSub()
-    const returnedSub = await getUserSubsription(event.context.auth.email!)
+    const productPlan = await getProductPlan()
+    var userSub = await getUserSubFromDb(event)
+    // https://github.com/lmsqueezy/lemonsqueezy.js/blob/b1f66e905ee0614be87c3711d6529f2582e5729f/src/subscriptions/types.ts#L159-L167
+    // cancelled is true if status cancelled and endsAt populated
+    const isCancelled = userSub?.status === 'cancelled' && (userSub?.endsAt ? true : false)
     return {
         plan: userSub?.currentPlan,
-        planPrice: productVariant.data?.data.attributes.price, // DEPRECATED???
-        status: returnedSub?.status,
-        statusFormatted: returnedSub?.status_formatted,
-        endsAt: returnedSub?.ends_at,
-        renewsAt: returnedSub?.renews_at,
-        isCancelled: returnedSub?.cancelled,
-        dta: import.meta.dev ? {
-            returnedSub,
-        } : {},
+        planPrice: productPlan.price,
+        status: userSub?.status,
+        statusFormatted: userSub?.status_formatted,
+        endsAt: userSub?.endsAt,
+        renewsAt: userSub?.renewsAt,
+        isCancelled: isCancelled,
     }
 })

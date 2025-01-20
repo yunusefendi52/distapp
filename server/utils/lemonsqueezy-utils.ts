@@ -1,4 +1,4 @@
-import { lemonSqueezySetup, listSubscriptions } from "@lemonsqueezy/lemonsqueezy.js"
+import { getSubscription, getVariant, lemonSqueezySetup } from "@lemonsqueezy/lemonsqueezy.js"
 
 export function getProductVariandId() {
     return getLsTestMode() ? process.env.NUXT_LEMONSQUEEZY_VARIANT_ID_TEST! : process.env.NUXT_LEMONSQUEEZY_VARIANT_ID_PROD!
@@ -22,29 +22,28 @@ export function setupLemonSqueezy() {
     })
 }
 
-export async function getUserSubsription(email: string) {
-    // Note do not change dunning to expired before testing this
-    const userSubs = await listSubscriptions({
-        filter: {
-            storeId: process.env.NUXT_LEMONSQUEEZY_STORE_ID!,
-            userEmail: email,
-            variantId: getProductVariandId(),
-        },
-        include: ['customer', 'product', 'store'],
-        page: {
-            size: 2,
-        },
-    }).then(e => e.data!.data).then(singleOrDefault)
-    const returnedSub = userSubs?.attributes
-    const subscriptionId = returnedSub?.first_subscription_item?.subscription_id
-    if (!subscriptionId && returnedSub) {
+export async function getProductPlan() {
+    // const productVariant = await getVariant(getProductVariandId(), {
+    //     include: ['price-model', 'product'],
+    // })
+    // if (productVariant.error) {
+    //     throw createError({
+    //         message: `Error get variant current ${productVariant.error.message}`
+    //     })
+    // }
+    return {
+        price: 333, // DEPRECATED???
+    }
+}
+
+export async function getUrlsSubscription(subscriptionId: string) {
+    const { data, error } = await getSubscription(subscriptionId)
+    if (error) {
         throw createError({
-            message: 'SubscriptionId returned null in your account',
+            message: error.message,
         })
     }
     return {
-        ...returnedSub,
-        /// Mapped from app, not from lemonsqueezy
-        subscriptionId,
+        updatePaymentMethod: data?.data.attributes.urls.update_payment_method,
     }
 }

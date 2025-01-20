@@ -9,21 +9,19 @@ export type CustomerMetadata = {
 export default defineEventHandler(async event => {
     const { checkoutOrigin } = getQuery(event)
     const db = event.context.drizzle
-    const activeSubs = await db.select()
-        .from(tables.users_subs)
-        .where(and(
-            eq(tables.users_subs.userId, event.context.auth.userId),
-        ))
-    if (activeSubs && activeSubs.length > 0) {
+    const activeSub = await getUserSubFromDb(event)
+    if (!activeSub) {
         console.warn('User has already subscription', { userId: event.context.auth.userId, })
         throw createError({
             message: 'User already has subscription',
         })
     }
-    
-    throw createError({
-        message: 'Billing is in still in development. Check again later.',
-    })
+
+    if (!import.meta.dev) {
+        throw createError({
+            message: 'Billing is in still in development. Check again later.',
+        })
+    }
 
     const variantId = getProductVariandId()
     const user = await db.select()

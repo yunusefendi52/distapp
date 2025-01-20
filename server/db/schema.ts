@@ -27,14 +27,14 @@ export const usersRelations = relations(users, (r) => ({
 // users_subs
 export const users_subs = sqliteTable('users_app_subs', {
     subscriptionId: text('subsription_id').primaryKey().unique(),
-    customerId: text('customer_id').unique().notNull(),
+    customerId: text('customer_id').notNull(),
     userId: text('user_id').notNull(),
     providerUserId: text('p_user_id'),
     currentPlan: text({
         enum: ['basic'],
     }),
     status: text('status', {
-        enum: ['on_trial', 'active', 'paused', 'past_due', 'cancelled', 'expired',],
+        enum: ['on_trial', 'active', 'paused', 'past_due', 'unpaid', 'cancelled', 'expired',],
     }),
     status_formatted: text('status_formatted'),
     endsAt: integer('ends_at', {
@@ -45,6 +45,12 @@ export const users_subs = sqliteTable('users_app_subs', {
     }),
     webhookEventId: text('webhook_id'),
     webhookEventName: text('hook_event_name'),
+    cardBrand: text('card_brand'),
+    variantId: text('variant_id'),
+    variant_name: text('variant_name'),
+    product_id: text('product_id'),
+    product_name: text('product_name'),
+    user_name: text('user_name'),
     ...timeColumns,
 }, t => ({
     idx_user_app_subs_userId: index('idx_user_app_subs_userId').on(t.userId),

@@ -31,6 +31,14 @@ export const roleEditNotAllowed = async (
     return !(await roleEditAllowed(event, orgName))
 }
 
-export async function getUserPlan(event: H3Event<EventHandlerRequest>) {
-    
+export async function getUserSubFromDb(event: H3Event<EventHandlerRequest>) {
+    const db = event.context.drizzle
+    const userId = event.context.auth.userId
+    return await db.select()
+        .from(tables.users_subs)
+        .where(and(
+            eq(tables.users_subs.userId, userId),
+            ne(tables.users_subs.status, 'expired'),
+        ))
+        .then(singleOrDefault)
 }

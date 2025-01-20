@@ -6,13 +6,13 @@ export type WebhookEvent = {
 export type WebhookData = {
     type: string;
     id: string;
-    attributes: Attributes;
+    attributes: SubscriptionAttributes;
     relationships: Relationships;
     links: DataLinks;
     [key: string]: any;
 }
 
-export type Attributes = {
+export type SubscriptionAttributes = {
     store_id: number;
     customer_id: number;
     order_id: number;
@@ -31,13 +31,14 @@ export type Attributes = {
     cancelled: boolean;
     trial_ends_at: null;
     billing_anchor: number;
-    first_subscription_item: FirstSubscriptionItem;
+    first_subscription_item: FirstSubscriptionItem | undefined;
     urls: Urls;
     renews_at: string | undefined;
     ends_at: null;
     created_at: string;
     updated_at: string;
     test_mode: boolean;
+    subscription_id: number | undefined;
     [key: string]: any;
 }
 

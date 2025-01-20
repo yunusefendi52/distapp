@@ -1,0 +1,1 @@
+ALTER TABLE `users_app_subs` ADD `card_brand` text;

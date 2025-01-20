@@ -198,7 +198,8 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@primevue/nuxt-module',
     'nuxt-svgo-loader',
-    "@nuxtjs/google-fonts"
+    "@nuxtjs/google-fonts",
+    '@nuxt/test-utils/module'
   ],
 
   primevue: {

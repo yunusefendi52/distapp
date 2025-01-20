@@ -1,5 +1,5 @@
 <template>
-    <div v-if="status === 'pending'">
+    <div v-if="!status || status === 'pending'">
         <ProgressSpinner style="width: 30px; height: 30px; margin: unset;" strokeWidth="6" class="self-center"
             data-testid="menu-loading" />
     </div>
@@ -40,7 +40,7 @@
                                 }}</span>
                         </template>
                         <Button v-if="data?.plan !== 'basic'" label="Checkout" outlined :loading="isPending" fluid
-                            @click="() => mutate()" class="mt-3" />
+                            @click="() => mutate()" class="mt-3" data-testid="checkout_btn" />
                     </div>
                 </div>
             </AppCard>
@@ -63,14 +63,11 @@
                             <span class="font-semibold text-lg">Only 1</span>
                         </div>
                     </div>
-                    <Button v-if="data?.plan !== 'basic'" class="mt-5" label="Your current plan" outlined disabled />
+                    <Button v-if="data?.plan !== 'basic'" class="mt-5" label="Your current plan" outlined disabled
+                        data-testid="btn_free_current" />
                 </div>
             </AppCard>
         </div>
-        <!-- <span v-if="data?.status === 'checkout_open'">Your checkout is now being processed.</span>
-        <span v-else-if="data?.status === 'checkout_confirmed'">Your checkout is confirmed.</span>
-        <span v-else-if="data?.status === 'checkout_succeeded'">Your checkout is processed.</span>
-        <span v-else-if="data?.status === 'cancelled'">Your subscription is cancelled.</span> -->
     </div>
 </template>
 
