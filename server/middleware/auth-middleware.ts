@@ -26,6 +26,7 @@ export default defineEventHandler(async (event) => {
       } else {
         const userId = verifiedData.payload.sub
         const email = verifiedData.payload.email as string | undefined
+        const provider = verifiedData.payload.provider as string
         event.context.auth = {
           userId: userId!,
           email: email,

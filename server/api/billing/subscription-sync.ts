@@ -1,5 +1,6 @@
 import type { EventHandlerRequest, H3Event } from "h3"
 import { verifyWebhookRequest } from "./verifyWebhookRequest"
+import { defineEventHandler } from 'h3'
 
 export type SubsStatusType = typeof tables.users_subs.status.enumValues[number]
 
@@ -125,10 +126,9 @@ export type SubscriptionSyncData = {
     user_email: string;
     status: string;
     status_formatted: string;
-    card_brand: string;
+    card_brand: string | undefined;
     renews_at: string | undefined;
     ends_at: string | null;
     created_at: string;
     updated_at: string;
-    subscription_id: number | undefined;
 }

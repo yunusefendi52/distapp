@@ -14,6 +14,8 @@
             <div class="w-full flex justify-center" style="color-scheme: auto;">
                 <GoogleSignInButton @success="handleLoginSuccess" @error="handleLoginError"></GoogleSignInButton>
             </div>
+            <ProgressSpinner v-if="isLoggingIn" style="width: 40px; height: 40px; margin: unset;" strokeWidth="4"
+                class="self-center" />
         </div>
     </div>
 </template>
@@ -24,6 +26,7 @@ import {
     GoogleSignInButton,
     type CredentialResponse,
 } from "vue3-google-signin";
+import ProgressSpinner from 'primevue/progressspinner';
 
 function handleSuccessSignIn(r: { param: string } | undefined) {
     if (r) {
@@ -31,14 +34,22 @@ function handleSuccessSignIn(r: { param: string } | undefined) {
     }
 }
 
+const isLoggingIn = ref(false)
+
 const handleLoginSuccess = async (response: CredentialResponse) => {
-    const r = await $fetch('/api/auth/sign-in-google', {
-        method: 'post',
-        body: {
-            token: response.credential,
-        },
-    })
-    handleSuccessSignIn(r)
+    try {
+        isLoggingIn.value = true
+
+        const r = await $fetch('/api/auth/sign-in-google', {
+            method: 'post',
+            body: {
+                token: response.credential,
+            },
+        })
+        handleSuccessSignIn(r)
+    } finally {
+        isLoggingIn.value = false
+    }
 }
 
 const handleLoginError = () => {

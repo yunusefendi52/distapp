@@ -1,4 +1,4 @@
-import { getSubscription, getVariant, lemonSqueezySetup } from "@lemonsqueezy/lemonsqueezy.js"
+import { getSubscription, getVariant, lemonSqueezySetup, listSubscriptions } from "@lemonsqueezy/lemonsqueezy.js"
 
 export function getProductVariandId() {
     return getLsTestMode() ? process.env.NUXT_LEMONSQUEEZY_VARIANT_ID_TEST! : process.env.NUXT_LEMONSQUEEZY_VARIANT_ID_PROD!
@@ -46,4 +46,26 @@ export async function getUrlsSubscription(subscriptionId: string) {
     return {
         updatePaymentMethod: data?.data.attributes.urls.update_payment_method,
     }
+}
+
+export async function getUserSubscriptionLms(userEmail: string) {
+    // this will get latest subscription
+    const userSubs = await listSubscriptions({
+        filter: {
+            productId: process.env.NUXT_LEMONSQUEEZY_PRODUCT_ID_TEST!,
+            storeId: process.env.NUXT_LEMONSQUEEZY_STORE_ID!,
+            userEmail: userEmail
+        },
+        page: {
+            size: 1
+        }
+    });
+    if (userSubs.error) {
+        throw createError({
+            message: userSubs.error.message,
+            statusCode: 500
+        });
+    }
+    const data = userSubs.data?.data;
+    return data && data.length ? data[0] : undefined;
 }

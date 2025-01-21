@@ -5,17 +5,24 @@ import { mockNuxtImport } from '@nuxt/test-utils/runtime'
 
 type UserSubType = Awaited<ReturnType<typeof getUserSubFromDb>>
 
-const { getUserSubFromDbMock } = vi.hoisted(() => {
+const { getUserSubFromDbMock, getUserSubscriptionLmsMock } = vi.hoisted(() => {
     return {
         getUserSubFromDbMock: vi.fn(() => {
             return {
             } as UserSubType
+        }),
+        getUserSubscriptionLmsMock: vi.fn(() => {
+            return undefined
         })
     }
 })
 
 mockNuxtImport('getUserSubFromDb', () => {
     return getUserSubFromDbMock
+})
+// TODO: Test this??
+mockNuxtImport('getUserSubscriptionLms', () => {
+    return getUserSubscriptionLmsMock
 })
 
 describe('Current billing tests', () => {
