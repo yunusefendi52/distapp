@@ -52,10 +52,10 @@
         <div class="flex flex-col gap-2">
             <span class="font-semibold">File metadata</span>
             <div class="flex flex-col">
-                <span>{{ `MD5: ${detailArtifact?.fileMetadata?.md5?.replaceAll('"', '')}` }}</span>
+                <!-- <span>{{ `MD5: ${detailArtifact?.fileMetadata?.md5?.replaceAll('"', '')}` }}</span> -->
                 <span>{{ `File Extension: ${detailArtifact?.extension}`
                     }}</span>
-                <span>{{ `File Size: ${formatBytes(detailArtifact?.fileMetadata?.contentLength || 0)}` }}</span>
+                <span>{{ `File Size: ${formatBytes(detailArtifact?.fileMetadata?.contentLength) || 'n/a'}` }}</span>
             </div>
         </div>
         <div class="flex flex-col gap-2">

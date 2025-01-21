@@ -19,7 +19,10 @@ export const getExtensionFromMimeType = (mimeType: string | undefined) => {
     return mimeType
 }
 
-export function formatBytes(bytes: number, decimals = 2, isBinary = false) {
+export function formatBytes(bytes: number | null | undefined, decimals = 2, isBinary = false) {
+    if (!bytes) {
+        return undefined
+    }
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']; // or ['B', 'KB', 'MB', 'GB', 'TB']
 
     if (!+bytes) {

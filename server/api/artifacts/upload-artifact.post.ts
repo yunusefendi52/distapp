@@ -6,6 +6,7 @@ export type UploadTempValue = {
     fileKey: string
     orgId: string
     appId: string
+    fileSize?: number | undefined
     apkFileKey?: string | undefined
 }
 
@@ -131,6 +132,7 @@ export default defineEventHandler(async (event) => {
                 fileKey,
                 orgId: orgId,
                 appId: appId,
+                fileSize: fileSize,
                 ...(apkUrl ? {
                     apkFileKey: apkUrl?.fileKey
                 } : undefined),

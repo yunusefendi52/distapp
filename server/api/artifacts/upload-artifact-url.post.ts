@@ -1,4 +1,4 @@
-import { findApiKey } from "./upload-artifact.post"
+import { findApiKey, type UploadTempValue } from "./upload-artifact.post"
 
 export default defineEventHandler(async (event) => {
     const { uploadId, fileKey, apkFileKey, appName, orgName, releaseNotes, packageMetadata, filename, headlessUploadId } = await readValidatedBody(event, z.object({
@@ -66,6 +66,14 @@ export default defineEventHandler(async (event) => {
     const newReleaseId = (lastArtifact?.releaseId ?? 0) + 1
     const now = new Date()
     const artifactsId = generateId()
+    const keyValueTemp = await db.select({
+        value: tables.keyValue.value,
+    })
+        .from(tables.keyValue)
+        .where(eq(tables.keyValue.key, uploadId))
+        .then(takeUniqueOrThrow) as {
+            value: UploadTempValue
+        }
     await db.batch([
         db.delete(tables.keyValue)
             .where(or(
@@ -87,6 +95,7 @@ export default defineEventHandler(async (event) => {
             extension: packageData?.extension,
             packageName: packageData?.packageName,
             filename: filename.substring(0, 32),
+            fileContentLength: keyValueTemp.value.fileSize,
         }),
     ])
 

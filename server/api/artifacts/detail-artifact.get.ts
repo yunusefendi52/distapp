@@ -35,10 +35,10 @@ export default defineEventHandler(async (event) => {
         appName!.toString(),
         parseInt(releaseId!.toString()),
     )
-    const s3 = new S3Fetch()
-    const { assets } = getStorageKeys(userOrg.org!.id!, app.id, detailArtifact.fileObjectKey)
-    const [headObject, groups] = await Promise.all([
-        s3.getHeadObject(assets),
+    // const s3 = new S3Fetch()
+    // const { assets } = getStorageKeys(userOrg.org!.id!, app.id, detailArtifact.fileObjectKey)
+    const [groups] = await Promise.all([
+        // s3.getHeadObject(assets),
         db.select()
             .from(tables.artifactsGroups)
             .leftJoin(tables.artifactsGroupsManager, eq(tables.artifactsGroupsManager.artifactsGroupsId, tables.artifactsGroups.id))
@@ -50,9 +50,9 @@ export default defineEventHandler(async (event) => {
         hasApk: detailArtifact.fileObjectApkKey ? true : false,
         hasApkDDD: detailArtifact.fileObjectApkKey,
         fileMetadata: {
-            md5: headObject.etag,
-            contentLength: headObject.contentLength,
-            contentType: headObject.contentType,
+            // md5: headObject.etag,
+            contentLength: detailArtifact.fileContentLength,
+            // contentType: headObject.contentType,
         },
         groups,
     }
