@@ -18,7 +18,7 @@ const onRowSelect = (event: any) => {
         return
     }
     navigateTo({
-        name: 'orgs-orgName-apps-appId',
+        name: 'orgs-orgName-apps-appId-index-releases',
         params: {
             orgName: orgName,
             appId: appName,
@@ -84,7 +84,7 @@ useTitleApp('Apps')
                     </div>
                     <div>
                         <NuxtLink :to="{
-                            name: 'orgs-orgName-settings',
+                            name: 'org-settings-info',
                             params: {
                                 orgName: orgNameParam?.toString() ?? '',
                             },

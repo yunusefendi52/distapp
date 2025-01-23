@@ -1,8 +1,10 @@
 <template>
     <div class="flex gap-3 p-3 flex-col justify-stretch bottom-menu">
-        <Button data-testid="btn_acc_stngs" label="Account Settings" outlined @click="() => navigateTo({
-            name: 'account-settings',
-        })" />
+        <NuxtLink :to="{
+            name: 'account-settings-profile',
+        }">
+            <Button data-testid="btn_acc_stngs" label="Account Settings" outlined fluid />
+        </NuxtLink>
         <SignOutButton />
     </div>
 </template>

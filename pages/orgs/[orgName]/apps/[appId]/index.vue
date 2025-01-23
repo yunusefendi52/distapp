@@ -8,7 +8,7 @@
                 </div>
             </div>
             <NuxtLink :to="{
-                name: 'orgs-orgName-apps-appId-settings',
+                name: 'app-info-settings',
                 params: params,
             }">
                 <Button icon="pi pi-cog" outlined data-testid="settings_app_btn" />
