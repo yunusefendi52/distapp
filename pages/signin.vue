@@ -28,9 +28,12 @@ import {
 } from "vue3-google-signin";
 import ProgressSpinner from 'primevue/progressspinner';
 
+const route = useRoute()
+
 function handleSuccessSignIn(r: { param: string } | undefined) {
     if (r) {
-        location.href = `/?${r.param}`
+        const redirect = route.query.redirect
+        location.href = `/?${r.param}${redirect ? `&redirect=${redirect}` : ''}`
     }
 }
 
@@ -60,8 +63,6 @@ definePageMeta({
     layout: 'auth-layout',
     name: 'signin',
 })
-
-const route = useRoute()
 
 const isAddAccount = computed(() => route.path.startsWith('/add-account'))
 if (!isAddAccount.value) {

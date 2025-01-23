@@ -7,24 +7,13 @@
         <div class="flex-1 flex flex-col lg:flex-row gap-5 items-start">
             <AppCard class="w-full">
                 <div class="flex flex-col gap-2 justify-stretch p-2">
-                    <div class="flex flex-row">
-                        <span
-                            class="flex-1 font-bold text-3xl bg-gradient-to-r from-orange-500 via-orange-300 to-orange-100 bg-clip-text text-transparent inline-block">Pro</span>
-                        <div class="flex flex-row gap-3 items-end flex-wrap">
-                            <span class="text-2xl font-bold">${{ (data?.planPrice || 0) / 100 }}</span>
-                            <span>/month</span>
-                        </div>
-                    </div>
-                    <div class="mt-5 flex flex-col gap-5">
-                        <div class="flex flex-row gap-1">
-                            <span class="flex-1 font-semibold text-lg">Number of apps</span>
-                            <span class="font-semibold text-lg">Up To 250</span>
-                        </div>
-                        <div class="flex flex-row gap-1">
-                            <span class="flex-1 font-semibold text-lg">Number of organization</span>
-                            <span class="font-semibold text-lg">Up to 20</span>
-                        </div>
-                    </div>
+                    <PriceCard price-name="Pro" price="$3.33" :features="[{
+                        name: 'Number of apps',
+                        desc: 'Up To 250',
+                    }, {
+                        name: 'Number of organizations',
+                        desc: 'Up To 20',
+                    }]" />
                     <div class="mt-5 flex flex-col gap-2">
                         <template v-if="data?.plan === 'basic'">
                             <span>{{ data?.endsAt ? 'Ends' : 'Renews' }} at {{ formatDate(data?.endsAt ||
@@ -46,23 +35,13 @@
             </AppCard>
             <AppCard class="w-full">
                 <div class="flex flex-col gap-2 justify-stretch p-2">
-                    <div class="flex flex-row">
-                        <span
-                            class="flex-1 font-bold text-3xl bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 bg-clip-text text-transparent inline-block">Free</span>
-                        <div class="flex flex-row gap-3 items-end flex-wrap">
-                            <span class="text-2xl font-bold">$0</span>
-                        </div>
-                    </div>
-                    <div class="mt-5 flex flex-col gap-5">
-                        <div class="flex flex-row gap-1">
-                            <span class="flex-1 font-semibold text-lg">Number of apps</span>
-                            <span class="font-semibold text-lg">Up to 3</span>
-                        </div>
-                        <div class="flex flex-row gap-1">
-                            <span class="flex-1 font-semibold text-lg">Number of organization</span>
-                            <span class="font-semibold text-lg">Only 1</span>
-                        </div>
-                    </div>
+                    <PriceCard price-name="Free" price="$0" :features="[{
+                        name: 'Number of apps',
+                        desc: 'Up To 2',
+                    }, {
+                        name: 'Number of organizations',
+                        desc: 'Only 1',
+                    }]" />
                     <Button v-if="data?.plan !== 'basic'" class="mt-5" label="Your current plan" outlined disabled
                         data-testid="btn_free_current" />
                 </div>

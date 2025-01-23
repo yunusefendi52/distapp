@@ -4,13 +4,20 @@
             <AppIcon class="fill-black dark:fill-white h-8" />
         </div>
         <span @click="goToHomePage" class="cursor-pointer font-semibold text-xl flex-1">DistApp</span>
-        <ThemeSwitcher />
+        <div class="flex flex-row gap-3">
+            <NuxtLink to="pricing" v-if="route.meta.layout === 'content-layout'">
+                <Button label="Pricing" outlined />
+            </NuxtLink>
+            <ThemeSwitcher />
+        </div>
     </div>
     <!-- <AppDivider orientation="horizontal" /> -->
 </template>
 
 <script setup lang="ts">
 import AppIcon from '~/public/appicon.svg'
+
+const route = useRoute()
 
 function goToHomePage() {
     navigateTo({
