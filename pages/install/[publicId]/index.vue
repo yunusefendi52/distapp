@@ -29,9 +29,7 @@
                             <!-- <span>30mbbb</span> -->
                         </div>
                         <div>
-                            <Button label="Download"
-                                @click="download(item.releaseId.toString(), publicId.toString(), true)"
-                                :loading="isDownloading" />
+                            <DownloadButton :releaseId="item.releaseId.toString()" />
                         </div>
                     </div>
                 </template>
@@ -72,8 +70,6 @@ const { data, status, error } = useFetch('/api/install/get-data', {
 const artifacts = computed(() => data.value?.artifacts.map(e => e.artifacts!))
 
 const title = useTitleApp(computed(() => `Install ${data.value?.app.displayName ?? ''}`))
-
-const { download, isDownloading } = useDownloadArtifact(appName.toString(), orgName.toString())
 
 const cookie = useCookie(cookieAuthKey)
 </script>
