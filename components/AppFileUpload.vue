@@ -93,6 +93,8 @@ const { mutateAsync, isPending } = useMutation({
     onSuccess: () => {
         if (fileList.value) {
             fileList.value = undefined
+            releaseNotes.value = null
+            selectedGroup.value = undefined
             emit('onSuccess')
         }
     },
