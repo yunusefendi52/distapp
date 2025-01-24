@@ -11,9 +11,9 @@ export type OsType = 'android' | 'ios'
 export const getExtensionFromMimeType = (mimeType: string | undefined) => {
     if (mimeType === 'application/vnd.android.package-archive') {
         return 'apk'
-    } else if (mimeType === 'application/x-authorware-bin') {
+    } else if (mimeType === 'application/x-authorware-bin' || mimeType === '.aab') {
         return 'aab'
-    } else if (mimeType === 'application/octet-stream') {
+    } else if (mimeType === 'application/octet-stream' || mimeType === '.ipa') {
         return 'ipa'
     }
     return mimeType
