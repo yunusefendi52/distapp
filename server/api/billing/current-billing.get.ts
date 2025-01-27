@@ -2,6 +2,19 @@ import { defineEventHandler } from 'h3'
 import { syncUserSubscription } from './subscription-sync'
 
 export default defineEventHandler(async event => {
+    if (!isBillingEnabled(event)) {
+        return {
+            plan: '',
+            planPrice: 0,
+            status: '',
+            statusFormatted: '',
+            endsAt: '',
+            renewsAt: '',
+            isCancelled: false,
+            doNotShow: true,
+        }
+    }
+
     const userSubLms = await getUserSubscriptionLms(event.context.auth.email!)
     if (userSubLms) {
         const subAttrs = userSubLms.attributes
@@ -41,5 +54,6 @@ export default defineEventHandler(async event => {
         endsAt: userSub?.endsAt,
         renewsAt: userSub?.renewsAt,
         isCancelled: isCancelled,
+        doNotShow: false,
     }
 })

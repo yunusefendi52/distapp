@@ -3,6 +3,9 @@
         <ProgressSpinner style="width: 30px; height: 30px; margin: unset;" strokeWidth="6" class="self-center"
             data-testid="menu-loading" />
     </div>
+    <div v-else-if="data?.doNotShow">
+        Billing disabled
+    </div>
     <div v-else class="flex max-w-full flex-col lg:max-w-5xl mx-auto my-10 gap-5">
         <div class="flex-1 flex flex-col lg:flex-row gap-5 items-start">
             <AppCard class="w-full">

@@ -78,6 +78,7 @@ export default defineNuxtConfig({
     APP_LIMIT_APPS_TESTER_GROUPS: 100,
     APP_LIMIT_UPLOAD_SIZE: 83886080, // 80 mb
     APP_LIMIT_ARTIFACT: 5,
+    APP_DISABLE_BILLING: false,
     LOCAL_AUTHS: '',
     JWT_KEY: '',
     DB_URL: '',

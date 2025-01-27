@@ -22,25 +22,27 @@ export default defineEventHandler(async event => {
     const name = payload['name'] as string
     const email = payload['email'] as string
     const { token: userToken, appUserId, pUserId } = await generateUserToken(event, 'google', payload.sub!, email, name)
-    const userSubLms = await getUserSubscriptionLms(email)
-    if (userSubLms) {
-        const subAttrs = userSubLms.attributes
-        await syncUserSubscription(event, appUserId, pUserId, userSubLms.id, {
-            card_brand: subAttrs.card_brand || undefined,
-            created_at: subAttrs.created_at,
-            customer_id: subAttrs.customer_id,
-            ends_at: subAttrs.ends_at,
-            product_id: subAttrs.product_id,
-            product_name: subAttrs.product_name,
-            renews_at: subAttrs.renews_at,
-            status: subAttrs.status,
-            status_formatted: subAttrs.status_formatted,
-            updated_at: subAttrs.updated_at,
-            user_email: subAttrs.user_email,
-            user_name: subAttrs.user_name,
-            variant_id: subAttrs.variant_id,
-            variant_name: subAttrs.variant_name,
-        })
+    if (isBillingEnabled(event)) {
+        const userSubLms = await getUserSubscriptionLms(email)
+        if (userSubLms) {
+            const subAttrs = userSubLms.attributes
+            await syncUserSubscription(event, appUserId, pUserId, userSubLms.id, {
+                card_brand: subAttrs.card_brand || undefined,
+                created_at: subAttrs.created_at,
+                customer_id: subAttrs.customer_id,
+                ends_at: subAttrs.ends_at,
+                product_id: subAttrs.product_id,
+                product_name: subAttrs.product_name,
+                renews_at: subAttrs.renews_at,
+                status: subAttrs.status,
+                status_formatted: subAttrs.status_formatted,
+                updated_at: subAttrs.updated_at,
+                user_email: subAttrs.user_email,
+                user_name: subAttrs.user_name,
+                variant_id: subAttrs.variant_id,
+                variant_name: subAttrs.variant_name,
+            })
+        }
     }
     signInUser(event, userToken)
     const param = new URLSearchParams({

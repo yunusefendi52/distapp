@@ -7,6 +7,12 @@ export type CustomerMetadata = {
 }
 
 export default defineEventHandler(async event => {
+    if (!isBillingEnabled(event)) {
+        throw createError({
+            message: 'Billing disabled',
+        })
+    }
+
     const { checkoutOrigin } = getQuery(event)
     const db = event.context.drizzle
     const activeSub = await getUserSubFromDb(event)

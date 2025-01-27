@@ -65,3 +65,8 @@ export function checkIsExpire(gracePeriodHour: number, endsAt: Date) {
     now.setHours(now.getHours() - gracePeriodHour)
     return (endsAt.getTime() - now.getTime()) <= 0
 }
+
+export function isBillingEnabled(event: H3Event<EventHandlerRequest>) {
+    const { APP_DISABLE_BILLING } = useRuntimeConfig(event)
+    return !APP_DISABLE_BILLING
+}
