@@ -23,10 +23,10 @@ export default defineEventHandler(async (event) => {
             .where(and(
                 eq(tables.apps.organizationsId, orgId),
             )).then(takeUniqueOrThrow)
-        const { APP_LIMIT_BETA_APPS } = useRuntimeConfig(event)
-        if (allOrgApps.count >= APP_LIMIT_BETA_APPS) {
+        const { appLimit: appSize } = await getUserFeature(event)
+        if (allOrgApps.count >= appSize) {
             throw createError({
-                message: `Currently we limited creating ${APP_LIMIT_BETA_APPS} apps as we are in beta testing`,
+                message: `The number of apps has reached the limit ${appSize}`,
             })
         }
     }

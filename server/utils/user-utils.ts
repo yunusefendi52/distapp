@@ -42,3 +42,26 @@ export async function getUserSubFromDb(event: H3Event<EventHandlerRequest>) {
         ))
         .then(singleOrDefault)
 }
+
+export async function getUserFeature(event: H3Event<EventHandlerRequest>) {
+    const {
+        APP_LIMIT_ORG,
+        APP_LIMIT_APPS,
+        APP_LIMIT_APPS_GROUP,
+        APP_LIMIT_INVITE_ORGS,
+        APP_LIMIT_ARTIFACT,
+    } = useRuntimeConfig(event)
+    return {
+        orgLimit: APP_LIMIT_ORG,
+        appLimit: APP_LIMIT_APPS,
+        appGroupLimit: APP_LIMIT_APPS_GROUP,
+        inviteOrgLimit: APP_LIMIT_INVITE_ORGS,
+        artifactLimit: APP_LIMIT_ARTIFACT,
+    }
+}
+
+export function checkIsExpire(gracePeriodHour: number, endsAt: Date) {
+    const now = new Date()
+    now.setHours(now.getHours() - gracePeriodHour)
+    return (endsAt.getTime() - now.getTime()) <= 0
+}

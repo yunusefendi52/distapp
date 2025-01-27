@@ -113,9 +113,10 @@ export default defineEventHandler(async (event) => {
     }).from(tables.artifacts)
         .where(eq(tables.artifacts.appsId, appId))
         .then(takeUniqueOrThrow)
-    if (artifactTotal.count >= 10) {
+    const { artifactLimit } = await getUserFeature(event)
+    if (artifactTotal.count >= artifactLimit) {
         throw createError({
-            message: 'Currently it\'s limited up to 10, we still tidying up, for now you can remove one of the previous artifact',
+            message: `The number of artifact as reached the limit of ${artifactLimit} releases`,
             statusCode: 400,
         })
     }

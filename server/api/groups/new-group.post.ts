@@ -16,10 +16,10 @@ export default defineEventHandler(async (event) => {
     const db = event.context.drizzle
     const { userApp: app } = await getUserApp(event, orgName, appName)
     const groups = await getListGroups(event, orgName, appName, undefined, 'count')
-    var { APP_LIMIT_APPS_GROUP } = useRuntimeConfig(event)
-    if (groups?.count! >= APP_LIMIT_APPS_GROUP) {
+    const { appGroupLimit: appGroupSize } = await getUserFeature(event)
+    if (groups?.count! >= appGroupSize) {
         throw createError({
-            message: `The number of groups has reached the limit of ${APP_LIMIT_APPS_GROUP} groups`,
+            message: `The number of groups has reached the limit of ${appGroupSize} groups`,
         })
     }
     const now = new Date()

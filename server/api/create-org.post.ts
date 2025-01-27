@@ -19,10 +19,10 @@ export default defineEventHandler(async (event) => {
                 eq(tables.organizationsPeople.role, 'owner'),
             ))
             .then(takeUniqueOrThrow)
-        const { APP_LIMIT_BETA_ORG } = useRuntimeConfig(event)
-        if (myCurrentUserOrgs.count >= APP_LIMIT_BETA_ORG) {
+        const { orgLimit: orgSize } = await getUserFeature(event)
+        if (myCurrentUserOrgs.count >= orgSize) {
             throw createError({
-                message: `Currently we limited creating ${APP_LIMIT_BETA_ORG} organization as we are in beta testing`,
+                message: `The number of organization has reached the limit ${orgSize} ${myCurrentUserOrgs.count}`,
             })
         }
     }

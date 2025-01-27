@@ -19,10 +19,10 @@ export default defineEventHandler(async (event) => {
     const { app: { apiAuthKey } } = useRuntimeConfig(event)
     const { userApp, userOrg } = await getUserApp(event, orgName, appName)
     const testers = await getListApikeys(event, userApp.organizationsId!, userApp.id, groupName, 'count')
-    const { APP_LIMIT_APPS_GROUPS_TESTER } = useRuntimeConfig(event)
-    if (testers?.count! >= APP_LIMIT_APPS_GROUPS_TESTER) {
+    const { APP_LIMIT_APPS_TESTER_GROUPS } = useRuntimeConfig(event)
+    if (testers?.count! >= APP_LIMIT_APPS_TESTER_GROUPS) {
         throw createError({
-            message: `The number of testers in group ${groupName} has reached the limit ${APP_LIMIT_APPS_GROUPS_TESTER} testers`,
+            message: `The number of testers in group ${groupName} has reached the limit ${APP_LIMIT_APPS_TESTER_GROUPS} testers`,
         })
     }
 

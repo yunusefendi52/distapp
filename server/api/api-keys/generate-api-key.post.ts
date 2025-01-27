@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
     const { APP_LIMIT_API_KEYS } = useRuntimeConfig(event)
     if (listApiKeys?.count! >= APP_LIMIT_API_KEYS) {
         throw createError({
-            message: `You can only create ${APP_LIMIT_API_KEYS} keys`,
+            message: `You can only create ${APP_LIMIT_API_KEYS} keys. Delete your other keys`,
         })
     }
 
