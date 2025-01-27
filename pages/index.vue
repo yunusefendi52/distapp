@@ -12,7 +12,7 @@
                     }">
                         <Button :label="isLoggedIn ? 'Go To Apps' : 'Get Started'" />
                     </NuxtLink>
-                    <NuxtLink to="https://docs.distapp.lhf.my.id/self-hosted/setup-self-hosted" target="_blank">
+                    <NuxtLink to="https://docs-distapp.lhf.my.id/self-hosted/setup-self-hosted" target="_blank">
                         <Button icon="pi pi-server" label="Self Hosted" text />
                     </NuxtLink>
                     <NuxtLink to="https://github.com/yunusefendi52/distapp" target="_blank">
