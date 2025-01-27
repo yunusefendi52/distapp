@@ -6,14 +6,17 @@
                 <span class="text-lg font-light">Manage and distribute your Android or iOS app.
                     Useful for tester or self distribution.
                     Alternative App Center Distribution.</span>
-                <div class="flex flex-row flex-wrap gap-4 mt-3">
-                    <NuxtLink to="https://github.com/yunusefendi52/distapp" target="_blank">
-                        <Button icon="pi pi-github" label="GitHub" severity="secondary" />
-                    </NuxtLink>
+                <div class="flex flex-row flex-wrap gap-3 mt-3">
                     <NuxtLink :to="{
                         name: isLoggedIn ? 'apps' : 'signin',
                     }">
                         <Button :label="isLoggedIn ? 'Go To Apps' : 'Get Started'" />
+                    </NuxtLink>
+                    <NuxtLink to="https://docs.distapp.lhf.my.id/self-hosted/setup-self-hosted" target="_blank">
+                        <Button icon="pi pi-server" label="Self Hosted" text />
+                    </NuxtLink>
+                    <NuxtLink to="https://github.com/yunusefendi52/distapp" target="_blank">
+                        <Button icon="pi pi-github" label="GitHub" text />
                     </NuxtLink>
                 </div>
                 <span class="text-sm italic font-light">Beta testing</span>
@@ -34,7 +37,8 @@
             <AppCard class="h-full">
                 <article class="px-2">
                     <h2 class="font-bold text-lg mb-1">Manage your apps</h2>
-                    <p class="font-light">Manage all of your apps in one place. Supports Android and iOS. More coming</p>
+                    <p class="font-light">Manage all of your apps in one place. Supports Android and iOS. More coming
+                    </p>
                 </article>
             </AppCard>
             <AppCard class="h-full">

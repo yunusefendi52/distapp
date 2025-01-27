@@ -41,3 +41,5 @@ playwright/.auth
 tests/tests_artifacts
 __MACOSX
 .distapp-data
+docs/.vitepress/dist
+docs/.vitepress/cache
