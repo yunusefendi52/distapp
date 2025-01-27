@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
         const myCurrentUserOrgs = await db.select({
             count: count()
         }).from(tables.organizations)
-            .leftJoin(tables.organizationsPeople, and(
+            .innerJoin(tables.organizationsPeople, and(
                 eq(tables.organizations.id, tables.organizationsPeople.organizationId),
                 eq(tables.organizationsPeople.userId, userId),
                 eq(tables.organizationsPeople.role, 'owner'),
