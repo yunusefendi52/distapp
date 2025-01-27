@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <div class="flex flex-col sm:flex-row sm:mt-5 gap-2">
-            <div class="flex flex-col gap-3 px-5 py-5 sm:p-20 justify-center items-start flex-1">
+    <div class="flex justify-center max-w-7xl flex-col mx-auto mt-10 px-5 gap-14">
+        <div class="flex flex-col lg:flex-row gap-10">
+            <div class="flex flex-col gap-3 justify-center items-start flex-1">
                 <span class="text-4xl font-medium">DistApp</span>
                 <span class="text-lg font-light">Manage and distribute your Android or iOS app.
                     Useful for tester or self distribution.
@@ -18,11 +18,33 @@
                 </div>
                 <span class="text-sm italic font-light">Beta testing</span>
             </div>
-            <div class="flex justify-center items-center flex-1 p-5 sm:p-0 sm:mr-10">
-                <img class="distapp-dark border border-white/15 rounded-lg" src="/assets/distapp-dark.webp">
-                <img class="distapp-light border border-black/15 rounded-lg" src="/assets/distapp-light.webp">
+            <div class="flex justify-center items-center lg:w-[550px]">
+                <img class="distapp-dark border border-white/15 rounded-lg" width="550" src="/assets/distapp-dark.webp">
+                <img class="distapp-light border border-black/15 rounded-lg" width="550"
+                    src="/assets/distapp-light.webp">
             </div>
         </div>
+        <div class="flex flex-col gap-6 sm:grid sm:grid-cols-3">
+            <AppCard class="h-full">
+                <article class="px-2">
+                    <h2 class="font-bold text-lg mb-1">Self Hosted</h2>
+                    <p class="font-light">You can self host in your own infrastructure</p>
+                </article>
+            </AppCard>
+            <AppCard class="h-full">
+                <article class="px-2">
+                    <h2 class="font-bold text-lg mb-1">Manage your apps</h2>
+                    <p class="font-light">Manage all of your apps in one place. Supports Android and iOS. More coming</p>
+                </article>
+            </AppCard>
+            <AppCard class="h-full">
+                <article class="px-2">
+                    <h2 class="font-bold text-lg mb-2">Group and organization</h2>
+                    <p class="font-light">Create seperate group or organization for your apps</p>
+                </article>
+            </AppCard>
+        </div>
+        <div class="h-[50px]"></div>
     </div>
 </template>
 

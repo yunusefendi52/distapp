@@ -8,7 +8,7 @@
 
         <slot />
 
-        <footer class="fixed bottom-0 w-full px-10 py-5 text-right">
+        <footer class="sm:fixed bottom-0 w-full px-10 py-5 text-right bg-[var(--p-content-background)]">
             <NuxtLink to="privacy-policy">
                 <Button label="Privacy" text size="small" />
             </NuxtLink>
