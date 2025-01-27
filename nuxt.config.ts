@@ -103,7 +103,7 @@ export default defineNuxtConfig({
       tasks: true,
     },
     scheduledTasks: {
-      '0 */24 * * *': 'purgeArtifact',
+      '0 */24 * * *': ['purgeArtifact', 'purgeUploadTemp'],
     },
     // node: true,
   },
