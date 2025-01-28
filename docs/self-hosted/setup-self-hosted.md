@@ -9,7 +9,7 @@
 
 You can use any Amazon S3 compatible API, such as Cloudflare R2. If you want to host S3 your self you can use minio or seaweeedfs, make sure the service is accessible for download/upload on the internet, we use signed-url for user to download directly on S3 service.
 
-If you already have running S3 service, make sure there is a bucket "distapp" and create access key and secret key, which we'll use later.
+If you already have running S3 service, make sure there is a bucket "distapp" and create access key and secret key, which we'll use later. Skip this and continue to [Setup DistApp](#setup-distapp)
 
 If you want to deploy minio yourself, run this sample. Update the key accordingly.
 
@@ -29,4 +29,5 @@ Make sure the service is accessible on the internet, you also have to make sure 
 
 Run script below and follow the guide to setup S3
 
-curl -FfSL https://distapp.lhf.my.id/install.sh | bash
+curl -fsSL https://distapp.lhf.my.id/install.sh | bash
+

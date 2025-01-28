@@ -20,10 +20,12 @@ cd $workDir
 #     exit 1
 # fi
 
+read -p "Enter admin password: " adminPass </dev/tty
+adminPass=${adminPass:-$(gen_password)}
 read -p "Enter S3 endpoint: " s3Endpoint </dev/tty
 read -p "Enter S3 region (default: auto): " s3Region </dev/tty
 s3Region=${s3Region:-auto}
-read -p "Enter S3 sccess key: " s3AccessKey </dev/tty
+read -p "Enter S3 access key: " s3AccessKey </dev/tty
 read -p "Enter S3 secret key: " s3SecretKey </dev/tty
 
 echo -e "This script will download docker compose configuration in $workDir directory"
@@ -33,24 +35,27 @@ IFS=""
 envBase="$(curl -fsSL https://github.com/yunusefendi52/distapp/raw/refs/heads/main/public/docker/docker-compose-base.env)"
 echo $envBase > docker-compose-base.env
 
-adminPass="$(gen_password)"
 dbAuthToken=$(echo "sqld:$(gen_password)" | base64)
 
 envContent="$(curl -fsSL https://github.com/yunusefendi52/distapp/raw/refs/heads/main/public/docker/docker-compose.env)"
 echo $envContent > docker-compose.env
-sed -i '' -e "s/.*NUXT_LOCAL_AUTHS=.*/NUXT_LOCAL_AUTHS=admin=$adminPass/" docker-compose.env
-sed -i '' -e "s/.*NUXT_DB_AUTH_TOKEN=.*/NUXT_DB_AUTH_TOKEN=basic:$dbAuthToken/" docker-compose.env
-sed -i '' -e "s/.*NUXT_S3_ENDPOINT=.*/NUXT_S3_ENDPOINT=$s3Endpoint/" docker-compose.env
-sed -i '' -e "s/.*NUXT_S3_REGION=.*/NUXT_S3_REGION=$s3Region/" docker-compose.env
-sed -i '' -e "s/.*NUXT_S3_ACCESS_KEY_ID=.*/NUXT_S3_ACCESS_KEY_ID=$s3AccessKey/" docker-compose.env
-sed -i '' -e "s/.*NUXT_S3_SECRET_ACCESS_KEY=.*/NUXT_S3_SECRET_ACCESS_KEY=$s3SecretKey/" docker-compose.env
-sed -i '' -e "s/.*NUXT_JWT_KEY=.*/NUXT_JWT_KEY=$(gen_password)/" docker-compose.env
-sed -i '' -e "s/.*NUXT_APP_API_AUTH_KEY=.*/NUXT_APP_API_AUTH_KEY=$(gen_password)/" docker-compose.env
+sed -i '' -e "s|.*NUXT_LOCAL_AUTHS=.*|NUXT_LOCAL_AUTHS=admin=$adminPass|" docker-compose.env
+sed -i '' -e "s|.*NUXT_DB_AUTH_TOKEN=.*|NUXT_DB_AUTH_TOKEN=basic:$dbAuthToken|" docker-compose.env
+sed -i '' -e "s|.*NUXT_S3_ENDPOINT=.*|NUXT_S3_ENDPOINT=$s3Endpoint|" docker-compose.env
+sed -i '' -e "s|.*NUXT_S3_REGION=.*|NUXT_S3_REGION=$s3Region|" docker-compose.env
+sed -i '' -e "s|.*NUXT_S3_ACCESS_KEY_ID=.*|NUXT_S3_ACCESS_KEY_ID=$s3AccessKey|" docker-compose.env
+sed -i '' -e "s|.*NUXT_S3_SECRET_ACCESS_KEY=.*|NUXT_S3_SECRET_ACCESS_KEY=$s3SecretKey|" docker-compose.env
+sed -i '' -e "s|.*NUXT_JWT_KEY=.*|NUXT_JWT_KEY=$(gen_password)|" docker-compose.env
+sed -i '' -e "s|.*NUXT_APP_API_AUTH_KEY=.*|NUXT_APP_API_AUTH_KEY=$(gen_password)|" docker-compose.env
 
 dockerComposeContent="$(curl -fsSL https://github.com/yunusefendi52/distapp/raw/refs/heads/main/public/docker/docker-compose.yml)"
 echo $dockerComposeContent > docker-compose.yml
 
 # echo "do not delete this" > .completed
 
+echo "Admin Username: admin"
+echo "Admin Password: $adminPass"
+echo "Open http://localhost:3000"
+echo
 echo "Docker compose configured in $workDir"
 echo "Now run 'docker compose up -d' in $workDir directory"

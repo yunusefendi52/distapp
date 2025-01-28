@@ -8,7 +8,6 @@ services:
       - docker-compose-base.env
       - docker-compose.env
     depends_on:
-      - minio
       - db
   db:
     image: ghcr.io/tursodatabase/libsql-server:v0.24.31
