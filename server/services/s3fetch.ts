@@ -64,7 +64,8 @@ export class S3Fetch {
 
 export const createAwsClient = () => {
     const client = new AwsClient({
-        region: 'auto',
+        region: process.env.NUXT_S3_REGION || 'auto',
+        service: 's3',
         accessKeyId: process.env.NUXT_S3_ACCESS_KEY_ID!,
         secretAccessKey: process.env.NUXT_S3_SECRET_ACCESS_KEY!,
     })
