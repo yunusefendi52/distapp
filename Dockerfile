@@ -1,4 +1,4 @@
-FROM oven/bun:1 as builder
+FROM oven/bun:1.2.0 as builder
 WORKDIR /builder
 
 COPY package.json bun.lock /builder/
@@ -6,7 +6,7 @@ RUN bun install --frozen-lockfile
 COPY . .
 RUN bun run build --preset=bun
 
-FROM oven/bun:1
+FROM oven/bun:1.2.0
 WORKDIR /app
 COPY --from=builder /builder/.output .
 
