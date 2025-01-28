@@ -1,0 +1,27 @@
+{
+    "name": "distapp",
+    "version": "1.0.1",
+    "description": "Manage and distribute Android or iOS app",
+    "main": "cli.mjs",
+    "bin": {
+        "distapp": "./cli.mjs"
+    },
+    "scripts": {
+        "start": "node cli.mjs"
+    },
+    "files": [
+        "cli.mjs"
+    ],
+    "author": "Yunus Efendi",
+    "license": "GPL-3.0-only",
+    "keywords": [
+        "cli",
+        "distapp",
+        "alternative",
+        "appcenter"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/yunusefendi52/distapp.git"
+    }
+}

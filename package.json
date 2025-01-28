@@ -21,7 +21,9 @@
     "build-cli": "bun build cli/cli.ts --target node > cli/cli.mjs",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "cli:pack": "bun run build-cli && cd cli && bun pm pack",
+    "cli:publish": "cd cli && bun publish"
   },
   "dependencies": {
     "@hebilicious/vue-query-nuxt": "^0.3.0",

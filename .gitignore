@@ -43,3 +43,4 @@ __MACOSX
 .distapp-data
 docs/.vitepress/dist
 docs/.vitepress/cache
+cli/distapp-*.tgz

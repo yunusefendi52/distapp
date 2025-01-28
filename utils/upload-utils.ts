@@ -3,13 +3,17 @@ import { ofetch } from 'ofetch'
 import { normalizeError } from '~/utils/showErrorAlert.js'
 
 var myFetchApiKey: string
-export function updateMyFetchApiKey(value: string) {
-    myFetchApiKey = value
+export var myFetchApiUrl: string
+export function updateMyFetch(apiKey: string, fetchApiUrl: string) {
+    myFetchApiKey = apiKey
+    myFetchApiUrl = fetchApiUrl
 }
 export const myFetch = ofetch.create({
     retry: false,
     onRequest(request) {
-        request.options.baseURL = process.env.DISTAPP_CLI_URL
+        if (myFetchApiUrl) {
+            request.options.baseURL = myFetchApiUrl
+        }
         if (myFetchApiKey) {
             request.options.headers.append('API-KEY', myFetchApiKey)
         }

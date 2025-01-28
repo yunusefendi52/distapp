@@ -4,7 +4,7 @@ import { promises, existsSync } from 'fs'
 import child_process from 'node:child_process'
 import { uuidv4 } from "uuidv7"
 const exec = util.promisify(child_process.exec)
-import { myFetch } from '../utils/upload-utils.js'
+import { myFetch, myFetchApiUrl } from '../utils/upload-utils.js'
 import type { BundleKeystoreResponse } from '../server/api/artifacts/get-bundle-keystore.get.js'
 import { downloadFile } from '~/server/services/downloadFile.js'
 
@@ -24,7 +24,7 @@ async function getBundleKeystore(keystoreFile: string) {
     }
     var keystoreUrl = bundleKeystoreResponse.appKeystoreUrl
     if (keystoreUrl.startsWith('/')) {
-        keystoreUrl = `${process.env.DISTAPP_CLI_URL}${keystoreUrl}`
+        keystoreUrl = `${myFetchApiUrl}${keystoreUrl}`
     }
     await downloadFile(keystoreUrl, keystoreFile)
     return bundleKeystoreResponse

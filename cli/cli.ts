@@ -1,4 +1,6 @@
-import { uploadArtifact, updateMyFetchApiKey } from '../utils/upload-utils.js'
+#!/usr/bin/env node
+
+import { uploadArtifact, updateMyFetch } from '../utils/upload-utils.js'
 import { promises } from "node:fs"
 import { resolve } from "node:path"
 import { parseArgs } from "node:util"
@@ -22,6 +24,11 @@ const args = parseArgs({
         apiKey: {
             type: 'string',
         },
+        url: {
+            type: 'string',
+            short: 'u',
+            default: process.env.DISTAPP_CLI_URL || 'https://distapp.lhf.my.id',
+        },
     },
 })
 
@@ -37,10 +44,10 @@ function slugToOrgApp(slug: string): { orgName: string, appName: string } {
 
 async function start() {
     if (!values.apiKey) {
-        console.error('API Key required')
+        console.error('API Key required. Specify using --apiKey YOUR_API_KEY')
         return
     }
-    updateMyFetchApiKey(values.apiKey)
+    updateMyFetch(values.apiKey, values.url)
     if (values.distribute) {
         const { orgName, appName } = slugToOrgApp(values.slug!)
         const filePath = resolve(values.file!)
