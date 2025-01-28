@@ -11,13 +11,7 @@
                     <div class="flex-1 flex flex-col lg:flex-row gap-5">
                         <AppCard class="w-full">
                             <div class="flex flex-col gap-2 justify-stretch p-2 h-full">
-                                <PriceCard price-name="Pro" price="$3.33" :features="[{
-                                    name: 'Number of apps',
-                                    desc: 'Up To 250',
-                                }, {
-                                    name: 'Number of organizations',
-                                    desc: 'Up To 20',
-                                }]" />
+                                <PriceCard price-name="Pro" price="$3.33" :features="proFeatures" />
                                 <div class="mt-5 flex flex-col gap-2">
                                     <NuxtLink :to="getStaredTo">
                                         <Button label="Get Started" outlined fluid />
@@ -27,13 +21,7 @@
                         </AppCard>
                         <AppCard class="w-full">
                             <div class="flex flex-col gap-2 justify-stretch p-2 h-full">
-                                <PriceCard price-name="Free" price="$0" :features="[{
-                                    name: 'Number of apps',
-                                    desc: 'Up To 2',
-                                }, {
-                                    name: 'Number of organizations',
-                                    desc: 'Only 1',
-                                }]" />
+                                <PriceCard price-name="Free" price="$0" :features="freeFeatures" />
                                 <div class="mt-5 flex flex-col gap-2">
                                     <NuxtLink :to="getStaredTo">
                                         <Button label="Get Started" outlined fluid />
@@ -51,6 +39,7 @@
 
 <script setup lang="ts">
 import { NuxtLink } from '#components'
+import { freeFeatures, proFeatures } from '#imports'
 
 definePageMeta({
     layout: 'content-layout',

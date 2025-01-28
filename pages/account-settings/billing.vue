@@ -10,13 +10,7 @@
         <div class="flex-1 flex flex-col lg:flex-row gap-5 items-start">
             <AppCard class="w-full">
                 <div class="flex flex-col gap-2 justify-stretch p-2">
-                    <PriceCard price-name="Pro" price="$3.33" :features="[{
-                        name: 'Number of apps',
-                        desc: 'Up To 250',
-                    }, {
-                        name: 'Number of organizations',
-                        desc: 'Up To 20',
-                    }]" />
+                    <PriceCard price-name="Pro" price="$3.33" :features="proFeatures" />
                     <div class="mt-5 flex flex-col gap-2">
                         <template v-if="data?.plan === 'basic'">
                             <span>{{ data?.endsAt ? 'Ends' : 'Renews' }} at {{ formatDate(data?.endsAt ||
@@ -38,13 +32,7 @@
             </AppCard>
             <AppCard class="w-full">
                 <div class="flex flex-col gap-2 justify-stretch p-2">
-                    <PriceCard price-name="Free" price="$0" :features="[{
-                        name: 'Number of apps',
-                        desc: 'Up To 2',
-                    }, {
-                        name: 'Number of organizations',
-                        desc: 'Only 1',
-                    }]" />
+                    <PriceCard price-name="Free" price="$0" :features="freeFeatures" />
                     <Button v-if="data?.plan !== 'basic'" class="mt-5" label="Your current plan" outlined disabled
                         data-testid="btn_free_current" />
                 </div>
@@ -55,6 +43,7 @@
 
 <script setup lang="ts">
 import { formatDate } from '#imports'
+import { freeFeatures, proFeatures } from '#imports'
 
 const { data, status, refresh } = useFetch('/api/billing/current-billing')
 
