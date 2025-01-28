@@ -1,0 +1,33 @@
+services:
+  distapp:
+    image: 5yunus2efendi/distapp:latest
+    platform: linux/amd64
+    ports:
+      - "3000:3000"
+    env_file:
+      - docker-compose-base.env
+      - docker-compose.env
+    depends_on:
+      - minio
+      - db
+  minio:
+    image: bitnami/minio:2024.12.18
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    env_file:
+      - docker-compose.env
+    environment:
+      - MINIO_DEFAULT_BUCKETS=distapp
+    volumes:
+      - 'minio_data:/bitnami/minio/data'
+  db:
+    image: ghcr.io/tursodatabase/libsql-server:v0.24.31
+    platform: linux/amd64
+    env_file:
+      - docker-compose.env
+    volumes:
+      - db:/var/lib/sqld
+volumes:
+  db:
+  minio_data:
