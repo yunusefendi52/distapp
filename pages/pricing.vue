@@ -30,7 +30,6 @@
                             </div>
                         </AppCard>
                     </div>
-                    * May change later, this is for testing design
                 </div>
             </div>
         </div>
