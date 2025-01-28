@@ -86,7 +86,7 @@ export default defineNuxtConfig({
     APP_LIMIT_API_KEYS: 10,
     APP_LIMIT_APPS_TESTER_GROUPS: 100,
     APP_LIMIT_UPLOAD_SIZE: 83886080, // 80 mb
-    APP_GRACE_PERIOD_HOUR: 120,
+    APP_GRACE_PERIOD_HOUR: 120, // 5 days
     APP_DISABLE_BILLING: false,
     LOCAL_AUTHS: '',
     JWT_KEY: '',
