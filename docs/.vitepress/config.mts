@@ -9,7 +9,7 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'DistApp Managed', link: 'https://distapp.lhf.my.id' },
-      { text: 'CLI', link: '/cli/get-started-cli' },
+      { text: 'CLI', link: '/cli/cli-usage' },
     ],
 
     sidebar: [
@@ -26,8 +26,8 @@ export default defineConfig({
         text: 'CLI',
         items: [
           {
-            text: 'Get Started CLI',
-            link: '/cli/get-started-cli',
+            text: 'CLI Usage',
+            link: '/cli/cli-usage',
           },
         ],
       },

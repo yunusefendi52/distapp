@@ -28,7 +28,7 @@ curl -Ls "https://github.com/yunusefendi52/distapp/raw/refs/heads/main/cli/cli.s
 
 *node is required (tested on 20.17.0)*
 
-See for more https://docs-distapp.lhf.my.id/cli/get-started-cli
+See for more https://docs-distapp.lhf.my.id/cli/cli-usage
 
 ## Setup Dev
 

@@ -11,7 +11,7 @@ hero:
       link: /overview/what-is-distapp
     - theme: alt
       text: CLI
-      link: /cli/get-started-cli
+      link: /cli/cli-usage
     - theme: alt
       text: Self Hosted
       link: /self-hosted/setup-self-hosted
