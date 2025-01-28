@@ -23,12 +23,6 @@ export default defineEventHandler(async event => {
         })
     }
 
-    if (!import.meta.dev) {
-        throw createError({
-            message: 'Billing is in still in development. Check again later.',
-        })
-    }
-
     const variantId = getProductVariandId()
     const user = await db.select()
         .from(tables.users)
