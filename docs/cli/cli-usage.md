@@ -8,6 +8,8 @@ Run the following command to install CLI
 npm -g install distapp
 ```
 
+*node is required (tested on 20.17.0)*
+
 Or use bun
 
 ```bash
