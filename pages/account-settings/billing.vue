@@ -10,7 +10,7 @@
         <div class="flex-1 flex flex-col lg:flex-row gap-5 items-start">
             <AppCard class="w-full">
                 <div class="flex flex-col gap-2 justify-stretch p-2">
-                    <PriceCard price-name="Pro" price="$3.33" :features="proFeatures" />
+                    <PriceCard price-name="Pro" price="$4" :features="proFeatures" />
                     <div class="mt-5 flex flex-col gap-2">
                         <template v-if="data?.plan === 'basic'">
                             <span>{{ data?.endsAt ? 'Ends' : 'Renews' }} at {{ formatDate(data?.endsAt ||

@@ -32,7 +32,7 @@ export async function getProductPlan() {
     //     })
     // }
     return {
-        price: 333, // DEPRECATED???
+        price: 400, // DEPRECATED???
     }
 }
 
@@ -52,7 +52,9 @@ export async function getUserSubscriptionLms(userEmail: string) {
     // this will get latest subscription
     const userSubs = await listSubscriptions({
         filter: {
-            productId: process.env.NUXT_LEMONSQUEEZY_PRODUCT_ID_TEST!,
+            productId: getLsTestMode()
+                ? process.env.NUXT_LEMONSQUEEZY_PRODUCT_ID_PROD!
+                : process.env.NUXT_LEMONSQUEEZY_PRODUCT_ID_TEST!,
             storeId: process.env.NUXT_LEMONSQUEEZY_STORE_ID!,
             userEmail: userEmail
         },

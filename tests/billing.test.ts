@@ -51,7 +51,7 @@ describe('Billing component test', () => {
         expect(component.find('[data-testid="checkout_btn"]').exists()).toBeTruthy()
         expect(component.find('[data-testid="btn_free_current"]').exists()).toBeTruthy()
         expect(component.html()).not.toContain('Update Payment Method')
-        expect(component.html(), 'Shows price in $').toContain('$3.33')
+        expect(component.html(), 'Shows price in $').toContain('$4')
     })
 
     test('Should get current billing and shows subscribed user', async () => {
