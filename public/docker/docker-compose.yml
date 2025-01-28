@@ -10,17 +10,6 @@ services:
     depends_on:
       - minio
       - db
-  minio:
-    image: bitnami/minio:2024.12.18
-    ports:
-      - '9000:9000'
-      - '9001:9001'
-    env_file:
-      - docker-compose.env
-    environment:
-      - MINIO_DEFAULT_BUCKETS=distapp
-    volumes:
-      - 'minio_data:/bitnami/minio/data'
   db:
     image: ghcr.io/tursodatabase/libsql-server:v0.24.31
     platform: linux/amd64
@@ -30,4 +19,3 @@ services:
       - db:/var/lib/sqld
 volumes:
   db:
-  minio_data:
