@@ -29,5 +29,15 @@ Make sure the service is accessible on the internet, you also have to make sure 
 
 Run script below and follow the guide to setup S3
 
+```bash
 curl -fsSL https://distapp.lhf.my.id/install.sh | bash
+```
 
+All configurations are saved to `~/distapp`, which you can change later.
+
+The default port is 3000, you can change the host port (left side) in docker-compose.yml. Example port 5173:
+
+```yaml
+ports:
+    - 3000:3000 -> 5173:3000
+```

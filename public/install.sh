@@ -15,12 +15,12 @@ mkdir -p $workDir
 
 cd $workDir
 
-# if [ -e .completed ]; then
-#     echo "DistApp may already downloaded in $workDir. Ignored"
-#     exit 1
-# fi
+if [ -e .completed ]; then
+    echo "DistApp may already downloaded in $workDir. Ignored"
+    exit 1
+fi
 
-read -p "Enter admin password: " adminPass </dev/tty
+read -p "Enter admin password (default: auto generated): " adminPass </dev/tty
 adminPass=${adminPass:-$(gen_password)}
 read -p "Enter S3 endpoint: " s3Endpoint </dev/tty
 read -p "Enter S3 region (default: auto): " s3Region </dev/tty
@@ -51,11 +51,11 @@ sed -i '' -e "s|.*NUXT_APP_API_AUTH_KEY=.*|NUXT_APP_API_AUTH_KEY=$(gen_password)
 dockerComposeContent="$(curl -fsSL https://github.com/yunusefendi52/distapp/raw/refs/heads/main/public/docker/docker-compose.yml)"
 echo $dockerComposeContent > docker-compose.yml
 
-# echo "do not delete this" > .completed
-
 echo "Admin Username: admin"
 echo "Admin Password: $adminPass"
 echo "Open http://localhost:3000"
 echo
 echo "Docker compose configured in $workDir"
 echo "Now run 'docker compose up -d' in $workDir directory"
+
+echo "do not delete this" > .completed

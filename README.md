@@ -11,7 +11,7 @@ See docs https://docs-distapp.lhf.my.id
 
 ## Self Hosting
 
-See https://docs-distapp.lhf.my.id/self-hosted/setup-self-hosted
+See https://docs-distapp.lhf.my.id/self-hosted/setup-self-hosted for more.
 
 ## CLI Usage
 
@@ -34,7 +34,7 @@ See for more https://docs-distapp.lhf.my.id/cli/get-started-cli
 
 #### Ensure you have the required .env
 
-See `docker-compose.env` in the repo
+Copy contents of [](public/docker/docker-compose-base.env) and [](public/docker/docker-compose.env) to `.env`
 
 #### Make sure to install the dependencies:
 
