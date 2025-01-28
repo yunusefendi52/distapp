@@ -51,6 +51,9 @@ export const users_subs = sqliteTable('users_app_subs', {
     product_id: text('product_id'),
     product_name: text('product_name'),
     user_name: text('user_name'),
+    testMode: integer('test_mode', {
+        mode: 'boolean',
+    }),
     ...timeColumns,
 }, t => ({
     idx_user_app_subs_userId: index('idx_user_app_subs_userId').on(t.userId),

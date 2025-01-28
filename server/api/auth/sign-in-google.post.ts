@@ -41,6 +41,7 @@ export default defineEventHandler(async event => {
                 user_name: subAttrs.user_name,
                 variant_id: subAttrs.variant_id,
                 variant_name: subAttrs.variant_name,
+                test_mode: subAttrs.test_mode,
             })
         }
     }

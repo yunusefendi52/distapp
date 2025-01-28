@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
         const { orgLimit: orgSize } = await getUserMaxOrg(event)
         if (myCurrentUserOrgs.count >= orgSize) {
             throw createError({
-                message: `The number of organization has reached the limit ${orgSize} of ${myCurrentUserOrgs.count} organizations`,
+                message: `The number of organization has reached the limit ${orgSize} of organizations`,
             })
         }
     }

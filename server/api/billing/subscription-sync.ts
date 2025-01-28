@@ -105,6 +105,7 @@ export async function syncUserSubscription(
         product_name: attributes.product_name,
         user_name: attributes.user_name,
         variant_name: attributes.variant_name,
+        testMode: attributes.test_mode,
     }
     await db.insert(tables.users_subs)
         .values(newSub)
@@ -131,4 +132,5 @@ export type SubscriptionSyncData = {
     ends_at: string | null;
     created_at: string;
     updated_at: string;
+    test_mode: boolean;
 }

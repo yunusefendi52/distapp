@@ -34,10 +34,12 @@ export const roleEditNotAllowed = async (
 export async function getUserSubFromDb(event: H3Event<EventHandlerRequest>, whichUserId?: string | undefined) {
     const db = event.context.drizzle
     const userId = whichUserId || event.context.auth.userId
+    const isTestMode = getLsTestMode()
     return await db.select()
         .from(tables.users_subs)
         .where(and(
             eq(tables.users_subs.userId, userId),
+            eq(tables.users_subs.testMode, isTestMode),
             ne(tables.users_subs.status, 'expired'),
         ))
         .then(singleOrDefault)
