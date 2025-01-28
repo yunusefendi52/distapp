@@ -142,6 +142,7 @@ export const artifacts = sqliteTable('artifacts', {
     packageName: text('packageName'),
     filename: text('filename'),
     fileContentLength: integer('file_content_length'),
+    fileApkContentLength: integer('file_apk_content_length'),
 
     appsId: text('appsId'),
     organizationId: text('organizationId'),

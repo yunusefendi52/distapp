@@ -96,6 +96,7 @@ export default defineEventHandler(async (event) => {
             packageName: packageData?.packageName,
             filename: filename.substring(0, 32),
             fileContentLength: keyValueTemp.value.fileSize,
+            fileApkContentLength: keyValueTemp.value.fileApkSize,
         }),
     ])
 

@@ -1,4 +1,4 @@
-import { count } from "drizzle-orm"
+import { count, sum } from "drizzle-orm"
 import type { LibSQLDatabase } from "drizzle-orm/libsql"
 import { uuidv7 } from "uuidv7"
 
@@ -7,6 +7,7 @@ export type UploadTempValue = {
     orgId: string
     appId: string
     fileSize?: number | undefined
+    fileApkSize?: number | null | undefined
     apkFileKey?: string | undefined
 }
 
@@ -108,15 +109,21 @@ export default defineEventHandler(async (event) => {
         createdBy = userId
     }
 
-    const artifactTotal = await db.select({
-        count: count(tables.artifacts.id),
+    // Across orgs
+    // TODO: Optimize????
+    const artifactSize = await db.select({
+        sumContentLength: sql<number>`sum(${tables.artifacts.fileContentLength}) + sum(${tables.artifacts.fileApkContentLength})`,
     }).from(tables.artifacts)
-        .where(eq(tables.artifacts.appsId, appId))
+        .where(and(
+            eq(tables.artifacts.organizationId, orgId),
+        ))
         .then(takeUniqueOrThrow)
-    const { artifactLimit } = await getUserFeature(event)
-    if (artifactTotal.count >= artifactLimit) {
+    const { artifactSizeLimit } = await getUserFeature(event, orgId)
+    const artifactSizeBytesLimit = artifactSizeLimit * 1024 * 1024
+    const sumAllContentLength = artifactSize.sumContentLength + fileSize + (fileSizeApk || 0)
+    if (sumAllContentLength >= artifactSizeBytesLimit) {
         throw createError({
-            message: `The number of artifact as reached the limit of ${artifactLimit} releases`,
+            message: `The number of artifact as reached the limit of ${artifactSizeLimit} mb. ${sumAllContentLength}`,
             statusCode: 400,
         })
     }
@@ -134,6 +141,7 @@ export default defineEventHandler(async (event) => {
                 orgId: orgId,
                 appId: appId,
                 fileSize: fileSize,
+                fileApkSize: fileSizeApk,
                 ...(apkUrl ? {
                     apkFileKey: apkUrl?.fileKey
                 } : undefined),

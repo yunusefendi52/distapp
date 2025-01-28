@@ -19,10 +19,10 @@ export default defineEventHandler(async (event) => {
                 eq(tables.organizationsPeople.role, 'owner'),
             ))
             .then(takeUniqueOrThrow)
-        const { orgLimit: orgSize } = await getUserFeature(event)
+        const { orgLimit: orgSize } = await getUserMaxOrg(event)
         if (myCurrentUserOrgs.count >= orgSize) {
             throw createError({
-                message: `The number of organization has reached the limit ${orgSize} ${myCurrentUserOrgs.count}`,
+                message: `The number of organization has reached the limit ${orgSize} of ${myCurrentUserOrgs.count} organizations`,
             })
         }
     }

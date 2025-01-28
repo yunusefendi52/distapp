@@ -35,10 +35,10 @@ export default defineEventHandler(async (event) => {
         ))
         .then(takeUniqueOrThrow)
     const peopleCount = await getListOrg(db, org.id, 'count').then(e => e?.count || 0)
-    const { inviteOrgLimit: inviteOrgSize } = await getUserFeature(event)
+    const { inviteOrgLimit: inviteOrgSize } = await getUserFeature(event, org.id)
     if (peopleCount >= inviteOrgSize) {
         throw createError({
-            message: `You can only invite ${inviteOrgSize} people. Please contact us if you need to add more people`,
+            message: `You can only invite ${inviteOrgSize} people. Please contact your administrator if you need to add more people`,
         })
     }
     const inviteLink = await generateTokenWithOptions(event, {

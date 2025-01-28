@@ -70,14 +70,23 @@ export default defineNuxtConfig({
       limitUploadSizeMb: 120,
       apiAuthKey: '',
     },
+    // Features free plan
     APP_LIMIT_ORG: 1,
     APP_LIMIT_APPS: 2,
     APP_LIMIT_APPS_GROUP: 8,
     APP_LIMIT_INVITE_ORGS: 8,
+    APP_LIMIT_SIZE_ARTIFACT_MB: 512,
+    // Features subsription plan
+    APP_LIMIT_PRO_ORG: 10,
+    APP_LIMIT_PRO_APPS: 100,
+    APP_LIMIT_PRO_APPS_GROUP: 25,
+    APP_LIMIT_PRO_INVITE_ORGS: 25,
+    APP_LIMIT_PRO_SIZE_ARTIFACT_MB: 5000,
+
     APP_LIMIT_API_KEYS: 10,
     APP_LIMIT_APPS_TESTER_GROUPS: 100,
     APP_LIMIT_UPLOAD_SIZE: 83886080, // 80 mb
-    APP_LIMIT_ARTIFACT: 5,
+    APP_GRACE_PERIOD_HOUR: 120,
     APP_DISABLE_BILLING: false,
     LOCAL_AUTHS: '',
     JWT_KEY: '',

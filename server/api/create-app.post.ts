@@ -23,10 +23,10 @@ export default defineEventHandler(async (event) => {
             .where(and(
                 eq(tables.apps.organizationsId, orgId),
             )).then(takeUniqueOrThrow)
-        const { appLimit: appSize } = await getUserFeature(event)
+        const { appLimit: appSize } = await getUserFeature(event, orgId)
         if (allOrgApps.count >= appSize) {
             throw createError({
-                message: `The number of apps has reached the limit ${appSize}`,
+                message: `The number of apps has reached the limit ${appSize} apps`,
             })
         }
     }

@@ -1,0 +1,1 @@
+ALTER TABLE `artifacts` ADD `file_apk_content_length` integer;
