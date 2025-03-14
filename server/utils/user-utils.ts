@@ -67,6 +67,8 @@ export async function getUserFeature(event: H3Event<EventHandlerRequest>, orgId:
         APP_LIMIT_PRO_APPS_GROUP,
         APP_LIMIT_PRO_INVITE_ORGS,
         APP_LIMIT_PRO_SIZE_ARTIFACT_MB,
+        APP_LIMIT_UPLOAD_SIZE,
+        APP_LIMIT_PRO_UPLOAD_SIZE,
     } = useRuntimeConfig(event)
     const ownerUserSubs = await getOwnerUserSub(event, orgId)
     const isSubsActive = await checkIfSubsActive(event, ownerUserSubs)
@@ -75,6 +77,7 @@ export async function getUserFeature(event: H3Event<EventHandlerRequest>, orgId:
         appGroupLimit: isSubsActive ? APP_LIMIT_PRO_APPS_GROUP : APP_LIMIT_APPS_GROUP,
         inviteOrgLimit: isSubsActive ? APP_LIMIT_PRO_INVITE_ORGS : APP_LIMIT_INVITE_ORGS,
         artifactSizeLimit: isSubsActive ? APP_LIMIT_PRO_SIZE_ARTIFACT_MB : APP_LIMIT_SIZE_ARTIFACT_MB,
+        uploadLimitSize: isSubsActive ? APP_LIMIT_PRO_UPLOAD_SIZE : APP_LIMIT_UPLOAD_SIZE,
     }
 }
 

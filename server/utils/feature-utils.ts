@@ -7,6 +7,9 @@ export const freeFeatures = [{
 }, {
     name: 'Number of organizations',
     desc: 'Only 1',
+}, {
+    name: 'Upload size',
+    desc: 'Only 80 mb',
 }]
 
 export const proFeatures = [{
@@ -18,4 +21,7 @@ export const proFeatures = [{
 }, {
     name: 'Number of organizations',
     desc: 'Up To 10',
+}, {
+    name: 'Upload size',
+    desc: 'Up To 300 mb',
 }]

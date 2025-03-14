@@ -59,13 +59,6 @@ export default defineEventHandler(async (event) => {
         fileSizeApk: z.number().nullish(),
     }).parse)
 
-    const { APP_LIMIT_UPLOAD_SIZE } = useRuntimeConfig(event)
-    if (fileSize >= APP_LIMIT_UPLOAD_SIZE || (hasFileApk && fileSizeApk ? fileSizeApk >= APP_LIMIT_UPLOAD_SIZE : false)) {
-        throw createError({
-            message: `Maximum file size is ${APP_LIMIT_UPLOAD_SIZE} bytes`,
-        })
-    }
-
     var orgId: string
     var appId: string
     var createdBy: string
@@ -107,6 +100,13 @@ export default defineEventHandler(async (event) => {
         orgId = userOrg!.organizationsId!
         appId = app.id
         createdBy = userId
+    }
+
+    const { uploadLimitSize } = await getUserFeature(event, orgId)
+    if (fileSize >= uploadLimitSize || (hasFileApk && fileSizeApk ? fileSizeApk >= uploadLimitSize : false)) {
+        throw createError({
+            message: `Maximum file size is ${uploadLimitSize} bytes`,
+        })
     }
 
     // Across orgs
