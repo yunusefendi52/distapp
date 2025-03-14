@@ -100,7 +100,9 @@ async function checkIfSubsActive(event: H3Event<EventHandlerRequest>, ownerUserS
     const {
         APP_GRACE_PERIOD_HOUR,
     } = useRuntimeConfig(event)
-    const isExpired = ownerUserSubs && ownerUserSubs.endsAt ? checkIsExpire(APP_GRACE_PERIOD_HOUR, ownerUserSubs.endsAt) : true
+    const isExpired = ownerUserSubs && ownerUserSubs.endsAt
+        ? checkIsExpire(APP_GRACE_PERIOD_HOUR, ownerUserSubs.endsAt)
+        : ownerUserSubs?.status === 'expired'
     const isPro = ownerUserSubs?.product_name === 'DistApp Pro'
     const isSubsActive = !isExpired && isPro
     return isSubsActive
