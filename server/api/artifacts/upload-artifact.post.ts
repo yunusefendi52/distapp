@@ -102,7 +102,7 @@ export default defineEventHandler(async (event) => {
         createdBy = userId
     }
 
-    const { uploadLimitSize } = await getUserFeature(event, orgId)
+    const { uploadLimitSize, artifactSizeLimit } = await getUserFeature(event, orgId)
     if (fileSize >= uploadLimitSize || (hasFileApk && fileSizeApk ? fileSizeApk >= uploadLimitSize : false)) {
         throw createError({
             message: `Maximum file size is ${uploadLimitSize} bytes`,
@@ -118,7 +118,6 @@ export default defineEventHandler(async (event) => {
             eq(tables.artifacts.organizationId, orgId),
         ))
         .then(takeUniqueOrThrow)
-    const { artifactSizeLimit } = await getUserFeature(event, orgId)
     const artifactSizeBytesLimit = artifactSizeLimit * 1024 * 1024
     const sumAllContentLength = artifactSize.sumContentLength + fileSize + (fileSizeApk || 0)
     if (sumAllContentLength >= artifactSizeBytesLimit) {
