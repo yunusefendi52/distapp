@@ -42,6 +42,8 @@ export async function getUserSubFromDb(event: H3Event<EventHandlerRequest>, whic
             eq(tables.users_subs.testMode, isTestMode),
             ne(tables.users_subs.status, 'expired'),
         ))
+        .orderBy(desc(tables.users_subs.createdAt))
+        .limit(1)
         .then(singleOrDefault)
 }
 
@@ -51,7 +53,7 @@ export async function getUserMaxOrg(event: H3Event<EventHandlerRequest>) {
         APP_LIMIT_PRO_ORG,
     } = useRuntimeConfig(event)
     const ownerUserSubs = await getUserSubFromDb(event, event.context.auth.userId)
-    const isSubsActive = await checkIfSubsActive(event, ownerUserSubs)
+    const isSubsActive = checkIfSubsActive(event, ownerUserSubs)
     return {
         orgLimit: isSubsActive ? APP_LIMIT_PRO_ORG : APP_LIMIT_ORG,
     }
@@ -71,7 +73,7 @@ export async function getUserFeature(event: H3Event<EventHandlerRequest>, orgId:
         APP_LIMIT_PRO_UPLOAD_SIZE,
     } = useRuntimeConfig(event)
     const ownerUserSubs = await getOwnerUserSub(event, orgId)
-    const isSubsActive = await checkIfSubsActive(event, ownerUserSubs)
+    const isSubsActive = checkIfSubsActive(event, ownerUserSubs)
     return {
         appLimit: isSubsActive ? APP_LIMIT_PRO_APPS : APP_LIMIT_APPS,
         appGroupLimit: isSubsActive ? APP_LIMIT_PRO_APPS_GROUP : APP_LIMIT_APPS_GROUP,
@@ -96,7 +98,7 @@ async function getOwnerUserSub(event: H3Event<EventHandlerRequest>, orgId: strin
     return await getUserSubFromDb(event, orgOwner.userId!)
 }
 
-async function checkIfSubsActive(event: H3Event<EventHandlerRequest>, ownerUserSubs: Awaited<ReturnType<typeof getOwnerUserSub>>) {
+export function checkIfSubsActive(event: H3Event<EventHandlerRequest>, ownerUserSubs: Awaited<ReturnType<typeof getOwnerUserSub>>) {
     const {
         APP_GRACE_PERIOD_HOUR,
     } = useRuntimeConfig(event)
