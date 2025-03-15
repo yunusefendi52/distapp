@@ -106,6 +106,10 @@ export async function syncUserSubscription(
         user_name: attributes.user_name,
         variant_name: attributes.variant_name,
         testMode: attributes.test_mode,
+        subs_quantity: attributes.first_subscription_item?.quantity || undefined,
+        subs_created_at: attributes.first_subscription_item?.created_at || undefined,
+        subs_updated_at: attributes.first_subscription_item?.updated_at || undefined,
+        subs_price_id: attributes.first_subscription_item?.price_id || undefined,
     }
     await db.insert(tables.users_subs)
         .values(newSub)
@@ -133,4 +137,5 @@ export type SubscriptionSyncData = {
     created_at: string;
     updated_at: string;
     test_mode: boolean;
+    first_subscription_item: FirstSubscriptionItem | undefined;
 }

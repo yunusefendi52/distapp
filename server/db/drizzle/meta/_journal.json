@@ -498,6 +498,13 @@
       "when": 1738078229998,
       "tag": "0070_brave_husk",
       "breakpoints": true
+    },
+    {
+      "idx": 71,
+      "version": "6",
+      "when": 1742081106462,
+      "tag": "0071_ambitious_butterfly",
+      "breakpoints": true
     }
   ]
 }

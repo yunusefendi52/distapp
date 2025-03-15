@@ -54,6 +54,10 @@ export const users_subs = sqliteTable('users_app_subs', {
     testMode: integer('test_mode', {
         mode: 'boolean',
     }),
+    subs_quantity: integer('subs_quantity'),
+    subs_created_at: text('subs_created_at'),
+    subs_updated_at: text('subs_updated_at'),
+    subs_price_id: integer('subs_price_id'),
     ...timeColumns,
 }, t => ({
     idx_user_app_subs_userId: index('idx_user_app_subs_userId').on(t.userId),
