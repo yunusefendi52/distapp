@@ -39,6 +39,9 @@ export default defineEventHandler(async event => {
             variant_id: subAttrs.variant_id,
             variant_name: subAttrs.variant_name,
             test_mode: subAttrs.test_mode,
+            first_subscription_item: subAttrs.first_subscription_item ? {
+                ...subAttrs.first_subscription_item,
+            } : undefined,
         })
     }
 
