@@ -16,7 +16,7 @@ mkdir -p $workDir
 cd $workDir
 
 if [ -e .completed ]; then
-    echo "DistApp may already downloaded in $workDir. Ignored"
+    echo "DistApp may already downloaded in $workDir. Run 'docker compose -f "$workDir/docker-compose.yml" up -d'"
     exit 1
 fi
 
@@ -56,6 +56,6 @@ echo "Admin Password: $adminPass"
 echo "Open http://localhost:3000"
 echo
 echo "Docker compose configured in $workDir"
-echo "Now run 'docker compose up -d' in $workDir directory"
+echo "Now run 'docker compose -f "$workDir/docker-compose.yml" up -d'"
 
 echo "do not delete this" > .completed
