@@ -2,7 +2,7 @@
 
 Distribute Android and iOS app. Alternative App Center Distribution with option to self-hosted your self
 
-![Deploy](https://github.com/yunusefendi52/distapp/actions/workflows/deploy.yml/badge.svg)
+![Deploy](https://github.com/yunusefendi52/distapp/actions/workflows/deploy.yml/badge.svg) [![Docker Pulls](https://img.shields.io/docker/pulls/5yunus2efendi/distapp)](https://hub.docker.com/repository/docker/5yunus2efendi/distapp)
 
 
 ## Docs
