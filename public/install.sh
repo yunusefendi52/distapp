@@ -33,29 +33,40 @@ echo
 
 IFS=""
 envBase="$(curl -fsSL https://github.com/yunusefendi52/distapp/raw/refs/heads/main/public/docker/docker-compose-base.env)"
-echo $envBase > docker-compose-base.env
+echo $envBase >docker-compose-base.env
 
 dbAuthToken=$(echo "sqld:$(gen_password)" | base64)
 
 envContent="$(curl -fsSL https://github.com/yunusefendi52/distapp/raw/refs/heads/main/public/docker/docker-compose.env)"
-echo $envContent > docker-compose.env
-sed -i '' -e "s|.*NUXT_LOCAL_AUTHS=.*|NUXT_LOCAL_AUTHS=admin=$adminPass|" docker-compose.env
-sed -i '' -e "s|.*NUXT_DB_AUTH_TOKEN=.*|NUXT_DB_AUTH_TOKEN=basic:$dbAuthToken|" docker-compose.env
-sed -i '' -e "s|.*NUXT_S3_ENDPOINT=.*|NUXT_S3_ENDPOINT=$s3Endpoint|" docker-compose.env
-sed -i '' -e "s|.*NUXT_S3_REGION=.*|NUXT_S3_REGION=$s3Region|" docker-compose.env
-sed -i '' -e "s|.*NUXT_S3_ACCESS_KEY_ID=.*|NUXT_S3_ACCESS_KEY_ID=$s3AccessKey|" docker-compose.env
-sed -i '' -e "s|.*NUXT_S3_SECRET_ACCESS_KEY=.*|NUXT_S3_SECRET_ACCESS_KEY=$s3SecretKey|" docker-compose.env
-sed -i '' -e "s|.*NUXT_JWT_KEY=.*|NUXT_JWT_KEY=$(gen_password)|" docker-compose.env
-sed -i '' -e "s|.*NUXT_APP_API_AUTH_KEY=.*|NUXT_APP_API_AUTH_KEY=$(gen_password)|" docker-compose.env
+echo $envContent >docker-compose.env
+
+if [[ "$(uname)" == "Darwin" ]]; then
+    function sed_cmd() {
+        sed -i '' $@
+    }
+else
+    function sed_cmd() {
+        sed -i $@
+    }
+fi
+
+sed_cmd -e "s|.*NUXT_LOCAL_AUTHS=.*|NUXT_LOCAL_AUTHS=admin=$adminPass|" docker-compose.env
+sed_cmd -e "s|.*NUXT_DB_AUTH_TOKEN=.*|NUXT_DB_AUTH_TOKEN=basic:$dbAuthToken|" docker-compose.env
+sed_cmd -e "s|.*NUXT_S3_ENDPOINT=.*|NUXT_S3_ENDPOINT=$s3Endpoint|" docker-compose.env
+sed_cmd -e "s|.*NUXT_S3_REGION=.*|NUXT_S3_REGION=$s3Region|" docker-compose.env
+sed_cmd -e "s|.*NUXT_S3_ACCESS_KEY_ID=.*|NUXT_S3_ACCESS_KEY_ID=$s3AccessKey|" docker-compose.env
+sed_cmd -e "s|.*NUXT_S3_SECRET_ACCESS_KEY=.*|NUXT_S3_SECRET_ACCESS_KEY=$s3SecretKey|" docker-compose.env
+sed_cmd -e "s|.*NUXT_JWT_KEY=.*|NUXT_JWT_KEY=$(gen_password)|" docker-compose.env
+sed_cmd -e "s|.*NUXT_APP_API_AUTH_KEY=.*|NUXT_APP_API_AUTH_KEY=$(gen_password)|" docker-compose.env
 
 dockerComposeContent="$(curl -fsSL https://github.com/yunusefendi52/distapp/raw/refs/heads/main/public/docker/docker-compose.yml)"
-echo $dockerComposeContent > docker-compose.yml
+echo $dockerComposeContent >docker-compose.yml
 
+echo "Docker compose configured in $workDir"
+echo "Now run 'docker compose -f "$workDir/docker-compose.yml" up -d'"
+echo
 echo "Admin Username: admin"
 echo "Admin Password: $adminPass"
 echo "Open http://localhost:3000"
-echo
-echo "Docker compose configured in $workDir"
-echo "Now run 'docker compose -f "$workDir/docker-compose.yml" up -d'"
 
-echo "do not delete this" > .completed
+echo "do not delete this" >.completed
