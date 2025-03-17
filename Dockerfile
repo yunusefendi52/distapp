@@ -8,6 +8,7 @@ RUN bun run build --preset=bun
 
 FROM oven/bun:1.2.0
 WORKDIR /app
+RUN mkdir -p /app/distapp-headless
 
 RUN apt-get update && \
     apt-get install -y openjdk-11-jre-headless
