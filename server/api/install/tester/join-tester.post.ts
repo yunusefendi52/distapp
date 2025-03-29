@@ -26,7 +26,10 @@ export default defineEventHandler(async (event) => {
         db.select({
             groupId: tables.artifactsGroups.id,
         }).from(tables.artifactsGroups)
-            .where(eq(tables.artifactsGroups.name, joinTesterPayload.groupName))
+            .where(and(
+                eq(tables.artifactsGroups.name, joinTesterPayload.groupName),
+                eq(tables.artifactsGroups.appsId, joinTesterPayload.appId),
+            ))
             .then(takeUniqueOrThrow)
     ])
     await db.insert(tables.groupTester)

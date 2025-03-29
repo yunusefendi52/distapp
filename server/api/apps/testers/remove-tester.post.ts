@@ -19,7 +19,10 @@ export default defineEventHandler(async (event) => {
     const artifactGroup = await db.select({
         groupId: tables.artifactsGroups.id,
     }).from(tables.artifactsGroups)
-        .where(eq(tables.artifactsGroups.name, groupName))
+        .where(and(
+            eq(tables.artifactsGroups.name, groupName),
+            eq(tables.artifactsGroups.appsId, userApp.id),
+        ))
         .then(takeUniqueOrThrow)
     await db.delete(tables.groupTester)
         .where(and(
