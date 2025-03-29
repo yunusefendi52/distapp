@@ -50,6 +50,8 @@
 import { formatDate } from '#imports'
 import { normalizeError } from '~/utils/showErrorAlert'
 
+const showAccountBtn = useState<boolean>('show-account-btn')
+
 definePageMeta({
     layout: 'install-layout',
     server: false,
@@ -66,6 +68,11 @@ const { data, status, error } = useFetch('/api/install/get-data', {
         appName,
     },
     server: false,
+})
+watchEffect(() => {
+    if (data.value) {
+        showAccountBtn.value = data.value.artifactGroup.isPublic !== true
+    }
 })
 const artifacts = computed(() => data.value?.artifacts.map(e => e.artifacts!))
 
