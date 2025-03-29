@@ -39,3 +39,19 @@ distapp --distribute \
 - `$API_KEY` Add your API Key, created in `App Settings` -> `API Keys`
 
 If you self-hosted DistApp, specify the url using `--url` option, e.g `--url https://mydistapp.com`
+
+### Distribute to Groups
+
+Add `--group` option to distribute to group, specify multiple times if you want to send to multiple group. You can get your group name from Group Settings or using last segment URL of the group.
+
+![Group Setttings](./group-settings.png){width=400px}
+
+Example:
+
+```bash
+distapp --distribute \
+    --file "$PATH_TO_ARTIFACT" \
+    --slug "$APP_SLUG" \ # e.g yedev/habit-tool-android
+    --apiKey "$API_KEY" \
+    --group "public-app"
+```

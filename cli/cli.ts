@@ -6,6 +6,8 @@ import { resolve } from "node:path"
 import { parseArgs } from "node:util"
 import { extractAabToApk } from './extract-aab-to-apk.js'
 import { basename, extname } from 'path'
+import { UpdateGroupsRequest } from '~/server/api/update-artifact-groups.put.js'
+import { myFetch } from '../utils/upload-utils.js'
 
 const args = parseArgs({
     options: {
@@ -28,6 +30,10 @@ const args = parseArgs({
             type: 'string',
             short: 'u',
             default: process.env.DISTAPP_CLI_URL || 'https://distapp.lhf.my.id',
+        },
+        group: {
+            type: 'string',
+            multiple: true,
         },
     },
 })
@@ -66,8 +72,23 @@ async function start() {
                 disposeBundle = dispose
             }
             const bundleApkFile = bundleApkPath ? await promises.readFile(bundleApkPath) : undefined
-            await uploadArtifact(file, filename, orgName, appName, values.releaseNotes ? values.releaseNotes : null, bundleApkFile)
-            console.log(`Finished Distributing "${filePath}"` + (bundleApkPath ? ' with generated APK' : ''))
+            const { artifactId } = await uploadArtifact(file, filename, orgName, appName, values.releaseNotes ? values.releaseNotes : null, bundleApkFile)
+            const groupNames = values.group
+            let updateToGroup = false
+            if (artifactId && groupNames && groupNames.length) {
+                await myFetch('/api/update-artifact-groups', {
+                    body: {
+                        artifactId: artifactId,
+                        orgName: orgName,
+                        appName: appName,
+                        groupNames: groupNames,
+                    } satisfies UpdateGroupsRequest,
+                    method: 'put',
+                })
+                updateToGroup = true
+            }
+            const groups = groupNames?.join(', ')
+            console.log(`Finished Distributing "${filePath}"` + (bundleApkPath ? ' with generated APK' : '') + (updateToGroup ? ` to groups ${groups}` : ''))
         } finally {
             await disposeBundle?.()
         }

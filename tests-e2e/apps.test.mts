@@ -43,6 +43,16 @@ test('Apps test', async ({ page, goto, context }) => {
             await expect(page.getByTestId('createAppDialogForm')).toBeHidden()
         })
 
+        let groupName = 'My Group App'
+        await test.step('User can create group app', async () => {
+            await page.getByTestId('a_menus').getByText(orgName).click()
+            await page.getByText(appName).click()
+            await page.getByLabel('Groups').click()
+            await page.getByText('New Group').click()
+            await page.getByTestId('group_name').fill(groupName)
+            await page.getByText('Save').click()
+        })
+
         let appSlug: string
         let appApiKey: string
 
@@ -88,6 +98,18 @@ test('Apps test', async ({ page, goto, context }) => {
                 expect(stdout).toContain('Finished Distributing')
                 expect(stdout).not.toContain('with generated APK')
             })
+            await test.step(`User can upload artifact ${osTestType} APK to group with API keys using CLI`, async () => {
+                const { stderr, stdout } = await exec(`${cliCommand} \\
+                    --distribute \\
+                    --file "tests/tests_artifacts/app-arm64-v8a-release.apk" \\
+                    --slug "${appSlug}" \\
+                    --apiKey "${appApiKey}" \\
+                    --group "${groupName}"`)
+                expect(stderr).toBeFalsy()
+                expect(stdout).toContain('Finished Distributing')
+                expect(stdout).toContain('to groups')
+                expect(stdout).not.toContain('with generated APK')
+            })
             await test.step(`User should not able upload artifact arbitrary ZIP to ${osTestType}`, async () => {
                 await expect(exec(`${cliCommand} \\
                 --distribute \\
@@ -124,7 +146,7 @@ test('Apps test', async ({ page, goto, context }) => {
                 await page.getByTestId('upload_input_btn').click()
                 const fileChooser = await fileChooserPromise
                 await fileChooser.setFiles('tests/tests_artifacts/app-release.aab')
-            
+
                 const generateBundleRespPromise = page.waitForResponse(r => r.url().includes('generate-bundle-headless'))
                 const gbRespPromise = page.waitForResponse(r => r.url().includes('/genbndl'))
                 const uploadArtifactUrlPromise = page.waitForResponse(r => r.url().includes('upload-artifact-url'))
@@ -148,7 +170,7 @@ test('Apps test', async ({ page, goto, context }) => {
                 await page.getByTestId('upload_input_btn').click()
                 const fileChooser = await fileChooserPromise
                 await fileChooser.setFiles('tests/tests_artifacts/app-arm64-v8a-release.apk')
-                
+
                 const uploadArtifactUrlPromise = page.waitForResponse(r => r.url().includes('upload-artifact-url'))
                 await page.getByTestId('submit_upload_btn').click()
                 const uploadArtifactUrl = await uploadArtifactUrlPromise
@@ -165,7 +187,7 @@ test('Apps test', async ({ page, goto, context }) => {
                 await page.getByTestId('upload_input_btn').click()
                 const fileChooser = await fileChooserPromise
                 await fileChooser.setFiles('tests/tests_artifacts/testapp.ipa')
-                
+
                 const uploadArtifactUrlPromise = page.waitForResponse(r => r.url().includes('upload-artifact-url'))
                 await page.getByTestId('submit_upload_btn').click()
                 const uploadArtifactUrl = await uploadArtifactUrlPromise

@@ -45,6 +45,10 @@
                     <InputGroup>
                         <InputText name="groupDisplayName" :value="detailGroup?.displayName" fluid></InputText>
                     </InputGroup>
+                    <span class="text-sm mb-1">
+                        <span>Name: </span>
+                        <span>{{ groupName }}</span>
+                    </span>
                 </div>
                 <div class="flex items-center gap-3 my-3">
                     <ToggleSwitch v-model="isPublic" :pt="{

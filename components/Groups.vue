@@ -30,8 +30,8 @@
             isPublic: isPublic,
         })">
             <div class="flex align-items-center gap-3 mb-3">
-                <InputText v-model="newGroupName" class="flex-auto" autocomplete="off" placeholder="Group Name"
-                    required />
+                <InputText v-model="newGroupName" class="flex-auto" autocomplete="off" placeholder="Group Name" required
+                    data-testid="group_name" />
             </div>
             <div class="flex items-center gap-3 my-3">
                 <ToggleSwitch v-model="isPublic" name="isPublic" />
