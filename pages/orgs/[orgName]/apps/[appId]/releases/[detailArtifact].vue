@@ -103,7 +103,7 @@ const { data: appGroups } = useFetch('/api/groups/list-groups', {
     },
 })
 const groups = computed(() => appGroups.value ?? [])
-const selectedGroup = ref<any[]>()
+const selectedGroup = ref<typeof groups.value>()
 watchEffect(() => {
     selectedGroup.value = detailArtifact.value?.groups.map(e => e.artifactsGroups) ?? []
 })
@@ -111,7 +111,9 @@ const { execute: saveGroups, status: saveGroupsStatus } = useAsyncData(() => {
     return $fetch.raw('/api/update-artifact-groups', {
         body: {
             artifactId: detailArtifact.value?.id ?? '',
-            groupIds: selectedGroup.value?.map(e => e.id) ?? [],
+            orgName: orgName,
+            appName: appName,
+            groupNames: selectedGroup.value?.map(e => e.name) ?? [],
         } satisfies UpdateGroupsRequest,
         method: 'put',
         onResponse: () => {

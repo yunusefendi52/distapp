@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
     const id = generateId()
     const token = await generateTokenWithOptions(event, {
         id,
-    }, v => v, apiAuthKey)
+    } satisfies ApiKeyTypePayload, v => v, apiAuthKey)
     await db.insert(tables.apiKeys).values({
         id: id,
         createdAt: new Date(),
@@ -51,3 +51,7 @@ export default defineEventHandler(async (event) => {
         token: token,
     }
 })
+
+export type ApiKeyTypePayload = {
+    id: string,
+}
