@@ -10,9 +10,8 @@
             <div class="flex flex-col justify-start gap-3">
                 <span class=" text-4xl">{{ data?.app.displayName }}</span>
                 <div class="flex justify-start gap-2">
-                    <Badge :value="data?.app.osType === 'ios' ? 'iOS' : 'Android'" severity="info" />
                     <Badge :value="data?.org.displayName" severity="info" />
-                    <Badge :value="data?.artifactGroup.name" severity="info" />
+                    <Badge :value="data?.artifactGroup?.displayName" severity="info" />
                 </div>
                 <PlatformBadge :osType="data?.app?.osType" />
             </div>
