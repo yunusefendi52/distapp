@@ -14,6 +14,7 @@
                     <Badge :value="data?.org.displayName" severity="info" />
                     <Badge :value="data?.artifactGroup.name" severity="info" />
                 </div>
+                <PlatformBadge :osType="data?.app?.osType" />
             </div>
             <Panel v-for="item in artifacts" :key="item.id">
                 <template #header>
@@ -26,7 +27,8 @@
                                     item.releaseId
                                 }})</a>
                             <ClientOnly>
-                                <span class="self-start" v-tooltip="{ value: item.createdAt, showDelay: 1250 }">{{ formatDate(item.createdAt) }}</span>
+                                <span class="self-start" v-tooltip="{ value: item.createdAt, showDelay: 1250 }">{{
+                                    formatDate(item.createdAt) }}</span>
                             </ClientOnly>
                             <!-- <span>30mbbb</span> -->
                         </div>
@@ -49,6 +51,7 @@
 </template>
 
 <script setup lang="ts">
+import { PlatformBadge } from '#components'
 import { formatDate } from '#imports'
 import { normalizeError } from '~/utils/showErrorAlert'
 

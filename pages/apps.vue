@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { MenuItem } from 'primevue/menuitem';
-import { CreateAppDialog } from '#components'
+import { CreateAppDialog, PlatformBadge } from '#components'
 import { ListAppsRequest } from '~/server/api/list-apps.get';
 import _ from 'lodash'
 import { normalizeName } from '~/server/utils/utils';
@@ -121,13 +121,7 @@ useTitleApp('Apps')
             <Column header="Platform">
                 <template #body="prop">
                     <div class="items-center flex">
-                        <div class="flex flex-row gap-2 px-[10px] py-[2px] items-center rounded-full dark:bg-[var(--p-surface-700)]">
-                            <i v-if="prop.data.osType === 'android'" class="pi pi-android"></i>
-                            <i v-if="prop.data.osType === 'ios'" class="pi pi-apple"></i>
-                            <span>
-                                {{ prop.data.osType === 'android' ? 'Android' : 'iOS' }}
-                            </span>
-                        </div>
+                        <PlatformBadge :osType="prop.data.osType" />
                     </div>
                 </template>
             </Column>

@@ -34,13 +34,19 @@
                     detailArtifact?.versionCode2
                     }})</span>
                 <ClientOnly>
-                    <span class="text-base"  v-tooltip="{ value: detailArtifact?.createdAt || '-', showDelay: 1250 }">Uploaded: {{ formatDate(detailArtifact?.createdAt) }}</span>
+                    <span class="text-base"
+                        v-tooltip="{ value: detailArtifact?.createdAt || '-', showDelay: 1250 }">Uploaded: {{
+                            formatDate(detailArtifact?.createdAt) }}</span>
                 </ClientOnly>
             </div>
         </div>
         <div class="flex flex-col gap-2">
             <span class="font-semibold">Downloads</span>
             <span>{{ '-' }}</span>
+        </div>
+        <div class="flex flex-col gap-2">
+            <span class="font-semibold">Platform</span>
+            <PlatformBadge :osType="detailApp?.osType" />
         </div>
         <div class="flex flex-col gap-2">
             <span class="font-semibold">Groups</span>
@@ -75,6 +81,7 @@
 import { formatDate, formatBytes } from '#imports'
 import { UpdateGroupsRequest } from '~/server/api/update-artifact-groups.put';
 import { MenuItem } from '#imports'
+import { PlatformBadge } from '#components';
 
 const { params } = useRoute()
 const appName = params.appId as string
