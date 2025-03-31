@@ -35,7 +35,7 @@ test('Apps test', async ({ page, goto, context }) => {
                 await page.getByText('Select organization').click()
                 await page.getByLabel(orgName).getByText(orgName).click()
             }
-            await page.getByText('Select OS Type').click()
+            await page.getByTestId('dropdown_platform').click()
             await page.getByLabel(osTestType).click()
             await page.getByTestId('inputAppName').fill(appName)
             await page.getByText('Save').click()

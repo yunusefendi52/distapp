@@ -118,9 +118,17 @@ useTitleApp('Apps')
                     </div>
                 </template>
             </Column>
-            <Column header="OS">
+            <Column header="Platform">
                 <template #body="prop">
-                    {{ prop.data.osType === 'android' ? 'Android' : 'iOS' }}
+                    <div class="items-center flex">
+                        <div class="flex flex-row gap-2 px-[10px] py-[2px] items-center rounded-full dark:bg-[var(--p-surface-700)]">
+                            <i v-if="prop.data.osType === 'android'" class="pi pi-android"></i>
+                            <i v-if="prop.data.osType === 'ios'" class="pi pi-apple"></i>
+                            <span>
+                                {{ prop.data.osType === 'android' ? 'Android' : 'iOS' }}
+                            </span>
+                        </div>
+                    </div>
                 </template>
             </Column>
             <Column header="Owner" v-if="!isOrg">

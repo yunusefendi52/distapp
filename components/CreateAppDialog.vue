@@ -76,8 +76,9 @@ watchEffect(() => {
                 </Select>
             </div>
             <div class="flex flex-col gap-2">
-                <label>OS Type</label>
-                <Dropdown v-model="selectedOs" optionLabel="label" :options="listOs" placeholder="Select OS Type" />
+                <label>Platform</label>
+                <Dropdown data-testid="dropdown_platform" v-model="selectedOs" optionLabel="label" :options="listOs"
+                    placeholder="Select Platform" />
             </div>
             <div class="flex flex-col gap-2">
                 <label>App Name</label>
