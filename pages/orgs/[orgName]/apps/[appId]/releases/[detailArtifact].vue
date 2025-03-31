@@ -33,7 +33,9 @@
                 <span class="font-semibold text-xl">Version {{ detailArtifact?.versionName2 }} ({{
                     detailArtifact?.versionCode2
                     }})</span>
-                <span class="text-lg">{{ formatDate(detailArtifact?.createdAt) }}</span>
+                <ClientOnly>
+                    <span class="text-base"  v-tooltip="{ value: detailArtifact?.createdAt || '-', showDelay: 1250 }">Uploaded: {{ formatDate(detailArtifact?.createdAt) }}</span>
+                </ClientOnly>
             </div>
         </div>
         <div class="flex flex-col gap-2">

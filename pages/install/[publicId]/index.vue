@@ -25,7 +25,9 @@
                                 ({{
                                     item.releaseId
                                 }})</a>
-                            <span>{{ formatDate(item.createdAt) }}</span>
+                            <ClientOnly>
+                                <span class="self-start" v-tooltip="{ value: item.createdAt, showDelay: 1250 }">{{ formatDate(item.createdAt) }}</span>
+                            </ClientOnly>
                             <!-- <span>30mbbb</span> -->
                         </div>
                         <div>

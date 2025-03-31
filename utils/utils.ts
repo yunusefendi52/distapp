@@ -40,7 +40,7 @@ export function formatBytes(bytes: number | null | undefined, decimals = 2, isBi
 }
 
 export const formatDate = (value?: string | null) => {
-    return value ? moment(value).format('LLL') : '-'
+    return value ? moment(value).fromNow() : '-'
 }
 
 export const isIosDevice = () => /(iPad|iPhone|iPod)/g.test(navigator.userAgent) || (/(Mac OS)/g.test(navigator.userAgent) && "ontouchend" in document)

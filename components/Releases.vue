@@ -22,11 +22,13 @@
                     </label>
                 </template>
             </Column>
-            <Column header="Date">
+            <Column header="Uploaded">
                 <template #body="slotProps">
-                    <label>
-                        {{ formatDate(slotProps.data.artifacts.createdAt) }}
-                    </label>
+                    <ClientOnly>
+                        <label v-tooltip="{ value: slotProps.data.artifacts.createdAt, showDelay: 1250 }">
+                            {{ formatDate(slotProps.data.artifacts.createdAt) }}
+                        </label>
+                    </ClientOnly>
                 </template>
             </Column>
             <template #empty>
