@@ -39,7 +39,7 @@ const signout = (event: any) => {
                 const userTokens = useLocalStorage<UserTokenInfo[]>(userTokensKey, [])
                 try {
                     if (cookie.value) {
-                        const newUserTokens = userTokens.value.filter(e => e.email !== userEmail.value)
+                        const newUserTokens = userTokens.value.filter(e => e.email !== email.value)
                         userTokens.value = newUserTokens
                     }
                 } catch (e) {
@@ -57,8 +57,7 @@ const signout = (event: any) => {
 }
 
 const cookie = useCookie(cookieAuthKey)
-const cookiePayload = cookie.value ? decodeJwt(cookie.value) : undefined
-const userEmail = computed(() => cookiePayload?.email?.toString())
+const { email } = useAccount()
 
 const items = ref([{
     label: 'Add Account',
@@ -76,7 +75,7 @@ if (import.meta.client) {
         items.value = [
             ...items.value,
             ...userTokens.value.map(e => ({
-                label: `${e.email} ${e.email === userEmail.value ? '(Current)' : ''}`.trimEnd(),
+                label: `${e.email} ${e.email === email.value ? '(Current)' : ''}`.trimEnd(),
                 icon: 'pi pi-user',
                 command: () => {
                     cookie.value = e.token

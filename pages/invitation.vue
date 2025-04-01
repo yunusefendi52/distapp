@@ -8,8 +8,12 @@
                     <label for="username">Invitation code</label>
                     <InputText name="link" :value="invitationCode" readonly fluid autocomplete="off" />
                 </div>
-                <div class="w-full mt-5">
+                <div class="w-full mt-5 flex flex-col space-y-2">
                     <Button :loading="joinIsPending" type="submit" class="w-full" label="Join"></Button>
+                    <span>
+                        <span>You logged in as: </span>
+                        <span>{{ email }}</span>
+                    </span>
                 </div>
             </form>
         </div>
@@ -18,6 +22,8 @@
 
 <script setup lang="ts">
 import _ from 'lodash'
+
+const { email } = useAccount()
 
 const { query } = useRoute()
 const invitationCode = computed(() => query.c)

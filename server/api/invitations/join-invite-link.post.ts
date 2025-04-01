@@ -11,7 +11,18 @@ export default defineEventHandler(async (event) => {
             message: 'Invitation code expired or invalid',
         })
     }
-    await addToOrg(event, orgId, email)
+    try {
+        await addToOrg(event, orgId, email)
+    } catch (e) {
+        if (`${e}`.includes('UNIQUE constraint failed: organizationsPeople.userId')) {
+            throw createError({
+                statusCode: 400,
+                message: 'You already join invitation',
+            })
+        } else {
+            throw e
+        }
+    }
     return {
         message: 'added',
     }
