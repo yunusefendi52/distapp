@@ -11,7 +11,7 @@
                 <span class=" text-4xl">{{ data?.app.displayName }}</span>
                 <div class="flex justify-start gap-2">
                     <Badge :value="data?.org.displayName" severity="info" />
-                    <Badge :value="data?.artifactGroup?.displayName" severity="info" />
+                    <Badge :value="data?.artifactGroup?.displayName || undefined" severity="info" />
                 </div>
                 <PlatformBadge :osType="data?.app?.osType" />
             </div>

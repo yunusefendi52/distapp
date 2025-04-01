@@ -9,12 +9,12 @@ export default defineEventHandler(async (event) => {
     const joinTesterPayload = await verifyToken(event, token, apiAuthKey) as JoinTesterPayload
 
     const auth = event.context.auth
-    if (joinTesterPayload.email !== auth.email) {
-        throw createError({
-            message: 'Invitation not found, make sure you have the correct account',
-            statusCode: 400,
-        })
-    }
+    // if (joinTesterPayload.email !== auth.email) {
+    //     throw createError({
+    //         message: 'Invitation not found, make sure you have the correct account',
+    //         statusCode: 400,
+    //     })
+    // }
 
     const db = event.context.drizzle
     const sel = await db.select()

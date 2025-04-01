@@ -109,7 +109,7 @@ if (isLoggedIn.value) {
             userTokens.value = newUserTokens
         }
         if (redirect) {
-            navigateTo(redirect)
+            navigateTo(decodeURIComponent(redirect))
         }
     }
 }

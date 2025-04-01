@@ -71,7 +71,7 @@ const { mutate, isPending, data } = useMutation({
     },
 })
 function copyLink(value: string | undefined) {
-    const link = `${window.location.origin}/install/join-tester#${value}`
+    const link = `${window.location.origin}/install/join-tester?c=${value}`
     copyText(link)
 }
 
