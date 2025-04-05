@@ -1,4 +1,3 @@
-import moment from "moment"
 import * as jose from 'jose'
 
 export const getMimeTypeFromosType = (osType?: OsType): string => {
@@ -39,7 +38,34 @@ export function formatBytes(bytes: number | null | undefined, decimals = 2, isBi
 }
 
 export const formatDate = (value?: string | null) => {
-    return value ? moment(value).fromNow() : '-'
+    return value ? formatRelativeTime(new Date(value)) : '-'
+}
+
+function formatRelativeTime(date: Date, baseDate = Date.now()) {
+    const rtf = new Intl.RelativeTimeFormat(undefined, {
+        numeric: 'auto',
+        style: 'long',
+    });
+    const d1 = new Date(baseDate);
+    const d2 = new Date(date);
+    const diffInSeconds = Math.floor((d2.getTime() - d1.getTime()) / 1000);
+
+    const units = [
+        { unit: 'year', seconds: 60 * 60 * 24 * 365 },
+        { unit: 'month', seconds: 60 * 60 * 24 * 30 },
+        { unit: 'week', seconds: 60 * 60 * 24 * 7 },
+        { unit: 'day', seconds: 60 * 60 * 24 },
+        { unit: 'hour', seconds: 60 * 60 },
+        { unit: 'minute', seconds: 60 },
+        { unit: 'second', seconds: 1 },
+    ];
+
+    for (const { unit, seconds } of units) {
+        const delta = diffInSeconds / seconds;
+        if (Math.abs(delta) >= 1 || unit === 'second') {
+            return rtf.format(Math.round(delta), unit as any);
+        }
+    }
 }
 
 export const isIosDevice = () => /(iPad|iPhone|iPod)/g.test(navigator.userAgent) || (/(Mac OS)/g.test(navigator.userAgent) && "ontouchend" in document)
@@ -69,4 +95,11 @@ export const navigateFromTab = (event: MenuItemCommandEvent) => {
         name: event.item.routeName,
         params: event.item.routeParams,
     })
+}
+
+export function formatSimpleDate(value: string | undefined) {
+    return value ? new Intl.DateTimeFormat(undefined, {
+        dateStyle: 'long',
+        timeStyle: 'medium',
+    }).format(new Date(value)) : '-'
 }

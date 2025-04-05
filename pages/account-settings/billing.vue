@@ -13,8 +13,8 @@
                     <PriceCard price-name="Pro" price="$4" :features="proFeatures" />
                     <div class="mt-5 flex flex-col gap-2">
                         <template v-if="data?.plan === 'basic'">
-                            <span>{{ data?.endsAt ? 'Ends' : 'Renews' }} at {{ moment(data?.endsAt ||
-                                data?.renewsAt).format('LLL')
+                            <span>{{ data?.endsAt ? 'Ends' : 'Renews' }} at {{ formatSimpleDate(data?.endsAt ||
+                                data?.renewsAt)
                             }}</span>
                             <Button v-if="data?.isCancelled" label="Resume Subscription" outlined
                                 :loading="toggleSubsPending" fluid @click="() => toggleSubs(false)" class="mt-3" />
@@ -42,9 +42,8 @@
 </template>
 
 <script setup lang="ts">
-import { formatDate } from '#imports'
+import { formatSimpleDate } from '#imports'
 import { freeFeatures, proFeatures } from '#imports'
-import moment from "moment"
 
 const { data, status, refresh } = useFetch('/api/billing/current-billing')
 

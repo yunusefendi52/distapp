@@ -2,8 +2,7 @@
     <div class="flex flex-col items-start gap-3 w-full">
         <Button @click="() => mutate()" :loading="isPending" label="Generate Token" />
         <div>
-            See this how to use <NuxtLink class="underline"
-                href="https://docs-distapp.lhf.my.id/cli/cli-usage"
+            See this how to use <NuxtLink class="underline" href="https://docs-distapp.lhf.my.id/cli/cli-usage"
                 target="_blank">
                 CLI
             </NuxtLink>
@@ -20,7 +19,7 @@
         <DataTable :value="apiKeys?.apiKeys" class="self-stretch">
             <Column header="Created At">
                 <template #body="{ data }">
-                    <span>{{ moment(data.apiKeys.createdAt).format('LLL') }}</span>
+                    <span>{{ formatSimpleDate(data.apiKeys.createdAt) }}</span>
                 </template>
             </Column>
             <Column header="">
@@ -39,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from 'moment'
+import { formatSimpleDate } from '#imports'
 const { params } = useRoute()
 
 const appName = params.appId as string
