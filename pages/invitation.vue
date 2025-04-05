@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import _ from 'lodash'
+import { omitBy } from 'es-toolkit'
 
 const { email } = useAccount()
 
@@ -32,12 +32,9 @@ const { mutate: joinInvite, isPending: joinIsPending } = useMutation({
     mutationFn: async (form: any) => {
         form.preventDefault()
         const data = Object.fromEntries(new FormData(form.target))
-        const formData = _.omitBy({
-            ...data,
-        }, _.isEmpty)
         await $fetch('/api/invitations/join-invite-link', {
             method: 'post',
-            body: formData,
+            body: data,
         })
         location.replace('/apps')
     },

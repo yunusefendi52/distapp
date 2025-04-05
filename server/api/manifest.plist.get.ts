@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import { escape } from 'es-toolkit'
 import { getArtifactFromInternal } from './artifacts/download-artifact.get'
 
 export default defineEventHandler(async (event) => {
@@ -40,7 +40,7 @@ const generatePlist = (
 					<key>kind</key>
 					<string>software-package</string>
 					<key>url</key>
-					<string>${_.escape(signedUrl)}</string>
+					<string>${escape(signedUrl)}</string>
 				</dict>
 			</array>
 			<key>metadata</key>

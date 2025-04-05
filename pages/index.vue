@@ -71,7 +71,7 @@
 </style>
 
 <script setup lang="ts">
-import _ from 'lodash';
+import { uniqBy } from 'es-toolkit';
 import { UserTokenInfo } from '~/server/models/UserTokenInfo';
 import { userTokensKey } from '~/server/utils/utils';
 
@@ -99,7 +99,7 @@ if (isLoggedIn.value) {
             },
         })
         if (userToken && userEmail) {
-            const newUserTokens = _.uniqBy([
+            const newUserTokens = uniqBy([
                 ...userTokens.value,
                 {
                     email: userEmail,

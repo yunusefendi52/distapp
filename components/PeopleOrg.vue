@@ -62,8 +62,6 @@
 </template>
 
 <script setup lang="ts">
-import _ from 'lodash';
-
 const form = ref()
 
 const route = useRoute()

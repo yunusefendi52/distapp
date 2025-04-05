@@ -2,8 +2,8 @@
 import { MenuItem } from 'primevue/menuitem';
 import { CreateAppDialog, PlatformBadge } from '#components'
 import { ListAppsRequest } from '~/server/api/list-apps.get';
-import _ from 'lodash'
 import { normalizeName } from '~/server/utils/utils';
+import { omitBy } from 'es-toolkit'
 
 const { name: routeName, params } = useRoute()
 const orgNameParam = params.orgName
@@ -59,10 +59,10 @@ const addApp = () => {
 const search = (e: any) => {
     e.preventDefault()
     const data = Object.fromEntries(new FormData(e.target))
-    request.value = _.omitBy({
+    request.value = omitBy({
         ...request.value,
         ...data,
-    }, _.isEmpty)
+    }, v => v ? false : true)
 }
 
 const upperCase = (value: string | null | undefined) => {
