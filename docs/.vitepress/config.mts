@@ -38,6 +38,10 @@ export default defineConfig({
             text: 'Setup Self Hosted',
             link: '/self-hosted/setup-self-hosted',
           },
+          {
+            text: 'Hosting License',
+            link: '/self-hosted/hosting-license',
+          },
         ],
       },
     ],

@@ -1,0 +1,8 @@
+SELF-HOSTING LICENSE
+
+This license serves as an extension to the terms outlined in this license <https://github.com/yunusefendi52/distapp/blob/main/LICENSE.txt>
+
+1. You are strictly prohibited from reselling or commercially exploiting the software for personal or corporate gain.
+2. You may not sublicense the software to third parties, whether for free or for profit.
+3. Under no circumstances may the software be incorporated into a product or service that replicates its core functionality.
+4. Hosting our software is allowed for any purpose, as long as not violated all these terms.
