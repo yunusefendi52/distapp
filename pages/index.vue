@@ -19,7 +19,6 @@
                         <Button icon="pi pi-github" label="GitHub" text />
                     </NuxtLink>
                 </div>
-                <span class="text-sm italic font-light">Beta testing</span>
             </div>
             <div class="flex justify-center items-center lg:w-[550px]">
                 <img class="distapp-dark border border-white/15 rounded-lg" width="550" src="/assets/distapp_dark.webp">
