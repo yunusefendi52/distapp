@@ -16,8 +16,9 @@
             }" />
             <Button v-else icon=" pi pi-upload" text />
         </div>
+        <span v-if="errorMsg" class="text-red-400">{{ errorMsg }}</span>
     </AppCard>
-    <input ref="fileRef" :modelValue="model" class="hidden" type="file" :accept="prop.accept" @change="(e) => {
+    <input ref="fileRef" :modelValue="model" class="hidden" type="file" @change="(e) => {
         onChange(e)
     }">
 </template>
@@ -40,17 +41,16 @@ watchEffect(() => {
 })
 const modelFile = computed(() => model.value && model.value.length ? model.value.item(0) : undefined)
 const prop = defineProps<{
-    accept?: string,
+    allowedExts?: string,
     placeholder?: string,
     dataTestId?: string,
 }>()
 function onChange(event: Event) {
     const inputEl = event.target as HTMLInputElement
     updateFile(inputEl?.files)
-    emit('change', event)
 }
 const emit = defineEmits<{
-    (e: 'change', event: Event): void
+    (e: 'change', fileList: FileList | undefined): void
 }>()
 
 function clickUpload() {
@@ -73,18 +73,29 @@ const handleDrop = (event: DragEvent) => {
     if (!files || !files.length || files.length > 1) {
         return
     }
-    const propAccept = prop.accept
-    if (!propAccept) {
-        return
-    }
-    const exts = propAccept.split(',').map(e => getExtensionFromMimeType(e)) || []
-    const firstFile = files[0]
-    if (exts.find(v => firstFile.name.endsWith(v || ''))) {
-        updateFile(files)
-    }
+    updateFile(files)
 }
 
+const errorMsg = ref()
+
 function updateFile(files: FileList | null) {
+    errorMsg.value = undefined
+    if (files && prop.allowedExts) {
+        const exts = prop.allowedExts.split(',')
+        for (let index = 0; index < files.length; index++) {
+            const file = files.item(index)
+            if (file) {
+                const validFile = exts.find(e => file.name.endsWith(e.trim())) ? true : false
+                if (!validFile) {
+                    errorMsg.value = `Invalid file type, only accepts ${prop.allowedExts}`
+                    return
+                }
+            }
+        }
+    }
     model.value = files || undefined
 }
+watch(() => model.value, v => {
+    emit('change', v)
+})
 </script>

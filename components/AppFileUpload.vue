@@ -1,9 +1,9 @@
 <template>
     <Drawer class="!w-[30rem]" position="right" header="Upload" v-model:visible="showUpload">
-        <div class="flex flex-col gap-3" v-if="mimeTypeFromOsType">
+        <div class="flex flex-col gap-3" v-if="allowedExts">
             <div>
                 <InputFileUpload dataTestId="upload_input_btn" v-model="fileList" type="file"
-                    :accept="mimeTypeFromOsType" @change="checkFile" />
+                    :allowed-exts="allowedExts" @change="checkFile" />
                 <div v-if="isFileAab">
                     <div class="text-m mb-2">
                         <span class="text-sm dark:text-neutral-200">
@@ -49,13 +49,12 @@ const orgName = computed(() => props.dataProps!.orgName)
 const appName = computed(() => props.dataProps!.appName)
 const groupName = computed(() => props.dataProps.groupName)
 
-const mimeTypeFromOsType = computed(() => osType.value ? getMimeTypeFromosType(osType.value) : undefined)
+const allowedExts = computed(() => osType.value ? getAllowedExtsFromOstype(osType.value) : undefined)
 const fileList = ref<FileList | undefined>()
 const fileApkRef = ref<FileList | undefined>()
 const isFileAab = ref(false)
-function checkFile(event: Event) {
-    const input = event.target as HTMLInputElement
-    isFileAab.value = input.files?.item(0)?.name?.endsWith('.aab') || false
+function checkFile(files: FileList | undefined) {
+    isFileAab.value = files?.item(0)?.name?.endsWith('.aab') || false
 }
 
 const { data: appGroups } = useFetch('/api/groups/list-groups', {

@@ -1,21 +1,10 @@
 import * as jose from 'jose'
 
-export const getMimeTypeFromosType = (osType?: OsType): string => {
-    return osType == 'android' ? 'application/vnd.android.package-archive,.aab' : '.ipa'
+export const getAllowedExtsFromOstype = (osType?: OsType): string => {
+    return osType == 'android' ? '.apk,.aab' : '.ipa'
 }
 
 export type OsType = 'android' | 'ios'
-
-export const getExtensionFromMimeType = (mimeType: string | undefined) => {
-    if (mimeType === 'application/vnd.android.package-archive') {
-        return 'apk'
-    } else if (mimeType === 'application/x-authorware-bin' || mimeType === '.aab') {
-        return 'aab'
-    } else if (mimeType === 'application/octet-stream' || mimeType === '.ipa') {
-        return 'ipa'
-    }
-    return mimeType
-}
 
 export function formatBytes(bytes: number | null | undefined, decimals = 2, isBinary = false) {
     if (!bytes) {
