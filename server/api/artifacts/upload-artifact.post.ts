@@ -112,7 +112,7 @@ export default defineEventHandler(async (event) => {
     // Across orgs
     // TODO: Optimize????
     const artifactSize = await db.select({
-        sumContentLength: sql<number>`sum(${tables.artifacts.fileContentLength}) + sum(${tables.artifacts.fileApkContentLength})`,
+        sumContentLength: sql<number>`sum(${tables.artifacts.fileContentLength}) + sum(coalesce(${tables.artifacts.fileApkContentLength}, 0))`,
     }).from(tables.artifacts)
         .where(and(
             eq(tables.artifacts.organizationId, orgId),
