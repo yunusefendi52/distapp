@@ -122,7 +122,7 @@ export default defineEventHandler(async (event) => {
     const sumAllContentLength = artifactSize.sumContentLength + fileSize + (fileSizeApk || 0)
     if (sumAllContentLength >= artifactSizeBytesLimit) {
         throw createError({
-            message: `The number of artifact as reached the limit of ${artifactSizeLimit} mb. ${sumAllContentLength}`,
+            message: `The number of artifact has reached the limit of ${artifactSizeLimit} mb. ${sumAllContentLength}`,
             statusCode: 400,
         })
     }
