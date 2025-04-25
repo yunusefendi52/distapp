@@ -1,6 +1,6 @@
 {
     "name": "distapp",
-    "version": "1.0.2",
+    "version": "1.0.4",
     "description": "Manage and distribute Android or iOS app",
     "main": "cli.mjs",
     "bin": {
@@ -23,5 +23,9 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/yunusefendi52/distapp.git"
+    },
+    "dependencies": {
+        "@commander-js/extra-typings": "^13.1.0",
+        "commander": "^13.1.0"
     }
 }

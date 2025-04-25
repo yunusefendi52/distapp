@@ -78,10 +78,10 @@ test('Apps test', async ({ page, goto, context }) => {
                 test.setTimeout(90_000)
 
                 const { stderr, stdout } = await exec(`${cliCommand} \\
-                    --distribute \\
+                    distribute \\
                     --file "tests/tests_artifacts/app-release.aab" \\
                     --slug "${appSlug}" \\
-                    --apiKey "${appApiKey}"`)
+                    --api-key "${appApiKey}"`)
                 expect(stderr).toBeFalsy()
                 expect(stdout).toContain('Finished Distributing')
                 expect(stdout).toContain('with generated APK')
@@ -90,20 +90,20 @@ test('Apps test', async ({ page, goto, context }) => {
             })
             await test.step(`User can upload artifact ${osTestType} APK with API keys using CLI`, async () => {
                 const { stderr, stdout } = await exec(`${cliCommand} \\
-                    --distribute \\
+                    distribute \\
                     --file "tests/tests_artifacts/app-arm64-v8a-release.apk" \\
                     --slug "${appSlug}" \\
-                    --apiKey "${appApiKey}"`)
+                    --api-key "${appApiKey}"`)
                 expect(stderr).toBeFalsy()
                 expect(stdout).toContain('Finished Distributing')
                 expect(stdout).not.toContain('with generated APK')
             })
             await test.step(`User can upload artifact ${osTestType} APK to group with API keys using CLI`, async () => {
                 const { stderr, stdout } = await exec(`${cliCommand} \\
-                    --distribute \\
+                    distribute \\
                     --file "tests/tests_artifacts/app-arm64-v8a-release.apk" \\
                     --slug "${appSlug}" \\
-                    --apiKey "${appApiKey}" \\
+                    --api-key "${appApiKey}" \\
                     --group "${groupName}"`)
                 expect(stderr).toBeFalsy()
                 expect(stdout).toContain('Finished Distributing')
@@ -112,27 +112,27 @@ test('Apps test', async ({ page, goto, context }) => {
             })
             await test.step(`User should not able upload artifact arbitrary ZIP to ${osTestType}`, async () => {
                 await expect(exec(`${cliCommand} \\
-                --distribute \\
+                distribute \\
                 --file "tests/tests_artifacts/release.zip" \\
                 --slug "${appSlug}" \\
-                --apiKey "${appApiKey}"`)).rejects.toThrow(/Cannot read package file/)
+                --api-key "${appApiKey}"`)).rejects.toThrow(/Cannot read package file/)
             })
         } else if (osTestType === 'iOS') {
             await test.step(`User can upload artifact ${osTestType} IPA with API keys using CLI`, async () => {
                 const { stderr, stdout } = await exec(`${cliCommand} \\
-                    --distribute \\
+                    distribute \\
                     --file "tests/tests_artifacts/testapp.ipa" \\
                     --slug "${appSlug}" \\
-                    --apiKey "${appApiKey}"`)
+                    --api-key "${appApiKey}"`)
                 expect(stderr).toBeFalsy()
                 expect(stdout).toContain('Finished Distributing')
             })
             await test.step(`User should not able to upload arbitrary file to ${osTestType}`, async () => {
                 await expect(exec(`${cliCommand} \\
-                    --distribute \\
+                    distribute \\
                     --file "tests/tests_artifacts/release.zip" \\
                     --slug "${appSlug}" \\
-                    --apiKey "${appApiKey}"`)).rejects.toThrow(/Cannot read package file/)
+                    --api-key "${appApiKey}"`)).rejects.toThrow(/Cannot read package file/)
             })
         }
 

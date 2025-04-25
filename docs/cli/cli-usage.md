@@ -28,10 +28,10 @@ bun -g install distapp
 Distribute apk, aab and ipa using the following command:
 
 ```bash
-distapp --distribute \
+distapp distribute \
     --file "$PATH_TO_ARTIFACT" \
-    --slug "$APP_SLUG" \ # e.g yedev/habit-tool-android
-    --apiKey "$API_KEY"
+    --slug "$APP_SLUG" \
+    --api-key "$API_KEY"
 ```
 
 - `$PATH_TO_ARTIFACT` Can be apk, aab or ipa
@@ -49,9 +49,9 @@ Add `--group` option to distribute to group, specify multiple times if you want 
 Example:
 
 ```bash
-distapp --distribute \
+distapp distribute \
     --file "$PATH_TO_ARTIFACT" \
-    --slug "$APP_SLUG" \ # e.g yedev/habit-tool-android
-    --apiKey "$API_KEY" \
+    --slug "$APP_SLUG" \
+    --api-key "$API_KEY" \
     --group "public-app"
 ```
