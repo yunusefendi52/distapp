@@ -25,6 +25,10 @@ Secret Key: 043ec277661d48bebab2972fd6043ebf
 
 Make sure the service is accessible on the internet, you also have to make sure SSL is setup, it is up to you how you setup this whether you are using load balancer or access directly
 
+::: tip
+If you happen to use load balancer (i.e nginx) and encounter a **413 (Request Entity Too Large)** error, make sure to configure it to accept request size larger than your package-at least 200MB
+:::
+
 ### Setup DistApp
 
 Run script below and follow the guide to setup S3
