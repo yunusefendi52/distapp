@@ -91,7 +91,7 @@ watchEffect(() => {
     <Dialog v-model:visible="addOrgVisible" modal header="Add Organization">
         <form @submit.prevent="saveOrg">
             <div class="flex flex-col gap-3 w-25rem">
-                <InputText data-testid="orgname" name="name" v-model="orgNameRef"></InputText>
+                <InputText placeholder="Name" data-testid="orgname" name="name" v-model="orgNameRef"></InputText>
                 <Button data-testid="orgsavebtn" label="Save" type="submit" :loading="isPendingOrg"></Button>
             </div>
         </form>
