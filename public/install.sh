@@ -10,7 +10,7 @@ set -o pipefail
 
 baseDir="$PWD"
 
-workDir="$baseDir/distapp"
+workDir="$baseDir"
 mkdir -p $workDir
 
 cd $workDir
