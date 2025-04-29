@@ -166,9 +166,8 @@ export default defineNuxtConfig({
       }],
       meta: [{
         name: 'theme-color',
-        content: 'theme-color',
-      },
-      {
+        content: '',
+      }, {
         name: 'description',
         content: 'Manage and distribute Android or iOS app. App Center Alternative',
       }, {
