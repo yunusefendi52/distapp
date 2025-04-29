@@ -8,7 +8,7 @@ gen_password() {
 set -e
 set -o pipefail
 
-baseDir="$HOME"
+baseDir="$PWD"
 
 workDir="$baseDir/distapp"
 mkdir -p $workDir

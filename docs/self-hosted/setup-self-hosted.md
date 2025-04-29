@@ -31,13 +31,25 @@ If you happen to use load balancer (i.e nginx) and encounter a **413 (Request En
 
 ### Setup DistApp
 
-Run script below and follow the guide to setup S3
+First, create a diretory to store all the configurations
+
+``` bash
+mkdir -p distapp && cd distapp
+```
+
+And then run script below and follow the guide to setup S3
 
 ```bash
 curl -fsSL https://distapp.lhf.my.id/install.sh | bash
 ```
 
-All configurations are saved to `~/distapp`, which you can change later.
+Then you can run DistApp
+
+```bash
+docker compose up -d
+```
+
+Now you can access it in http://localhost:3000.
 
 The default port is 3000, you can change the host port (left side) in docker-compose.yml. Example port 5173:
 
