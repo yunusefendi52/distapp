@@ -20,10 +20,18 @@
                     </NuxtLink>
                 </div>
             </div>
-            <div class="flex justify-center items-center lg:w-[550px]">
-                <img class="distapp-dark border border-white/15 rounded-lg" width="550" src="/assets/distapp_dark.webp">
-                <img class="distapp-light border border-black/15 rounded-lg" width="550"
-                    src="/assets/distapp_light.webp">
+            <div class="flex flex-col">
+                <a :href="link">
+                    <div class="flex justify-center items-center lg:w-[550px]">
+                        <img class="distapp-dark border border-white/15 rounded-lg" width="550"
+                            src="/assets/distapp_dark.webp">
+                        <img class="distapp-light border border-black/15 rounded-lg" width="550"
+                            src="/assets/distapp_light.webp">
+                    </div>
+                </a>
+                <a class="self-start" :href="link">
+                    <span class="text-xs text-[var(--p-text-muted-color)]">Habit Tool - Habit tracker log</span>
+                </a>
             </div>
         </div>
         <div class="flex flex-col gap-6 sm:grid sm:grid-cols-3">
@@ -112,4 +120,6 @@ if (isLoggedIn.value) {
         }
     }
 }
+
+const link = 'https://play.google.com/store/apps/details?id=com.yedev.habittrackertool&utm_source=distapp&utm_campaign=distapp&utm_medium=distapp'
 </script>
