@@ -49,5 +49,9 @@ export default defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/yunusefendi52/distapp' }
     ]
-  }
+  },
+  ignoreDeadLinks: [
+    // ignore all localhost links
+    /^https?:\/\/localhost/,
+  ]
 })
