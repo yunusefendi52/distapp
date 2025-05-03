@@ -9,20 +9,10 @@ export default defineEventHandler(async (event) => {
     let appId: string
     let orgId: string
 
-    const apiKey = getHeader(event, 'API-KEY')
+    const apiKey = await getAuthApiKey(event, request.orgName, request.appName)
     if (apiKey) {
-        const { app: { apiAuthKey } } = useRuntimeConfig(event)
-        if (!apiAuthKey) {
-            throw createError({
-                message: 'Please provide using env NUXT_APP_API_AUTH_KEY',
-                statusCode: 500,
-            })
-        }
-
-        const apiKeyPayload: ApiKeyTypePayload = await verifyToken(event, apiKey, apiAuthKey)
-        const { appsId, organizationId } = await findApiKey(db, apiKeyPayload.id, request.orgName, request.appName)
-        appId = appsId!
-        orgId = organizationId!
+        appId = apiKey.appId
+        orgId = apiKey.orgId
     } else {
         if (await roleEditNotAllowed(event, request.orgName)) {
             throw createError({

@@ -64,12 +64,15 @@ definePageMeta({
 
 const route = useRoute()
 const { value: { publicId, orgName, appName } } = computed(() => route.params)
+const { value: { artifactId, releaseId } } = computed(() => route.query)
 
 const { data, status, error } = useFetch('/api/install/get-data', {
     query: {
         publicId,
         orgName,
         appName,
+        artifactId,
+        releaseId,
     },
     server: false,
 })

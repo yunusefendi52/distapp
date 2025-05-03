@@ -3,12 +3,14 @@ import { uuidv4 } from 'uuidv7'
 import child_process from 'node:child_process'
 import util from 'util'
 const exec = util.promisify(child_process.exec)
+import slugify from '~/server/utils/slugify.mjs';
+const { normalizeName } = slugify;
 
 function generateTestId() {
     return uuidv4().slice(0, 8)
 }
 
-test('Apps test', async ({ page, goto, context }) => {
+test('Apps test', async ({ page, goto, context, request }) => {
     const orgName = `Org Test ${generateTestId()}`
 
     await test.step('User can create organization', async () => {
@@ -55,6 +57,8 @@ test('Apps test', async ({ page, goto, context }) => {
 
         let appSlug: string
         let appApiKey: string
+        let orgId: string
+        let appId: string
 
         await test.step('User can create app API key', async () => {
             await page.getByTestId('a_menus').getByText(orgName).click()
@@ -62,6 +66,8 @@ test('Apps test', async ({ page, goto, context }) => {
             await page.getByTestId('settings_app_btn').click()
             await expect(page).toHaveURL(/.*app-info/)
             appSlug = await page.getByTestId('slug_input').inputValue()
+            orgId = await page.getByTestId('orgid_input').inputValue()
+            appId = await page.getByTestId('appid_input').inputValue()
             await page.getByText('API Keys').click()
             await expect(page).toHaveURL(/.*api-keys/)
             await page.getByText('Generate Token').click()
@@ -70,7 +76,8 @@ test('Apps test', async ({ page, goto, context }) => {
             expect(appApiKey).toContain('ey')
         })
 
-        const cliCommand = 'DISTAPP_CLI_URL="http://localhost:3000" node cli/cli.mjs'
+        const distappUrl = 'http://localhost:3000'
+        const cliCommand = `DISTAPP_CLI_URL="${distappUrl}" node cli/cli.mjs`
 
         if (osTestType === 'Android') {
             await test.step(`User can upload artifact ${osTestType} AAB with API keys using CLI`, async () => {
@@ -104,7 +111,7 @@ test('Apps test', async ({ page, goto, context }) => {
                     --file "tests/tests_artifacts/app-arm64-v8a-release.apk" \\
                     --slug "${appSlug}" \\
                     --api-key "${appApiKey}" \\
-                    --group "${groupName}"`)
+                    --group "${normalizeName(groupName)}"`)
                 expect(stderr).toBeFalsy()
                 expect(stdout).toContain('Finished Distributing')
                 expect(stdout).toContain('to groups')
@@ -116,6 +123,34 @@ test('Apps test', async ({ page, goto, context }) => {
                 --file "tests/tests_artifacts/release.zip" \\
                 --slug "${appSlug}" \\
                 --api-key "${appApiKey}"`)).rejects.toThrow(/Cannot read package file/)
+            })
+            await test.step(`User can get the latest app version`, async () => {
+                const resp = await request.get(`${distappUrl}/api/apps/app-version`, {
+                    params: {
+                        orgId: orgId,
+                        appId: appId,
+                    },
+                })
+                expect(resp.ok()).toBeTruthy()
+                const respJson = JSON.parse(await resp.text())
+                expect(respJson.groupName).toBeFalsy()
+                expect(respJson.releaseId).toEqual(3)
+                expect(respJson.installLink).toBeFalsy()
+            })
+            await test.step(`User can get the latest app version spesific group`, async () => {
+                const resp = await request.get(`${distappUrl}/api/apps/app-version`, {
+                    params: {
+                        orgId: orgId,
+                        appId: appId,
+                        group: normalizeName(groupName),
+                    },
+                })
+                expect(resp.ok()).toBeTruthy()
+                const respJson = JSON.parse(await resp.text())
+                expect(respJson.groupName).toEqual(groupName)
+                expect(respJson.releaseId).toEqual(3)
+                expect(respJson.installLink).toBeTruthy()
+                expect(respJson.installLink).toContain('artifactId')
             })
         } else if (osTestType === 'iOS') {
             await test.step(`User can upload artifact ${osTestType} IPA with API keys using CLI`, async () => {
