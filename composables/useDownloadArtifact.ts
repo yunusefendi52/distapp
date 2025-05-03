@@ -1,5 +1,8 @@
+import { ManifestInstallDialog } from "#components"
+
 export const useDownloadArtifact = (appName: string, orgName: string) => {
     const isDownloading = ref(false)
+    const dialog = useDialog()
 
     const download = async (releaseId: string, publicId: string | undefined, hasApk: boolean) => {
         let url = `/api/artifacts/download-artifact?appName=${appName}&orgName=${orgName}&releaseId=${releaseId}&publicId=${publicId || ''}&hasApk=${hasApk}`
@@ -16,7 +19,20 @@ export const useDownloadArtifact = (appName: string, orgName: string) => {
                 if (import.meta.dev) {
                     console.log('manifestLink', manifestLink)
                 }
-                document.location = manifestLink
+                dialog.open(ManifestInstallDialog, {
+                    props: {
+                        header: 'Confirm Installation',
+                        modal: true,
+                        closable: true,
+                        dismissableMask: true,
+                        style: {
+                            width: '90%',
+                        },
+                    },
+                    data: {
+                        manifestLink,
+                    },
+                })
             } finally {
                 isDownloading.value = false
             }
