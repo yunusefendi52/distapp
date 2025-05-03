@@ -1,19 +1,5 @@
 import { uuidv7 } from "uuidv7"
 import type { EventHandlerRequest, H3Event } from "h3"
-import slugify from 'slugify'
-
-export const normalizeName = (value: string): string => {
-    const vv = slugify(value.trim(), {
-        lower: true,
-        locale: 'en',
-        replacement: '-',
-        trim: true,
-    })
-    if (!vv.length) {
-        throw 'Value cannot be empty or whitespace'
-    }
-    return vv
-}
 
 export const getJwtKey = (event: H3Event<EventHandlerRequest>) => {
     const config = useRuntimeConfig(event)

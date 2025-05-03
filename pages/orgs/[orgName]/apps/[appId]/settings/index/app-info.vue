@@ -20,6 +20,24 @@
                     <Button icon="pi pi-copy" @click="() => copyText(slug)" />
                 </div>
             </div>
+            <div class="flex flex-col md:flex-row gap-3 *:md:flex-1">
+                <div class="flex flex-col gap-2">
+                    <label>Organization Id</label>
+                    <div class="flex flex-row gap-2">
+                        <InputText :value="data?.organizationsId" readonly aria-describedby="Org Id" class="flex-1"
+                            data-testid="orgid_input" />
+                        <Button icon="pi pi-copy" @click="() => copyText(data?.organizationsId || undefined)" />
+                    </div>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label>App Id</label>
+                    <div class="flex flex-row gap-2">
+                        <InputText :value="data?.id" readonly aria-describedby="App Id" class="flex-1"
+                            data-testid="appid_input" />
+                        <Button icon="pi pi-copy" @click="() => copyText(data?.id)" />
+                    </div>
+                </div>
+            </div>
             <Button :loading="isPending" type="submit" class="sm:self-start" label="Save Changes" />
         </form>
     </div>

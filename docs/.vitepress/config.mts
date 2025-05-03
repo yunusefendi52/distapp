@@ -44,6 +44,15 @@ export default defineConfig({
           },
         ],
       },
+      {
+        text: 'APIs',
+        items: [
+          {
+            text: 'Get the Latest App Version',
+            link: '/apis/get-the-latest-app-version',
+          },
+        ],
+      },
     ],
 
     socialLinks: [
