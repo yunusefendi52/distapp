@@ -6,15 +6,20 @@ export default defineEventHandler(async event => {
     }).parse)
     const db = event.context.drizzle
     const app = await db.select({
+        name: tables.apps.name,
         displayName: tables.apps.displayName,
+        orgName: tables.organizations.name,
+        orgDisplayName: tables.organizations.displayName,
         osType: tables.apps.osType,
     }).from(tables.apps)
+        .leftJoin(tables.organizations, eq(tables.organizations.id, tables.apps.organizationsId))
         .where(and(
             eq(tables.apps.organizationsId, orgId),
             eq(tables.apps.id, appId),
         )).then(takeUniqueOrThrow)
     const artifact = await db.select({
         groupName: tables.artifactsGroups.displayName,
+        artifactId: tables.artifacts.id,
         releaseId: tables.artifacts.releaseId,
         versionCode: tables.artifacts.versionCode2,
         versionName: tables.artifacts.versionName2,
@@ -31,14 +36,19 @@ export default defineEventHandler(async event => {
         .orderBy(desc(tables.artifacts.createdAt))
         .limit(1)
         .then(singleOrDefault)
-
+    const installParam = new URLSearchParams({
+        artifactId: `${artifact?.artifactId || ''}`,
+    })
+    const installLink = `/install/${app.orgName}/apps/${app.name}/${group || ''}${artifact ? `?${installParam.toString()}`: ''}`
     return {
-        name: app.displayName,
+        appName: app.displayName,
+        orgName: app.orgDisplayName,
         groupName: group ? artifact?.groupName : undefined,
         releaseId: artifact?.releaseId,
         platform: app.osType,
         versionCode: artifact?.versionCode,
         versionName: artifact?.versionName,
         releaseNotes: artifact?.releaseNotes || undefined,
+        installLink: group ? installLink : undefined,
     }
 })

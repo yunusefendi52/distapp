@@ -11,16 +11,19 @@ Here is a curl example to check the latest version of spesific group.
 ```bash
 # Sample Response
 {
-  "name": "Habit Tool - Android",
+  "appName": "Habit Tool - Android",
+  "orgName": "YeDev",
   "groupName": "private",
-  "releaseId": 2,
+  "releaseId": 1,
   "platform": "android",
   "versionCode": "26",
   "versionName": "2.2",
-  "releaseNotes": "Release notes"
+  "installLink": "/install/yedev/apps/habit-tool-android/private?artifactId=019695a0-777b-7a64-9273-c0cd7019ef64"
 }
 ```
 
 Remove the `group` parameter to check the latest version of all releases.
 
 You can get the `Org Id` and `App Id` from `App Info` in `App Settings` page.
+
+Since we can't automatically know the domain, you need to add your self to `installLink` i.e `https://distapp.lhf.my.id/install/yedev/apps/habit-tool-android/private?artifactId=019695a0-777b-7a64-9273-c0cd7019ef64`

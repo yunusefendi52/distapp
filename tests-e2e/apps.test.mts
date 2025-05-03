@@ -132,7 +132,10 @@ test('Apps test', async ({ page, goto, context, request }) => {
                     },
                 })
                 expect(resp.ok()).toBeTruthy()
-                expect(await resp.text()).toContain('"releaseId":3,"platform":"android","versionCode":"2001","versionName":"1.0.0"}')
+                const respJson = JSON.parse(await resp.text())
+                expect(respJson.groupName).toBeFalsy()
+                expect(respJson.releaseId).toEqual(3)
+                expect(respJson.installLink).toBeFalsy()
             })
             await test.step(`User can get the latest app version spesific group`, async () => {
                 const resp = await request.get(`${distappUrl}/api/apps/app-version`, {
@@ -146,6 +149,8 @@ test('Apps test', async ({ page, goto, context, request }) => {
                 const respJson = JSON.parse(await resp.text())
                 expect(respJson.groupName).toEqual(groupName)
                 expect(respJson.releaseId).toEqual(3)
+                expect(respJson.installLink).toBeTruthy()
+                expect(respJson.installLink).toContain('artifactId')
             })
         } else if (osTestType === 'iOS') {
             await test.step(`User can upload artifact ${osTestType} IPA with API keys using CLI`, async () => {
