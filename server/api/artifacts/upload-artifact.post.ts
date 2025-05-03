@@ -99,17 +99,9 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    // Across orgs
-    // TODO: Optimize????
-    const artifactSize = await db.select({
-        sumContentLength: sql<number>`sum(${tables.artifacts.fileContentLength}) + sum(coalesce(${tables.artifacts.fileApkContentLength}, 0))`,
-    }).from(tables.artifacts)
-        .where(and(
-            eq(tables.artifacts.organizationId, orgId),
-        ))
-        .then(takeUniqueOrThrow)
+    const { artifactSize } = await getArtifactSizeByOrg(event, orgId)
     const artifactSizeBytesLimit = artifactSizeLimit * 1024 * 1024
-    const sumAllContentLength = artifactSize.sumContentLength + fileSize + (fileSizeApk || 0)
+    const sumAllContentLength = artifactSize + fileSize + (fileSizeApk || 0)
     if (sumAllContentLength >= artifactSizeBytesLimit) {
         throw createError({
             message: `The number of artifact has reached the limit of ${artifactSizeLimit} mb. ${sumAllContentLength}`,
