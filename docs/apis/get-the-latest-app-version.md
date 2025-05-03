@@ -1,6 +1,6 @@
 # Get the Latest App Version
 
-We provide an API to get the latest version of your app. Since we don't offer an SDK, it's up to you how you implement the version check. We recommend calling this API on a daily or hourly basis.
+We provide an API to get the latest version of your app. Since we don't offer an SDK, it's up to you how you implement the version check. We recommend calling this API on a daily or hourly basis. We may enforce limit this API in the future for certain subscription.
 
 ## Request sample
 
