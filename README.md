@@ -39,12 +39,12 @@ bun run dev
 
 If you find this project helpful and make your job easier, your support through a donation or sponsorship would be sincerely appreciated.
 
-<iframe src="https://github.com/sponsors/yunusefendi52/button" title="Sponsor yunusefendi52" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
+[![Github-sponsors](https://img.shields.io/badge/sponsor-30363D?style=for-the-badge&logo=GitHub-Sponsors&logoColor=#EA4AAA)](https://github.com/sponsors/yunusefendi52)
 
 Contributions via PayPal or Bitcoin are also accepted.
 
 [![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/yunusefendi99)
 
-[![Bitcoin](https://img.shields.io/badge/bitcoin-2F3134?style=for-the-badge&logo=bitcoin)](bitcoin:bc1q6qenpas30wycduw4w0n7ekfhpdp6hhqt0fmxa6)
+[![Bitcoin](https://img.shields.io/badge/bitcoin-2F3134?style=for-the-badge&logo=bitcoin)](https://www.blockchain.com/explorer/addresses/btc/bc1q6qenpas30wycduw4w0n7ekfhpdp6hhqt0fmxa6)
 
 Bitcoin address: bc1q6qenpas30wycduw4w0n7ekfhpdp6hhqt0fmxa6
