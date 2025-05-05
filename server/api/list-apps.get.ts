@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
             )
         },
         orderBy(fields, operators) {
-            return operators.asc(fields.displayName)
+            return sql`${fields.displayName} collate nocase asc`
         },
     })
     return apps
