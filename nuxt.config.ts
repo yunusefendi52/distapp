@@ -104,6 +104,7 @@ export default defineNuxtConfig({
     public: {
       GOOGLE_CLIENT_ID: '',
       LOCAL_AUTH_ENABLED: false,
+      UPLOAD_WITH_BUILD_APK: false,
     },
   },
 

@@ -23,4 +23,7 @@ RUN [ -f ${DISTAPP_BUNDLETOOL_PATH} ] || curl -L -o ${DISTAPP_BUNDLETOOL_PATH} "
 
 COPY --from=builder /builder/.output .
 
+ARG NUXT_PUBLIC_UPLOAD_WITH_BUILD_APK=true
+ENV NUXT_PUBLIC_UPLOAD_WITH_BUILD_APK=${NUXT_PUBLIC_UPLOAD_WITH_BUILD_APK}
+
 ENTRYPOINT [ "bun", "run", "server/index.mjs" ]

@@ -9,14 +9,21 @@
                         <span class="text-sm dark:text-neutral-200">
                             <span class="">You can use CLI to generate APK automatically. </span>
                             <a href="https://github.com/yunusefendi52/distapp?tab=readme-ov-file#cli-usage"
-                                target="_blank">Learn
+                                class="underline" target="_blank">Learn
                                 more.</a>
                             <br>
-                            <span>If you have generated APK, attach it below.</span>
                         </span>
                     </div>
-                    <InputFileUpload v-model="fileApkRef" type="file" accept="application/vnd.android.package-archive"
-                        placeholder="Click to attach APK" />
+                    <div class="flex flex-row items-center gap-2 mt-3">
+                        <Checkbox v-model="generateApk" inputId="generate_apk" binary />
+                        <label class="cursor-pointer text-sm dark:text-neutral-200" for="generate_apk">
+                            Build APK (slower - use CLI for faster builds)
+                        </label>
+                    </div>
+                    <div class="mt-4" v-if="!generateApk">
+                        <InputFileUpload v-model="fileApkRef" type="file"
+                            accept="application/vnd.android.package-archive" placeholder="Click to attach APK" />
+                    </div>
                 </div>
             </div>
             <div class="flex flex-col gap-2">
@@ -112,7 +119,7 @@ const submit = async () => {
     mutateAsync({
         file: realFile,
         // fileApk: realApkFile,
-        fileApk: isFileAab ? (actualApkFile || 'generate_bundle') : undefined,
+        fileApk: isFileAab ? ((generateApk.value ? 'generate_bundle' : undefined) || actualApkFile) : undefined,
     })
 }
 
@@ -134,4 +141,7 @@ const onUpload = async (file: File, fileApk: File | 'generate_bundle' | undefine
         throw e
     }
 }
+
+const { public: { UPLOAD_WITH_BUILD_APK } } = useRuntimeConfig()
+const generateApk = ref(UPLOAD_WITH_BUILD_APK)
 </script>
