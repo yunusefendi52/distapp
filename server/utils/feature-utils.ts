@@ -1,6 +1,6 @@
 export const freeFeatures = [{
     name: 'Artifacts storage',
-    desc: 'Only 512MB',
+    desc: 'Only 50MB',
 }, {
     name: 'Number of apps',
     desc: 'Only 2',
@@ -9,7 +9,7 @@ export const freeFeatures = [{
     desc: 'Only 1',
 }, {
     name: 'Upload size',
-    desc: 'Only 80 mb',
+    desc: 'Only 50 mb',
 }]
 
 export const proFeatures = [{
