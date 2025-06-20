@@ -17,7 +17,8 @@
             <Column field="orgDisplayName" header="Organization Name"></Column>
             <Column header="Size">
                 <template #body="{ data }">
-                    {{ data.storageSize ? formatBytes(data.storageSize) : '-' }}
+                    {{ data.storageSize ? `${formatBytes(data.storageSize)} / ${formatBytes(data.maxTotalSizeMb * 1024 *
+                    1024)}` : '-' }}
                 </template>
             </Column>
         </DataTable>
