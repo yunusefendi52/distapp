@@ -43,7 +43,7 @@ export async function getUserSubFromDb(event: H3Event<EventHandlerRequest>, whic
         .where(and(
             eq(tables.users_subs.userId, userId),
             eq(tables.users_subs.testMode, isTestMode),
-            isNull(tables.users_subs.subs_quantity),
+            // isNull(tables.users_subs.subs_quantity), // Uncomment after all data migrated
             eq(tables.users_subs.status, 'active'),
         ))
         .orderBy(desc(tables.users_subs.createdAt))
