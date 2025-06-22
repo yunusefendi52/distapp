@@ -109,7 +109,7 @@ export default defineNuxtConfig({
   },
 
   nitro: {
-    preset: 'bun',
+    preset: 'cloudflare-pages',
     experimental: {
       openAPI: true,
       tasks: true,
