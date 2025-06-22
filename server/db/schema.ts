@@ -13,6 +13,7 @@ const timeColumns = {
 // Users
 export const users = sqliteTable('users', {
     id: text('id').primaryKey().unique(),
+    idv4: text('idv4').unique(),
     providerUserId: text('providerUserId').unique(),
     name: text('name').notNull(),
     email: text('email').unique(),
@@ -34,7 +35,8 @@ export const users_subs = sqliteTable('users_app_subs', {
         enum: ['basic'],
     }),
     status: text('status', {
-        enum: ['on_trial', 'active', 'paused', 'past_due', 'unpaid', 'cancelled', 'expired',],
+        // enum: ['on_trial', 'active', 'paused', 'past_due', 'unpaid', 'cancelled', 'expired',],
+        enum: ['incomplete', 'incomplete_expired', 'trialing', 'active', 'past_due', 'canceled', 'unpaid',],
     }),
     status_formatted: text('status_formatted'),
     endsAt: integer('ends_at', {

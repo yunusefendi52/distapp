@@ -1,3 +1,4 @@
+import type { EventHandlerRequest, H3Event } from "h3"
 import { findApiKey, type UploadTempValue } from "./upload-artifact.post"
 
 export default defineEventHandler(async (event) => {
@@ -64,13 +65,18 @@ export default defineEventHandler(async (event) => {
         .then(takeUniqueOrThrow) as {
             value: UploadTempValue
         }
-    await db.batch([
-        db.delete(tables.keyValue)
+
+
+    await db.transaction(async tx => {
+
+        await tryReportUsageBill(event, orgId)
+
+        await tx.delete(tables.keyValue)
             .where(or(
                 eq(tables.keyValue.key, uploadId),
                 ...(headlessUploadId ? [eq(tables.keyValue.key, headlessUploadId!)] : []),
-            )),
-        db.insert(tables.artifacts).values({
+            ))
+        await tx.insert(tables.artifacts).values({
             id: artifactsId,
             createdAt: now,
             updatedAt: now,
@@ -87,8 +93,8 @@ export default defineEventHandler(async (event) => {
             filename: filename.substring(0, 32),
             fileContentLength: keyValueTemp.value.fileSize,
             fileApkContentLength: keyValueTemp.value.fileApkSize,
-        }),
-    ])
+        })
+    })
 
     return {
         artifactId: artifactsId,

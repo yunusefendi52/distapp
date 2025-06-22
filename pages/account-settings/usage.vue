@@ -10,15 +10,15 @@
                     <span class="font-medium">Total Storage</span>
                     <span class="font-light text-sm">Current total storage for all organizations you own</span>
                 </div>
-                <span class="text-2xl font-medium">{{ data ? formatBytes(data?.totalStorage) : '-' }}</span>
+                <span class="text-2xl font-medium">{{ data && data?.totalStorage ? formatBytes(data?.totalStorage) : '-'
+                    }}</span>
             </div>
         </AppCard>
         <DataTable :show-gridlines="false" :value="data?.usages || []" class="my-4">
             <Column field="orgDisplayName" header="Organization Name"></Column>
             <Column header="Size">
                 <template #body="{ data }">
-                    {{ data.storageSize ? `${formatBytes(data.storageSize)} / ${formatBytes(data.maxTotalSizeMb * 1024 *
-                    1024)}` : '-' }}
+                    {{ data.storageSize ? `${formatBytes(data.storageSize)}` : '0 GB' }}
                 </template>
             </Column>
         </DataTable>

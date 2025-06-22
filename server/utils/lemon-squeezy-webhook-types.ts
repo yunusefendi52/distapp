@@ -43,11 +43,9 @@ export type SubscriptionAttributes = {
 }
 
 export type FirstSubscriptionItem = {
-    id: number;
     subscription_id: number;
     price_id: number;
     quantity: number;
-    is_usage_based: boolean;
     created_at: string;
     updated_at: string;
 }

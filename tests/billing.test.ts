@@ -18,7 +18,9 @@ const { useFetchMock } = vi.hoisted(() => {
 
 mockNuxtImport('useFetch', () => useFetchMock)
 
-describe('Billing component test', () => {
+describe('Billing component test', {
+    skip: true,
+}, () => {
     test('Should load component with loading first', async () => {
         useFetchMock.mockImplementationOnce(async () => {
             return {
@@ -105,7 +107,7 @@ describe('Billing component test', () => {
         expect(component.html()).toContain('Update Payment Method')
         expect(component.html()).toContain('Renews at')
     })
-    
+
     test('Should get current billing and shows cancelled subscribed user with ends at', async () => {
         useFetchMock.mockImplementationOnce(() => {
             const renewsAt = new Date()

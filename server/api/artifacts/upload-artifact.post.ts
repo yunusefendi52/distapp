@@ -92,22 +92,24 @@ export default defineEventHandler(async (event) => {
         createdBy = userId
     }
 
-    const { uploadLimitSize, artifactSizeLimit } = await getUserFeature(event, orgId)
+    const { isSubsActive, uploadLimitSize, artifactSizeLimit } = await getUserFeature(event, orgId)
     if (fileSize >= uploadLimitSize || (hasFileApk && fileSizeApk ? fileSizeApk >= uploadLimitSize : false)) {
         throw createError({
             message: `Maximum file size is ${uploadLimitSize} bytes`,
         })
     }
 
-    const { artifactSize } = await getArtifactSizeByOrg(event, orgId)
-    const artifactSizeBytesLimit = artifactSizeLimit * 1024 * 1024
-    const sumAllContentLength = artifactSize + fileSize + (fileSizeApk || 0)
-    if (sumAllContentLength >= artifactSizeBytesLimit) {
-        throw createError({
-            message: `The number of artifact has reached the limit of ${artifactSizeLimit} mb. ${sumAllContentLength}`,
-            statusCode: 400,
-        })
-    }
+    if (!isSubsActive) {
+        const { artifactSize } = await getArtifactSizeByOrg(event, orgId)
+        const artifactSizeBytesLimit = artifactSizeLimit * 1024 * 1024
+        const sumAllContentLength = artifactSize + fileSize + (fileSizeApk || 0)
+        if (sumAllContentLength >= artifactSizeBytesLimit) {
+            throw createError({
+                message: `The number of artifact has reached the limit of ${artifactSizeLimit} mb. ${sumAllContentLength}`,
+                statusCode: 400,
+            })
+        }
+    } // Otherwise usage-based billing
 
     // Always limit file size when user upload directly
     const { fileKey, signedUrl } = await generateSignedUrlUpload(orgId, appId, fileSize)

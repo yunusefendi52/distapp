@@ -109,7 +109,7 @@ export default defineNuxtConfig({
   },
 
   nitro: {
-    preset: 'cloudflare-pages',
+    preset: 'bun',
     experimental: {
       openAPI: true,
       tasks: true,
@@ -206,7 +206,7 @@ export default defineNuxtConfig({
     '@primevue/nuxt-module',
     'nuxt-svgo-loader',
     "@nuxtjs/google-fonts",
-    '@nuxt/test-utils/module'
+    '@nuxt/test-utils/module',
   ],
 
   primevue: {

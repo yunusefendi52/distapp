@@ -1,6 +1,7 @@
 import type { EventHandlerRequest, H3Event } from "h3"
 import { verifyWebhookRequest } from "./verifyWebhookRequest"
 import { defineEventHandler } from 'h3'
+import type { LibSQLDatabase } from "drizzle-orm/libsql"
 
 export type SubsStatusType = typeof tables.users_subs.status.enumValues[number]
 
@@ -43,7 +44,7 @@ export default defineEventHandler(async event => {
             const webhookName = webhookEvent.meta.event_name
             const webhookId = webhookEvent.meta.webhook_id
             await syncUserSubscription(
-                event,
+                event.context.drizzle,
                 userId,
                 pUserId,
                 subscriptionId,
@@ -64,7 +65,7 @@ export default defineEventHandler(async event => {
 
 /// Be care full using this, make sure ends_at not null otherwise it will be replaced to null in db
 export async function syncUserSubscription(
-    event: H3Event<EventHandlerRequest>,
+    db: LibSQLDatabase<typeof tables>,
     userId: string,
     pUserId: string,
     subscriptionId: string,
@@ -73,17 +74,14 @@ export async function syncUserSubscription(
     webhookEventName?: string) {
     const variantId = attributes.variant_id?.toString() || undefined
 
-    const db = event.context.drizzle
-
-    const subsStatus: typeof tables.users_subs.status.enumValues[number] | undefined
-        = tables.users_subs.status.enumValues.find(e => e as string === attributes.status)
+    const subsStatus = tables.users_subs.status.enumValues.find(e => e as string === attributes.status)
     if (!subsStatus) {
         throw createError({
             message: `Invalid subs status app ${attributes.status}`,
         })
     }
 
-    const updatedAt = new Date(attributes.updated_at)
+    const updatedAt = attributes.updated_at ? new Date(attributes.updated_at) : undefined
     // Be careful about null, set to null if you want NULL
     const newSub: NewSubscription = {
         currentPlan: 'basic',

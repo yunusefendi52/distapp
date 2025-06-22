@@ -11,7 +11,10 @@
     <div class="mt-5 flex flex-col gap-5 flex-1">
         <div class="flex flex-row gap-1" v-for="v in features">
             <span class="flex-1 font-semibold text-lg">{{ v.name }}</span>
-            <span class="font-semibold text-lg">{{ v.desc }}</span>
+            <div class="flex flex-col text-end">
+                <span class="font-semibold text-lg">{{ v.desc }}</span>
+                <span v-if="v.desc2" class="text-sm">{{ v.desc2 }}</span>
+            </div>
         </div>
     </div>
 </template>
@@ -22,7 +25,8 @@ defineProps<{
     price: string,
     features: {
         name: string,
-        desc: string
+        desc: string,
+        desc2?: string,
     }[],
 }>()
 </script>

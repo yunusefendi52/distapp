@@ -1,4 +1,4 @@
-import type { EventHandler, EventHandlerRequest, H3Event } from "h3"
+import type { EventHandlerRequest, H3Event } from "h3"
 
 export const getCurrentUserRole = async (
     event: H3Event<EventHandlerRequest>,
@@ -34,13 +34,13 @@ export const roleEditNotAllowed = async (
 export async function getUserSubFromDb(event: H3Event<EventHandlerRequest>, whichUserId?: string | undefined) {
     const db = event.context.drizzle
     const userId = whichUserId || event.context.auth.userId
-    const isTestMode = getLsTestMode()
+    const isTestMode = getPolarTestMode()
     return await db.select()
         .from(tables.users_subs)
         .where(and(
             eq(tables.users_subs.userId, userId),
             eq(tables.users_subs.testMode, isTestMode),
-            ne(tables.users_subs.status, 'expired'),
+            eq(tables.users_subs.status, 'active'),
         ))
         .orderBy(desc(tables.users_subs.createdAt))
         .limit(1)
@@ -75,6 +75,7 @@ export async function getUserFeature(event: H3Event<EventHandlerRequest>, orgId:
     const ownerUserSubs = await getOwnerUserSub(event, orgId)
     const isSubsActive = checkIfSubsActive(event, ownerUserSubs)
     return {
+        isSubsActive,
         appLimit: isSubsActive ? APP_LIMIT_PRO_APPS : APP_LIMIT_APPS,
         appGroupLimit: isSubsActive ? APP_LIMIT_PRO_APPS_GROUP : APP_LIMIT_APPS_GROUP,
         inviteOrgLimit: isSubsActive ? APP_LIMIT_PRO_INVITE_ORGS : APP_LIMIT_INVITE_ORGS,
@@ -104,7 +105,7 @@ export function checkIfSubsActive(event: H3Event<EventHandlerRequest>, ownerUser
     } = useRuntimeConfig(event)
     const isExpired = ownerUserSubs && ownerUserSubs.endsAt
         ? checkIsExpire(APP_GRACE_PERIOD_HOUR, ownerUserSubs.endsAt)
-        : ownerUserSubs?.status === 'expired'
+        : ownerUserSubs?.status === 'canceled'
     const isPro = ownerUserSubs?.product_name === 'DistApp Pro'
     const isSubsActive = !isExpired && isPro
     return isSubsActive
