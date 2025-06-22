@@ -23,7 +23,7 @@ export default defineEventHandler(async event => {
             .from(tables.users)
             .where(eq(tables.users.id, event.context.auth.userId))
             .then(takeUniqueOrThrow)
-        await syncUserSubscription(event, user.id, user.providerUserId!, userSubLms.id, {
+        await syncUserSubscription(event.context.drizzle, user.id, user.providerUserId!, userSubLms.id, {
             card_brand: subAttrs.card_brand || undefined,
             created_at: subAttrs.created_at,
             customer_id: subAttrs.customer_id,

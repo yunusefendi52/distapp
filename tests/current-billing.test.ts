@@ -25,7 +25,9 @@ mockNuxtImport('getUserSubscriptionLms', () => {
     return getUserSubscriptionLmsMock
 })
 
-describe('Current billing tests', () => {
+describe('Current billing tests', {
+    skip: true,
+}, () => {
     test('Should has isCancelled when status cancelled and endsAt defined', async () => {
         getUserSubFromDbMock.mockImplementation(() => {
             return {

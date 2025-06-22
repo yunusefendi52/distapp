@@ -34,6 +34,7 @@ export default defineEventHandler(async (event) => {
                 eq(tables.artifacts.appsId, app.id),
             ))
     })
+
     return {
         deleted: new Date(),
     }

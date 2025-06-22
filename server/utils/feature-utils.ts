@@ -15,6 +15,7 @@ export const freeFeatures = [{
 export const proFeatures = [{
     name: 'Artifacts storage',
     desc: '5GB',
+    desc2: 'Then extra $0.02 /GB (round up)'
 }, {
     name: 'Number of apps',
     desc: 'Up To 100',

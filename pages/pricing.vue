@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="w-full md:max-w-4xl m-auto p-5">
+        <div class="w-full md:max-w-5xl m-auto p-5">
             <h1 class="text-5xl font-medium">Pricing</h1>
             <div class="mt-5">
                 <div class="flex max-w-full flex-col lg:max-w-5xl mx-auto my-10 gap-5">
