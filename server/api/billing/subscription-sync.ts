@@ -120,7 +120,7 @@ export async function syncUserSubscription(
 
 
 export type SubscriptionSyncData = {
-    customer_id: number;
+    customer_id: number | string;
     product_id: number;
     variant_id: number;
     product_name: string;

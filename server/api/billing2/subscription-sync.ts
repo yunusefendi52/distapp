@@ -17,13 +17,13 @@ export default defineEventHandler((event) => {
                     payload.data.id, {
                     card_brand: '-',
                     created_at: payload.data.createdAt.toISOString(),
-                    customer_id: 0,
+                    customer_id: payload.data.customerId,
                     ends_at: payload.data.endsAt?.toISOString() || null,
                     first_subscription_item: {
                         created_at: payload.data.createdAt.toISOString(),
                         updated_at: payload.data.modifiedAt?.toISOString() || '',
                         price_id: 0,
-                        quantity: 0,
+                        quantity: 0, // Do not set this to other value, we use this null in db to detect user active subs from db
                         subscription_id: 0,
                     },
                     product_id: 0,

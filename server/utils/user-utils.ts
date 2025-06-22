@@ -1,3 +1,4 @@
+import { isNull } from "drizzle-orm"
 import type { EventHandlerRequest, H3Event } from "h3"
 
 export const getCurrentUserRole = async (
@@ -32,6 +33,8 @@ export const roleEditNotAllowed = async (
 }
 
 export async function getUserSubFromDb(event: H3Event<EventHandlerRequest>, whichUserId?: string | undefined) {
+    // TODO: use getActiveSubs (using polar (?)) after all migrated
+    // the idea is to use single source instead of polar vs webhook (db)
     const db = event.context.drizzle
     const userId = whichUserId || event.context.auth.userId
     const isTestMode = getPolarTestMode()
@@ -40,6 +43,7 @@ export async function getUserSubFromDb(event: H3Event<EventHandlerRequest>, whic
         .where(and(
             eq(tables.users_subs.userId, userId),
             eq(tables.users_subs.testMode, isTestMode),
+            isNull(tables.users_subs.subs_quantity),
             eq(tables.users_subs.status, 'active'),
         ))
         .orderBy(desc(tables.users_subs.createdAt))
