@@ -7,6 +7,7 @@
         "@lemonsqueezy/lemonsqueezy.js": "^4.0.0",
         "@libsql/client": "^0.14.0",
         "@plist/parse": "^1.1.0",
+        "@polar-sh/adapter-utils": "^0.2.0",
         "@polar-sh/sdk": "^0.34.2",
         "@primevue/nuxt-module": "4.0.2",
         "@primevue/themes": "4.0.2",
@@ -395,6 +396,8 @@
     "@plist/parse": ["@plist/parse@1.1.0", "", { "dependencies": { "@plist/binary.parse": "^1.1.0", "@plist/common": "^1.1.0", "@plist/openstep.parse": "^1.1.0", "@plist/xml.parse": "^1.1.0" } }, "sha512-s/8zU3ryJCJGLjd0KWZYaM07+05Y5V4JmPM7F5I1o53a5qXh0iaZ7n1nyxZ/viXgN6Qrk7OxtY5mYoRwjvuhbQ=="],
 
     "@plist/xml.parse": ["@plist/xml.parse@1.1.0", "", { "dependencies": { "@plist/common": "^1.1.0", "base64-js": "^1.5.1", "fast-xml-parser": "^4.0.8" } }, "sha512-g3FIK0LjizCi4lIDjtvJY6rQxGQHBlcZP56K3jGHkD2plmNYn9hs1rhtigDbyBfCmIQhqLNWtl3e2JJiL9h3Vw=="],
+
+    "@polar-sh/adapter-utils": ["@polar-sh/adapter-utils@0.2.0", "", { "dependencies": { "@polar-sh/sdk": "^0.32.11" } }, "sha512-dSP4E8BgHyaGevYAaTRlNW8rJjR91GXP7InV2+WZ2je2+Oq8PJKo7sLWbpkkJp9zmRx1I88f76rk0XmCY8Aivg=="],
 
     "@polar-sh/sdk": ["@polar-sh/sdk@0.34.2", "", { "dependencies": { "standardwebhooks": "^1.0.0" }, "peerDependencies": { "@modelcontextprotocol/sdk": ">=1.5.0 <1.10.0", "zod": ">= 3" }, "optionalPeers": ["@modelcontextprotocol/sdk"], "bin": { "mcp": "bin/mcp-server.js" } }, "sha512-NGd6ufpf1jY8SihVyf31NUzQlwHwrs4kmItEMbluO5rnbA6vruhQMx/wiHjS1jHmKqOB5qU5KZgOgn95Rttysw=="],
 
@@ -2053,6 +2056,8 @@
     "@nuxt/vite-builder/escape-string-regexp": ["escape-string-regexp@5.0.0", "", {}, "sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw=="],
 
     "@nuxtjs/google-fonts/pathe": ["pathe@1.1.2", "", {}, "sha512-whLdWMYL2TwI08hn8/ZqAbrVemu0LNaNNJZX73O6qaIdCTfXutsLhMkjdENX0qhsQ9uIimo4/aQOmXkoon2nDQ=="],
+
+    "@polar-sh/adapter-utils/@polar-sh/sdk": ["@polar-sh/sdk@0.32.16", "", { "dependencies": { "standardwebhooks": "^1.0.0" }, "peerDependencies": { "@modelcontextprotocol/sdk": ">=1.5.0 <1.10.0", "zod": ">= 3" }, "optionalPeers": ["@modelcontextprotocol/sdk"], "bin": { "mcp": "bin/mcp-server.js" } }, "sha512-s+FvSJieNv9KcXGFNSbVzXpTY/hW8oYk8soa3Ow7NgWw/dY+pJ1py+qv+hNwxIuEmlHlpBIBHJVYQqPI9lLzCA=="],
 
     "@primevue/nuxt-module/pathe": ["pathe@1.1.2", "", {}, "sha512-whLdWMYL2TwI08hn8/ZqAbrVemu0LNaNNJZX73O6qaIdCTfXutsLhMkjdENX0qhsQ9uIimo4/aQOmXkoon2nDQ=="],
 

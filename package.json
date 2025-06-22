@@ -30,6 +30,7 @@
     "@lemonsqueezy/lemonsqueezy.js": "^4.0.0",
     "@libsql/client": "^0.14.0",
     "@plist/parse": "^1.1.0",
+    "@polar-sh/adapter-utils": "^0.2.0",
     "@polar-sh/sdk": "^0.34.2",
     "@primevue/nuxt-module": "4.0.2",
     "@primevue/themes": "4.0.2",
