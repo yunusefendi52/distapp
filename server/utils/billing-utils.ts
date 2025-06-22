@@ -44,7 +44,6 @@ export async function tryReportUsageBill(event: H3Event<EventHandlerRequest>, or
     // TODO: remove after migrated to new billing
     const customers = await polar.customers.list({
         limit: 1,
-        email: orgOwner.email!,
         metadata: {
             userId: orgOwner.id!,
         },
