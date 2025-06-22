@@ -23,6 +23,6 @@ export function getPolarEnv() {
         accessToken: process.env.NUXT_POLAR_ACCESS_TOKEN_PROD!,
         productId: process.env.NUXT_POLAR_PRODUCT_ID_PROD!,
         webhookSecretKey: process.env.NUXT_POLAR_WEBHOOK_SECRET_KEY_PROD!,
-        discountId: process.env.NUXT_POLAR_DISCOUNT_ID_TEST,
+        discountId: process.env.NUXT_POLAR_DISCOUNT_ID_PROD,
     }
 }
