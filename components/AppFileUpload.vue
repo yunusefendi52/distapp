@@ -29,11 +29,11 @@
             <div class="flex flex-row gap-2" v-if="osType === 'desktop'">
                 <div class="flex-1 flex flex-col gap-2">
                     <label for="versionname">Version Name</label>
-                    <InputText id="versionname" fluid v-model="versionName" placeholder="e.g 1.0.0" />
+                    <InputText id="versionname" data-testid="i_versionname" fluid v-model="versionName" placeholder="e.g 1.0.0" />
                 </div>
                 <div class="flex-1 flex flex-col gap-2">
                     <label for="versioncode">Version Code</label>
-                    <InputText id="versioncode" fluid v-model="versionCode" placeholder="e.g 1" />
+                    <InputText id="versioncode" data-testid="i_versioncode" fluid v-model="versionCode" placeholder="e.g 1" />
                 </div>
             </div>
             <div class="flex flex-col gap-2">
