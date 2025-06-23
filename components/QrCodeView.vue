@@ -14,7 +14,7 @@ onMounted(() => {
             type: 'svg',
             data: props.code,
             image: "",
-            margin: 10,
+            margin: 0,
             dotsOptions: {
                 type: 'classy',
             },
@@ -33,7 +33,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="flex items-center justify-center">
+    <div class="flex items-center justify-center bg-white py-1 px-4">
         <div ref="divQr"></div>
     </div>
 </template>
