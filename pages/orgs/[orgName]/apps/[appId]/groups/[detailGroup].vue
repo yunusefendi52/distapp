@@ -67,7 +67,6 @@
         </form>
     </Drawer>
     <Dialog v-model:visible="showQrLink" modal header="QR Link" style="width: 22rem;">
-        <!-- <span class="text-surface-500 dark:text-surface-400 block mb-8">Update your information.</span> -->
         <div class="px-4 pb-2 flex flex-col gap-4">
             <span class="text-center">Scan the following QR in your device to open the link</span>
             <QrCodeView :code="publicLink" />
