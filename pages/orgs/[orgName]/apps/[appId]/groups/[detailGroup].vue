@@ -23,6 +23,7 @@
                             publicLink
                         }}</a> </span>
             </div>
+            <Button icon="pi pi-qrcode" @click="() => showQrLink = true" />
             <Button icon="pi pi-user" @click="() => showManageApptester = true" />
             <Button icon="pi pi-pencil" @click="() => groupSettings = true" />
             <!-- <Button icon="pi pi-refresh" label="Regenerate Link" @click="regenerateLink" /> -->
@@ -63,9 +64,18 @@
             </div>
         </form>
     </Drawer>
+    <Dialog v-model:visible="showQrLink" modal header="QR Link" style="width: 22rem;">
+        <!-- <span class="text-surface-500 dark:text-surface-400 block mb-8">Update your information.</span> -->
+        <div class="px-4 pb-2 flex flex-col gap-4">
+            <span class="text-center">Scan the following QR in your device to open the link</span>
+            <QrCodeView :code="publicLink" />
+            <Button icon="pi pi-copy" text label="Copy Link" @click="() => copyLink(publicLink)" />
+        </div>
+    </Dialog>
 </template>
 
 <script setup lang="ts">
+const showQrLink = ref(false)
 const route = useRoute()
 const params = route.params
 const appName = params.appId as string
@@ -191,4 +201,8 @@ const { mutate: mutateArtifactGroupData, isPending: updateArtifactGroupDataIsPen
 })
 
 const title = useTitleApp(computed(() => `${detailApp.data.value?.displayName} • Groups` || '-'))
+
+const copyLink = (value: string) => {
+    navigator.clipboard.writeText(value);
+}
 </script>

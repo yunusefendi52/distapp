@@ -28,6 +28,7 @@
         "pg": "^8.11.3",
         "primeicons": "^7.0.0",
         "primevue": "4.0.2",
+        "qr-code-styling": "^1.9.2",
         "simple-xml-to-json": "^1.2.3",
         "slugify": "^1.6.6",
         "uuidv7": "^1.0.1",
@@ -1600,6 +1601,10 @@
     "protocols": ["protocols@2.0.1", "", {}, "sha512-/XJ368cyBJ7fzLMwLKv1e4vLxOju2MNAIokcr7meSaNcVbWz/CPcW22cP04mwxOErdA5mwjA8Q6w/cdAQxVn7Q=="],
 
     "punycode": ["punycode@2.3.1", "", {}, "sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg=="],
+
+    "qr-code-styling": ["qr-code-styling@1.9.2", "", { "dependencies": { "qrcode-generator": "^1.4.4" } }, "sha512-RgJaZJ1/RrXJ6N0j7a+pdw3zMBmzZU4VN2dtAZf8ZggCfRB5stEQ3IoDNGaNhYY3nnZKYlYSLl5YkfWN5dPutg=="],
+
+    "qrcode-generator": ["qrcode-generator@1.5.0", "", {}, "sha512-sqo7otiDq5rA4djRkFI7IjLQqxRrLpIou0d3rqr03JJLUGf5raPh91xCio+lFFbQf0SlcVckStz0EmDEX3EeZA=="],
 
     "queue-microtask": ["queue-microtask@1.2.3", "", {}, "sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A=="],
 
