@@ -23,9 +23,11 @@
                             publicLink
                         }}</a> </span>
             </div>
-            <Button icon="pi pi-qrcode" @click="() => showQrLink = true" />
-            <Button icon="pi pi-user" @click="() => showManageApptester = true" />
-            <Button icon="pi pi-pencil" @click="() => groupSettings = true" />
+            <div class="flex flex-row gap-2">
+                <Button icon="pi pi-qrcode" @click="() => showQrLink = true" />
+                <Button icon="pi pi-user" @click="() => showManageApptester = true" />
+                <Button icon="pi pi-pencil" @click="() => groupSettings = true" />
+            </div>
             <!-- <Button icon="pi pi-refresh" label="Regenerate Link" @click="regenerateLink" /> -->
         </div>
     </div>
