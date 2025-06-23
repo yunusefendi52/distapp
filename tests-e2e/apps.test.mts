@@ -122,7 +122,14 @@ test('Apps test', async ({ page, goto, context, request }) => {
                 distribute \\
                 --file "tests/tests_artifacts/release.zip" \\
                 --slug "${appSlug}" \\
-                --api-key "${appApiKey}"`)).rejects.toThrow(/Cannot read package file/)
+                --api-key "${appApiKey}"`)).rejects.toThrow(/Version Name and Version Code are required/)
+                await expect(exec(`${cliCommand} \\
+                distribute \\
+                --file "tests/tests_artifacts/release.zip" \\
+                --slug "${appSlug}" \\
+                --api-key "${appApiKey}" \\
+                --version-code 1 \\
+                --version-name 1`)).rejects.toThrow(/You cannot set version in your platform type/)
             })
             await test.step(`User can get the latest app version`, async () => {
                 const resp = await request.get(`${distappUrl}/api/apps/app-version`, {
@@ -167,7 +174,14 @@ test('Apps test', async ({ page, goto, context, request }) => {
                     distribute \\
                     --file "tests/tests_artifacts/release.zip" \\
                     --slug "${appSlug}" \\
-                    --api-key "${appApiKey}"`)).rejects.toThrow(/Cannot read package file/)
+                    --api-key "${appApiKey}"`)).rejects.toThrow(/Version Name and Version Code are required/)
+                await expect(exec(`${cliCommand} \\
+                    distribute \\
+                    --file "tests/tests_artifacts/release.zip" \\
+                    --slug "${appSlug}" \\
+                    --api-key "${appApiKey}" \\
+                    --version-code 1 \\
+                    --version-name 1`)).rejects.toThrow(/You cannot set version in your platform type/)
             })
         }
 
