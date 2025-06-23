@@ -1,6 +1,6 @@
 {
     "name": "distapp",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Manage and distribute Android, iOS and Desktop app",
     "main": "cli.mjs",
     "bin": {
