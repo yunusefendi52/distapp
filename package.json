@@ -51,6 +51,7 @@
     "pg": "^8.11.3",
     "primeicons": "^7.0.0",
     "primevue": "4.0.2",
+    "qr-code-styling": "^1.9.2",
     "simple-xml-to-json": "^1.2.3",
     "slugify": "^1.6.6",
     "uuidv7": "^1.0.1",
