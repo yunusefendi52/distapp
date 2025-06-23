@@ -3,7 +3,7 @@
         <div class="flex flex-col lg:flex-row gap-10">
             <div class="flex flex-col gap-3 justify-center items-start flex-1">
                 <span class="text-4xl font-medium">DistApp</span>
-                <span class="text-lg font-light">Manage and distribute your Android or iOS app.
+                <span class="text-lg font-light">Manage and distribute Android, iOS and Desktop app.
                     Useful for tester or self distribution.
                     Alternative App Center Distribution.</span>
                 <div class="flex flex-row flex-wrap gap-3 mt-3">
@@ -35,20 +35,20 @@
             </div>
         </div>
         <div class="flex flex-col gap-6 sm:grid sm:grid-cols-3">
-            <AppCard class="h-full">
+            <AppCard class="h-full" :apply-shadow="true">
                 <article class="px-2">
                     <h2 class="font-bold text-lg mb-1">Self Hosted</h2>
                     <p class="font-light">You can self host in your own infrastructure</p>
                 </article>
             </AppCard>
-            <AppCard class="h-full">
+            <AppCard class="h-full" :apply-shadow="true">
                 <article class="px-2">
                     <h2 class="font-bold text-lg mb-1">Manage your apps</h2>
-                    <p class="font-light">Manage all of your apps in one place. Supports Android and iOS. More coming
+                    <p class="font-light">Manage all of your apps in one place. Supports Android, iOS and Desktop.
                     </p>
                 </article>
             </AppCard>
-            <AppCard class="h-full">
+            <AppCard class="h-full" :apply-shadow="true">
                 <article class="px-2">
                     <h2 class="font-bold text-lg mb-2">Group and organization</h2>
                     <p class="font-light">Create seperate group or organization for your apps</p>
@@ -86,7 +86,7 @@ definePageMeta({
     layout: 'content-layout',
 })
 
-const title = 'DistApp • Manage and distribute Android or iOS app'
+const title = 'DistApp • Manage and distribute Android, iOS and Desktop app'
 useHead({
     title: title,
 })

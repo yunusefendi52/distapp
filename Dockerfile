@@ -27,7 +27,7 @@ ARG NUXT_PUBLIC_UPLOAD_WITH_BUILD_APK=true
 ENV NUXT_PUBLIC_UPLOAD_WITH_BUILD_APK=${NUXT_PUBLIC_UPLOAD_WITH_BUILD_APK}
 
 LABEL org.opencontainers.image.title="DistApp"
-LABEL org.opencontainers.image.description="Manage and distribute Android or iOS app"
+LABEL org.opencontainers.image.description="Manage and distribute Android, iOS and Desktop app"
 LABEL org.opencontainers.image.authors="Yunus"
 LABEL org.opencontainers.image.url="https://distapp.lhf.my.id"
 LABEL org.opencontainers.image.source="https://github.com/yunusefendi52/distapp"

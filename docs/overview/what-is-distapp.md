@@ -1,6 +1,6 @@
 # What is DistApp
 
-Manage and distribute your Android or iOS app. Useful for tester or self distribution. Alternative App Center Distribution.
+Manage and distribute your Android, iOS and Desktop app. Useful for tester or self distribution. Alternative App Center Distribution.
 
 ## Use Cases
 
