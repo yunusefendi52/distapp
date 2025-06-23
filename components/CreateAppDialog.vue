@@ -11,6 +11,10 @@ const listOs = [
         label: 'iOS',
         value: 'ios',
     },
+    {
+        label: 'Desktop',
+        value: 'desktop',
+    },
 ]
 
 const selectedOrg = ref<typeof orgs.value[0]>()

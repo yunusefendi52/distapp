@@ -10,7 +10,7 @@ export function normalizeError(error: FetchContext | FetchError): string {
         }
     }
     const message: string = error.response?._data?.message || error.response?.statusText || getFetchError()?.data?.message || getFetchError() || 'Unexpected happen'
-    if (message.includes(`undefined (reading 'userId')`)) {
+    if (typeof message === 'string' && message.includes(`undefined (reading 'userId')`)) {
         return 'Unauthorized. Try login again'
     }
     return message

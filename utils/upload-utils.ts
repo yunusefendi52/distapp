@@ -27,7 +27,7 @@ export type UploadArtifactResponse = {
     apkUrl: {
         apkSignedUrl: string,
         apkFileKey: string,
-    } | undefined
+    } | undefined,
 }
 
 function getSizeFromFile(
@@ -51,10 +51,28 @@ export async function uploadArtifact(
     appName: string,
     releaseNotes: string | null,
     fileApk: File | Buffer | 'generate_bundle' | undefined,
+    versionMetadata: {
+        versionName: string,
+        versionCode: string,
+    } | undefined,
 ) {
-    const packageMetadata = await readPackageFile(file)
+    // This will be validated in upload-artifact endpoint
+    const isZipPlatform = filename.endsWith('.zip') ? true : false
+    filename = filename.substring(0, filename.lastIndexOf('.'))
+    const packageMetadata = await readPackageFile(file, isZipPlatform)
     if (!packageMetadata) {
         throw 'Cannot read package file'
+    }
+    // Handle generic zip and packageName is null from readPackageFile
+    // Package name and version will needs to be supplied by user
+    if (!packageMetadata.packageName) {
+        if (!versionMetadata?.versionName || !versionMetadata.versionCode) {
+            throw 'Version Name and Version Code are required.'
+        }
+
+        packageMetadata.packageName = appName
+        packageMetadata.versionCode = versionMetadata.versionCode
+        packageMetadata.versionName = versionMetadata.versionName
     }
     const fileSize = getSizeFromFile(file)
     const fileSizeApk = getSizeFromFile(fileApk)
@@ -67,6 +85,7 @@ export async function uploadArtifact(
             filename: filename,
             fileSize,
             fileSizeApk,
+            isZipPlatform,
         },
         onResponseError(r) {
             console.error('Error ', normalizeError(r))

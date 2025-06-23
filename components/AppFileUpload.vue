@@ -26,6 +26,16 @@
                     </div>
                 </div>
             </div>
+            <div class="flex flex-row gap-2" v-if="osType === 'desktop'">
+                <div class="flex-1 flex flex-col gap-2">
+                    <label for="versionname">Version Name</label>
+                    <InputText id="versionname" fluid v-model="versionName" placeholder="e.g 1.0.0" />
+                </div>
+                <div class="flex-1 flex flex-col gap-2">
+                    <label for="versioncode">Version Code</label>
+                    <InputText id="versioncode" fluid v-model="versionCode" placeholder="e.g 1" />
+                </div>
+            </div>
             <div class="flex flex-col gap-2">
                 <label for="releasenotes">Release Notes</label>
                 <Textarea rows="4" id="releasenotes" v-model="releaseNotes" aria-describedby="releasenotes-help" />
@@ -51,6 +61,8 @@ const props = defineProps<{
 const emit = defineEmits(['onSuccess'])
 
 const releaseNotes = ref<string | null>(null)
+const versionName = ref<string | undefined>(undefined)
+const versionCode = ref<string | undefined>(undefined)
 const osType = computed<OsType | null>(() => props.dataProps!.osType)
 const orgName = computed(() => props.dataProps!.orgName)
 const appName = computed(() => props.dataProps!.appName)
@@ -127,7 +139,11 @@ const toast = useToast()
 
 const onUpload = async (file: File, fileApk: File | 'generate_bundle' | undefined) => {
     try {
-        const data = await uploadArtifact(file, file.name.substring(0, file.name.lastIndexOf('.')), orgName.value, appName.value, releaseNotes.value, fileApk)
+        const data = await uploadArtifact(file, file.name, orgName.value, appName.value, releaseNotes.value, fileApk,
+            versionName.value && versionCode.value ? {
+                versionName: versionName.value,
+                versionCode: versionCode.value,
+            } : undefined)
         return {
             artifactId: data!.artifactId,
         }

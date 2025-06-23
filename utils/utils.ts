@@ -1,10 +1,32 @@
 import * as jose from 'jose'
 
 export const getAllowedExtsFromOstype = (osType?: OsType): string => {
-    return osType == 'android' ? '.apk,.aab' : '.ipa'
+    if (osType === 'android') return '.apk,.aab'
+    else if (osType === 'ios') return '.ipa'
+    else if (osType === 'desktop') return '.zip'
+    return ''
 }
 
-export type OsType = 'android' | 'ios'
+export type OsType = 'android' | 'ios' | 'desktop'
+
+export async function isZipFile(file: File | Buffer): Promise<boolean> {
+    const ZIP_SIGNATURE = [0x50, 0x4B, 0x03, 0x04]; // "PK\x03\x04"
+
+    let header: Uint8Array;
+
+    if (file instanceof File) {
+        if (file.size < 4) return false;
+        const buffer = await file.slice(0, 4).arrayBuffer();
+        header = new Uint8Array(buffer);
+    } else if (Buffer.isBuffer(file)) {
+        if (file.length < 4) return false;
+        header = new Uint8Array(file.slice(0, 4));
+    } else {
+        throw new TypeError("Unsupported file type");
+    }
+
+    return ZIP_SIGNATURE.every((byte, i) => header[i] === byte);
+}
 
 export function formatBytes(bytes: number | null | undefined, decimals = 2, isBinary = false) {
     if (!bytes) {

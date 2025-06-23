@@ -1,8 +1,24 @@
 import { parse } from "@plist/parse"
 import JSZip from "jszip"
 import { myFetch } from './upload-utils.js'
+import { isZipFile } from './utils'
 
-export const readPackageFile = async (data: File | Buffer | ArrayBuffer | string | Blob) => {
+export const readPackageFile = async (data: File | Buffer, izZipPlatform: boolean): Promise<PackageDetail | undefined> => {
+    if (izZipPlatform) {
+        const isActuallyZipFile = await isZipFile(data)
+        if (!isActuallyZipFile) {
+            throw 'The file is not a zip file'
+        }
+
+        // Will be handled after reading package file
+        return {
+            extension: 'zip',
+            versionCode: '',
+            versionName: '',
+            packageName: '',
+        }
+    }
+
     var fileZip = new JSZip();
     await fileZip.loadAsync(data)
     var extension = ''
@@ -63,6 +79,7 @@ export const readPackageFile = async (data: File | Buffer | ArrayBuffer | string
             packageName: packageName!,
         }
     }
+
     if (!packageMetadata) {
         return undefined
     }
@@ -74,4 +91,11 @@ export const readPackageFile = async (data: File | Buffer | ArrayBuffer | string
         packageName: packageMetadata.packageName,
     }
     return packageDetail
+}
+
+type PackageDetail = {
+    versionName: string;
+    versionCode: string;
+    extension: string;
+    packageName: string;
 }
