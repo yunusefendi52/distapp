@@ -22,12 +22,14 @@ export const distribute = new Command('distribute')
     .option('--release-notes <string>')
     .option('--url <url>')
     .option('--group <string...>')
+    .option('--version-name <string>', 'Version name of your desktop app (e.g v1.0.0)')
+    .option('--version-code <string>', 'Version code of your desktop app (e.g 1)')
     .action(async (options) => {
         const optUrl = options.url || process.env.DISTAPP_CLI_URL || 'https://distapp.lhf.my.id'
         updateMyFetch(options.apiKey, optUrl)
         const { orgName, appName } = slugToOrgApp(options.slug!)
         const filePath = resolve(options.file!)
-        const filename = basename(filePath, extname(filePath))
+        const filename = basename(filePath)
         const file = await promises.readFile(filePath)
         console.log("Distributing", {
             filePath,
@@ -42,7 +44,11 @@ export const distribute = new Command('distribute')
                 disposeBundle = dispose
             }
             const bundleApkFile = bundleApkPath ? await promises.readFile(bundleApkPath) : undefined
-            const { artifactId } = await uploadArtifact(file, filename, orgName, appName, options.releaseNotes ? options.releaseNotes : null, bundleApkFile)
+            const { artifactId } = await uploadArtifact(file, filename, orgName, appName, options.releaseNotes ? options.releaseNotes : null, bundleApkFile
+                , options.versionCode && options.versionName ? {
+                    versionCode: options.versionCode,
+                    versionName: options.versionName,
+                } : undefined)
             const groupNames = options.group
             let updateToGroup = false
             if (artifactId && groupNames && groupNames.length) {

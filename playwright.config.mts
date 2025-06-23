@@ -6,7 +6,7 @@ export default defineConfig<ConfigOptions>({
     webServer: {
         command: './setup-test.sh',
         url: 'http://localhost:3000',
-        reuseExistingServer: !process.env.CI,
+        reuseExistingServer: false,
         stdout: 'pipe',
         stderr: 'pipe',
     },

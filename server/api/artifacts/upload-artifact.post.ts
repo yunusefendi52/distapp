@@ -50,13 +50,14 @@ export async function findApiKey(
 
 export default defineEventHandler(async (event) => {
     const db = event.context.drizzle
-    const { orgName, appName, hasFileApk, filename, fileSize, fileSizeApk } = await readValidatedBody(event, z.object({
+    const { orgName, appName, hasFileApk, filename, fileSize, fileSizeApk, isZipPlatform } = await readValidatedBody(event, z.object({
         appName: z.string().trim().min(1).max(128),
         orgName: z.string().trim().min(1).max(128),
         hasFileApk: z.boolean().default(false),
         filename: z.string().regex(filenameRegex, `Filename must have regex ${filenameRegex.source}`),
         fileSize: z.number(),
         fileSizeApk: z.number().nullish(),
+        isZipPlatform: z.boolean().nullish(),
     }).parse)
 
     var orgId: string
@@ -110,6 +111,17 @@ export default defineEventHandler(async (event) => {
             })
         }
     } // Otherwise usage-based billing
+
+    const detailApp = await db.select({
+        appOsType: tables.apps.osType,
+    }).from(tables.apps)
+        .where(eq(tables.apps.id, appId))
+        .then(takeUniqueOrThrow)
+    if (isZipPlatform && detailApp.appOsType !== 'desktop') {
+        throw createError({
+            message: `You cannot set version in your platform type ${detailApp.appOsType}`,
+        })
+    }
 
     // Always limit file size when user upload directly
     const { fileKey, signedUrl } = await generateSignedUrlUpload(orgId, appId, fileSize)

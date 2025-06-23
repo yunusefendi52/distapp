@@ -23,7 +23,7 @@ test('Apps test', async ({ page, goto, context, request }) => {
         await expect(page.getByText(orgName)).toHaveCount(2)
     })
 
-    const osTestTypes = ['Android', 'iOS'] as const
+    const osTestTypes = ['Android', 'iOS', 'Desktop'] as const
     for (const osTestType of osTestTypes) {
         const index = osTestTypes.indexOf(osTestType)
 
@@ -122,7 +122,14 @@ test('Apps test', async ({ page, goto, context, request }) => {
                 distribute \\
                 --file "tests/tests_artifacts/release.zip" \\
                 --slug "${appSlug}" \\
-                --api-key "${appApiKey}"`)).rejects.toThrow(/Cannot read package file/)
+                --api-key "${appApiKey}"`)).rejects.toThrow(/Version Name and Version Code are required/)
+                await expect(exec(`${cliCommand} \\
+                distribute \\
+                --file "tests/tests_artifacts/release.zip" \\
+                --slug "${appSlug}" \\
+                --api-key "${appApiKey}" \\
+                --version-code 1 \\
+                --version-name 1`)).rejects.toThrow(/You cannot set version in your platform type/)
             })
             await test.step(`User can get the latest app version`, async () => {
                 const resp = await request.get(`${distappUrl}/api/apps/app-version`, {
@@ -167,7 +174,33 @@ test('Apps test', async ({ page, goto, context, request }) => {
                     distribute \\
                     --file "tests/tests_artifacts/release.zip" \\
                     --slug "${appSlug}" \\
-                    --api-key "${appApiKey}"`)).rejects.toThrow(/Cannot read package file/)
+                    --api-key "${appApiKey}"`)).rejects.toThrow(/Version Name and Version Code are required/)
+                await expect(exec(`${cliCommand} \\
+                    distribute \\
+                    --file "tests/tests_artifacts/release.zip" \\
+                    --slug "${appSlug}" \\
+                    --api-key "${appApiKey}" \\
+                    --version-code 1 \\
+                    --version-name 1`)).rejects.toThrow(/You cannot set version in your platform type/)
+            })
+        } else if (osTestType === 'Desktop') {
+            await test.step(`User should not able to upload zip file ${osTestType} if didn't specify version`, async () => {
+                await expect(exec(`${cliCommand} \\
+                    distribute \\
+                    --file "tests/tests_artifacts/release.zip" \\
+                    --slug "${appSlug}" \\
+                    --api-key "${appApiKey}"`)).rejects.toThrow(/Version Name and Version Code are required/)
+            })
+            await test.step(`User can upload zip file ${osTestType} with API keys using CLI`, async () => {
+                const { stderr, stdout } = await exec(`${cliCommand} \\
+                    distribute \\
+                    --file "tests/tests_artifacts/release.zip" \\
+                    --slug "${appSlug}" \\
+                    --api-key "${appApiKey}" \\
+                    --version-code 1 \\
+                    --version-name 1.0.0`)
+                expect(stderr).toBeFalsy()
+                expect(stdout).toContain('Finished Distributing')
             })
         }
 
@@ -222,6 +255,27 @@ test('Apps test', async ({ page, goto, context, request }) => {
                 await page.getByTestId('upload_input_btn').click()
                 const fileChooser = await fileChooserPromise
                 await fileChooser.setFiles('tests/tests_artifacts/testapp.ipa')
+
+                const uploadArtifactUrlPromise = page.waitForResponse(r => r.url().includes('upload-artifact-url'))
+                await page.getByTestId('submit_upload_btn').click()
+                const uploadArtifactUrl = await uploadArtifactUrlPromise
+                expect(uploadArtifactUrl.ok()).toBe(true)
+                await expect(page.getByTestId('submit_upload_btn')).not.toBeVisible()
+            })
+        } else if (osTestType === 'Desktop') {
+            await test.step('User can upload Desktop zip in website', async () => {
+                await page.getByTestId('a_menus').getByText(orgName).click()
+                await page.getByText(appName).click()
+                await page.getByTestId('d_upload').click()
+                await expect(page.getByTestId('upload_input_btn')).toBeVisible()
+                const fileChooserPromise = page.waitForEvent('filechooser')
+                await page.getByTestId('upload_input_btn').click()
+                const fileChooser = await fileChooserPromise
+                await fileChooser.setFiles('tests/tests_artifacts/release.zip')
+                
+                // Fill in the version
+                await page.getByTestId('i_versionname').fill('1.0.0')
+                await page.getByTestId('i_versioncode').fill('1')
 
                 const uploadArtifactUrlPromise = page.waitForResponse(r => r.url().includes('upload-artifact-url'))
                 await page.getByTestId('submit_upload_btn').click()

@@ -1,5 +1,13 @@
+<script setup lang="ts">
+defineProps<{
+    applyShadow?: boolean,
+}>()
+</script>
+
 <template>
-    <div class="card">
+    <div class="card" :class="{
+        'shadow-lg dark:shadow-gray-900': applyShadow,
+    }">
         <slot />
     </div>
 </template>
