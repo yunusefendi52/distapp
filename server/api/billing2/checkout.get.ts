@@ -24,7 +24,7 @@ export default defineEventHandler(async event => {
         externalCustomerId: event.context.auth.userId,
         metadata: userMetadata,
         customerMetadata: userMetadata,
-        discountId: userIds.includes(event.context.auth.userId) ? getPolarEnv().discountId : undefined,
+        discountId: userIds.includes(event.context.auth.userId) ? getPolarEnv().discountId : getPolarEnv().discountId2,
         allowDiscountCodes: false,
         successUrl: `${checkoutOrigin}/api/billing/checkout-confirmation`,
     })
