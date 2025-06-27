@@ -16,15 +16,18 @@ export default defineEventHandler(async event => {
             eq(tables.organizationsPeople.role, 'owner'),
         ))
 
-    let maxUserArtifactSize = 0
     const firstOrgId = usages.find(e => true)?.orgId
-    if (firstOrgId) {
-        const userFeature = await getUserFeature(event, firstOrgId)
-        maxUserArtifactSize = userFeature.artifactSizeLimit
+    if (!firstOrgId) {
+        throw createError({
+            message: 'No org id found',
+        })
     }
 
+    const [userFeature, artifactSize] = await Promise.all([getUserFeature(event, firstOrgId), getArtifactSizeByOrg(event, firstOrgId)])
+    const maxUserArtifactSize = userFeature.artifactSizeLimit
+
     return {
-        totalStorage: usages.reduce((p, value) => value.storageSize + p, 0),
+        totalStorage: artifactSize.artifactSize,
         maxUserArtifactSize,
         usages,
     }
