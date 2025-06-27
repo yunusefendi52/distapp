@@ -26,8 +26,11 @@
                                 data.statusFormatted
                                 }}</span>
                         </template>
-                        <Button v-if="data?.plan !== planName" label="Checkout" outlined :loading="isPending" fluid
-                            @click="() => mutate()" class="mt-3" data-testid="checkout_btn" />
+                        <div v-if="data?.plan !== planName">
+                            <DiscountLabel />
+                            <Button label="Checkout" outlined :loading="isPending" fluid
+                                @click="() => mutate()" class="mt-3" data-testid="checkout_btn" />
+                        </div>
                     </div>
                 </div>
             </AppCard>

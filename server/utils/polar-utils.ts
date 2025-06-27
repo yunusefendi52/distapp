@@ -28,3 +28,8 @@ export function getPolarEnv() {
         discountId2: process.env.NUXT_POLAR_DISCOUNT_ID_2_PROD,
     }
 }
+
+export function getDiscountByUser(userId: string) {
+    const userIds = process.env.NUXT_POLAR_DISCOUNT_USER_IDS?.split(':') || []
+    return userIds.includes(userId) ? getPolarEnv().discountId : getPolarEnv().discountId2
+}

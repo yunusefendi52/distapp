@@ -13,6 +13,7 @@
                             <div class="flex flex-col gap-2 justify-stretch p-2 h-full">
                                 <PriceCard price-name="Pro" price="$4" :features="proFeatures" />
                                 <div class="mt-5 flex flex-col gap-2">
+                                    <DiscountLabel />
                                     <NuxtLink :to="getStaredTo">
                                         <Button label="Get Started" outlined fluid />
                                     </NuxtLink>

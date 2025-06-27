@@ -17,14 +17,13 @@ export default defineEventHandler(async event => {
         userId: event.context.auth.userId,
         p_user_id: user.providerUserId!,
     }
-    const userIds = process.env.NUXT_POLAR_DISCOUNT_USER_IDS?.split(':') || []
     const checkout = await polar.checkouts.create({
         products: [getPolarEnv().productId],
         customerEmail: user.email,
         externalCustomerId: event.context.auth.userId,
         metadata: userMetadata,
         customerMetadata: userMetadata,
-        discountId: userIds.includes(event.context.auth.userId) ? getPolarEnv().discountId : getPolarEnv().discountId2,
+        discountId: getDiscountByUser(event.context.auth.userId),
         allowDiscountCodes: false,
         successUrl: `${checkoutOrigin}/api/billing/checkout-confirmation`,
     })
