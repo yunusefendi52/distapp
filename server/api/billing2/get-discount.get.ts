@@ -1,3 +1,5 @@
+import type { Discount } from "@polar-sh/sdk/models/components/discount.js"
+
 export default defineEventHandler(async event => {
     if (!isBillingEnabled(event)) {
         return undefined
@@ -12,9 +14,7 @@ export default defineEventHandler(async event => {
     const discount = await polar.discounts.get({
         id: discountId,
     })
-    const now = new Date()
-    const nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-    if (nowDate >= (discount.endsAt || nowDate)) {
+    if (!validateIfDiscountValid(discount)) {
         return undefined;
     }
 
@@ -26,3 +26,14 @@ export default defineEventHandler(async event => {
         endsAt: discount.endsAt,
     }
 })
+
+export function validateIfDiscountValid(discount: Discount) {
+    const now = new Date()
+    const nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    // Validate only if discount has expiry
+    if (discount.endsAt && nowDate >= discount.endsAt) {
+        return false
+    }
+
+    return true
+}
