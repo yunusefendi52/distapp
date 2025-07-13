@@ -229,7 +229,8 @@ export const groupTester = sqliteTable('grouptester', {
         onDelete: 'cascade',
     }),
 }, t => ({
-    testerId_orgId_appId_groupId: uniqueIndex('testerId_orgId_appId_groupId').on(t.testerId, t.organizationId, t.appsId, t.artifactGroupId)
+    testerId_orgId_appId_groupId: uniqueIndex('testerId_orgId_appId_groupId').on(t.testerId, t.organizationId, t.appsId, t.artifactGroupId),
+    grouptester_artifactGroupId_IDX: uniqueIndex('grouptester_artifactGroupId_IDX').on(t.artifactGroupId),
 }))
 
 // API Keys
@@ -286,4 +287,5 @@ export const keyValue = sqliteTable('key_value', {
     ...timeColumns,
 }, (t) => ({
     key_value_group_key: unique().on(t.key, t.group),
+    key_value_group_createdAt_key: index('key_value_group_createdAt_key_IDX').on(t.createdAt, t.createdAt),
 }))

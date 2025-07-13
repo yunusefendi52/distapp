@@ -1,0 +1,2 @@
+CREATE UNIQUE INDEX `grouptester_artifactGroupId_IDX` ON `grouptester` (`artifactGroupId`);--> statement-breakpoint
+CREATE INDEX `key_value_group_createdAt_key_IDX` ON `key_value` (`createdAt`,`createdAt`);
