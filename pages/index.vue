@@ -24,8 +24,12 @@
                 <a :href="link">
                     <div class="flex justify-center items-center lg:w-[550px]">
                         <img class="distapp-dark border border-white/15 rounded-lg" width="550"
+                            loading="lazy"
+                            alt="DistApp showcase in dark mode"
                             src="/assets/distapp_dark.webp">
                         <img class="distapp-light border border-black/15 rounded-lg" width="550"
+                            loading="lazy"
+                            alt="DistApp showcase in light mode"
                             src="/assets/distapp_light.webp">
                     </div>
                 </a>

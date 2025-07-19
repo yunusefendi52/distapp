@@ -167,6 +167,8 @@ export default defineNuxtConfig({
       }, {
         rel: 'stylesheet',
         href: '/assets/spa-loader.css',
+        media: "print",
+        onload: "this.media='all'",
       }],
       meta: [{
         name: 'theme-color',
