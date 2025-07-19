@@ -3,7 +3,7 @@ layout: home
 
 hero:
   name: "DistApp"
-  text: "Manage and distribute Android, iOS and Desktop app"
+  text: "Manage and distribute Android, iOS and Desktop apps"
   # tagline: Docs API
   actions:
     - theme: brand

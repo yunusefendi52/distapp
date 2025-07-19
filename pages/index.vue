@@ -3,7 +3,7 @@
         <div class="flex flex-col lg:flex-row gap-10">
             <div class="flex flex-col gap-3 justify-center items-start flex-1">
                 <span class="text-4xl font-medium">DistApp</span>
-                <span class="text-lg font-light">Manage and distribute Android, iOS and Desktop app.
+                <span class="text-lg font-light">Manage and distribute Android, iOS and Desktop apps.
                     Useful for tester or self distribution.
                     Alternative App Center Distribution.</span>
                 <div class="flex flex-row flex-wrap gap-3 mt-3">
@@ -90,7 +90,7 @@ definePageMeta({
     layout: 'content-layout',
 })
 
-const title = 'DistApp • Manage and distribute Android, iOS and Desktop app'
+const title = 'DistApp • Manage and distribute Android, iOS and Desktop apps'
 useHead({
     title: title,
 })

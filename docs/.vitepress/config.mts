@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "DistApp",
-  description: "Manage and distribute Android, iOS and Desktop app",
+  description: "Manage and distribute Android, iOS and Desktop apps",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
