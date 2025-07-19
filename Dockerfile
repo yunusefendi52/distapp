@@ -1,6 +1,8 @@
 FROM oven/bun:1.2.8 as builder
 WORKDIR /builder
 
+ENV NUXT_DISTAPP_SELF_HOST=true
+
 COPY package.json bun.lock /builder/
 RUN bun install --frozen-lockfile
 COPY . .

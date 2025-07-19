@@ -192,6 +192,7 @@ export default defineNuxtConfig({
       { name: 'twitter:title', content: title },
       { name: 'twitter:description', content: description },
       { name: 'twitter:image', content: 'https://distapp.lhf.my.id/assets/distapp-dark.webp' },
+      ...(import.meta.env.NUXT_DISTAPP_SELF_HOST ? [{ name: 'robots', content: 'noindex' }] : []),
       ],
     },
   },
