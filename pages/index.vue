@@ -22,7 +22,7 @@
             </div>
             <div class="flex flex-col">
                 <a :href="link">
-                    <div class="flex justify-center items-center lg:w-[550px]">
+                    <div class="flex justify-center items-center lg:h-[310px]">
                         <img class="distapp-dark border border-white/15 rounded-lg" width="550"
                             loading="lazy"
                             alt="DistApp showcase in dark mode"
@@ -33,7 +33,7 @@
                             src="/assets/distapp_light.webp">
                     </div>
                 </a>
-                <a class="self-start" :href="link">
+                <a class="self-center lg:self-start" :href="link">
                     <span class="text-xs text-[var(--p-text-muted-color)]">Habit Tool - Habit tracker log</span>
                 </a>
             </div>
