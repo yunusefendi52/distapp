@@ -2,11 +2,13 @@
 
 Distribute Android and iOS app. Alternative App Center Distribution with option to self-hosted your self
 
-![Deploy](https://github.com/yunusefendi52/distapp/actions/workflows/deploy.yml/badge.svg) [![Docker Pulls](https://img.shields.io/docker/pulls/5yunus2efendi/distapp)](https://hub.docker.com/repository/docker/5yunus2efendi/distapp)
+![Deploy](https://github.com/yunusefendi52/distapp/actions/workflows/deploy.yml/badge.svg) [![Docker Pulls](https://img.shields.io/docker/pulls/5yunus2efendi/distapp)](https://hub.docker.com/r/5yunus2efendi/distapp)
 
 ## Checkout our managed DistApp
 
 Hassle-free and ready to use [DistApp](https://distapp.app)
+
+[![DistApp](public/assets/distapp_dark.webp)](https://distapp.app)
 
 ## Docs
 
