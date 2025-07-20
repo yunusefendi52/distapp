@@ -6,7 +6,7 @@ We provide an API to get the latest version of your app. Since we don't offer an
 
 Here is a curl example to check the latest version of spesific group.
 
-> `curl -L "https://distapp.lhf.my.id/api/apps/app-version?orgId=YOUR_ORG_ID&appId=YOUR_APP_ID&group=private"`
+> `curl -L "https://distapp.app/api/apps/app-version?orgId=YOUR_ORG_ID&appId=YOUR_APP_ID&group=private"`
 
 ```bash
 # Sample Response
@@ -26,4 +26,4 @@ Remove the `group` parameter to check the latest version of all releases.
 
 You can get the `Org Id` and `App Id` from `App Info` in `App Settings` page.
 
-Since we can't automatically know the domain, you need to add your self to `installLink` i.e `https://distapp.lhf.my.id/install/yedev/apps/habit-tool-android/private?artifactId=019695a0-777b-7a64-9273-c0cd7019ef64`
+Since we can't automatically know the domain, you need to add your self to `installLink` i.e `https://distapp.app/install/yedev/apps/habit-tool-android/private?artifactId=019695a0-777b-7a64-9273-c0cd7019ef64`

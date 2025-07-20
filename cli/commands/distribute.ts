@@ -25,7 +25,7 @@ export const distribute = new Command('distribute')
     .option('--version-name <string>', 'Version name of your desktop app (e.g v1.0.0)')
     .option('--version-code <string>', 'Version code of your desktop app (e.g 1)')
     .action(async (options) => {
-        const optUrl = options.url || process.env.DISTAPP_CLI_URL || 'https://distapp.lhf.my.id'
+        const optUrl = options.url || process.env.DISTAPP_CLI_URL || 'https://distapp.app'
         updateMyFetch(options.apiKey, optUrl)
         const { orgName, appName } = slugToOrgApp(options.slug!)
         const filePath = resolve(options.file!)

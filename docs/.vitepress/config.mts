@@ -8,7 +8,7 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'DistApp Managed', link: 'https://distapp.lhf.my.id' },
+      { text: 'DistApp Managed', link: 'https://distapp.app' },
       { text: 'CLI', link: '/cli/cli-usage' },
     ],
 

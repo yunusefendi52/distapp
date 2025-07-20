@@ -14,7 +14,7 @@ If you already have running S3 service, make sure there is a bucket "distapp" an
 If you want to deploy minio yourself, run this sample. Update the key accordingly.
 
 ```bash
-curl -fsSL https://distapp.lhf.my.id/docker/docker-compose-minio.yml | docker compose -f /dev/stdin up -d
+curl -fsSL https://distapp.app/docker/docker-compose-minio.yml | docker compose -f /dev/stdin up -d
 ```
 
 The default key is:
@@ -40,7 +40,7 @@ mkdir -p distapp && cd distapp
 And then run script below and follow the guide to setup S3
 
 ```bash
-curl -fsSL https://distapp.lhf.my.id/install.sh | bash
+curl -fsSL https://distapp.app/install.sh | bash
 ```
 
 Then you can run DistApp
