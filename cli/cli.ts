@@ -3,7 +3,7 @@
 import { Command } from '@commander-js/extra-typings'
 import { distribute } from './commands/distribute.js'
 
-const distributeDeprecated = 'Deprecated. Use distribute command instead. See https://docs-distapp.lhf.my.id/cli/cli-usage#distribute-to-distapp'
+const distributeDeprecated = 'Deprecated. Use distribute command instead. See https://docs.distapp.app/cli/cli-usage#distribute-to-distapp'
 const program = new Command()
     .option('--distribute', distributeDeprecated)
     .action((options) => {

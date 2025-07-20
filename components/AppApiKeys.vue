@@ -2,7 +2,7 @@
     <div class="flex flex-col items-start gap-3 w-full">
         <Button @click="() => mutate()" :loading="isPending" label="Generate Token" />
         <div>
-            See this how to use <NuxtLink class="underline" href="https://docs-distapp.lhf.my.id/cli/cli-usage"
+            See this how to use <NuxtLink class="underline" href="https://docs.distapp.app/cli/cli-usage"
                 target="_blank">
                 CLI
             </NuxtLink>

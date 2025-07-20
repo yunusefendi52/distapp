@@ -12,15 +12,15 @@ Hassle-free and ready to use [DistApp](https://distapp.app)
 
 ## Docs
 
-See docs https://docs-distapp.lhf.my.id
+See the documentation here https://docs.distapp.app
 
 ## Self Hosting
 
-See https://docs-distapp.lhf.my.id/self-hosted/setup-self-hosted for more.
+See https://docs.distapp.app/self-hosted/setup-self-hosted for more.
 
 ## CLI Usage
 
-We updated how to use CLI. See https://docs-distapp.lhf.my.id/cli/cli-usage#cli-usage
+We updated how to use CLI. See https://docs.distapp.app/cli/cli-usage#cli-usage
 
 ## Setup Dev
 
