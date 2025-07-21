@@ -1,10 +1,11 @@
+import { uuidv4 } from "uuidv7"
 import { getListApikeys } from "./list-api-keys.get"
 
 export default defineEventHandler(async (event) => {
     const { appConfig: { apiAuthKey } } = useRuntimeConfig(event)
     if (!apiAuthKey) {
         throw createError({
-            message: 'Please provide using env NUXT_APP_API_AUTH_KEY',
+            message: 'Please provide using env NUXT_APP_CONFIG_API_AUTH_KEY',
             statusCode: 500,
         })
     }
@@ -36,7 +37,7 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    const id = generateId()
+    const id = uuidv4()
     const token = await generateTokenWithOptions(event, {
         id,
     } satisfies ApiKeyTypePayload, v => v, apiAuthKey)
