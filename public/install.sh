@@ -57,7 +57,7 @@ sed_cmd -e "s|.*NUXT_S3_REGION=.*|NUXT_S3_REGION=$s3Region|" docker-compose.env
 sed_cmd -e "s|.*NUXT_S3_ACCESS_KEY_ID=.*|NUXT_S3_ACCESS_KEY_ID=$s3AccessKey|" docker-compose.env
 sed_cmd -e "s|.*NUXT_S3_SECRET_ACCESS_KEY=.*|NUXT_S3_SECRET_ACCESS_KEY=$s3SecretKey|" docker-compose.env
 sed_cmd -e "s|.*NUXT_JWT_KEY=.*|NUXT_JWT_KEY=$(gen_password)|" docker-compose.env
-sed_cmd -e "s|.*NUXT_APP_API_AUTH_KEY=.*|NUXT_APP_API_AUTH_KEY=$(gen_password)|" docker-compose.env
+sed_cmd -e "s|.*NUXT_APP_CONFIG_API_AUTH_KEY=.*|NUXT_APP_CONFIG_API_AUTH_KEY=$(gen_password)|" docker-compose.env
 
 dockerComposeContent="$(curl -fsSL https://github.com/yunusefendi52/distapp/raw/refs/heads/main/public/docker/docker-compose.yml)"
 echo $dockerComposeContent >docker-compose.yml

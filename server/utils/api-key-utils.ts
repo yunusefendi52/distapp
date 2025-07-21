@@ -12,7 +12,7 @@ export async function getAuthApiKey(
         const { appConfig: { apiAuthKey } } = useRuntimeConfig(event)
         if (!apiAuthKey) {
             throw createError({
-                message: 'Please provide using env NUXT_APP_API_AUTH_KEY',
+                message: 'Please provide using env NUXT_APP_CONFIG_API_AUTH_KEY',
                 statusCode: 500,
             })
         }
