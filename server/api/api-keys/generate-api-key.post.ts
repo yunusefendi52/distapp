@@ -1,7 +1,7 @@
 import { getListApikeys } from "./list-api-keys.get"
 
 export default defineEventHandler(async (event) => {
-    const { app: { apiAuthKey } } = useRuntimeConfig(event)
+    const { appConfig: { apiAuthKey } } = useRuntimeConfig(event)
     if (!apiAuthKey) {
         throw createError({
             message: 'Please provide using env NUXT_APP_API_AUTH_KEY',

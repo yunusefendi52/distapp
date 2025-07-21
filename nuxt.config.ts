@@ -68,6 +68,8 @@ export default defineNuxtConfig({
     app: {
       enableDrizzleLogging: true,
       limitUploadSizeMb: 120,
+    },
+    appConfig: {
       apiAuthKey: '',
     },
     // Features free plan

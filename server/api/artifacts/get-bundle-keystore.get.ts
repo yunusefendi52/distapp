@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     const { BUNDLEAAB: { KEYSTORE_URL, KEYSTORE_PASS, KEYSTORE_ALIAS } } = useRuntimeConfig(event)
     const apiKey = getHeader(event, 'API-KEY')
     if (apiKey) {
-        const { app: { apiAuthKey } } = useRuntimeConfig(event)
+        const { appConfig: { apiAuthKey } } = useRuntimeConfig(event)
         if (!apiAuthKey) {
             throw createError({
                 message: 'Please provide using env NUXT_APP_API_AUTH_KEY to get key',

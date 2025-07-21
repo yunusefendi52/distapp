@@ -9,7 +9,7 @@ export async function getAuthApiKey(
     const apiKey = getHeader(event, 'API-KEY')
     const db = event.context.drizzle
     if (apiKey) {
-        const { app: { apiAuthKey } } = useRuntimeConfig(event)
+        const { appConfig: { apiAuthKey } } = useRuntimeConfig(event)
         if (!apiAuthKey) {
             throw createError({
                 message: 'Please provide using env NUXT_APP_API_AUTH_KEY',
