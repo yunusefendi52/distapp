@@ -4,7 +4,9 @@
             <ProgressSpinner style="width: 50px; height: 50px; margin: unset;" strokeWidth="6" />
         </div>
         <div v-else-if="status === 'error' && error">
-            <span>{{ normalizeError(error) }}</span>
+            <Message severity="error" class="mx-4">
+                <span>{{ normalizeError(error) }}</span>
+            </Message>
         </div>
         <div class="container flex flex-col gap-5 px-5" v-else>
             <div class="flex flex-col justify-start gap-3">
@@ -80,6 +82,13 @@ watchEffect(() => {
     if (data.value) {
         showAccountBtn.value = data.value.artifactGroup.isPublic !== true
     }
+})
+watch(() => error.value, (err) => {
+    if (err && err.statusCode === 400) {
+        showAccountBtn.value = true
+    }
+}, {
+    immediate: true,
 })
 const artifacts = computed(() => data.value?.artifacts.map(e => e.artifacts!))
 

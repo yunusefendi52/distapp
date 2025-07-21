@@ -4,7 +4,7 @@ import type { EventHandlerRequest, H3Event } from "h3"
 
 export const getArtifactGroupFromPublicIdOrUser = async (event: H3Event<EventHandlerRequest>, orgName: string, appName: string, publicId: string) => {
     const db = event.context.drizzle
-    const userId = event.context.auth?.userId
+    const userId = event.context.auth?.userId || ''
 
     async function getArtifact(usePublicId: boolean) {
         var item = await db.select({
@@ -39,7 +39,7 @@ export const getArtifactGroupFromPublicIdOrUser = async (event: H3Event<EventHan
     if (!item) {
         console.error('Cannot find artifact log')
         throw createError({
-            message: 'App installation not found',
+            message: `The app installation does not exist or is invalid.`,
             statusCode: 400,
         })
     }
