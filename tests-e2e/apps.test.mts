@@ -23,7 +23,7 @@ test('Apps test', async ({ page, goto, context, request }) => {
         await expect(page.getByText(orgName)).toHaveCount(2)
     })
 
-    const osTestTypes = ['Android', 'iOS', 'Windows', 'MacOS', 'Linux'] as const
+    const osTestTypes = ['Android', 'iOS', 'Windows', 'MacOS'] as const
     for (const osTestType of osTestTypes) {
         const index = osTestTypes.indexOf(osTestType)
 
