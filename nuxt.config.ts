@@ -58,7 +58,7 @@ const Noir = definePreset(Aura, {
 })
 
 const title = 'DistApp • Manage and distribute Android, iOS and Desktop apps'
-const description = 'Manage and distribute Android, iOS and Desktop apps'
+const description = 'Manage and distribute Android, iOS and Desktop apps. Useful for tester or self distribution. Alternative App Center Distribution.'
 export default defineNuxtConfig({
   compatibilityDate: '2024-08-20',
   devtools: { enabled: true },
@@ -177,7 +177,7 @@ export default defineNuxtConfig({
         content: '',
       }, {
         name: 'description',
-        content: 'Manage and distribute Android, iOS and Desktop apps. App Center Alternative',
+        content: description,
       }, {
         name: 'keywords',
         content: 'distapp, dist, app, app center, appcenter, ios, android, microsoft, alternative app center, alternative, firebase',
