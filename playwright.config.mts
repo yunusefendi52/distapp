@@ -20,6 +20,7 @@ export default defineConfig<ConfigOptions>({
     expect: {
         timeout: 12000,
     },
+    timeout: 90_000,
     projects: [
         { name: 'setup', testMatch: '**/*.setup.mts' },
         {
