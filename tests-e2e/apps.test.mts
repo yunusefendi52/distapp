@@ -93,7 +93,7 @@ test('Apps test', async ({ page, goto, context, request }) => {
                 expect(stdout).toContain('Finished Distributing')
                 expect(stdout).toContain('with generated APK')
 
-                test.setTimeout(30_000)
+                // test.setTimeout(30_000)
             })
             await test.step(`User can upload artifact ${osTestType} APK with API keys using CLI`, async () => {
                 const { stderr, stdout } = await exec(`${cliCommand} \\
