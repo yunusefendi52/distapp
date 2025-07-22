@@ -12,8 +12,24 @@ const listOs = [
         value: 'ios',
     },
     {
-        label: 'Desktop',
-        value: 'desktop',
+        label: 'Windows',
+        value: 'windows',
+    },
+    {
+        label: 'MacOS',
+        value: 'macos',
+    },
+    {
+        label: 'Linux',
+        value: 'linux',
+    },
+    {
+        label: 'Embedded',
+        value: 'embedded',
+    },
+    {
+        label: 'Other',
+        value: 'other',
     },
 ]
 
@@ -57,7 +73,6 @@ const {
 watchEffect(() => {
     const createdData = onCreateOrgData.value
     const orgsValue = orgs.value
-    console.log('changeddd', { createdData, orgsValue })
     if (createdData && orgsValue) {
         selectedOrg.value = orgsValue.find(v => v.name === createdData.normalizedOrgName)
     }

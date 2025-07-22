@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
     const { name, orgId, osType } = await readValidatedBody(event, z.object({
         name: z.string().min(1).max(128).trim(),
         orgId: z.string().min(1).trim(),
-        osType: z.enum(['ios', 'android', 'desktop']),
+        osType: z.enum(tables.apps.osType.enumValues),
     }).parse)
     const db = event.context.drizzle
     const org = await getUserOrg(event, '', orgId)

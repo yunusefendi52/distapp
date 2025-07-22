@@ -4,6 +4,11 @@
         <i v-if="osType === 'android'" class="pi pi-android"></i>
         <i v-else-if="osType === 'ios'" class="pi pi-apple"></i>
         <i v-else-if="osType === 'desktop'" class="pi pi-desktop"></i>
+        <i v-else-if="osType === 'windows'" class="pi pi-microsoft"></i>
+        <i v-else-if="osType === 'macos'" class="pi pi-apple"></i>
+        <i v-else-if="osType === 'linux'" class="pi pi-desktop"></i>
+        <i v-else-if="osType === 'embedded'" class="pi pi-microchip"></i>
+        <i v-else-if="osType === 'other'" class="pi pi-box"></i>
         <span class="text-sm">
             {{ platformName }}
         </span>
@@ -18,9 +23,25 @@ const props = defineProps<{
 }>()
 
 const platformName = computed(() => {
-    if (props.osType === 'android') return 'Android'
-    if (props.osType === 'ios') return 'iOS'
-    if (props.osType === 'desktop') return 'Desktop'
-    return ''
+    switch (props.osType) {
+        case 'android':
+            return 'Android';
+        case 'ios':
+            return 'iOS';
+        case 'desktop':
+            return 'Desktop';
+        case 'windows':
+            return 'Windows';
+        case 'macos':
+            return 'MacOS';
+        case 'linux':
+            return 'Linux';
+        case 'embedded':
+            return 'Embedded';
+        case 'other':
+            return 'Other';
+        default:
+            return '';
+    }
 })
 </script>

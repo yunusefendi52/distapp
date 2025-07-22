@@ -23,7 +23,7 @@ test('Apps test', async ({ page, goto, context, request }) => {
         await expect(page.getByText(orgName)).toHaveCount(2)
     })
 
-    const osTestTypes = ['Android', 'iOS', 'Desktop'] as const
+    const osTestTypes = ['Android', 'iOS', 'Windows', 'MacOS', 'Linux'] as const
     for (const osTestType of osTestTypes) {
         const index = osTestTypes.indexOf(osTestType)
 
@@ -183,7 +183,7 @@ test('Apps test', async ({ page, goto, context, request }) => {
                     --version-code 1 \\
                     --version-name 1`)).rejects.toThrow(/You cannot set version in your platform type/)
             })
-        } else if (osTestType === 'Desktop') {
+        } else if (osTestType === 'Windows' || osTestType === 'MacOS' || osTestType === 'Linux') {
             await test.step(`User should not able to upload zip file ${osTestType} if didn't specify version`, async () => {
                 await expect(exec(`${cliCommand} \\
                     distribute \\
@@ -262,8 +262,8 @@ test('Apps test', async ({ page, goto, context, request }) => {
                 expect(uploadArtifactUrl.ok()).toBe(true)
                 await expect(page.getByTestId('submit_upload_btn')).not.toBeVisible()
             })
-        } else if (osTestType === 'Desktop') {
-            await test.step('User can upload Desktop zip in website', async () => {
+        } else if (osTestType === 'Windows' || osTestType === 'MacOS' || osTestType === 'Linux') {
+            await test.step(`User can upload ${osTestType} zip in website`, async () => {
                 await page.getByTestId('a_menus').getByText(orgName).click()
                 await page.getByText(appName).click()
                 await page.getByTestId('d_upload').click()

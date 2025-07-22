@@ -1,13 +1,24 @@
 import * as jose from 'jose'
 
 export const getAllowedExtsFromOstype = (osType?: OsType): string => {
-    if (osType === 'android') return '.apk,.aab'
-    else if (osType === 'ios') return '.ipa'
-    else if (osType === 'desktop') return '.zip'
-    return ''
+    switch (osType) {
+        case 'android':
+            return '.apk,.aab';
+        case 'ios':
+            return '.ipa';
+        case 'desktop':
+        case 'windows':
+        case 'macos':
+        case 'linux':
+        case 'embedded':
+        case 'other':
+            return '.zip';
+        default:
+            return ''; // or handle unknown osType
+    }
 }
 
-export type OsType = 'android' | 'ios' | 'desktop'
+export type OsType = 'android' | 'ios' | 'desktop' | 'windows' | 'macos' | 'linux' | 'embedded' | 'other'
 
 export async function isZipFile(file: File | Buffer): Promise<boolean> {
     const ZIP_SIGNATURE = [0x50, 0x4B, 0x03, 0x04]; // "PK\x03\x04"

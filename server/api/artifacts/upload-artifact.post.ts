@@ -117,7 +117,7 @@ export default defineEventHandler(async (event) => {
     }).from(tables.apps)
         .where(eq(tables.apps.id, appId))
         .then(takeUniqueOrThrow)
-    if (isZipPlatform && detailApp.appOsType !== 'desktop') {
+    if (isZipPlatform && (detailApp.appOsType === 'android' || detailApp.appOsType === 'ios')) {
         throw createError({
             message: `You cannot set version in your platform type ${detailApp.appOsType}`,
         })

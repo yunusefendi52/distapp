@@ -41,14 +41,8 @@
         <div class="flex flex-col gap-6 sm:grid sm:grid-cols-3">
             <AppCard class="h-full" :apply-shadow="true">
                 <article class="px-2">
-                    <h2 class="font-bold text-lg mb-1">Self Hosted</h2>
-                    <p class="font-light">You can self host in your own infrastructure</p>
-                </article>
-            </AppCard>
-            <AppCard class="h-full" :apply-shadow="true">
-                <article class="px-2">
                     <h2 class="font-bold text-lg mb-1">Manage your apps</h2>
-                    <p class="font-light">Manage all of your apps in one place. Supports Android, iOS and Desktop.
+                    <p class="font-light">Manage all of your apps in one place. Supports Android, iOS, Desktop and other platforms.
                     </p>
                 </article>
             </AppCard>
@@ -56,6 +50,12 @@
                 <article class="px-2">
                     <h2 class="font-bold text-lg mb-2">Group and organization</h2>
                     <p class="font-light">Create seperate group or organization for your apps</p>
+                </article>
+            </AppCard>
+            <AppCard class="h-full" :apply-shadow="true">
+                <article class="px-2">
+                    <h2 class="font-bold text-lg mb-1">Self Hosted</h2>
+                    <p class="font-light">You can self host in your own infrastructure</p>
                 </article>
             </AppCard>
         </div>

@@ -112,7 +112,7 @@ export const apps = sqliteTable('apps', {
     name: text('name').notNull(),
     displayName: text('displayName').notNull(),
     osType: text('osType', {
-        enum: ['android', 'ios', 'desktop']
+        enum: ['android', 'ios', 'desktop', 'windows', 'macos', 'linux', 'embedded', 'other'],
     }),
     organizationsId: text('organizationsId').references(() => organizations.id, {
         onDelete: 'cascade',

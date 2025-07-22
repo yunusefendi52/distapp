@@ -26,7 +26,7 @@
                     </div>
                 </div>
             </div>
-            <div class="flex flex-row gap-2" v-if="osType === 'desktop'">
+            <div class="flex flex-row gap-2" v-if="isOsZipType">
                 <div class="flex-1 flex flex-col gap-2">
                     <label for="versionname">Version Name</label>
                     <InputText id="versionname" data-testid="i_versionname" fluid v-model="versionName" placeholder="e.g 1.0.0" />
@@ -64,6 +64,7 @@ const releaseNotes = ref<string | null>(null)
 const versionName = ref<string | undefined>(undefined)
 const versionCode = ref<string | undefined>(undefined)
 const osType = computed<OsType | null>(() => props.dataProps!.osType)
+const isOsZipType = computed(() => osType.value !== 'android' && osType.value !== 'ios')
 const orgName = computed(() => props.dataProps!.orgName)
 const appName = computed(() => props.dataProps!.appName)
 const groupName = computed(() => props.dataProps.groupName)
