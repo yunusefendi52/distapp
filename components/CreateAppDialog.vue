@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { getIconForOsType } from '#imports';
 const { orgs } = await useOrgsStore()
 const dialogRef = inject<any>('dialogRef');
 
@@ -96,8 +97,24 @@ watchEffect(() => {
             </div>
             <div class="flex flex-col gap-2">
                 <label>Platform</label>
-                <Dropdown data-testid="dropdown_platform" v-model="selectedOs" optionLabel="label" :options="listOs"
-                    placeholder="Select Platform" />
+                <Select data-testid="dropdown_platform" v-model="selectedOs" optionLabel="label" :options="listOs"
+                    placeholder="Select Platform">
+                    <template #value="slotProps">
+                        <div v-if="slotProps.value" class="flex items-center gap-3">
+                            <i :class="getIconForOsType(slotProps.value.value)"></i>
+                            <div>{{ slotProps.value.label }}</div>
+                        </div>
+                        <span v-else>
+                            {{ slotProps.placeholder }}
+                        </span>
+                    </template>
+                    <template #option="slotProps">
+                        <div class="flex items-center gap-3">
+                            <i :class="getIconForOsType(slotProps.option.value)"></i>
+                            <div>{{ slotProps.option.label }}</div>
+                        </div>
+                    </template>
+                </Select>
             </div>
             <div class="flex flex-col gap-2">
                 <label>App Name</label>

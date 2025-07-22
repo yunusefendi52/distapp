@@ -1,14 +1,7 @@
 <template>
     <div
         class="self-start flex flex-row gap-2 px-[10px] py-[2px] items-center rounded-full bg-[var(--p-surface-200)] dark:bg-[var(--p-surface-700)]">
-        <i v-if="osType === 'android'" class="pi pi-android"></i>
-        <i v-else-if="osType === 'ios'" class="pi pi-apple"></i>
-        <i v-else-if="osType === 'desktop'" class="pi pi-desktop"></i>
-        <i v-else-if="osType === 'windows'" class="pi pi-microsoft"></i>
-        <i v-else-if="osType === 'macos'" class="pi pi-apple"></i>
-        <i v-else-if="osType === 'linux'" class="pi pi-desktop"></i>
-        <i v-else-if="osType === 'embedded'" class="pi pi-microchip"></i>
-        <i v-else-if="osType === 'other'" class="pi pi-box"></i>
+        <i :class="getIconForOsType(osType)"></i>
         <span class="text-sm">
             {{ platformName }}
         </span>
@@ -16,6 +9,7 @@
 </template>
 
 <script setup lang="ts">
+import { getIconForOsType } from '#imports';
 import { OsType } from '~/utils/utils';
 
 const props = defineProps<{
