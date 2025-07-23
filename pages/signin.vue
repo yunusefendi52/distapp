@@ -28,6 +28,8 @@ import {
 } from "vue3-google-signin";
 import ProgressSpinner from 'primevue/progressspinner';
 
+useTitleApp('Sign In')
+
 const route = useRoute()
 
 function handleSuccessSignIn(r: { param: string } | undefined) {

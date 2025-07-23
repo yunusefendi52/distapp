@@ -44,6 +44,7 @@ import { freeFeatures, proFeatures } from '#imports'
 definePageMeta({
     layout: 'content-layout',
 })
+useTitleApp('Pricing')
 
 const options = ref<{
     value: 'monthly',
