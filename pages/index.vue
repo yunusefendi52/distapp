@@ -25,10 +25,12 @@
                     <div class="flex justify-center items-center lg:h-[310px]">
                         <img class="distapp-dark border border-white/15 rounded-lg" width="550"
                             loading="lazy"
+                            fetchpriority="high"
                             alt="DistApp showcase in dark mode"
                             src="/assets/distapp_dark.webp">
                         <img class="distapp-light border border-black/15 rounded-lg" width="550"
                             loading="lazy"
+                            fetchpriority="high"
                             alt="DistApp showcase in light mode"
                             src="/assets/distapp_light.webp">
                     </div>
