@@ -62,7 +62,11 @@ const description = 'Manage and distribute Android, iOS and Desktop apps. Useful
 export default defineNuxtConfig({
   compatibilityDate: '2024-08-20',
   devtools: { enabled: true },
-  ssr: false,
+  routeRules: {
+    '/': { ssr: true }, // Enable SSR on index page
+    '/pricing': { ssr: true }, // Enable SSR on pricing page
+    '/**': { ssr: false }, // Disable SSR for all other pages
+  },
   spaLoadingTemplate: true,
   runtimeConfig: {
     app: {

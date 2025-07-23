@@ -41,7 +41,7 @@ globalThis.$fetch = globalThis.$fetch.create({
 })
 </script>
 
-<style lang="scss">
+<style>
 html,
 body,
 #__nuxt {
