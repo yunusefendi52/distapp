@@ -45,7 +45,6 @@
 </template>
 
 <script setup lang="ts">
-import AppFileUpload from './AppFileUpload.vue';
 import { DataTableRowClickEvent } from 'primevue/datatable';
 import { formatDate } from '#imports';
 

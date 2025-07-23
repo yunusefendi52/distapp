@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col items-center">
-        <div v-if="status === 'pending'">
+        <div v-if="status === 'idle' || status === 'pending'">
             <ProgressSpinner style="width: 50px; height: 50px; margin: unset;" strokeWidth="6" />
         </div>
         <div v-else-if="status === 'error' && error">

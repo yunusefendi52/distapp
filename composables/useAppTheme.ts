@@ -19,7 +19,9 @@ export const useAppTheme = () => {
     const appThemeComputed = computed(() => appTheme.value === 'd' ? 'appdark' : 'applight')
     watchEffect(() => {
         const themeColor = appThemeComputed.value === 'appdark' ? 'black' : 'white'
-        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", themeColor);
+        if (import.meta.client) {
+            document.querySelector('meta[name="theme-color"]')?.setAttribute("content", themeColor);
+        }
     })
     return {
         appTheme: appThemeComputed,

@@ -12,11 +12,18 @@
 const toast = useToast()
 
 const { appTheme } = useAppTheme()
-useHead({
-    htmlAttrs: {
-        class: [appTheme],
-    },
-})
+if (import.meta.client) {
+    watchEffect(() => {
+        document.documentElement.classList.toggle('appdark', appTheme.value === 'appdark')
+        document.documentElement.classList.toggle('applight', appTheme.value === 'applight')
+    })
+} else {
+    useHead({
+        htmlAttrs: {
+            class: [appTheme],
+        },
+    })
+}
 useTitleApp('')
 
 globalThis.$fetch = globalThis.$fetch.create({
