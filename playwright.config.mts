@@ -9,6 +9,7 @@ export default defineConfig<ConfigOptions>({
         reuseExistingServer: false,
         stdout: 'pipe',
         stderr: 'pipe',
+        timeout: 120_000,
     },
     use: {
         screenshot: 'only-on-failure',
