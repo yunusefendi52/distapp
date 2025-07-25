@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
         token: z.string().min(1),
     }).parse)
 
-    const { appConfig: { apiAuthKey } } = useRuntimeConfig(event)
+    const apiAuthKey = getApiAuthKey(event)
     const joinTesterPayload = await verifyToken(event, token, apiAuthKey) as JoinTesterPayload
 
     const auth = event.context.auth

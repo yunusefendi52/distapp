@@ -2,13 +2,7 @@ import { uuidv4 } from "uuidv7"
 import { getListApikeys } from "./list-api-keys.get"
 
 export default defineEventHandler(async (event) => {
-    const { appConfig: { apiAuthKey } } = useRuntimeConfig(event)
-    if (!apiAuthKey) {
-        throw createError({
-            message: 'Please provide using env NUXT_APP_CONFIG_API_AUTH_KEY',
-            statusCode: 500,
-        })
-    }
+    const apiAuthKey = getApiAuthKey(event)
 
     if (!event.context.auth.userId) {
         setResponseStatus(event, 401, 'Unauthorized')

@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
             statusCode: 401,
         })
     }
-    const { appConfig: { apiAuthKey } } = useRuntimeConfig(event)
+    const apiAuthKey = getApiAuthKey(event)
     const { userApp, userOrg } = await getUserApp(event, orgName, appName)
     const testers = await getListApikeys(event, userApp.organizationsId!, userApp.id, groupName, 'count')
     const { APP_LIMIT_APPS_TESTER_GROUPS } = useRuntimeConfig(event)
