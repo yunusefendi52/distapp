@@ -43,6 +43,10 @@ export default defineConfig({
             link: '/self-hosted/setup-self-hosted',
           },
           {
+            text: 'Config Clerk Authentication',
+            link: '/self-hosted/config-clerk-authentication',
+          },
+          {
             text: 'Hosting License',
             link: '/self-hosted/hosting-license',
           },

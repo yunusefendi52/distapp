@@ -112,7 +112,10 @@ export default defineNuxtConfig({
       GOOGLE_CLIENT_ID: '',
       LOCAL_AUTH_ENABLED: false,
       UPLOAD_WITH_BUILD_APK: false,
+      CLERK_AUTH_ENABLED: false,
+      CLERK_PUBLISHABLE_KEY: '',
     },
+    CLERK_SECRET_KEY: '',
   },
 
   nitro: {

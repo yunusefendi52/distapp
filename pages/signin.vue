@@ -11,8 +11,11 @@
                 <Button type="submit" data-testid="sign_in_btn" label="Sign In" :loading="isPending" />
             </form>
             <AppDivider :orientation="'horizontal'" v-if="LOCAL_AUTH_ENABLED" />
+            <Button v-if="CLERK_AUTH_ENABLED" label="Sign In with Email" icon="pi pi-envelope"
+                @click="() => signInWithEmail()" :loading="signingEmail"></Button>
             <div class="w-full flex justify-center" style="color-scheme: auto;">
-                <GoogleSignInButton @success="handleLoginSuccess" @error="handleLoginError"></GoogleSignInButton>
+                <GoogleSignInButton width="320" @success="handleLoginSuccess" @error="handleLoginError">
+                </GoogleSignInButton>
             </div>
             <ProgressSpinner v-if="isLoggingIn" style="width: 40px; height: 40px; margin: unset;" strokeWidth="4"
                 class="self-center" />
@@ -27,6 +30,7 @@ import {
     type CredentialResponse,
 } from "vue3-google-signin";
 import ProgressSpinner from 'primevue/progressspinner';
+import { Clerk } from '@clerk/clerk-js'
 
 useTitleApp('Sign In')
 
@@ -92,6 +96,25 @@ const { mutate: signInAuth, isPending } = useMutation({
             if (e.ok) {
                 handleSuccessSignIn(e._data)
             }
+        })
+    },
+})
+
+const { CLERK_AUTH_ENABLED, CLERK_PUBLISHABLE_KEY } = useRuntimeConfig().public
+
+const { mutate: signInWithEmail, isPending: signingEmail } = useMutation({
+    mutationFn: async () => {
+        if (!CLERK_AUTH_ENABLED) {
+            return
+        }
+
+        const clerk = new Clerk(CLERK_PUBLISHABLE_KEY)
+        await clerk.load({})
+        await clerk.signOut(() => {
+            console.log('signed out cleared')
+        })
+        await clerk.redirectToSignIn({
+            redirectUrl: '/auth/clerk-callback',
         })
     },
 })
