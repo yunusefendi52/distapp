@@ -1,7 +1,7 @@
-import slugify from 'slugify'
+import slug from 'slug'
 
 export const normalizeName = (value) => {
-    const slugValue = slugify(value.trim(), {
+    const slugValue = slug(value.trim(), {
         lower: true,
         locale: 'en',
         replacement: '-',

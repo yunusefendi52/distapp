@@ -23,16 +23,32 @@ export default defineEventHandler(async (event) => {
         })
     }
     const now = new Date()
-    await db.insert(tables.artifactsGroups).values({
-        id: generateId(),
-        name: normalizeName(groupName),
-        displayName: groupName,
-        appsId: app!.id,
-        publicId: normalizeName(groupName),
-        isPublic: isPublic,
-        createdAt: now,
-        updatedAt: now,
-    })
+    const normalizeGroupName = normalizeName(groupName)
+    try {
+        await db.insert(tables.artifactsGroups).values({
+            id: generateId(),
+            name: normalizeGroupName,
+            displayName: groupName,
+            appsId: app!.id,
+            publicId: normalizeGroupName,
+            isPublic: isPublic,
+            createdAt: now,
+            updatedAt: now,
+        })
+    } catch (e) {
+        const errorMessage = `${e}`
+        if (errorMessage.includes('SQLITE_CONSTRAINT') && errorMessage.includes('UNIQUE constraint failed:')) {
+            throw createError({
+                message: `${groupName} group with id "${normalizeGroupName}" already exists in your app. Try change or add prefix to your group name`,
+                statusCode: 400,
+            })
+        } else {
+            throw createError({
+                message: errorMessage,
+                statusCode: 400,
+            })
+        }
+    }
     return {
         ok: true,
     }
