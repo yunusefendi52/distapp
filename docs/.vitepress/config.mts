@@ -53,6 +53,15 @@ export default defineConfig({
         ],
       },
       {
+        text: 'Testing Guides',
+        items: [
+          {
+            text: 'Testing iOS Apps',
+            link: '/testing-guides/testing-ios-apps',
+          },
+        ],
+      },
+      {
         text: 'APIs',
         items: [
           {
