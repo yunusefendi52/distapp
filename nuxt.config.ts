@@ -82,7 +82,7 @@ export default defineNuxtConfig({
     APP_LIMIT_APPS: 2,
     APP_LIMIT_APPS_GROUP: 8,
     APP_LIMIT_INVITE_ORGS: 8,
-    APP_LIMIT_SIZE_ARTIFACT_MB: 50,
+    APP_LIMIT_SIZE_ARTIFACT_MB: 100,
     // Features subsription plan
     APP_LIMIT_PRO_ORG: 10,
     APP_LIMIT_PRO_APPS: 100,
