@@ -1,13 +1,17 @@
 export async function getActiveSubs(userId: string) {
     const polar = createPollar()
     const activeSubs = await polar.subscriptions.list({
-        active: true,
         metadata: {
             userId: userId,
         },
         limit: 2,
         sorting: ['-started_at']
-    }).then(e => e.result.items).then(singleOrDefault)
+    }).then(e => e.result.items).then(e => e && e.length ? e[0]: undefined)
+    if (activeSubs && (
+        activeSubs.status === 'active'
+        || activeSubs.status === 'past_due')) {
+        return activeSubs
+    }
     return activeSubs
 }
 

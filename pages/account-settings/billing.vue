@@ -20,7 +20,7 @@
                                 :loading="toggleSubsPending" fluid @click="() => toggleSubs(false)" class="mt-3" />
                             <Button v-else :loading="toggleSubsPending" label="Cancel Renew" outlined class="mt-3"
                                 @click="() => toggleSubs(true)" />
-                            <Button label="Billing Overview" outlined :loading="updatePaymentPending" fluid
+                            <Button label="Manage Billing" outlined :loading="updatePaymentPending" fluid
                                 @click="() => updatePayment()" class="mt-3" />
                             <span v-if="data?.endsAt ? false : true" class="mt-4">Your payment status: {{
                                 data.statusFormatted
