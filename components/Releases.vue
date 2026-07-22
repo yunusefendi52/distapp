@@ -10,30 +10,30 @@
             <Column field="artifacts.releaseId" header="Release Id" style="width: 15%"></Column>
             <Column field="artifacts.versionName2" header="Version">
                 <template #body="slotProps">
-                    <label>
+                    <span>
                         {{ `${slotProps.data.artifacts.versionName2} (${slotProps.data.artifacts.versionCode2})` }}
-                    </label>
+                    </span>
                 </template>
             </Column>
             <Column header="Groups">
                 <template #body="slotProps">
-                    <label>
+                    <span>
                         {{ slotProps.data.groups.names ?? '-' }}
-                    </label>
+                    </span>
                 </template>
             </Column>
             <Column header="Uploaded">
                 <template #body="slotProps">
                     <ClientOnly>
-                        <label v-tooltip="{ value: slotProps.data.artifacts.createdAt, showDelay: 1250 }">
+                        <span v-tooltip="{ value: slotProps.data.artifacts.createdAt, showDelay: 1250 }">
                             {{ formatDate(slotProps.data.artifacts.createdAt) }}
-                        </label>
+                        </span>
                     </ClientOnly>
                 </template>
             </Column>
             <template #empty>
                 <div class="flex items-center justify-center">
-                    <label>No data found</label>
+                    <span>No data found</span>
                 </div>
             </template>
         </DataTable>
