@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="w-full md:max-w-5xl m-auto p-5">
-            <h1 class="text-5xl font-medium">Pricing</h1>
+            <h1 class="text-5xl font-medium mt-5">Pricing</h1>
             <div class="mt-5">
                 <div class="flex max-w-full flex-col lg:max-w-5xl mx-auto my-10 gap-5">
                     <!-- <div class="flex flex-row gap-4">

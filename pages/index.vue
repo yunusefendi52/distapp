@@ -43,6 +43,7 @@
         <div class="flex flex-col gap-6 sm:grid sm:grid-cols-3">
             <AppCard class="h-full" :apply-shadow="true">
                 <article class="px-2">
+                    <i class="pi pi-box !text-[24px] pt-2 pb-1 mb-3 block text-[var(--p-primary-color)]"></i>
                     <h2 class="font-bold text-lg mb-1">Manage your apps</h2>
                     <p class="font-light">Manage all of your apps in one place. Supports Android, iOS, Desktop and other platforms.
                     </p>
@@ -50,12 +51,14 @@
             </AppCard>
             <AppCard class="h-full" :apply-shadow="true">
                 <article class="px-2">
+                    <i class="pi pi-users !text-[24px] pt-2 pb-1 mb-3 block text-[var(--p-primary-color)]"></i>
                     <h2 class="font-bold text-lg mb-2">Group and organization</h2>
                     <p class="font-light">Create seperate group or organization for your apps</p>
                 </article>
             </AppCard>
             <AppCard class="h-full" :apply-shadow="true">
                 <article class="px-2">
+                    <i class="pi pi-server !text-[24px] pt-2 pb-1 mb-3 block text-[var(--p-primary-color)]"></i>
                     <h2 class="font-bold text-lg mb-1">Self Hosted</h2>
                     <p class="font-light">You can self host in your own infrastructure</p>
                 </article>
@@ -78,7 +81,6 @@
                 </div>
             </div>
         </div>
-        <div class="h-[50px]"></div>
     </div>
 </template>
 

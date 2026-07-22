@@ -1,6 +1,6 @@
 <template>
     <div class="mb-16">
-        <header class="">
+        <header class="border-b border-[var(--p-content-border-color)] sticky top-0 bg-[var(--p-content-background)]">
             <nav class="flex w-full items-center">
                 <AppHeader class="flex-1" />
             </nav>
@@ -8,7 +8,7 @@
 
         <slot />
 
-        <footer class="sm:fixed bottom-0 w-full px-10 py-5 text-right bg-[var(--p-content-background)]">
+        <footer class="bottom-0 w-full px-10 py-5 text-right bg-[var(--p-content-background)]">
             <NuxtLink to="privacy-policy">
                 <Button label="Privacy" text size="small" />
             </NuxtLink>
