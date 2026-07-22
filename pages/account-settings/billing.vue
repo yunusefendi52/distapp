@@ -42,6 +42,11 @@
                 </div>
             </AppCard>
         </div>
+        <div class="text-center text-sm text-gray-500 mt-5">
+            <p>Questions about billing? Contact us at
+                <a href="mailto:contact@distapp.app" class="underline">contact@distapp.app</a>
+            </p>
+        </div>
     </div>
 </template>
 

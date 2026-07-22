@@ -26,6 +26,11 @@
                     <li>To communicate with you.</li>
                 </ul>
                 <p>We may change this Privacy Policy statement from time to time.</p>
+
+                <br>
+                <p class="text-lg font-bold">Contact</p>
+                <p>If you have any questions about this Privacy Policy, please contact us at
+                    <a href="mailto:contact@distapp.app" class="underline">contact@distapp.app</a>.</p>
             </div>
         </div>
     </div>
