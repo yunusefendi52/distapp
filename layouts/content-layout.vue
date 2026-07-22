@@ -9,6 +9,9 @@
         <slot />
 
         <footer class="bottom-0 w-full px-10 py-5 text-right bg-[var(--p-content-background)]">
+            <NuxtLink to="about">
+                <Button label="About" text size="small" />
+            </NuxtLink>
             <NuxtLink to="privacy-policy">
                 <Button label="Privacy" text size="small" />
             </NuxtLink>
