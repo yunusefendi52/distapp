@@ -68,7 +68,7 @@
             <h2 class="text-2xl font-medium">Frequently Asked Questions</h2>
             <div class="flex flex-col">
                 <div v-for="(faq, index) in faqs" :key="index"
-                    class="border-b border-[var(--p-text-muted-color)] last:border-b-0">
+                    class="border-b border-b-[var(--p-content-border-color)] last:border-b-0">
                     <button class="flex items-center justify-between w-full px-4 py-3 text-left font-medium hover:bg-[var(--p-surface-hover)] cursor-pointer"
                         @click="toggleFaq(index)">
                         <span class="font-medium text-lg">{{ faq.question }}</span>
