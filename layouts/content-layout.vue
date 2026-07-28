@@ -1,6 +1,6 @@
 <template>
     <div class="mb-16">
-        <header class="border-b border-[var(--p-content-border-color)] sticky top-0 bg-[var(--p-content-background)]">
+        <header class="border-b border-[var(--p-content-border-color)] sticky top-0 z-30 bg-[var(--p-content-background)]">
             <nav class="flex w-full items-center">
                 <AppHeader class="flex-1" />
             </nav>
