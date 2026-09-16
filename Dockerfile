@@ -8,15 +8,19 @@ RUN bun install --frozen-lockfile
 COPY . .
 RUN bun run build --preset=bun
 
-FROM oven/bun:1.2.8
+FROM eclipse-temurin:11-jre
 WORKDIR /app
 RUN mkdir -p /app/distapp-headless
 
-RUN apt-get update && \
-    apt-get install -y openjdk-11-jre-headless
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        curl \
+        unzip \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -y unzip
-RUN apt-get install -y curl
+# Install Bun
+RUN curl -fsSL https://bun.sh/install | bash -s "bun-v1.2.8"
+ENV PATH="/root/.bun/bin:${PATH}"
 
 ARG DISTAPP_BUNDLETOOL_PATH=/app/bundletool.jar
 ENV DISTAPP_BUNDLETOOL_PATH=${DISTAPP_BUNDLETOOL_PATH}
