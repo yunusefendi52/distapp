@@ -90,7 +90,7 @@ export default defineEventHandler(async (event) => {
             releaseId: newReleaseId,
             extension: packageData?.extension,
             packageName: packageData?.packageName,
-            filename: filename.substring(0, 32),
+            filename: filename,
             fileContentLength: keyValueTemp.value.fileSize,
             fileApkContentLength: keyValueTemp.value.fileApkSize,
         })
