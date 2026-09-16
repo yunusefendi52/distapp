@@ -8,7 +8,7 @@ RUN bun install --frozen-lockfile
 COPY . .
 RUN bun run build --preset=bun
 
-FROM eclipse-temurin:11-jre
+FROM eclipse-temurin:25-jre
 WORKDIR /app
 RUN mkdir -p /app/distapp-headless
 
@@ -25,7 +25,7 @@ ENV PATH="/root/.bun/bin:${PATH}"
 ARG DISTAPP_BUNDLETOOL_PATH=/app/bundletool.jar
 ENV DISTAPP_BUNDLETOOL_PATH=${DISTAPP_BUNDLETOOL_PATH}
 
-RUN [ -f ${DISTAPP_BUNDLETOOL_PATH} ] || curl -L -o ${DISTAPP_BUNDLETOOL_PATH} "https://github.com/google/bundletool/releases/download/1.17.2/bundletool-all-1.17.2.jar"
+RUN [ -f ${DISTAPP_BUNDLETOOL_PATH} ] || curl -L -o ${DISTAPP_BUNDLETOOL_PATH} "https://github.com/google/bundletool/releases/download/1.18.3/bundletool-all-1.18.3.jar"
 
 COPY --from=builder /builder/.output .
 

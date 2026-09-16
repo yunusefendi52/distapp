@@ -36,8 +36,8 @@ async function getBundletoolPath(bundeFilesDir: string): Promise<string> {
     } else {
         const bundletoolJarPath = join(bundeFilesDir, 'bundletool.jar')
         const bundletoolCheck = await exec(`java -jar "${bundletoolJarPath}" version || echo "Error check bundletool version"`)
-        if (!bundletoolCheck.stdout.includes('1.17.2')) {
-            await downloadFile('https://github.com/google/bundletool/releases/download/1.17.2/bundletool-all-1.17.2.jar', bundletoolJarPath)
+        if (!bundletoolCheck.stdout.includes('1.18.3')) {
+            await downloadFile('https://github.com/google/bundletool/releases/download/1.18.3/bundletool-all-1.18.3.jar', bundletoolJarPath)
         }
         return bundletoolJarPath
     }
