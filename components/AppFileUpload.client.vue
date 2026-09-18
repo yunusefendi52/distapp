@@ -14,12 +14,12 @@
                             <br>
                         </span>
                     </div>
-                    <div class="flex flex-row items-center gap-2 mt-3">
+                    <!-- <div class="flex flex-row items-center gap-2 mt-3">
                         <Checkbox v-model="generateApk" inputId="generate_apk" binary />
                         <label class="cursor-pointer text-sm dark:text-neutral-200" for="generate_apk">
                             Build APK (slower - use CLI for faster builds)
                         </label>
-                    </div>
+                    </div> -->
                     <div class="mt-4" v-if="!generateApk">
                         <InputFileUpload v-model="fileApkRef" type="file"
                             accept="application/vnd.android.package-archive" placeholder="Click to attach APK" />
@@ -140,6 +140,10 @@ const toast = useToast()
 
 const onUpload = async (file: File, fileApk: File | 'generate_bundle' | undefined) => {
     try {
+        if (fileApk === 'generate_bundle') {
+            throw 'Generating build APK in the web app is currently disabled. Please use the CLI instead.'
+        }
+
         const data = await uploadArtifact(file, file.name, orgName.value, appName.value, releaseNotes.value, fileApk,
             versionName.value && versionCode.value ? {
                 versionName: versionName.value,
@@ -160,5 +164,6 @@ const onUpload = async (file: File, fileApk: File | 'generate_bundle' | undefine
 }
 
 const { public: { UPLOAD_WITH_BUILD_APK } } = useRuntimeConfig()
-const generateApk = ref(UPLOAD_WITH_BUILD_APK)
+// const generateApk = ref(UPLOAD_WITH_BUILD_APK)
+const generateApk = ref(false)
 </script>

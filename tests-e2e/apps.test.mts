@@ -205,30 +205,30 @@ test('Apps test', async ({ page, goto, context, request }) => {
         }
 
         if (osTestType === 'Android') {
-            await test.step('User can upload aab in website', async () => {
-                await page.getByTestId('a_menus').getByText(orgName).click()
-                await page.getByText(appName).click()
-                await page.getByTestId('d_upload').click()
-                await expect(page.getByTestId('upload_input_btn')).toBeVisible()
-                const fileChooserPromise = page.waitForEvent('filechooser')
-                await page.getByTestId('upload_input_btn').click()
-                const fileChooser = await fileChooserPromise
-                await fileChooser.setFiles('tests/tests_artifacts/app-release.aab')
+            // await test.step('User can upload aab in website', async () => {
+            //     await page.getByTestId('a_menus').getByText(orgName).click()
+            //     await page.getByText(appName).click()
+            //     await page.getByTestId('d_upload').click()
+            //     await expect(page.getByTestId('upload_input_btn')).toBeVisible()
+            //     const fileChooserPromise = page.waitForEvent('filechooser')
+            //     await page.getByTestId('upload_input_btn').click()
+            //     const fileChooser = await fileChooserPromise
+            //     await fileChooser.setFiles('tests/tests_artifacts/app-release.aab')
 
-                const generateBundleRespPromise = page.waitForResponse(r => r.url().includes('generate-bundle-headless'))
-                const gbRespPromise = page.waitForResponse(r => r.url().includes('/genbndl'))
-                const uploadArtifactUrlPromise = page.waitForResponse(r => r.url().includes('upload-artifact-url'))
-                await page.getByTestId('submit_upload_btn').click()
-                const generateBundleResp = await generateBundleRespPromise
-                const uploadArtifactUrl = await uploadArtifactUrlPromise
-                const gbResp = await gbRespPromise
-                expect(generateBundleResp.status()).toBe(302)
-                expect(gbResp.ok()).toBe(true)
-                expect(uploadArtifactUrl.ok()).toBe(true)
-                await expect(page.getByTestId('submit_upload_btn'), {
-                    message: 'Dialog should be gone after upload success',
-                }).not.toBeVisible()
-            })
+            //     const generateBundleRespPromise = page.waitForResponse(r => r.url().includes('generate-bundle-headless'))
+            //     const gbRespPromise = page.waitForResponse(r => r.url().includes('/genbndl'))
+            //     const uploadArtifactUrlPromise = page.waitForResponse(r => r.url().includes('upload-artifact-url'))
+            //     await page.getByTestId('submit_upload_btn').click()
+            //     const generateBundleResp = await generateBundleRespPromise
+            //     const uploadArtifactUrl = await uploadArtifactUrlPromise
+            //     const gbResp = await gbRespPromise
+            //     expect(generateBundleResp.status()).toBe(302)
+            //     expect(gbResp.ok()).toBe(true)
+            //     expect(uploadArtifactUrl.ok()).toBe(true)
+            //     await expect(page.getByTestId('submit_upload_btn'), {
+            //         message: 'Dialog should be gone after upload success',
+            //     }).not.toBeVisible()
+            // })
             await test.step('User can upload apk in website', async () => {
                 await page.getByTestId('a_menus').getByText(orgName).click()
                 await page.getByText(appName).click()
