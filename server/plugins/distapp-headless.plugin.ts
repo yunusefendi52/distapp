@@ -2,7 +2,7 @@ import { spawn, spawnSync } from 'node:child_process'
 import { join } from 'node:path'
 
 export default defineNitroPlugin(async (nuxtApp) => {
-    if (import.meta.dev || import.meta.preset === 'bun') {
+    if (import.meta.dev) {
         const cwd = join(process.cwd(), 'distapp-headless')
         spawnSync('bun', ['i'], {
             cwd: cwd,
