@@ -17,7 +17,7 @@
                 <label>Slug</label>
                 <div class="flex flex-row gap-2">
                     <InputText :value="slug" readonly aria-describedby="slug" class="flex-1" data-testid="slug_input" />
-                    <Button icon="pi pi-copy" @click="() => copyText(slug)" />
+                    <AppCopyButton :textValue="() => slug" />
                 </div>
             </div>
             <div class="flex flex-col md:flex-row gap-3 *:md:flex-1">
@@ -26,7 +26,7 @@
                     <div class="flex flex-row gap-2">
                         <InputText :value="data?.organizationsId" readonly aria-describedby="Org Id" class="flex-1"
                             data-testid="orgid_input" />
-                        <Button icon="pi pi-copy" @click="() => copyText(data?.organizationsId || undefined)" />
+                        <AppCopyButton :textValue="() => data?.organizationsId || undefined" />
                     </div>
                 </div>
                 <div class="flex flex-col gap-2">
@@ -34,7 +34,7 @@
                     <div class="flex flex-row gap-2">
                         <InputText :value="data?.id" readonly aria-describedby="App Id" class="flex-1"
                             data-testid="appid_input" />
-                        <Button icon="pi pi-copy" @click="() => copyText(data?.id)" />
+                        <AppCopyButton :textValue="() => data?.id" />
                     </div>
                 </div>
             </div>

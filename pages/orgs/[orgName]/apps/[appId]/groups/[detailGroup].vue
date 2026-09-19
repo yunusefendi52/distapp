@@ -70,7 +70,7 @@
         <div class="px-4 pb-2 flex flex-col gap-4">
             <span class="text-center">Scan the following QR in your device to open the link</span>
             <QrCodeView :code="publicLink" />
-            <Button icon="pi pi-copy" text label="Copy Link" @click="() => copyLink(publicLink)" />
+            <AppCopyButton text label="Copy Link" :textValue="() => publicLink" />
         </div>
     </Dialog>
 </template>

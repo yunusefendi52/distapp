@@ -12,7 +12,7 @@
             <span class="text-sm" style="color: var(--p-text-muted-color);">Keep this key safe</span>
             <div class="flex flex-row gap-4 items-center">
                 <span data-testid="tkn_spn" class="flex-1 break-all flex-wrap text-xl">{{ data?.token }}</span>
-                <Button icon="pi pi-copy" @click="() => copyText(data?.token)" />
+                <AppCopyButton :textValue="() => data?.token" />
             </div>
         </AppCard>
 
