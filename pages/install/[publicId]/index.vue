@@ -10,7 +10,7 @@
         </div>
         <div class="container flex flex-col gap-5 px-5" v-else>
             <div class="flex flex-col justify-start gap-3">
-                <span class=" text-4xl">{{ data?.app.displayName }}</span>
+                <span class=" text-2xl">{{ data?.app.displayName }}</span>
                 <div class="flex justify-start gap-2">
                     <Badge :value="data?.org.displayName" severity="info" />
                     <Badge :value="data?.artifactGroup?.displayName || undefined" severity="info" />
