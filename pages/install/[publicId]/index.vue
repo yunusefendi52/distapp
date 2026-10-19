@@ -1,9 +1,9 @@
 <template>
     <div class="flex flex-col items-center">
-        <div v-if="status === 'idle' || status === 'pending'">
+        <div v-if="status === 'idle' || (status === 'pending' && !data)">
             <ProgressSpinner style="width: 50px; height: 50px; margin: unset;" strokeWidth="6" />
         </div>
-        <div v-else-if="status === 'error' && error">
+        <div v-else-if="status === 'error' && error && !data">
             <Message severity="error" class="mx-4">
                 <span>{{ normalizeError(error) }}</span>
             </Message>
@@ -17,7 +17,12 @@
                 </div>
                 <PlatformBadge :osType="data?.app?.osType" />
             </div>
-            <Panel v-for="item in artifacts" :key="item.id">
+            <IconField>
+                <InputIcon class="pi pi-search" />
+                <InputText v-model="search" aria-label="Search releases" autocomplete="off"
+                    placeholder="Search version name" class="w-full" />
+            </IconField>
+            <Panel v-for="(item, index) in artifacts" :key="item.id">
                 <template #header>
                     <div class="flex flex-row w-full">
                         <div class="flex-1 flex flex-col gap-1">
@@ -28,8 +33,11 @@
                                     item.releaseId
                                 }})</a>
                             <ClientOnly>
-                                <span class="self-start" v-tooltip="{ value: item.createdAt, showDelay: 1250 }">{{
-                                    formatDate(item.createdAt) }}</span>
+                                <span class="flex items-center gap-2" v-tooltip="{ value: item.createdAt, showDelay: 1250 }">
+                                    {{ formatDate(item.createdAt) }}
+                                    <Badge v-if="debouncedSearch.length === 0 && first === 0 && index === 0" value="Latest"
+                                        severity="success" />
+                                </span>
                             </ClientOnly>
                             <!-- <span>30mbbb</span> -->
                         </div>
@@ -47,6 +55,15 @@
                     </div>
                 </template>
             </Panel>
+            <Message severity="info" v-if="debouncedSearch && artifacts.length === 0">
+                <span>No releases match your search.</span>
+            </Message>
+            <Paginator v-model:first="first" v-model:rows="pageSize" :totalRecords="total"
+                template="FirstPageLink PrevPageLink NextPageLink RowsPerPageDropdown"
+                :rowsPerPageOptions="[5, 10, 20, 50]" @page="onPage" v-else />
+            <div class="flex justify-center" v-if="status === 'pending'">
+                <ProgressSpinner style="width: 22px; height: 22px; margin: unset;" strokeWidth="6" />
+            </div>
         </div>
     </div>
 </template>
@@ -68,6 +85,22 @@ const route = useRoute()
 const { value: { publicId, orgName, appName } } = computed(() => route.params)
 const { value: { artifactId, releaseId } } = computed(() => route.query)
 
+const page = ref(1)
+const pageSize = ref(20)
+const first = ref(0)
+const search = ref('')
+const debouncedSearch = refDebounced(search, 350)
+
+// Total is unknown at first (no count query); MAX_SAFE_INT keeps "Next" enabled.
+// A short page (fewer rows than pageSize) means it's the last page, so we lock in
+// the real total from it — that's how "Next" gets disabled correctly.
+const UNKNOWN_TOTAL = Number.MAX_SAFE_INTEGER
+const total = ref(UNKNOWN_TOTAL)
+const onPage = () => {
+    page.value = first.value / pageSize.value + 1
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
 const { data, status, error } = useFetch('/api/install/get-data', {
     query: {
         publicId,
@@ -75,13 +108,32 @@ const { data, status, error } = useFetch('/api/install/get-data', {
         appName,
         artifactId,
         releaseId,
+        page,
+        pageSize,
+        search: debouncedSearch,
     },
     server: false,
 })
+
 watchEffect(() => {
     if (data.value) {
         showAccountBtn.value = data.value.artifactGroup.isPublic !== true
     }
+})
+// Discover the real total on the first short page we ever see
+watchEffect(() => {
+    const rows = data.value?.artifacts?.length
+    if (rows != null && rows < pageSize.value) {
+        total.value = (page.value - 1) * pageSize.value + rows
+    }
+})
+watch(pageSize, () => {
+    total.value = UNKNOWN_TOTAL
+})
+watch(debouncedSearch, () => {
+    page.value = 1
+    first.value = 0
+    total.value = UNKNOWN_TOTAL
 })
 watch(() => error.value, (err) => {
     if (err && err.statusCode === 400) {
@@ -90,7 +142,7 @@ watch(() => error.value, (err) => {
 }, {
     immediate: true,
 })
-const artifacts = computed(() => data.value?.artifacts.map(e => e.artifacts!))
+const artifacts = computed(() => data.value?.artifacts.map(e => e.artifacts!) ?? [])
 
 const title = useTitleApp(computed(() => `Install ${data.value?.app.displayName ?? ''}`))
 

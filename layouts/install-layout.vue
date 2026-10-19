@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-row gap-1 items-center">
+    <div class="border-b border-[var(--p-content-border-color)] flex flex-row gap-1 items-center">
         <AppHeader class="flex-auto" />
         <template v-if="showAccountBtn">
             <template v-if="isLoggedIn">
