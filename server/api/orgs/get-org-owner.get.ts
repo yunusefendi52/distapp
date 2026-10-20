@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
         .where(and(
             eq(tables.organizations.name, orgName),
             eq(tables.organizationsPeople.role, 'owner'),
+            eq(tables.users.id, event.context.auth.userId),
         ))
         .then(takeUniqueOrThrow)
     return {
