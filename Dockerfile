@@ -5,10 +5,10 @@ ENV NUXT_DISTAPP_SELF_HOST=true
 ENV NUXT_ADD_SCHEDULED_TASKS=true
 
 COPY package.json bun.lock /builder/
+COPY patches/ /builder/patches/
 RUN bun install --frozen-lockfile
 COPY . .
 RUN bun run build --preset=bun
-RUN sed -i 's/Bun\.serve({/Bun.serve({\n  idleTimeout: process.env.NUXT_BUN_IDLE_TIMEOUT ? parseInt(process.env.NUXT_BUN_IDLE_TIMEOUT) : 120,/' .output/server/index.mjs
 
 FROM eclipse-temurin:25-jre
 WORKDIR /app
