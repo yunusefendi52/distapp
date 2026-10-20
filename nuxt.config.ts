@@ -124,9 +124,9 @@ export default defineNuxtConfig({
       openAPI: true,
       tasks: true,
     },
-    scheduledTasks: {
+    scheduledTasks: import.meta.env.NUXT_ADD_SCHEDULED_TASKS ? {
       '0 */24 * * *': ['purgeArtifact', 'purgeUploadTemp'],
-    },
+    } : undefined,
     // node: true,
   },
 
