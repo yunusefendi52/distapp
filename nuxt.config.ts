@@ -126,6 +126,8 @@ export default defineNuxtConfig({
     },
     scheduledTasks: import.meta.env.NUXT_ADD_SCHEDULED_TASKS ? {
       '0 */24 * * *': ['purgeArtifact', 'purgeUploadTemp'],
+      // Hourly: purge artifacts of the least recently scheduled apps
+      '0 * * * *': ['retention-purge'],
     } : undefined,
     // node: true,
   },

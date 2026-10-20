@@ -1,9 +1,10 @@
 import { runPurgeArtifact } from "~/server/tasks/purgeArtifact"
+import { runRetentionPurge } from "~/server/tasks/retention-purge"
 import { runPurgeUploadTemp } from "~/server/tasks/purgeUploadTemp"
 
 export default defineEventHandler(async (event) => {
     const { runTaskKey, taskName } = await getValidatedQuery(event, z.object({
-        runTaskKey: z.string().nullish(),
+        runTaskKey: z.string().min(1),
         taskName: z.string().nullish(),
     }).parse)
 
@@ -18,7 +19,12 @@ export default defineEventHandler(async (event) => {
         return await runPurgeUploadTemp(event)
     } else if (taskName === 'purgeArtifact') {
         return await runPurgeArtifact(event)
+    } else if (taskName === 'retention-purge') {
+        return await runRetentionPurge(event)
     } else {
-        setResponseStatus(event, 404, 'Not found')
+        throw createError({
+            message: 'Not found',
+            statusCode: 404,
+        })
     }
 })

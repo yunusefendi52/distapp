@@ -38,6 +38,8 @@ export default defineEventHandler(async (event) => {
         name: normalizeName(name),
         osType: osType,
         organizationsId: orgId,
+        // New apps inherit the organization retention settings by default
+        retentionMode: 'inherit',
         createdAt: now,
         updatedAt: now,
     })

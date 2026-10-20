@@ -9,6 +9,10 @@ export default defineEventHandler(async (event) => {
         id: tables.organizations.id,
         name: tables.organizations.name,
         displayName: tables.organizations.displayName,
+        retentionEnabled: tables.organizations.retentionEnabled,
+        retentionMode: tables.organizations.retentionMode,
+        retentionKeepLatest: tables.organizations.retentionKeepLatest,
+        retentionKeepDays: tables.organizations.retentionKeepDays,
     })
         .from(tables.organizations)
         .innerJoin(tables.organizationsPeople, and(

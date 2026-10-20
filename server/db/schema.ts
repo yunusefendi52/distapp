@@ -70,6 +70,16 @@ export const organizations = sqliteTable('organizations', {
     id: text('id').primaryKey().unique(),
     name: text('name').unique().notNull(),
     displayName: text('displayName').notNull(),
+    // Retention settings (organization level defaults, inherited by apps)
+    retentionEnabled: integer('retentionEnabled', { mode: 'boolean' }).default(false),
+    retentionMode: text('retentionMode', {
+        enum: ['latest', 'days', 'both'],
+    }).default('both'),
+    retentionKeepLatest: integer('retentionKeepLatest').default(5),
+    retentionKeepDays: integer('retentionKeepDays').default(30),
+    retentionLastScheduledAt: integer('retentionLastScheduledAt', {
+        mode: 'timestamp_ms',
+    }),
     ...timeColumns,
 })
 export const organizationsRelations = relations(organizations, (r) => ({
@@ -116,6 +126,17 @@ export const apps = sqliteTable('apps', {
     }),
     organizationsId: text('organizationsId').references(() => organizations.id, {
         onDelete: 'cascade',
+    }),
+    // Retention settings (app level defaults), retentionMode = 'inherit' means use organization level settings
+    // New apps are inserted with retentionMode 'inherit' (see create-app.post.ts), existing rows backfilled by migration 0075
+    retentionEnabled: integer('retentionEnabled', { mode: 'boolean' }).default(false),
+    retentionMode: text('retentionMode', {
+        enum: ['latest', 'days', 'both', 'inherit'],
+    }).default('both'),
+    retentionKeepLatest: integer('retentionKeepLatest').default(5),
+    retentionKeepDays: integer('retentionKeepDays').default(30),
+    retentionLastScheduledAt: integer('retentionLastScheduledAt', {
+        mode: 'timestamp_ms',
     }),
     ...timeColumns,
 }, (t) => ({
@@ -178,6 +199,13 @@ export const artifactsGroups = sqliteTable('artifactsGroups', {
     isPublic: integer('isPublic', {
         mode: 'boolean'
     }).default(false),
+    // Retention override, retentionMode = 'inherit' means use app level settings
+    retentionEnabled: integer('retentionEnabled', { mode: 'boolean' }).default(false),
+    retentionMode: text('retentionMode', {
+        enum: ['latest', 'days', 'both', 'inherit'],
+    }).default('inherit'),
+    retentionKeepLatest: integer('retentionKeepLatest'),
+    retentionKeepDays: integer('retentionKeepDays'),
     ...timeColumns,
 }, t => ({
     appsId_releaseId: unique().on(t.appsId, t.name),
