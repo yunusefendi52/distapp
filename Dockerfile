@@ -20,8 +20,32 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Bun
-RUN curl -fsSL https://bun.sh/install | bash -s "bun-v1.2.8"
-ENV PATH="/root/.bun/bin:${PATH}"
+ARG BUN_VERSION=1.2.8
+ARG BUN_SHA256_AMD64=1d48ae3f4649d281b14efd723e49b69a44e5da9a8d7341d611a3ea58ec478ec1
+ARG BUN_SHA256_ARM64=23083f256f2a1d155c456e12e39c51e31dc41b97c63420d9915f43bb86abeab1
+RUN set -eu; \
+    case "$(dpkg --print-architecture)" in \
+        amd64) \
+            BUN_ARCH="x64-baseline"; \
+            BUN_SHA256="${BUN_SHA256_AMD64}"; \
+            ;; \
+        arm64) \
+            BUN_ARCH="aarch64"; \
+            BUN_SHA256="${BUN_SHA256_ARM64}"; \
+            ;; \
+        *) \
+            echo "Unsupported architecture" >&2; \
+            exit 1; \
+            ;; \
+    esac; \
+    curl -fsSL \
+        "https://github.com/oven-sh/bun/releases/download/bun-v${BUN_VERSION}/bun-linux-${BUN_ARCH}.zip" \
+        -o /tmp/bun.zip; \
+    echo "${BUN_SHA256}  /tmp/bun.zip" | sha256sum -c -; \
+    unzip /tmp/bun.zip -d /tmp/bun; \
+    install -m 755 "/tmp/bun/bun-linux-${BUN_ARCH}/bun" /usr/local/bin/bun; \
+    rm -rf /tmp/bun /tmp/bun.zip; \
+    bun --version
 
 ARG DISTAPP_BUNDLETOOL_PATH=/app/bundletool.jar
 ENV DISTAPP_BUNDLETOOL_PATH=${DISTAPP_BUNDLETOOL_PATH}
