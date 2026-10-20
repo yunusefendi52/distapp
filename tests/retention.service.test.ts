@@ -243,7 +243,7 @@ describe('computeRetentionPlan', () => {
 })
 
 describe('executeRetention', () => {
-    test('Deletes DB rows in transactions then S3 objects per artifact', async () => {
+    test('Deletes S3 objects then DB rows within one transaction', async () => {
         const artifacts = [artifactRow('a-1'), artifactRow('a-2', { fileObjectApkKey: null })]
         const { db, stats } = makeFakeDb([artifacts])
         const { s3, calls } = makeS3()
@@ -286,9 +286,9 @@ describe('executeRetention', () => {
         expect(result.deleted).toBe(1)
         expect(result.failed).toBe(1)
         expect(result.errors).toEqual(['artifact a-1 (1.2.3): boom'])
-        // The failing artifact stops at its first S3 key; the other artifact is complete
+        // DB rows never start for the failed artifact; the healthy one is complete
         expect(calls.length).toBe(3)
-        expect(stats.deleteCalls).toBe(4)
+        expect(stats.deleteCalls).toBe(2)
     })
 
     test('Transaction failure is collected per artifact', async () => {

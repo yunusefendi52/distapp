@@ -179,15 +179,15 @@ export async function executeRetention(
     }
     const outcomes = await Promise.allSettled(plan.artifactsToDelete.map(async (artifact) => {
         await db.transaction(async (tx) => {
+            await deleteStorageObject(s3, getStorageKeys(orgId, app.id, artifact.fileObjectKey).assets)
+            if (artifact.fileObjectApkKey) {
+                await deleteStorageObject(s3, getStorageKeys(orgId, app.id, artifact.fileObjectApkKey).assets)
+            }
             await tx.delete(tables.artifactsGroupsManager)
                 .where(eq(tables.artifactsGroupsManager.artifactsId, artifact.id))
             await tx.delete(tables.artifacts)
                 .where(eq(tables.artifacts.id, artifact.id))
         })
-        await deleteStorageObject(s3, getStorageKeys(orgId, app.id, artifact.fileObjectKey).assets)
-        if (artifact.fileObjectApkKey) {
-            await deleteStorageObject(s3, getStorageKeys(orgId, app.id, artifact.fileObjectApkKey).assets)
-        }
     }))
     for (const [index, outcome] of outcomes.entries()) {
         if (outcome.status === 'fulfilled') {
