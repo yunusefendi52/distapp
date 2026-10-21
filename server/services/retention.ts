@@ -45,6 +45,8 @@ const DEFAULT_KEEP_LATEST = 5
 const DEFAULT_KEEP_DAYS = 30
 const DEFAULT_ARTIFACTS_LIMIT = 32
 
+const logger = createTaggedLogger('retention')
+
 function readPositiveInt(value: unknown, fallback: number) {
     const n = Number(value)
     return Number.isInteger(n) && n > 0 ? n : fallback
@@ -177,6 +179,16 @@ export async function executeRetention(
     if (!orgId) {
         return result
     }
+
+    logger.log('Retention plan', {
+        appId: app.id,
+        orgId,
+        mode: plan.appSettings.mode,
+        keepLatest: plan.appSettings.keepLatest,
+        keepDays: plan.appSettings.keepDays,
+        queued: plan.artifactsToDelete.length,
+    })
+
     const outcomes = await Promise.allSettled(plan.artifactsToDelete.map(async (artifact) => {
         await db.transaction(async (tx) => {
             await deleteStorageObject(s3, getStorageKeys(orgId, app.id, artifact.fileObjectKey).assets)

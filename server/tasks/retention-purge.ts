@@ -3,6 +3,7 @@ import type { EventHandlerRequest, H3Event } from "h3";
 import db from "../db/db";
 import { S3Fetch } from "../services/s3fetch";
 import { executeRetention, computeRetentionPlan } from "../services/retention";
+import { createTaggedLogger } from "../utils/logger-utils";
 
 // Each run visits a slice of apps, least recently scheduled first.
 const DEFAULT_APP_BATCH_SIZE = 16
@@ -15,6 +16,8 @@ function readPositiveInt(value: unknown, fallback: number) {
 function readBoolean(value: unknown) {
     return value === true || value === 'true' || value === '1'
 }
+
+const logger = createTaggedLogger('retention')
 
 export default defineTask({
     meta: {
@@ -31,13 +34,13 @@ export default defineTask({
     },
 });
 
-export async function runRetentionPurge(event?: H3Event<EventHandlerRequest>) {
-    console.log('Starting retention purge')
+export async function runRetentionPurge(event?: H3Event<EventHandlerRequest>, dryRunOverride?: boolean) {
+    logger.log('Starting retention purge')
 
     const env = event?.context.cloudflare?.env || process.env
 
     if (readBoolean(env.NUXT_RETENTION_DISABLED)) {
-        console.log('Retention purge is disabled (NUXT_RETENTION_DISABLED), skipping run')
+        logger.log('Retention purge is disabled (NUXT_RETENTION_DISABLED), skipping run')
         return {
             apps: 0,
             dryRun: false,
@@ -54,7 +57,7 @@ export async function runRetentionPurge(event?: H3Event<EventHandlerRequest>) {
     })
 
     const dateNow = new Date()
-    const dryRun = readBoolean(env.NUXT_RETENTION_DRY_RUN)
+    const dryRun = dryRunOverride ?? readBoolean(env.NUXT_RETENTION_DRY_RUN)
     const batchSize = readPositiveInt(env.NUXT_RETENTION_APP_BATCH_SIZE, DEFAULT_APP_BATCH_SIZE)
     const s3 = new S3Fetch()
 
@@ -97,7 +100,7 @@ export async function runRetentionPurge(event?: H3Event<EventHandlerRequest>) {
             try {
                 const plan = await computeRetentionPlan(drizzle, org, app)
                 wouldDelete += plan.artifactsToDelete.length
-                console.log('Retention dry run', {
+                logger.log('Retention dry run', {
                     appId: app.id,
                     orgId: app.organizationsId,
                     settings: plan.appSettings,
@@ -106,7 +109,7 @@ export async function runRetentionPurge(event?: H3Event<EventHandlerRequest>) {
             } catch (e) {
                 const message = e instanceof Error ? e.message : `${e}`
                 errors.push(`app ${app.id}: ${message}`)
-                console.error('Retention dry run failed for app', app.id, message)
+                logger.error('Retention dry run failed for app', app.id, message)
             }
             processed++
             continue
@@ -124,10 +127,15 @@ export async function runRetentionPurge(event?: H3Event<EventHandlerRequest>) {
                     : isNull(tables.apps.retentionLastScheduledAt),
             ))
         if (!claim.rowsAffected) {
-            console.warn('app to be already scheduled by other scheduler')
+            logger.warn('app to be already scheduled by other scheduler')
             continue
         }
         processed++
+
+        logger.log('Retention purge processing app', {
+            appId: app.id,
+            orgId: app.organizationsId,
+        })
 
         try {
             const result = await executeRetention(drizzle, org, app, s3)
@@ -135,7 +143,7 @@ export async function runRetentionPurge(event?: H3Event<EventHandlerRequest>) {
             failed += result.failed
             errors.push(...result.errors)
             if (result.deleted || result.failed) {
-                console.log('Retention purge app', {
+                logger.log('Retention purge app', {
                     appId: app.id,
                     orgId: app.organizationsId,
                     deleted: result.deleted,
@@ -146,11 +154,11 @@ export async function runRetentionPurge(event?: H3Event<EventHandlerRequest>) {
             failed++
             const message = e instanceof Error ? e.message : `${e}`
             errors.push(`app ${app.id}: ${message}`)
-            console.error('Retention purge failed for app', app.id, message)
+            logger.error('Retention purge failed for app', app.id, message)
         }
     }
 
-    console.log('Finished retention purge', {
+    logger.log('Finished retention purge', {
         apps: processed,
         dryRun,
         deleted,
@@ -158,7 +166,7 @@ export async function runRetentionPurge(event?: H3Event<EventHandlerRequest>) {
         failed,
     })
     if (errors.length) {
-        console.error('Retention purge errors', errors)
+        logger.error('Retention purge errors', errors)
     }
 
     return {
