@@ -31,6 +31,12 @@ const items = ref<MenuItem[]>([
         command: navigateFromTab,
     },
     {
+        label: 'Retention',
+        icon: 'pi pi-history',
+        routeName: 'orgs-orgName-settings-retention',
+        command: navigateFromTab,
+    },
+    {
         label: 'Danger',
         icon: 'pi pi-exclamation-triangle',
         routeName: 'orgs-orgName-settings-danger',

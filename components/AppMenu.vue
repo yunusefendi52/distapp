@@ -30,13 +30,26 @@ const orgName = computed(() => route.params.orgName as string)
         }" custom v-slot="{ href, route, navigate, isActive, isExactActive }">
             <a :active="item.routeParams?.orgName === orgName || item.name === orgName || routePath === route.path"
                 :href="href" @click="navigate" class="cursor-pointer" :data-testid="`amenu-${index}`">
-                <div class="flex flex-row px-3 py-2.5 gap-3 rounded-md menu-hover" style="align-items: center;"
+                <div class="flex flex-row justify-center px-3 py-2.5 gap-3 rounded-md menu-hover group" style="align-items: center;"
                     :class="{ 'menu-active': item.routeParams?.orgName == orgName || item.name === orgName || routePath === route.path }">
                     <i :class="item.icon" style="font-size: 1.25rem">
                     </i>
-                    <label
-                        :class="{ 'font-bold': item.routeParams?.orgName == orgName || item.name === orgName || routePath === route.path }">{{
-                            item.label }}</label>
+                    <div class="flex-1">
+                        <span
+                            class="line-clamp-1"
+                            :class="{ 'font-bold': item.routeParams?.orgName == orgName || item.name === orgName || routePath === route.path }">{{
+                                item.label }}</span>
+                    </div>
+                    <NuxtLink :to="{
+                        name: 'org-settings-info',
+                        params: {
+                            orgName: item.routeParams?.orgName ?? '',
+                        },
+                    }" v-if="item.routeName === 'orgs'">
+                        <div class="rounded border border-transparent p-1 group-hover:flex hidden items-center justify-center">
+                           <i class="pi pi-cog" style="font-size: 0.75rem"></i>
+                        </div>
+                    </NuxtLink>
                 </div>
             </a>
         </NuxtLink>

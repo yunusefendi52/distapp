@@ -28,6 +28,11 @@ const items = ref<MenuItem[]>([
         command: navigateFromTab,
     },
     {
+        label: 'Retention',
+        routeName: 'app-info-retention',
+        command: navigateFromTab,
+    },
+    {
         label: 'Danger',
         icon: 'pi pi-exclamation-triangle',
         routeName: 'settings-danger-app',
