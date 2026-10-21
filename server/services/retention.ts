@@ -41,8 +41,8 @@ export interface RetentionResult {
     errors: string[]
 }
 
-const DEFAULT_KEEP_LATEST = 5
-const DEFAULT_KEEP_DAYS = 30
+const DEFAULT_KEEP_LATEST = 10
+const DEFAULT_KEEP_DAYS = 90
 const DEFAULT_ARTIFACTS_LIMIT = 32
 
 const logger = createTaggedLogger('retention')
@@ -66,7 +66,7 @@ export function getEffectiveSettings(
 ): EffectiveRetentionSettings {
     const orgSettings: EffectiveRetentionSettings = {
         enabled: org.retentionEnabled ?? false,
-        mode: org.retentionMode ?? 'both',
+        mode: org.retentionMode ?? 'days',
         keepLatest: org.retentionKeepLatest ?? DEFAULT_KEEP_LATEST,
         keepDays: org.retentionKeepDays ?? DEFAULT_KEEP_DAYS,
     }

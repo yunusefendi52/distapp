@@ -164,8 +164,8 @@ const orgSettings = computed(() => {
     return {
         enabled: org.retentionEnabled ?? false,
         mode: (org.retentionMode as RetentionMode) ?? 'days',
-        keepLatest: org.retentionKeepLatest ?? 5,
-        keepDays: org.retentionKeepDays ?? 30,
+        keepLatest: org.retentionKeepLatest ?? 10,
+        keepDays: org.retentionKeepDays ?? 90,
     }
 })
 
@@ -203,8 +203,8 @@ watchEffect(() => {
             override: isOverride,
             enabled: app.value.retentionEnabled ?? false,
             mode: isValidMode(app.value.retentionMode) ? app.value.retentionMode : modeOptions[0].value,
-            keepLatest: app.value.retentionKeepLatest ?? 5,
-            keepDays: app.value.retentionKeepDays ?? 30,
+            keepLatest: app.value.retentionKeepLatest ?? 10,
+            keepDays: app.value.retentionKeepDays ?? 90,
         }
     }
 })
@@ -213,8 +213,8 @@ watchEffect(() => {
 const onOverrideChange = (value: boolean) => {
     if (value) {
         form.value.enabled = true
-        form.value.keepLatest = orgSettings.value?.keepLatest ?? 5
-        form.value.keepDays = orgSettings.value?.keepDays ?? 30
+        form.value.keepLatest = orgSettings.value?.keepLatest ?? 10
+        form.value.keepDays = orgSettings.value?.keepDays ?? 90
         form.value.mode = isValidMode(orgSettings.value?.mode)
             ? orgSettings.value.mode
             : modeOptions[0].value
@@ -234,8 +234,8 @@ const { mutate: saveApp, isPending: savingApp } = useMutation({
             ? {
                 retentionEnabled: form.value.enabled,
                 retentionMode: form.value.mode,
-                retentionKeepLatest: form.value.keepLatest ?? 5,
-                retentionKeepDays: form.value.keepDays ?? 30,
+                retentionKeepLatest: form.value.keepLatest ?? 10,
+                retentionKeepDays: form.value.keepDays ?? 90,
             }
             : {
                 retentionEnabled: false,

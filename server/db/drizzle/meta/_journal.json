@@ -540,6 +540,20 @@
       "when": 1792230445171,
       "tag": "0076_busy_speed_demon",
       "breakpoints": true
+    },
+    {
+      "idx": 77,
+      "version": "6",
+      "when": 1792601779133,
+      "tag": "0077_bent_queen_noir",
+      "breakpoints": true
+    },
+    {
+      "idx": 78,
+      "version": "6",
+      "when": 1792602064109,
+      "tag": "0078_wealthy_gunslinger",
+      "breakpoints": true
     }
   ]
 }

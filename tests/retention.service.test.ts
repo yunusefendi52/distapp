@@ -182,15 +182,15 @@ describe('getEffectiveSettings', () => {
         })).enabled).toBe(false)
     })
 
-    test('Missing org values fall back to defaults', () => {
+    test('Missing org values fall back to defaults (same as form defaults)', () => {
         expect(getEffectiveSettings(
-            orgRow({ retentionKeepLatest: null, retentionKeepDays: null }),
+            orgRow({ retentionMode: null, retentionKeepLatest: null, retentionKeepDays: null }),
             appRow(),
         )).toEqual({
             enabled: true,
             mode: 'days',
-            keepLatest: 5,
-            keepDays: 30,
+            keepLatest: 10,
+            keepDays: 90,
         })
     })
 })

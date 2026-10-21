@@ -129,8 +129,8 @@ watchEffect(() => {
         form.value = {
             enabled: org.value.retentionEnabled ?? false,
             mode: isValidMode(org.value.retentionMode) ? org.value.retentionMode : modeOptions[0].value,
-            keepLatest: org.value.retentionKeepLatest ?? 5,
-            keepDays: org.value.retentionKeepDays ?? 30,
+            keepLatest: org.value.retentionKeepLatest ?? 10,
+            keepDays: org.value.retentionKeepDays ?? 90,
         }
     }
 })
@@ -143,8 +143,8 @@ const { mutate: save, isPending: saving } = useMutation({
                 orgName: orgName.value,
                 retentionEnabled: form.value.enabled,
                 retentionMode: form.value.mode,
-                retentionKeepLatest: form.value.keepLatest ?? 5,
-                retentionKeepDays: form.value.keepDays ?? 30,
+                retentionKeepLatest: form.value.keepLatest ?? 10,
+                retentionKeepDays: form.value.keepDays ?? 90,
             },
         })
     },
