@@ -2,7 +2,7 @@ import { and, asc, eq, isNull, ne, or } from "drizzle-orm";
 import type { EventHandlerRequest, H3Event } from "h3";
 import db from "../db/db";
 import { S3Fetch } from "../services/s3fetch";
-import { executeRetention } from "../services/retention";
+import { executeRetention, computeRetentionPlan } from "../services/retention";
 
 // Each run visits a slice of apps, least recently scheduled first.
 const DEFAULT_APP_BATCH_SIZE = 16
@@ -25,7 +25,7 @@ export default defineTask({
         const result = await runRetentionPurge()
         return {
             result: {
-                status: `retention purge ${new Date().toISOString()} deleted ${result.deleted} failed ${result.failed}`,
+                status: `retention purge ${new Date().toISOString()} deleted ${result.deleted} failed ${result.failed}${result.dryRun ? ' (dry run)' : ''}`,
             },
         }
     },
@@ -40,7 +40,9 @@ export async function runRetentionPurge(event?: H3Event<EventHandlerRequest>) {
         console.log('Retention purge is disabled (NUXT_RETENTION_DISABLED), skipping run')
         return {
             apps: 0,
+            dryRun: false,
             deleted: 0,
+            wouldDelete: 0,
             failed: 0,
             errors: [],
         }
@@ -52,6 +54,7 @@ export async function runRetentionPurge(event?: H3Event<EventHandlerRequest>) {
     })
 
     const dateNow = new Date()
+    const dryRun = readBoolean(env.NUXT_RETENTION_DRY_RUN)
     const batchSize = readPositiveInt(env.NUXT_RETENTION_APP_BATCH_SIZE, DEFAULT_APP_BATCH_SIZE)
     const s3 = new S3Fetch()
 
@@ -84,11 +87,31 @@ export async function runRetentionPurge(event?: H3Event<EventHandlerRequest>) {
         .limit(batchSize)
 
     let deleted = 0
+    let wouldDelete = 0
     let failed = 0
     const errors: string[] = []
     let processed = 0
 
     for (const { app, org } of candidates) {
+        if (dryRun) {
+            try {
+                const plan = await computeRetentionPlan(drizzle, org, app)
+                wouldDelete += plan.artifactsToDelete.length
+                console.log('Retention dry run', {
+                    appId: app.id,
+                    orgId: app.organizationsId,
+                    settings: plan.appSettings,
+                    artifacts: plan.artifactsToDelete.map(v => `${v.versionName2} (${v.id})`),
+                })
+            } catch (e) {
+                const message = e instanceof Error ? e.message : `${e}`
+                errors.push(`app ${app.id}: ${message}`)
+                console.error('Retention dry run failed for app', app.id, message)
+            }
+            processed++
+            continue
+        }
+
         // Claim via the read value so overlapping runs skip this app.
         const claim = await drizzle.update(tables.apps)
             .set({
@@ -129,7 +152,9 @@ export async function runRetentionPurge(event?: H3Event<EventHandlerRequest>) {
 
     console.log('Finished retention purge', {
         apps: processed,
+        dryRun,
         deleted,
+        wouldDelete,
         failed,
     })
     if (errors.length) {
@@ -138,7 +163,9 @@ export async function runRetentionPurge(event?: H3Event<EventHandlerRequest>) {
 
     return {
         apps: processed,
+        dryRun,
         deleted,
+        wouldDelete,
         failed,
         errors,
     }
