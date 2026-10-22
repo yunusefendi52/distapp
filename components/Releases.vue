@@ -40,6 +40,9 @@
         <!-- Paginator Wrapper -->
         <div class="flex flex-row justify-center items-center">
             <Paginator v-model:first="first" v-model:rows="pageSize" :totalRecords="total"
+                :pt="{
+                    root: '!bg-[unset]',
+                }"
                 template="FirstPageLink PrevPageLink NextPageLink RowsPerPageDropdown" :rowsPerPageOptions="[10, 20, 50]"
                 @page="onPage" />
             <div class="h-[22px] w-[22px] m-[unset]">
