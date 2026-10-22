@@ -18,6 +18,7 @@
         "@tanstack/vue-query": "^5.28.9",
         "@vueuse/core": "^10.10.0",
         "@vueuse/nuxt": "^10.10.0",
+        "@vueuse/router": "10.10.0",
         "@xmldom/xmldom": "^0.8.10",
         "aws4fetch": "^1.0.19",
         "caniuse-lite": "^1.0.30001679",
@@ -843,6 +844,8 @@
     "@vueuse/metadata": ["@vueuse/metadata@10.11.1", "", {}, "sha512-IGa5FXd003Ug1qAZmyE8wF3sJ81xGLSqTqtQ6jaVfkeZ4i5kS2mwQF61yhVqojRnenVew5PldLyRgvdl4YYuSw=="],
 
     "@vueuse/nuxt": ["@vueuse/nuxt@10.11.1", "", { "dependencies": { "@nuxt/kit": "^3.12.1", "@vueuse/core": "10.11.1", "@vueuse/metadata": "10.11.1", "local-pkg": "^0.5.0", "vue-demi": ">=0.14.8" }, "peerDependencies": { "nuxt": "^3.0.0" } }, "sha512-UiaYSIwOkmUVn8Gl1AqtLWYR12flO+8sEu9X0Y1fNjSR7EWy9jMuiCvOGqwtoeTsqfHrivl0d5HfMzr11GFnMA=="],
+
+    "@vueuse/router": ["@vueuse/router@10.10.0", "", { "dependencies": { "@vueuse/shared": "10.10.0", "vue-demi": ">=0.14.7" }, "peerDependencies": { "vue-router": ">=4.0.0-rc.1" } }, "sha512-NYPT7PFncdSOQSPxsaBOGfu1KnDeJIiqzf9qEFTzLnj8bjRXr3295M0bRnS3NxGT48j3UegpDcktlvVBCbivLw=="],
 
     "@vueuse/shared": ["@vueuse/shared@10.11.1", "", { "dependencies": { "vue-demi": ">=0.14.8" } }, "sha512-LHpC8711VFZlDaYUXEBbFBCQ7GS3dVU9mjOhhMhXP6txTV4EhYQg/KGnQuvt/sPAtoUKq7VVUnL6mVtFoL42sA=="],
 
@@ -2707,6 +2710,8 @@
     "@vueuse/integrations/@vueuse/shared": ["@vueuse/shared@12.5.0", "", { "dependencies": { "vue": "^3.5.13" } }, "sha512-vMpcL1lStUU6O+kdj6YdHDixh0odjPAUM15uJ9f7MY781jcYkIwFA4iv2EfoIPO6vBmvutI1HxxAwmf0cx5ISQ=="],
 
     "@vueuse/nuxt/local-pkg": ["local-pkg@0.5.1", "", { "dependencies": { "mlly": "^1.7.3", "pkg-types": "^1.2.1" } }, "sha512-9rrA30MRRP3gBD3HTGnC6cDFpaE1kVDWxWgqWJUN0RvDNAo+Nz/9GxB+nHOH0ifbVFy0hSA1V6vFDvnx54lTEQ=="],
+
+    "@vueuse/router/@vueuse/shared": ["@vueuse/shared@10.10.0", "", { "dependencies": { "vue-demi": ">=0.14.7" } }, "sha512-2aW33Ac0Uk0U+9yo3Ypg9s5KcR42cuehRWl7vnUHadQyFvCktseyxxEPBi1Eiq4D2yBGACOnqLZpx1eMc7g5Og=="],
 
     "@wallet-standard/errors/chalk": ["chalk@5.6.2", "", {}, "sha512-7NzBL0rN6fMUW+f7A6Io4h40qQlG+xGmtMxfbnH/K7TAtt8JQWVQK+6g0UXKMeVJoyV5EkkNsErQ8pVD3bLHbA=="],
 

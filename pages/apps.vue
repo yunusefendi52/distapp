@@ -3,6 +3,8 @@ import { MenuItem } from 'primevue/menuitem';
 import { CreateAppDialog, PlatformBadge } from '#components'
 import { ListAppsRequest } from '~/server/api/list-apps.get';
 import { omitBy } from 'es-toolkit'
+import { refDebounced } from '@vueuse/core'
+import { useRouteQuery } from '@vueuse/router'
 
 const { name: routeName, params } = useRoute()
 const orgNameParam = params.orgName
@@ -25,12 +27,29 @@ const onRowSelect = (event: any) => {
     })
 };
 
+const _searchRouteQuery = useRouteQuery<string | null>('search', null, { mode: 'replace' })
+const searchQuery = computed<string>({
+    get: () => _searchRouteQuery.value ?? '',
+    set: (value) => {
+        _searchRouteQuery.value = value || null
+    },
+})
+const debouncedSearch = refDebounced(searchQuery, 350)
+
 const request = ref<ListAppsRequest | undefined>({
     orgName: orgNameParam as string | undefined,
+    search: searchQuery.value ?? undefined,
 })
 const { data: apps, refresh, status } = useFetch('/api/list-apps', {
     query: request,
     watch: [request],
+})
+
+watch(debouncedSearch, (value) => {
+    request.value = omitBy({
+        ...request.value,
+        search: value ?? '',
+    }, v => v ? false : true)
 })
 
 const dialog = useDialog()
@@ -53,15 +72,6 @@ const addApp = () => {
             }
         },
     })
-}
-
-const search = (e: any) => {
-    e.preventDefault()
-    const data = Object.fromEntries(new FormData(e.target))
-    request.value = omitBy({
-        ...request.value,
-        ...data,
-    }, v => v ? false : true)
 }
 
 const upperCase = (value: string | null | undefined) => {
@@ -93,12 +103,12 @@ useTitleApp('Apps')
                     </div>
                 </div>
                 <div class="flex flex-row gap-3 items-center">
-                    <form @submit="search" class="flex-1 flex-shrink-0">
-                        <IconField iconPosition="left" styl>
+                    <div class="flex-1 flex-shrink-0">
+                        <IconField iconPosition="left">
                             <InputIcon class="pi pi-search"> </InputIcon>
-                            <InputText style="width: 100%;" placeholder="Search" name="search" />
+                            <InputText style="width: 100%;" placeholder="Search" name="search" v-model="searchQuery" />
                         </IconField>
-                    </form>
+                    </div>
                     <div class="flex-shrink flex flex-row gap-2">
                         <Button label="Add App" @click="addApp"></Button>
                     </div>
