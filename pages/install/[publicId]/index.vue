@@ -10,7 +10,12 @@
         </div>
         <div class="container flex flex-col gap-5 px-5" v-else>
             <div class="flex flex-col justify-start gap-3">
-                <span class=" text-2xl">{{ data?.app.displayName }}</span>
+                <div class="flex flex-row items-center gap-2">
+                    <span class=" text-2xl">{{ data?.app.displayName }}</span>
+                    <div class="flex justify-center" v-if="status === 'pending'">
+                        <ProgressSpinner style="width: 22px; height: 22px; margin: unset;" strokeWidth="6" />
+                    </div>
+                </div>
                 <div class="flex justify-start gap-2">
                     <Badge :value="data?.org.displayName" severity="info" />
                     <Badge :value="data?.artifactGroup?.displayName || undefined" severity="info" />
@@ -61,9 +66,6 @@
             <Paginator v-model:first="first" v-model:rows="pageSize" :totalRecords="total"
                 template="FirstPageLink PrevPageLink NextPageLink RowsPerPageDropdown"
                 :rowsPerPageOptions="[5, 10, 20, 50]" @page="onPage" v-else />
-            <div class="flex justify-center" v-if="status === 'pending'">
-                <ProgressSpinner style="width: 22px; height: 22px; margin: unset;" strokeWidth="6" />
-            </div>
         </div>
     </div>
 </template>
@@ -122,6 +124,7 @@ watchEffect(() => {
 })
 // Discover the real total on the first short page we ever see
 watchEffect(() => {
+    if (status.value !== 'success') return
     const rows = data.value?.artifacts?.length
     if (rows != null && rows < pageSize.value) {
         total.value = (page.value - 1) * pageSize.value + rows

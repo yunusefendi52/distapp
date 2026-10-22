@@ -5,8 +5,12 @@ export default defineEventHandler(async (event) => {
         orgName: z.string().trim().min(1).max(128),
         groups: z.any(),
         groupName: z.string().nullish(),
+        page: z.string().optional().transform(e => e ? parseInt(e) : undefined),
+        pageSize: z.string().optional().transform(e => e ? parseInt(e) : undefined),
     }).parse)
     const { appName, orgName, groups, groupName } = query
+    const pageNo = Math.max(query.page ?? 1, 1)
+    const pageSizeNo = Math.min(Math.max(query.pageSize ?? 50, 1), 50)
     const groupIds: string[] = Array.isArray(groups) ? groups : (groups ? [groups] : [])
     const { userApp: app } = await getUserApp(event, orgName, appName)
     if (groupName) {
@@ -47,6 +51,8 @@ export default defineEventHandler(async (event) => {
             ` : sql`true`,
         ))
         .orderBy(desc(tables.artifacts.releaseId))
+        .limit(pageSizeNo)
+        .offset((pageNo - 1) * pageSizeNo)
     artifactGroups.forEach(v => {
         v.artifacts.fileObjectKey = ''
         if (v.groups) {
