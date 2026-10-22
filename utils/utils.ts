@@ -1,4 +1,5 @@
 import * as jose from 'jose'
+import { filesize } from "filesize";
 
 export const getAllowedExtsFromOstype = (osType?: OsType): string => {
     switch (osType) {
@@ -43,20 +44,7 @@ export function formatBytes(bytes: number | null | undefined, decimals = 2, isBi
     if (!bytes) {
         return undefined
     }
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']; // or ['B', 'KB', 'MB', 'GB', 'TB']
-
-    if (!+bytes) {
-        return `0 ${sizes[0]}`;
-    }
-
-    const inByte = isBinary ? 1024 : 1000;
-    const dm = decimals < 0 ? 0 : decimals;
-
-    const pow = Math.floor(Math.log(bytes) / Math.log(inByte));
-    const maxPow = Math.min(pow, sizes.length - 1);
-
-    return `${parseFloat((bytes / Math.pow(inByte, maxPow)).toFixed(dm))} ${sizes[maxPow]
-        }`;
+    return filesize(bytes)
 }
 
 export const formatDate = (value?: string | null) => {
