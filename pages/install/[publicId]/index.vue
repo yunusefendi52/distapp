@@ -88,7 +88,7 @@ const { value: { publicId, orgName, appName } } = computed(() => route.params)
 const { value: { artifactId, releaseId } } = computed(() => route.query)
 
 const page = ref(1)
-const pageSize = ref(20)
+const pageSize = useLocalStorage('install-page-size', 20)
 const first = ref(0)
 const search = ref('')
 const debouncedSearch = refDebounced(search, 350)
