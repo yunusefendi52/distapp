@@ -219,6 +219,11 @@ async function deleteStorageObject(s3: S3Fetch, key: string) {
     try {
         await s3.deleteObject(key)
     } catch (e) {
+        logger.log('unable to delete storage', {
+            key,
+            error: e,
+        })
+
         const status = (e as { statusCode?: number, status?: number, cause?: { statusCode?: number } })
         if (status?.statusCode === 404 || status?.status === 404 || status?.cause?.statusCode === 404) {
             return
