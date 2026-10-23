@@ -50,7 +50,9 @@ jobs:
 
     - name: Deploy
       if: github.ref == 'refs/heads/main'
-      run: curl -X POST https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/344ca361-b2d3-48e6-b896-ffa2dd1e9a1b
+      env:
+        DEPLOY_HOOK: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}
+      run: curl -X POST "$DEPLOY_HOOK"
     
     - uses: actions/upload-artifact@v4
       if: always()
