@@ -44,7 +44,7 @@ export function formatBytes(bytes: number | null | undefined, decimals = 2, isBi
     if (!bytes) {
         return undefined
     }
-    return filesize(bytes)
+    return filesize(bytes, { standard: 'jedec' })
 }
 
 export const formatDate = (value?: string | null) => {
