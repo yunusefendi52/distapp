@@ -1,4 +1,4 @@
-FROM oven/bun:1.2.8 as builder
+FROM oven/bun:1.2.8 AS builder
 WORKDIR /builder
 
 ENV NUXT_DISTAPP_SELF_HOST=true
@@ -54,6 +54,8 @@ ENV DISTAPP_BUNDLETOOL_PATH=${DISTAPP_BUNDLETOOL_PATH}
 RUN [ -f ${DISTAPP_BUNDLETOOL_PATH} ] || curl -L -o ${DISTAPP_BUNDLETOOL_PATH} "https://github.com/google/bundletool/releases/download/1.18.3/bundletool-all-1.18.3.jar"
 
 COPY --from=builder /builder/.output .
+# Manually copy @libsql/* dependency to fix issue cannot find module @libsql/linux-arm64-gnu
+COPY --from=builder /builder/node_modules/@libsql node_modules/@libsql
 
 ARG NUXT_PUBLIC_UPLOAD_WITH_BUILD_APK=true
 ENV NUXT_PUBLIC_UPLOAD_WITH_BUILD_APK=${NUXT_PUBLIC_UPLOAD_WITH_BUILD_APK}
