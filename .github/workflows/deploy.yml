@@ -111,7 +111,7 @@ jobs:
         uses: int128/docker-manifest-create-action@v2
         with:
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/distapp:latest-multiarch
+            ${{ secrets.DOCKERHUB_USERNAME }}/distapp:latest
           sources: |
             ${{ secrets.DOCKERHUB_USERNAME }}/distapp:build-${{ github.run_id }}-amd64
             ${{ secrets.DOCKERHUB_USERNAME }}/distapp:build-${{ github.run_id }}-arm64
