@@ -1,7 +1,6 @@
 services:
   distapp:
     image: 5yunus2efendi/distapp:latest
-    platform: linux/amd64
     ports:
       - "3000:3000"
     env_file:
@@ -11,7 +10,6 @@ services:
       - db
   db:
     image: ghcr.io/tursodatabase/libsql-server:v0.24.31
-    platform: linux/amd64
     env_file:
       - docker-compose.env
     volumes:
