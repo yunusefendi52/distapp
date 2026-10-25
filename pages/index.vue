@@ -1,91 +1,109 @@
 <template>
-    <div class="flex justify-center max-w-7xl flex-col mx-auto mt-10 px-5 gap-14">
-        <div class="flex flex-col lg:flex-row gap-10">
-            <div class="flex flex-col gap-3 justify-center items-start flex-1">
-                <span class="text-4xl font-medium">DistApp</span>
-                <span class="text-lg font-light">Manage and distribute Android, iOS and Desktop apps.
-                    Useful for tester or self distribution.
-                    Alternative App Center Distribution.</span>
-                <div class="flex flex-row flex-wrap gap-3 mt-3">
+    <div class="acc max-w-6xl mx-auto px-5">
+        <!-- Hero -->
+        <section class="flex flex-col lg:flex-row items-center gap-10 lg:gap-14 pt-14 pb-14 lg:pt-24 lg:pb-20">
+            <div class="flex flex-col items-start gap-4 flex-1">
+                <h1 class="text-4xl sm:text-5xl font-bold tracking-tight leading-[1.08]">
+                    Manage and distribute your builds
+                </h1>
+                <p class="text-lg font-light leading-relaxed text-[var(--p-text-color)] max-w-xl">
+                    All your builds in one place. Useful for self-distribution or testers, and a self-hostable alternative to App Center.
+                </p>
+
+                <div class="flex flex-row flex-wrap items-center gap-2 mt-2">
                     <NuxtLink :to="{
                         name: isLoggedIn ? 'apps' : 'signin',
                     }">
                         <Button :label="isLoggedIn ? 'Go To Apps' : 'Get Started'" />
-                    </NuxtLink>
-                    <NuxtLink to="https://docs.distapp.app/self-hosted/setup-self-hosted" target="_blank">
-                        <Button icon="pi pi-server" label="Self Hosted" text />
                     </NuxtLink>
                     <NuxtLink to="https://github.com/yunusefendi52/distapp" target="_blank">
                         <Button icon="pi pi-github" label="GitHub" text />
                     </NuxtLink>
                 </div>
             </div>
-            <div class="flex flex-col">
-                <a :href="link">
-                    <div class="flex justify-center items-center lg:h-[310px]">
-                        <img class="distapp-dark border border-white/15 rounded-lg" width="550"
-                            loading="lazy"
-                            fetchpriority="high"
-                            alt="DistApp showcase in dark mode"
-                            src="/assets/distapp_dark.webp">
-                        <img class="distapp-light border border-black/15 rounded-lg" width="550"
-                            loading="lazy"
-                            fetchpriority="high"
-                            alt="DistApp showcase in light mode"
-                            src="/assets/distapp_light.webp">
-                    </div>
+
+            <div class="flex flex-col flex-1 w-full min-w-0">
+                <a :href="link" class="group block">
+                    <img class="distapp-dark border border-white/15 rounded-xl shadow-xl max-w-full h-auto" width="550"
+                        loading="lazy"
+                        fetchpriority="high"
+                        alt="DistApp showcase in dark mode"
+                        src="/assets/distapp_dark.webp">
+                    <img class="distapp-light border border-black/15 rounded-xl shadow-xl max-w-full h-auto" width="550"
+                        loading="lazy"
+                        fetchpriority="high"
+                        alt="DistApp showcase in light mode"
+                        src="/assets/distapp_light.webp">
                 </a>
-                <a class="self-center lg:self-start" :href="link">
+                <a :href="link" class="self-center lg:self-start mt-2">
                     <span class="text-xs text-[var(--p-text-muted-color)]">Habit Tool - Habit tracker log</span>
                 </a>
             </div>
-        </div>
-        <div class="flex flex-col gap-6 sm:grid sm:grid-cols-3">
-            <AppCard class="h-full" :apply-shadow="true">
-                <article class="px-2">
-                    <i class="pi pi-box !text-[24px] pt-2 pb-1 mb-3 block text-[var(--p-primary-color)]"></i>
-                    <h2 class="font-bold text-lg mb-1">Manage your apps</h2>
-                    <p class="font-light">Manage all of your apps in one place. Supports Android, iOS, Desktop and other platforms.
-                    </p>
-                </article>
-            </AppCard>
-            <AppCard class="h-full" :apply-shadow="true">
-                <article class="px-2">
-                    <i class="pi pi-users !text-[24px] pt-2 pb-1 mb-3 block text-[var(--p-primary-color)]"></i>
-                    <h2 class="font-bold text-lg mb-2">Group and organization</h2>
-                    <p class="font-light">Create separate groups or organizations for your apps</p>
-                </article>
-            </AppCard>
-            <AppCard class="h-full" :apply-shadow="true">
-                <article class="px-2">
-                    <i class="pi pi-server !text-[24px] pt-2 pb-1 mb-3 block text-[var(--p-primary-color)]"></i>
-                    <h2 class="font-bold text-lg mb-1">Self Hosted</h2>
-                    <p class="font-light">You can self host in your own infrastructure</p>
-                </article>
-            </AppCard>
-        </div>
-        <div class="flex flex-col gap-4">
-            <h2 class="text-2xl font-medium">Frequently Asked Questions</h2>
-            <div class="flex flex-col">
-                <div v-for="(faq, index) in faqs" :key="index"
-                    class="border-b border-b-[var(--p-content-border-color)] last:border-b-0">
-                    <button class="flex items-center justify-between w-full px-4 py-3 text-left font-medium hover:bg-[var(--p-surface-hover)] cursor-pointer"
-                        @click="toggleFaq(index)">
-                        <span class="font-medium text-lg">{{ faq.question }}</span>
-                        <i :class="['pi', openItems.includes(index) ? 'pi-chevron-up' : 'pi-chevron-down']"
-                            class="text-sm text-[var(--p-text-muted-color)]"></i>
-                    </button>
-                    <div v-if="openItems.includes(index)" class="px-4 pb-3 text-[var(--p-muted-color)]">
-                        <p v-html="faq.answer"></p>
+        </section>
+
+        <!-- Features -->
+        <section class="py-10">
+            <div class="rounded-2xl border border-[var(--p-content-border-color)] px-7 py-9 sm:px-10 sm:py-11">
+                <p class="text-sm font-semibold text-[var(--acc)]">Features</p>
+                <h2 class="text-3xl font-bold tracking-tight mt-1 max-w-2xl">Built for distributing apps</h2>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-9 mt-8">
+                    <div v-for="feature in features" :key="feature.title">
+                        <h3 class="font-semibold text-lg">{{ feature.title }}</h3>
+                        <p class="font-light text-[var(--p-text-muted-color)] mt-1 leading-relaxed">{{ feature.description }}</p>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="h-[50px]"></div>
+        </section>
+
+        <!-- Self-hosting callout -->
+        <section class="my-6 rounded-2xl bg-[var(--acc-soft)] border border-[var(--acc-border)] px-8 py-10 sm:px-12 sm:py-12">
+            <p class="text-sm font-semibold text-[var(--acc)]">Self-hostable</p>
+            <h2 class="text-3xl font-bold tracking-tight mt-1 max-w-xl">Run DistApp on your own infrastructure</h2>
+            <p class="font-light text-[var(--p-text-muted-color)] mt-3 max-w-xl leading-relaxed">
+                Self-host with Docker and S3-compatible storage. Your builds, your server.
+            </p>
+            <NuxtLink to="https://docs.distapp.app/self-hosted/setup-self-hosted" target="_blank">
+                <Button label="Self-hosting guide" class="mt-5" />
+            </NuxtLink>
+        </section>
+
+        <!-- FAQ -->
+        <section class="py-10">
+            <p class="text-sm font-semibold text-[var(--acc)]">Questions</p>
+            <h2 class="text-3xl font-bold tracking-tight mt-1 mb-5">Frequently asked questions</h2>
+            <div class="rounded-2xl border border-[var(--p-content-border-color)] px-2 sm:px-4">
+                <div class="flex flex-col">
+                    <div v-for="(faq, index) in faqs" :key="index"
+                        class="border-b border-b-[var(--p-content-border-color)] last:border-b-0">
+                        <button class="flex items-center justify-between w-full px-4 py-3 text-left font-medium hover:bg-[var(--p-surface-hover)] cursor-pointer rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--acc)]"
+                            @click="toggleFaq(index)">
+                            <span class="font-medium text-lg">{{ faq.question }}</span>
+                            <i :class="['pi', openItems.includes(index) ? 'pi-chevron-up' : 'pi-chevron-down']"
+                                class="text-sm text-[var(--p-text-muted-color)]"></i>
+                        </button>
+                        <div v-if="openItems.includes(index)" class="px-4 pb-3 text-[var(--p-muted-color)]">
+                            <p v-html="faq.answer"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 </template>
 
 <style scoped lang="css">
+.applight .acc {
+    --acc: #15803d;
+    --acc-soft: rgb(21 128 61 / 0.06);
+    --acc-border: rgb(21 128 61 / 0.22);
+}
+
+.appdark .acc {
+    --acc: #4ade80;
+    --acc-soft: rgb(74 222 128 / 0.09);
+    --acc-border: rgb(74 222 128 / 0.28);
+}
+
 .distapp-dark {
     display: none;
 }
@@ -148,6 +166,33 @@ if (isLoggedIn.value) {
 }
 
 const link = 'https://play.google.com/store/apps/details?id=com.yedev.habittrackertool&utm_source=distapp&utm_campaign=distapp&utm_medium=distapp'
+
+const features = [
+    {
+        title: 'Manage your apps',
+        description: 'All your builds in one place, across Android, iOS, Desktop and other platforms.',
+    },
+    {
+        title: 'Groups and organizations',
+        description: 'Keep apps organized with separate groups and organizations.',
+    },
+    {
+        title: 'Public and private apps',
+        description: 'Control who can access each build, from private testers to public releases.',
+    },
+    {
+        title: 'Distribute from the CLI',
+        description: 'Upload your builds directly from your terminal or CI pipeline.',
+    },
+    {
+        title: 'QR code installs',
+        description: 'Testers scan a QR code to install a build, no store required.',
+    },
+    {
+        title: 'Retention policy',
+        description: 'Delete old artifacts on your rules, like the latest N builds or the last N days.',
+    },
+]
 
 const openItems = ref<number[]>([])
 const toggleFaq = (index: number) => {
