@@ -25,9 +25,9 @@ bun run drizzle:generate # Generate migrations from schema
 bun run drizzle:migrate  # Run migrations (bun run server/db/migrate.ts)
 
 # Testing
-bun run tests            # Unit tests (Vitest, dir: ./tests)
-bun run e2e              # E2E tests (Playwright, dir: ./tests-e2e)
-bun run e2e-ui           # Playwright UI mode
+bun run tests -- --watch=false  # Unit tests (Vitest, dir: ./tests)
+bun run e2e             # E2E tests (Playwright, dir: ./tests-e2e)
+bun run e2e-ui          # Playwright UI mode
 
 # Deployment
 bun run deploy           # Build + Wrangler deploy to Cloudflare Pages
