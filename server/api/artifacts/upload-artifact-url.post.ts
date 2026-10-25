@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
         appName: z.string().trim().min(1).max(128),
         orgName: z.string().trim().min(1).max(128),
         releaseNotes: z.string().nullish(),
-        packageMetadata: z.any(),
+        packageMetadata: z.any().optional(),
         filename: z.string().regex(filenameRegex, `Filename must have regex ${filenameRegex.source}`),
         headlessUploadId: z.string().nullish(),
     }).parse)

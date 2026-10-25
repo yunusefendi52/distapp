@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
     const userId = event.context.auth.userId
     const db = event.context.drizzle
     const { name: normalizedOrgName, displayName } = await readValidatedBody(event, z.object({
-        name: z.string().min(1).max(128).trim().transform(normalizeName),
+        name: z.string().min(1).max(128).trim().transform((v) => normalizeName(v)),
         displayName: z.string().min(1).max(128).trim(),
     }).parse)
     const now = new Date()
