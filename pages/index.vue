@@ -53,7 +53,7 @@
                 <article class="px-2">
                     <i class="pi pi-users !text-[24px] pt-2 pb-1 mb-3 block text-[var(--p-primary-color)]"></i>
                     <h2 class="font-bold text-lg mb-2">Group and organization</h2>
-                    <p class="font-light">Create seperate group or organization for your apps</p>
+                    <p class="font-light">Create separate groups or organizations for your apps</p>
                 </article>
             </AppCard>
             <AppCard class="h-full" :apply-shadow="true">
