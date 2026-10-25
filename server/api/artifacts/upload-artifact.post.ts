@@ -1,6 +1,7 @@
 import { count, sum } from "drizzle-orm"
 import type { LibSQLDatabase } from "drizzle-orm/libsql"
 import { uuidv7 } from "uuidv7"
+import { formatBytes } from "~/utils/utils.filesize"
 
 export type UploadTempValue = {
     fileKey: string
@@ -106,7 +107,7 @@ export default defineEventHandler(async (event) => {
         const sumAllContentLength = artifactSize + fileSize + (fileSizeApk || 0)
         if (sumAllContentLength >= artifactSizeBytesLimit) {
             throw createError({
-                message: `The number of artifact has reached the limit of ${artifactSizeLimit} mb. ${sumAllContentLength}`,
+                message: `The number of artifacts has reached the limit of ${formatBytes(artifactSizeBytesLimit)} (current total size: ${formatBytes(sumAllContentLength)})`,
                 statusCode: 400,
             })
         }

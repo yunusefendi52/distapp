@@ -1,5 +1,4 @@
 import * as jose from 'jose'
-import { filesize } from "filesize";
 
 export const getAllowedExtsFromOstype = (osType?: OsType): string => {
     switch (osType) {
@@ -38,13 +37,6 @@ export async function isZipFile(file: File | Buffer): Promise<boolean> {
     }
 
     return ZIP_SIGNATURE.every((byte, i) => header[i] === byte);
-}
-
-export function formatBytes(bytes: number | null | undefined, decimals = 2, isBinary = false) {
-    if (!bytes) {
-        return undefined
-    }
-    return filesize(bytes, { standard: 'jedec' })
 }
 
 export const formatDate = (value?: string | null) => {
