@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
         appName: z.string().min(1),
         orgName: z.string().min(1),
         releaseId: z.string().min(1),
-        hasManifestPList: z.any(),
+        hasManifestPList: z.any().optional(),
         publicId: z.string().nullable(),
         hasApk: z.string().transform(e => e === 'true'),
     }).parse)

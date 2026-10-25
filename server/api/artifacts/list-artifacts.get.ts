@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
     const query = await getValidatedQuery(event, z.object({
         appName: z.string().trim().min(1).max(128),
         orgName: z.string().trim().min(1).max(128),
-        groups: z.any(),
+        groups: z.any().optional(),
         groupName: z.string().nullish(),
         page: z.string().optional().transform(e => e ? parseInt(e) : undefined),
         pageSize: z.string().optional().transform(e => e ? parseInt(e) : undefined),
