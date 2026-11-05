@@ -8,7 +8,12 @@
                     <span>{{ modelFile.name }}</span>
                     <span class="text-sm">{{ formatBytes(modelFile.size) }}</span>
                 </template>
-                <span v-else>{{ placeholder || 'Click or drop to upload here' }}</span>
+                <template v-else>
+                    <span>{{ placeholder || 'Click or drop to upload here' }}</span>
+                    <span v-if="allowedExtsList.length" class="text-sm text-gray-500 dark:text-gray-400">
+                        Supported: {{ allowedExtsList.join(', ') }}
+                    </span>
+                </template>
             </div>
             <Button v-if="modelFile" icon="pi pi-times" text @click="(e) => {
                 e.stopPropagation()
@@ -45,6 +50,9 @@ const prop = defineProps<{
     placeholder?: string,
     dataTestId?: string,
 }>()
+const allowedExtsList = computed(() => prop.allowedExts
+    ? prop.allowedExts.split(',').map(e => e.trim()).filter(Boolean)
+    : [])
 function onChange(event: Event) {
     const inputEl = event.target as HTMLInputElement
     updateFile(inputEl?.files)
