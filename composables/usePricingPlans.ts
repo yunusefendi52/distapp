@@ -1,37 +1,51 @@
 export function usePricingPlans() {
-    const freeFeatures = [{
-        name: 'Artifacts storage',
-        desc: 'Only 100 MB',
-    }, {
-        name: 'Number of apps',
-        desc: 'Only 2',
-    }, {
-        name: 'Number of organizations',
-        desc: 'Only 1',
-    }, {
-        name: 'Upload size',
-        desc: 'Only 100 MB',
-    }]
+    const planConfig = useRuntimeConfig().public.plans
 
-    const proFeatures = [{
-        name: 'Artifacts storage',
-        desc: '5GB',
-        desc2: 'Then extra $0.02 /GB (round up)'
-    }, {
-        name: 'Number of apps',
-        desc: 'Up To 100',
-    }, {
-        name: 'Number of organizations',
-        desc: 'Up To 10',
-    }, {
-        name: 'Upload size',
-        desc: 'Up To 300 mb',
-    }]
+    const formatStorage = (mb: number) => formatBytes(mb * 1024 * 1024, 0, true) ?? ''
+
+    const freeFeatures = [
+        {
+            name: 'Artifacts storage',
+            desc: `Only ${formatStorage(planConfig.free.artifactMb)}`,
+        },
+        {
+            name: 'Number of apps',
+            desc: `Only ${planConfig.free.apps}`,
+        },
+        {
+            name: 'Number of organizations',
+            desc: `Only ${planConfig.free.orgs}`,
+        },
+        {
+            name: 'Upload size',
+            desc: `Only ${formatStorage(planConfig.free.uploadMb)}`,
+        },
+    ]
+
+    const proFeatures = [
+        {
+            name: 'Artifacts storage',
+            desc: formatStorage(planConfig.pro.artifactMb),
+            desc2: `Then extra $${planConfig.pro.extraPerGb} /GB (round up)`,
+        },
+        {
+            name: 'Number of apps',
+            desc: `Up To ${planConfig.pro.apps}`,
+        },
+        {
+            name: 'Number of organizations',
+            desc: `Up To ${planConfig.pro.orgs}`,
+        },
+        {
+            name: 'Upload size',
+            desc: `Up To ${formatStorage(planConfig.pro.uploadMb)}`,
+        },
+    ]
 
     const plans = [
         {
             name: 'Pro',
-            price: '$4',
+            price: planConfig.pro.price,
             period: '/month',
             highlighted: true,
             cta: 'Upgrade to Pro',
@@ -39,7 +53,7 @@ export function usePricingPlans() {
         },
         {
             name: 'Free',
-            price: '$0',
+            price: planConfig.free.price,
             period: '',
             highlighted: false,
             cta: 'Get Started',

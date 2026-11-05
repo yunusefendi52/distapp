@@ -57,6 +57,25 @@ const Noir = definePreset(Aura, {
   }
 })
 
+// Plans shown on the pricing page and enforced by the app
+const plans = {
+  free: {
+    price: '$0',
+    artifactMb: 100,
+    apps: 2,
+    orgs: 1,
+    uploadMb: 100,
+  },
+  pro: {
+    price: '$5',
+    extraPerGb: 0.2,
+    artifactMb: 5000,
+    apps: 100,
+    orgs: 50,
+    uploadMb: 1024,
+  },
+}
+
 const title = 'DistApp • Manage and distribute Android, iOS and Desktop apps'
 const description = 'Manage and distribute Android, iOS and Desktop apps to testers and users. A self-hostable alternative to App Center.'
 export default defineNuxtConfig({
@@ -78,22 +97,22 @@ export default defineNuxtConfig({
       apiAuthKey: '',
     },
     // Features free plan
-    APP_LIMIT_ORG: 1,
-    APP_LIMIT_APPS: 2,
+    APP_LIMIT_ORG: plans.free.orgs,
+    APP_LIMIT_APPS: plans.free.apps,
     APP_LIMIT_APPS_GROUP: 8,
     APP_LIMIT_INVITE_ORGS: 8,
-    APP_LIMIT_SIZE_ARTIFACT_MB: 100,
+    APP_LIMIT_SIZE_ARTIFACT_MB: plans.free.artifactMb,
     // Features subsription plan
-    APP_LIMIT_PRO_ORG: 10,
-    APP_LIMIT_PRO_APPS: 100,
+    APP_LIMIT_PRO_ORG: plans.pro.orgs,
+    APP_LIMIT_PRO_APPS: plans.pro.apps,
     APP_LIMIT_PRO_APPS_GROUP: 25,
     APP_LIMIT_PRO_INVITE_ORGS: 25,
-    APP_LIMIT_PRO_SIZE_ARTIFACT_MB: 5000,
-    APP_LIMIT_PRO_UPLOAD_SIZE: 314572800, // 300 mb
+    APP_LIMIT_PRO_SIZE_ARTIFACT_MB: plans.pro.artifactMb,
+    APP_LIMIT_PRO_UPLOAD_SIZE: plans.pro.uploadMb * 1024 * 1024,
 
     APP_LIMIT_API_KEYS: 10,
     APP_LIMIT_APPS_TESTER_GROUPS: 100,
-    APP_LIMIT_UPLOAD_SIZE: 104857600, // 100 mb
+    APP_LIMIT_UPLOAD_SIZE: plans.free.uploadMb * 1024 * 1024,
     APP_GRACE_PERIOD_HOUR: 120, // 5 days
     APP_DISABLE_BILLING: false,
     LOCAL_AUTHS: '',
@@ -114,6 +133,7 @@ export default defineNuxtConfig({
       UPLOAD_WITH_BUILD_APK: false,
       CLERK_AUTH_ENABLED: false,
       CLERK_PUBLISHABLE_KEY: '',
+      plans,
     },
     CLERK_SECRET_KEY: '',
   },

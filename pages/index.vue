@@ -218,7 +218,7 @@
                     <div class="mt-4 flex items-baseline gap-1">
                         <span class="text-2xl font-bold">$0</span>
                         <span class="text-sm">to start, Pro <NuxtLink to="/pricing"
-                                class="font-medium text-[var(--p-text-color)] underline underline-offset-2 hover:text-[var(--acc)]">$4/month</NuxtLink></span>
+                                class="font-medium text-[var(--p-text-color)] underline underline-offset-2 hover:text-[var(--acc)]">$5/month</NuxtLink></span>
                     </div>
                     <NuxtLink :to="{ name: isLoggedIn ? 'apps' : 'signin' }" class="mt-5">
                         <Button label="Get Started" fluid />
@@ -393,7 +393,7 @@ const faqs = [
     },
     {
         question: 'Does DistApp have pricing?',
-        answer: 'DistApp offers a Free plan with limitations: 100 MB artifact storage, up to 2 apps, 1 organization, and 100 MB upload size. The Pro plan at $4/month includes 5 GB storage, up to 100 apps, 10 organizations, and 300 MB upload size. These limits apply to our managed service only. If you self-host, DistApp is free and has none of these limitations. See the <a href="/pricing" class="text-[var(--p-primary-color)] underline">Pricing page</a> for details.',
+        answer: 'DistApp offers a Free plan with limitations: 100 MB artifact storage, up to 2 apps, 1 organization, and 100 MB upload size. The Pro plan at $5/month includes 5 GB storage, up to 100 apps, 50 organizations, and 1 GB upload size. These limits apply to our managed service only. If you self-host, DistApp is free and has none of these limitations. See the <a href="/pricing" class="text-[var(--p-primary-color)] underline">Pricing page</a> for details.',
     },
     {
         question: 'Is there a download limit in DistApp?',

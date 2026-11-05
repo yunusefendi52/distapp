@@ -8,7 +8,8 @@
     </div>
     <div v-else class="flex max-w-full flex-col lg:max-w-5xl mx-auto my-10 gap-5">
         <div class="flex-1 flex flex-col lg:flex-row gap-5 items-start">
-            <PlanCard class="w-full" name="Pro" price="$4" period="/month" :features="proFeatures" highlighted>
+            <PlanCard class="w-full" :name="proPlan.name" :price="proPlan.price" :period="proPlan.period"
+                :features="proFeatures" highlighted>
                 <div class="mt-5 flex flex-col gap-2">
                     <template v-if="data?.plan === planName">
                         <span>{{ data?.endsAt ? 'Ends' : 'Renews' }} at {{ formatSimpleDate(data?.endsAt ||
@@ -31,7 +32,7 @@
                     </div>
                 </div>
             </PlanCard>
-            <PlanCard class="w-full" name="Free" price="$0" :features="freeFeatures">
+            <PlanCard class="w-full" :name="freePlan.name" :price="freePlan.price" :features="freeFeatures">
                 <Button v-if="data?.plan !== planName" class="mt-5" label="Your current plan" outlined disabled
                     data-testid="btn_free_current" />
             </PlanCard>
@@ -47,7 +48,9 @@
 <script setup lang="ts">
 import { formatSimpleDate } from '#imports'
 
-const { freeFeatures, proFeatures } = usePricingPlans()
+const { plans, freeFeatures, proFeatures } = usePricingPlans()
+const proPlan = plans.find(p => p.name === 'Pro')!
+const freePlan = plans.find(p => p.name === 'Free')!
 
 const { data, status, refresh } = useFetch('/api/billing2/current-billing')
 
