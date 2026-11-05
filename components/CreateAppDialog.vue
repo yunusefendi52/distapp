@@ -120,6 +120,11 @@ watchEffect(() => {
                 <label>App Name</label>
                 <InputText data-testid="inputAppName" v-model="appName"></InputText>
             </div>
+            <div
+                class="flex items-center gap-2 text-sm text-surface-500 border border-[var(--p-content-border-color)] rounded-lg p-3">
+                <i class="pi pi-info-circle"></i>
+                <span>Artifact retention settings can be changed later in the app settings.</span>
+            </div>
             <Button label="Save" class="mt-3" :loading="isPending" type="submit" />
         </div>
     </form>
