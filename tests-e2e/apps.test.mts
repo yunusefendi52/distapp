@@ -202,6 +202,19 @@ test('Apps test', async ({ page, goto, context, request }) => {
                 expect(stderr).toBeFalsy()
                 expect(stdout).toContain('Finished Distributing')
             })
+            if (osTestType === 'MacOS') {
+                await test.step(`User can upload tar.gz file ${osTestType} with API keys using CLI`, async () => {
+                    const { stderr, stdout } = await exec(`${cliCommand} \\
+                        distribute \\
+                        --file "tests/tests_artifacts/release.tar.gz" \\
+                        --slug "${appSlug}" \\
+                        --api-key "${appApiKey}" \\
+                        --version-code 1 \\
+                        --version-name 1.0.0`)
+                    expect(stderr).toBeFalsy()
+                    expect(stdout).toContain('Finished Distributing')
+                })
+            }
         }
 
         if (osTestType === 'Android') {
@@ -283,6 +296,28 @@ test('Apps test', async ({ page, goto, context, request }) => {
                 expect(uploadArtifactUrl.ok()).toBe(true)
                 await expect(page.getByTestId('submit_upload_btn')).not.toBeVisible()
             })
+            if (osTestType === 'MacOS') {
+                await test.step(`User can upload ${osTestType} tar.gz in website`, async () => {
+                    await page.getByTestId('a_menus').getByText(orgName).click()
+                    await page.getByText(appName).click()
+                    await page.getByTestId('d_upload').click()
+                    await expect(page.getByTestId('upload_input_btn')).toBeVisible()
+                    const fileChooserPromise = page.waitForEvent('filechooser')
+                    await page.getByTestId('upload_input_btn').click()
+                    const fileChooser = await fileChooserPromise
+                    await fileChooser.setFiles('tests/tests_artifacts/release.tar.gz')
+
+                    // Fill in the version
+                    await page.getByTestId('i_versionname').fill('1.0.0')
+                    await page.getByTestId('i_versioncode').fill('1')
+
+                    const uploadArtifactUrlPromise = page.waitForResponse(r => r.url().includes('upload-artifact-url'))
+                    await page.getByTestId('submit_upload_btn').click()
+                    const uploadArtifactUrl = await uploadArtifactUrlPromise
+                    expect(uploadArtifactUrl.ok()).toBe(true)
+                    await expect(page.getByTestId('submit_upload_btn')).not.toBeVisible()
+                })
+            }
         }
     }
 

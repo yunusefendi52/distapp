@@ -2,7 +2,7 @@
 
 Ensure you’ve created an app with "Desktop" platform before continuing.
 
-Distributing the desktop app is supported through a ZIP file. Since we can't universally detect the installed version across all platforms, you'll need to manually specify the version.
+Distributing the desktop app is supported through a ZIP file (and `.tar.gz` for macOS apps). Since we can't universally detect the installed version across all platforms, you'll need to manually specify the version.
 
 ```bash
 distapp distribute \

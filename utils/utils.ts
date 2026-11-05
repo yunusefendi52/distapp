@@ -8,7 +8,9 @@ export const getAllowedExtsFromOstype = (osType?: OsType): string => {
             return '.ipa';
         case 'desktop':
         case 'windows':
+            return '.zip';
         case 'macos':
+            return '.zip,.tar.gz';
         case 'linux':
         case 'embedded':
         case 'other':
@@ -37,6 +39,24 @@ export async function isZipFile(file: File | Buffer): Promise<boolean> {
     }
 
     return ZIP_SIGNATURE.every((byte, i) => header[i] === byte);
+}
+
+export async function isGzipFile(file: File | Buffer): Promise<boolean> {
+    const GZIP_SIGNATURE = [0x1f, 0x8b];
+
+    let header: Uint8Array;
+    if (file instanceof File) {
+        if (file.size < 2) return false;
+        const buffer = await file.slice(0, 2).arrayBuffer();
+        header = new Uint8Array(buffer);
+    } else if (Buffer.isBuffer(file)) {
+        if (file.length < 2) return false;
+        header = new Uint8Array(file.slice(0, 2));
+    } else {
+        throw new TypeError("Unsupported file type");
+    }
+
+    return GZIP_SIGNATURE.every((byte, i) => header[i] === byte);
 }
 
 export const formatDate = (value?: string | null) => {

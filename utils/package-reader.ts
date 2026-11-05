@@ -1,22 +1,29 @@
 import { parse } from "@plist/parse"
 import JSZip from "jszip"
 import { myFetch } from './upload-utils.js'
-import { isZipFile } from './utils'
+import { isZipFile, isGzipFile } from './utils'
 
 export const readPackageFile = async (data: File | Buffer, izZipPlatform: boolean): Promise<PackageDetail | undefined> => {
     if (izZipPlatform) {
-        const isActuallyZipFile = await isZipFile(data)
-        if (!isActuallyZipFile) {
-            throw 'The file is not a zip file'
+        if (await isZipFile(data)) {
+            // Will be handled after reading package file
+            return {
+                extension: 'zip',
+                versionCode: '',
+                versionName: '',
+                packageName: '',
+            }
         }
-
-        // Will be handled after reading package file
-        return {
-            extension: 'zip',
-            versionCode: '',
-            versionName: '',
-            packageName: '',
+        if (await isGzipFile(data)) {
+            // Will be handled after reading package file
+            return {
+                extension: 'tar.gz',
+                versionCode: '',
+                versionName: '',
+                packageName: '',
+            }
         }
+        throw 'The file is not a supported archive (zip or tar.gz)'
     }
 
     var fileZip = new JSZip();

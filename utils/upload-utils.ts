@@ -57,8 +57,12 @@ export async function uploadArtifact(
     } | undefined,
 ) {
     // This will be validated in upload-artifact endpoint
-    const isZipPlatform = filename.endsWith('.zip') ? true : false
-    filename = filename.substring(0, filename.lastIndexOf('.'))
+    const isZipPlatform = filename.endsWith('.zip') || filename.endsWith('.tar.gz') ? true : false
+    if (filename.endsWith('.tar.gz')) {
+        filename = filename.substring(0, filename.length - '.tar.gz'.length)
+    } else {
+        filename = filename.substring(0, filename.lastIndexOf('.'))
+    }
     const packageMetadata = await readPackageFile(file, isZipPlatform)
     if (!packageMetadata) {
         throw 'Cannot read package file'
