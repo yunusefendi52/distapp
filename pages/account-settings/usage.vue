@@ -30,7 +30,9 @@
 </template>
 
 <script setup lang="ts">
-import { formatBytes, proFeatures } from '#imports'
+import { formatBytes } from '#imports'
+
+const { proFeatures } = usePricingPlans()
 
 const { data, status, refresh } = useFetch('/api/usage/get-usage')
 </script>
