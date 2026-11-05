@@ -4,7 +4,7 @@ test.use({ storageState: { cookies: [], origins: [] } });
 
 test('Add and switch account', async ({ page, goto, context }) => {
     await goto('/')
-    await page.getByText('Get Started').click()
+    await page.getByTestId('hero_cta_btn').click()
     
     await page.locator('[name="username"]').fill('usertest1')
     await page.locator('[name="password"]').fill('a5756f781e0e433986364b82de545c3b')
