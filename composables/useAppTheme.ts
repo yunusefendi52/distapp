@@ -1,32 +1,46 @@
+export type AppThemePreference = 'light' | 'dark' | 'system'
+
+const normalizeThemePreference = (value: unknown): AppThemePreference => {
+    if (value === 'dark' || value === 'd') return 'dark'
+    if (value === 'light' || value === 'l') return 'light'
+    return 'system'
+}
+
 export const useAppTheme = () => {
-    const appTheme = useCookie('app-theme')
-    if (import.meta.client && !appTheme.value) {
-        const watchColor = window.matchMedia('(prefers-color-scheme: dark)')
-        function onColorChange(e: MediaQueryListEvent) {
-            const newColorScheme = e.matches ? "d" : "l";
-            appTheme.value = newColorScheme
+    const cookie = useCookie(APP_THEME_COOKIE)
+    const preference = useState<AppThemePreference>('app-theme-preference', () => normalizeThemePreference(cookie.value))
+
+    watch(preference, (value) => {
+        cookie.value = value
+    })
+
+    const systemDark = ref(false)
+    if (import.meta.client) {
+        const media = window.matchMedia('(prefers-color-scheme: dark)')
+        systemDark.value = media.matches
+        const onColorChange = (e: MediaQueryListEvent) => {
+            systemDark.value = e.matches
         }
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            appTheme.value = 'd'
-        }
-        onMounted(() => {
-            watchColor.addEventListener('change', onColorChange)
-        })
-        onUnmounted(() => {
-            watchColor.removeEventListener('change', onColorChange)
-        })
+        onMounted(() => media.addEventListener('change', onColorChange))
+        onUnmounted(() => media.removeEventListener('change', onColorChange))
     }
-    const appThemeComputed = computed(() => appTheme.value === 'd' ? 'appdark' : 'applight')
+
+    const isDark = computed(() => preference.value === 'system' ? systemDark.value : preference.value === 'dark')
+    const appTheme = computed(() => isDark.value ? DARK_THEME_CLASS : LIGHT_THEME_CLASS)
+
     watchEffect(() => {
-        const themeColor = appThemeComputed.value === 'appdark' ? 'black' : 'white'
+        const themeColor = isDark.value ? 'black' : 'white'
         if (import.meta.client) {
-            document.querySelector('meta[name="theme-color"]')?.setAttribute("content", themeColor);
+            document.querySelector('meta[name="theme-color"]')?.setAttribute('content', themeColor)
         }
     })
+
     return {
-        appTheme: appThemeComputed,
-        switchTheme: () => {
-            appTheme.value = appTheme.value === 'd' ? 'l' : 'd'
+        appTheme,
+        preference,
+        isDark,
+        setTheme: (value: AppThemePreference) => {
+            preference.value = value
         },
     }
 }

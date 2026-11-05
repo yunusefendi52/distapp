@@ -6,6 +6,9 @@ import fs from 'fs'
 import Aura from '@primevue/themes/aura';
 import { definePreset } from '@primevue/themes';
 
+// Inlined into <head> before first paint to avoid a theme flash (see scripts/theme-init.js)
+const themeInitScript = fs.readFileSync(resolve(__dirname, 'scripts/theme-init.js'), 'utf-8')
+
 const Noir = definePreset(Aura, {
   semantic: {
     primary: {
@@ -226,6 +229,12 @@ export default defineNuxtConfig({
       { name: 'twitter:image', content: 'https://distapp.app/assets/distapp_dark.webp' },
       ...(import.meta.env.NUXT_DISTAPP_SELF_HOST ? [{ name: 'robots', content: 'noindex' }] : []),
       ],
+      script: [{
+        key: 'theme-init',
+        type: 'text/javascript',
+        tagPosition: 'head',
+        innerHTML: themeInitScript,
+      }],
     },
   },
   postcss: {
