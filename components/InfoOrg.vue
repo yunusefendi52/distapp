@@ -11,9 +11,8 @@
                 <InputText name="orgName" :value="detailOrg?.name" aria-describedby="org-name" />
             </div>
             <div class="flex flex-col gap-2">
-                <label for="orgName">Organization Owner</label>
-                <InputText aria-readonly="true" readonly
-                    :value="`${getOrgOwner?.orgOwner?.name} (${getOrgOwner?.orgOwner?.email})`"
+                <label for="orgOwner">Organization Owner</label>
+                <InputText aria-readonly="true" readonly :value="orgOwnerDisplay"
                     aria-describedby="org-owner" />
             </div>
             <Button :loading="isPending" type="submit" class="sm:self-start" label="Save Changes" />
@@ -35,6 +34,12 @@ const { data: getOrgOwner } = useFetch('/api/orgs/get-org-owner', {
     query: {
         orgName,
     },
+})
+
+const orgOwnerDisplay = computed(() => {
+    const owner = getOrgOwner.value?.orgOwner
+    if (!owner) return ''
+    return owner.email ? `${owner.name} (${owner.email})` : owner.name
 })
 
 const { mutate, isPending } = useMutation({
