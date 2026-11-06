@@ -1,83 +1,122 @@
 <script setup lang="ts">
 const orgsStore = await useOrgsStore()
 
-const items = computed(() => [{
-    label: 'All Apps',
-    icon: 'pi pi-th-large',
-    routeName: 'apps',
-    routeParams: undefined,
-    name: undefined,
-}, ...orgsStore.orgs.value.map((e) => ({
-    label: e.displayName,
-    icon: 'pi pi-users',
-    routeName: 'orgs',
-    routeParams: {
-        orgName: e.name,
+type MenuItemInfo = {
+    label: string
+    icon: string
+    routeName: string
+    routeParams?: { orgName: string }
+}
+
+const items = computed<MenuItemInfo[]>(() => [
+    {
+        label: 'All Apps',
+        icon: 'pi pi-th-large',
+        routeName: 'apps',
     },
-    name: e.name,
-}))])
+    ...orgsStore.orgs.value.map((e): MenuItemInfo => ({
+        label: e.displayName,
+        icon: 'pi pi-users',
+        routeName: 'orgs',
+        routeParams: {
+            orgName: e.name,
+        },
+    })),
+])
 
 const route = useRoute()
-const routePath = computed(() => route.path)
-const orgName = computed(() => route.params.orgName as string)
+const isItemActive = (item: MenuItemInfo) => {
+    if (item.routeName === 'apps') return route.name === 'apps'
+    return route.params.orgName === item.routeParams?.orgName
+}
 </script>
 
 <template>
-    <div class="px-3 py-4 flex gap-3 flex-col" data-testid="a_menus">
-        <NuxtLink v-for="(item, index) in items" :key="index" :to="{
-            name: item.routeName,
-            params: item.routeParams,
-        }" custom v-slot="{ href, route, navigate, isActive, isExactActive }">
-            <a :active="item.routeParams?.orgName === orgName || item.name === orgName || routePath === route.path"
-                :href="href" @click="navigate" class="cursor-pointer" :data-testid="`amenu-${index}`">
-                <div class="flex flex-row justify-center px-3 py-2.5 gap-3 rounded-md menu-hover group" style="align-items: center;"
-                    :class="{ 'menu-active': item.routeParams?.orgName == orgName || item.name === orgName || routePath === route.path }">
-                    <i :class="item.icon" style="font-size: 1.25rem">
-                    </i>
-                    <div class="flex-1">
-                        <span
-                            class="line-clamp-1"
-                            :class="{ 'font-bold': item.routeParams?.orgName == orgName || item.name === orgName || routePath === route.path }">{{
-                                item.label }}</span>
-                    </div>
-                    <NuxtLink :to="{
-                        name: 'org-settings-info',
-                        params: {
-                            orgName: item.routeParams?.orgName ?? '',
-                        },
-                    }" v-if="item.routeName === 'orgs'">
-                        <div class="rounded border border-transparent p-1 group-hover:flex hidden items-center justify-center">
-                           <i class="pi pi-cog" style="font-size: 0.75rem"></i>
-                        </div>
-                    </NuxtLink>
-                </div>
-            </a>
-        </NuxtLink>
-        <ProgressSpinner style="width: 22px; height: 22px; margin: unset;" strokeWidth="6" class="self-center"
-            data-testid="menu-loading" v-if="orgsStore.status.value === 'pending'" />
+    <div class="flex flex-col gap-1 px-3 py-4" data-testid="a_menus">
+        <template v-for="(item, index) in items" :key="index">
+            <span v-if="index === 1"
+                class="mt-3 px-3 text-[11px] font-semibold uppercase tracking-wider text-[var(--p-text-muted-color)]">
+                Organizations
+            </span>
+            <div class="group menu-hover relative flex items-center rounded-md"
+                :class="{ 'menu-active': isItemActive(item) }">
+                <NuxtLink :to="{
+                    name: item.routeName,
+                    params: item.routeParams,
+                }" custom v-slot="{ href, navigate }">
+                    <a :href="href" @click="navigate"
+                        class="flex min-w-0 flex-1 cursor-pointer items-center gap-3 px-3 py-2.5"
+                        :aria-current="isItemActive(item) ? 'page' : undefined" :data-testid="`amenu-${index}`">
+                        <i :class="item.icon" style="font-size: 1.25rem"></i>
+                        <span class="line-clamp-1 flex-1"
+                            :class="{ 'font-bold': isItemActive(item) }">{{ item.label }}</span>
+                    </a>
+                </NuxtLink>
+                <NuxtLink v-if="item.routeName === 'orgs'" :to="{
+                    name: 'org-settings-info',
+                    params: {
+                        orgName: item.routeParams?.orgName ?? '',
+                    },
+                }" custom v-slot="{ href, navigate }">
+                    <a :href="href" @click.stop="navigate" aria-label="Organization settings"
+                        class="mr-1 rounded-md p-1.5 text-[var(--p-text-muted-color)] transition-colors hover:bg-[var(--p-surface-200)] hover:text-[var(--p-text-color)] dark:hover:bg-[var(--p-surface-700)]">
+                        <i class="pi pi-cog" style="font-size: 0.75rem"></i>
+                    </a>
+                </NuxtLink>
+            </div>
+        </template>
+        <span v-if="orgsStore.status.value === 'pending' && orgsStore.orgs.value.length === 0"
+            class="mt-3 px-3 text-[11px] font-semibold uppercase tracking-wider text-[var(--p-text-muted-color)]">
+            Organizations
+        </span>
+        <div v-if="orgsStore.status.value === 'pending' && orgsStore.orgs.value.length === 0"
+            data-testid="menu-loading" class="flex flex-col gap-3 px-3 py-2">
+            <div v-for="i in 3" :key="i" class="flex items-center gap-3">
+                <div class="sk h-4 w-4 animate-pulse rounded" />
+                <div class="sk h-4 animate-pulse rounded" :style="{ width: `${45 + i * 12}%` }" />
+            </div>
+        </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
-$menuActiveColorLight: rgb(229, 229, 229);
-
-.menu-active {
-    background: $menuActiveColorLight;
+.menu-hover:hover:not(.menu-active) {
+    background: var(--p-surface-100);
 }
 
-.menu-hover:hover {
-    background: $menuActiveColorLight;
+.menu-active {
+    position: relative;
+    background: var(--p-surface-200);
+}
+
+.menu-active::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 1.25rem;
+    width: 3px;
+    transform: translateY(-50%);
+    border-radius: 0 3px 3px 0;
+    background: var(--p-primary-color);
 }
 
 .appdark {
-    $menuActiveColorDark: var(--p-navigation-item-focus-background);
+
+    .menu-hover:hover:not(.menu-active) {
+        background: var(--p-surface-800);
+    }
 
     .menu-active {
-        background: $menuActiveColorDark;
+        background: var(--p-navigation-item-focus-background);
     }
+}
 
-    .menu-hover:hover {
-        background: $menuActiveColorDark;
-    }
+.sk {
+    background-color: var(--p-surface-200);
+}
+
+.appdark .sk {
+    background-color: var(--p-surface-700);
 }
 </style>
