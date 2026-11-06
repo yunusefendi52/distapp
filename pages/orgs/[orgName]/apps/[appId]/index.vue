@@ -2,6 +2,13 @@
     <AppBarContainer>
         <div class="flex flex-row items-center">
             <div class="flex flex-row flex-1 gap-2 items-center">
+                <NuxtLink :to="{
+                    name: 'orgs',
+                    params: { orgName },
+                }">
+                    <Button icon="pi pi-arrow-left" text rounded aria-label="Back to apps"
+                        v-tooltip.top="'Back to apps'" data-testid="back_to_apps_btn" />
+                </NuxtLink>
                 <AppTitle :title="title" />
                 <div v-if="status === 'pending'">
                     <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" />

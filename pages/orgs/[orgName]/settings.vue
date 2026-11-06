@@ -1,6 +1,12 @@
 <template>
     <AppBarContainer>
-        <span class="text-2xl font-bold">{{ title }} Settings</span>
+        <div class="flex flex-row items-center gap-2">
+            <NuxtLink :to="{ name: 'orgs', params: { orgName } }">
+                <Button icon="pi pi-arrow-left" text rounded aria-label="Back to organization"
+                    v-tooltip.top="'Back to organization'" data-testid="back_to_org_btn" />
+            </NuxtLink>
+            <span class="text-2xl font-bold">{{ title }} Settings</span>
+        </div>
     </AppBarContainer>
 
     <div class="px-4 py-2">
@@ -17,6 +23,7 @@ definePageMeta({
 })
 
 const route = useRoute()
+const orgName = route.params.orgName as string
 const items = ref<MenuItem[]>([
     {
         label: 'Info',

@@ -1,6 +1,13 @@
 <template>
     <AppBarContainer>
         <div class="flex-1 flex flex-row items-center gap-2">
+            <NuxtLink :to="{
+                name: 'orgs-orgName-apps-appId-index-groups',
+                params: { orgName, appId: appName },
+            }">
+                <Button icon="pi pi-arrow-left" text rounded aria-label="Back to groups"
+                    v-tooltip.top="'Back to groups'" data-testid="back_to_groups_btn" />
+            </NuxtLink>
             <div class="flex-1">
                 <span class=" text-2xl font-bold">{{ title }}</span>
             </div>
@@ -201,7 +208,9 @@ const { mutate: mutateArtifactGroupData, isPending: updateArtifactGroupDataIsPen
     },
 })
 
-const title = useTitleApp(computed(() => `${detailApp.data.value?.displayName} • Groups` || '-'))
+const title = useTitleApp(computed(() => detailApp.data.value?.displayName
+    ? `${detailApp.data.value.displayName} • Groups`
+    : 'Groups'))
 
 const copyLink = (value: string) => {
     navigator.clipboard.writeText(value);

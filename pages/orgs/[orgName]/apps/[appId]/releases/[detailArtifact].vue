@@ -2,6 +2,13 @@
     <ConfirmDialog></ConfirmDialog>
     <AppBarContainer>
         <div class="flex flex-row flex-1 gap-2 items-center">
+            <NuxtLink :to="{
+                name: 'orgs-orgName-apps-appId-index-releases',
+                params: { orgName, appId: appName },
+            }">
+                <Button icon="pi pi-arrow-left" text rounded aria-label="Back to releases"
+                    v-tooltip.top="'Back to releases'" data-testid="back_to_releases_btn" />
+            </NuxtLink>
             <AppTitle :title="title" />
             <div v-if="status === 'pending' || status2 === 'pending'">
                 <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="6" />
