@@ -47,12 +47,12 @@
                         loading="lazy"
                         fetchpriority="high"
                         alt="DistApp showcase in dark mode"
-                        src="/assets/distapp_dark.webp">
+                        src="/assets/screenshots/distapp_dark.webp">
                     <img class="distapp-light border border-black/15 rounded-xl shadow-xl max-w-full h-auto" width="550"
                         loading="lazy"
                         fetchpriority="high"
                         alt="DistApp showcase in light mode"
-                        src="/assets/distapp_light.webp">
+                        src="/assets/screenshots/distapp_light.webp">
                 </a>
                 <a :href="link" class="self-center lg:self-start mt-2">
                     <span class="text-xs">Example app: Habit Tool</span>

@@ -8,7 +8,7 @@ Distribute Android and iOS app. Alternative App Center Distribution with option 
 
 Hassle-free and ready to use [DistApp](https://distapp.app)
 
-[![DistApp](public/assets/distapp_dark.webp)](https://distapp.app)
+[![DistApp](public/assets/screenshots/distapp_dark.webp)](https://distapp.app)
 
 ## Docs
 
