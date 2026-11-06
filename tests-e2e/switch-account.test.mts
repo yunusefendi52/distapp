@@ -47,6 +47,6 @@ test('Add and switch account', async ({ page, goto, context }) => {
     // Go to apps and should switch to first account if any
     await page.getByText('Go To Apps').click()
     await page.getByTestId('b_more_btn').click()
-    await expect(page.getByText('usertest2')).toContainText('usertest2')
+    await expect(page.locator('.p-menu').getByText('usertest2')).toContainText('usertest2')
     await expect(page.getByText('usertest1')).toHaveCount(0)
 })
