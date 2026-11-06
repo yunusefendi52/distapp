@@ -25,9 +25,14 @@ const items = computed<MenuItemInfo[]>(() => [
 ])
 
 const route = useRoute()
+const { isOpen } = useAppDrawer()
 const isItemActive = (item: MenuItemInfo) => {
     if (item.routeName === 'apps') return route.name === 'apps'
     return route.params.orgName === item.routeParams?.orgName
+}
+
+const closeDrawer = () => {
+    isOpen.value = false
 }
 </script>
 
@@ -35,7 +40,7 @@ const isItemActive = (item: MenuItemInfo) => {
     <div class="flex flex-col gap-1 px-3 py-4" data-testid="a_menus">
         <template v-for="(item, index) in items" :key="index">
             <span v-if="index === 1"
-                class="mt-3 px-3 text-[11px] font-semibold uppercase tracking-wider text-[var(--p-text-muted-color)]">
+                class="mt-3 px-3 text-[11px] font-semibold uppercase tracking-wider text-[var(--p-text-color)]">
                 Organizations
             </span>
             <div class="group menu-hover relative flex items-center rounded-md"
@@ -44,8 +49,8 @@ const isItemActive = (item: MenuItemInfo) => {
                     name: item.routeName,
                     params: item.routeParams,
                 }" custom v-slot="{ href, navigate }">
-                    <a :href="href" @click="navigate"
-                        class="flex min-w-0 flex-1 cursor-pointer items-center gap-3 px-3 py-2.5"
+                    <a :href="href" @click="navigate($event); closeDrawer()"
+                        class="flex min-w-0 flex-1 cursor-pointer items-center gap-3 px-3 py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--p-primary-color)]"
                         :aria-current="isItemActive(item) ? 'page' : undefined" :data-testid="`amenu-${index}`">
                         <i :class="item.icon" style="font-size: 1.25rem"></i>
                         <span class="line-clamp-1 flex-1"
@@ -58,15 +63,15 @@ const isItemActive = (item: MenuItemInfo) => {
                         orgName: item.routeParams?.orgName ?? '',
                     },
                 }" custom v-slot="{ href, navigate }">
-                    <a :href="href" @click.stop="navigate" aria-label="Organization settings"
-                        class="mr-1 rounded-md p-1.5 text-[var(--p-text-muted-color)] transition-colors hover:bg-[var(--p-surface-200)] hover:text-[var(--p-text-color)] dark:hover:bg-[var(--p-surface-700)]">
-                        <i class="pi pi-cog" style="font-size: 0.75rem"></i>
+                    <a :href="href" @click.stop="navigate($event); closeDrawer()" aria-label="Organization settings"
+                        class="mr-1 flex h-8 w-8 items-center justify-center rounded-md text-[var(--p-text-muted-color)] transition-colors hover:bg-[var(--p-surface-200)] hover:text-[var(--p-text-color)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--p-primary-color)] dark:hover:bg-[var(--p-surface-700)]">
+                        <i class="pi pi-cog" style="font-size: 0.875rem"></i>
                     </a>
                 </NuxtLink>
             </div>
         </template>
         <span v-if="orgsStore.status.value === 'pending' && orgsStore.orgs.value.length === 0"
-            class="mt-3 px-3 text-[11px] font-semibold uppercase tracking-wider text-[var(--p-text-muted-color)]">
+            class="mt-3 px-3 text-[11px] font-semibold uppercase tracking-wider text-[var(--p-text-color)]">
             Organizations
         </span>
         <div v-if="orgsStore.status.value === 'pending' && orgsStore.orgs.value.length === 0"

@@ -1,14 +1,5 @@
 <script setup lang="ts">
 const { isOpen } = useAppDrawer()
-const visible = ref(false)
-
-const route = useRoute()
-watchEffect(() => {
-    const path = route.path
-    if (path) {
-        visible.value = false
-    }
-})
 </script>
 
 <style lang="scss">
@@ -28,13 +19,13 @@ watchEffect(() => {
 
 <template>
     <div class="h-full flex flex-row overflow-auto">
-        <Drawer class="p-drawer-nb" v-model:visible="isOpen" :block-scroll="true">
+        <Drawer id="app-drawer" class="p-drawer-nb" v-model:visible="isOpen" :block-scroll="true">
             <template #container="{ closeCallback }">
                 <LazyAppDrawer />
             </template>
         </Drawer>
-        <LazyAppDrawer style="width: 320px;" class="hidden sm:inline-flex bg-color" />
-        <AppDivider orientation="vertical" class="hidden sm:inline-flex" />
+        <LazyAppDrawer class="hidden md:inline-flex w-[248px] lg:w-[320px] bg-color" />
+        <AppDivider orientation="vertical" class="hidden md:inline-flex" />
         <div class="flex-1 overflow-auto layout-content">
             <slot />
         </div>

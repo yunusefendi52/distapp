@@ -1,6 +1,6 @@
 <template>
     <div
-        class="self-start flex flex-row gap-2 px-[10px] py-[2px] items-center rounded-full bg-[var(--p-surface-200)] dark:bg-[var(--p-surface-700)]">
+        class="self-start flex flex-row gap-2 px-[10px] py-[2px] items-center rounded-full whitespace-nowrap bg-[var(--p-surface-200)] dark:bg-[var(--p-surface-700)]">
         <i :class="getIconForOsType(osType)"></i>
         <span class="text-sm">
             {{ platformName }}
