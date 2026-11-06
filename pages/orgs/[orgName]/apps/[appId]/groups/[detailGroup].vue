@@ -12,28 +12,30 @@
                 <span class=" text-2xl font-bold">{{ title }}</span>
             </div>
             <div>
-                <Button icon="pi pi-trash" severity="danger" @click="removeGroup" :loading="isPending" />
+                <Button icon="pi pi-trash" severity="danger" outlined aria-label="Delete group"
+                    v-tooltip.top="'Delete group'" @click="removeGroup" :loading="isPending" />
             </div>
         </div>
     </AppBarContainer>
     <div class="p-4">
-        <div class="card p-4 items-center flex flex-col justify-stretch sm:flex-row sm:justify-center gap-2">
-            <div class="flex flex-col flex-1">
-                <div class="flex flex-wrap gap-2 items-stretch">
-                    <span class="text-xl font-bold">{{ detailGroup?.displayName || detailGroup?.name }}</span>
-                    <div v-if="detailGroup?.isPublic">
-                        <Badge class="self-start" value="PUBLIC" severity="info" size="small"></Badge>
-                    </div>
+        <div class="card p-4 flex flex-col gap-3">
+            <div class="flex flex-wrap gap-2 items-stretch">
+                <span class="text-xl font-bold">{{ detailGroup?.displayName || detailGroup?.name }}</span>
+                <div v-if="detailGroup?.isPublic">
+                    <Badge class="self-start" value="PUBLIC" severity="info" size="small"></Badge>
                 </div>
-                <span v-if="publicLink">Install link: <a class="underline break-all" target="_blank"
-                        :href="publicLink">{{
-                            publicLink
-                        }}</a> </span>
             </div>
-            <div class="flex flex-row gap-2">
-                <Button icon="pi pi-qrcode" @click="() => showQrLink = true" />
-                <Button icon="pi pi-user" @click="() => showManageApptester = true" />
-                <Button icon="pi pi-pencil" @click="() => groupSettings = true" />
+            <span v-if="publicLink" class="mb-2">Install link: <a class="underline break-all" target="_blank"
+                    :href="publicLink">{{ publicLink }}</a></span>
+            <div class="flex flex-row flex-wrap gap-2">
+                <Button icon="pi pi-qrcode" severity="secondary" outlined aria-label="Show QR code"
+                    v-tooltip.top="'Show QR code'" @click="() => showQrLink = true" data-testid="group_qr_btn" />
+                <Button icon="pi pi-user" severity="secondary" outlined aria-label="Manage testers"
+                    v-tooltip.top="'Manage testers'" @click="() => showManageApptester = true"
+                    data-testid="group_testers_btn" />
+                <Button icon="pi pi-pencil" severity="secondary" outlined aria-label="Group settings"
+                    v-tooltip.top="'Group settings'" @click="() => groupSettings = true"
+                    data-testid="group_settings_btn" />
             </div>
             <!-- <Button icon="pi pi-refresh" label="Regenerate Link" @click="regenerateLink" /> -->
         </div>

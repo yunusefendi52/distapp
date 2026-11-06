@@ -6,11 +6,11 @@
             <input name="appName" hidden required :value="appName" />
             <input name="releaseId" hidden required :value="releaseId" />
             <div class="flex flex-col gap-1">
-                <Textarea rows="5" form="editForm" :pt="{
+                <Textarea rows="5" form="editForm" v-model="releaseNotesInput" :pt="{
                     root: {
                         'name': 'releaseNotes',
                     },
-                }" id="releaseNotes" ref="refTextArea" placeholder="Release Notes" />
+                }" id="releaseNotes" placeholder="Release Notes" />
             </div>
             <Button type="submit" severity="secondary" label="Save" data-testid="save_edit_btn" :loading="isPending" />
         </form>
@@ -33,17 +33,11 @@ const props = defineProps({
 
 const emit = defineEmits(['onEdited'])
 
-const refTextArea = ref()
+const releaseNotesInput = ref(props.releaseNotes)
 
-if (import.meta.client) {
-    watchEffect(() => {
-        const releaseNotes = props?.releaseNotes
-        if (refTextArea.value) {
-            // @ts-ignore
-            document.getElementById('releaseNotes').value = releaseNotes
-        }
-    })
-}
+watch(() => props.releaseNotes, (value) => {
+    releaseNotesInput.value = value
+})
 
 const { mutate, isPending } = useMutation({
     mutationFn: async (r: any) => {

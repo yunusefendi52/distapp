@@ -15,16 +15,17 @@
             </div>
         </div>
     </AppBarContainer>
-    <div class="flex flex-row gap-1 flex-1 p-4 items-center">
-        <span class="text-xl font-medium flex-1">Release {{ detailArtifact?.releaseId }}</span>
-        <div class="flex flex-col gap-2 items-stretch md:items-end">
-            <div class="flex flex-row gap-2">
-                <Button :loading="isDownloading" :label="detailArtifact?.hasApk ? `Download AAB` : `Download`"
-                    @click="() => download(releaseId, undefined, false)" size="small"></Button>
-                <Button :loading="isDownloading" label="Download APK" v-if="detailArtifact?.hasApk"
-                    @click="() => download(releaseId, undefined, true)" size="small"></Button>
-                <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" aria-haspopup="true"
-                    aria-controls="overlay_menu" size=small />
+
+    <div class="flex-1 px-4 py-4 md:px-6">
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <h1 class="text-2xl font-bold">Release {{ releaseId }}</h1>
+            <div class="flex flex-wrap gap-2">
+                <Button :loading="isDownloading" :label="detailArtifact?.hasApk ? 'Download AAB' : 'Download'"
+                    @click="() => download(releaseId, undefined, false)" data-testid="download_aab_btn" />
+                <Button v-if="detailArtifact?.hasApk" :loading="isDownloading" label="Download APK"
+                    @click="() => download(releaseId, undefined, true)" data-testid="download_apk_btn" />
+                <Button type="button" icon="pi pi-ellipsis-v" outlined aria-label="Release actions"
+                    aria-haspopup="true" aria-controls="overlay_menu" @click="toggle" data-testid="release_actions_btn" />
                 <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" :pt="{
                     root: {
                         class: '!mt-3'
@@ -32,52 +33,67 @@
                 }" />
             </div>
         </div>
+
+        <div class="mt-4 rounded-md border border-[var(--p-content-border-color)]">
+            <div class="flex flex-col gap-1 p-5 md:p-6">
+                <div class="flex flex-wrap items-baseline gap-2">
+                    <span class="text-2xl font-bold">Version {{ detailArtifact?.versionName2 || '-' }}</span>
+                    <span class="text-xl text-[var(--p-text-muted-color)]">({{ detailArtifact?.versionCode2 || '-'
+                        }})</span>
+                </div>
+                <span class="text-base text-[var(--p-text-muted-color)]">Uploaded: {{ uploaded }}</span>
+            </div>
+
+            <AppDivider orientation="horizontal" />
+
+            <div class="flex flex-col gap-5 p-5 md:p-6">
+                <section class="flex flex-col gap-2">
+                    <h2 class="text-base font-semibold">Groups</h2>
+                    <MultiSelect class="w-full max-w-md" v-model="selectedGroup" display="chip" :options="groups"
+                        :optionLabel="(w) => w.displayName || w.name" placeholder="Select groups" filter
+                        @change="saveGroupsDebounced()" data-testid="groups_multiselect" />
+                    <span v-if="saveGroupsStatus === 'pending'" class="text-xs text-[var(--p-text-muted-color)]">Saving
+                        changes…</span>
+                    <span v-else-if="saveGroupsStatus === 'error'" class="text-xs text-red-500">Could not save groups.
+                        Try again.</span>
+                    <span v-if="!groups.length" class="text-sm text-[var(--p-text-muted-color)]">
+                        No groups yet.
+                        <NuxtLink :to="{
+                            name: 'orgs-orgName-apps-appId-index-groups',
+                            params: { orgName, appId: appName },
+                        }" class="underline">Create a group</NuxtLink>
+                        to start sharing this build.
+                    </span>
+                </section>
+
+                <section class="flex flex-col gap-1">
+                    <h2 class="text-base font-semibold">Platform</h2>
+                    <PlatformBadge :osType="detailApp?.osType" />
+                </section>
+
+                <section class="flex flex-col gap-1">
+                    <h2 class="text-base font-semibold">File metadata</h2>
+                    <span class="text-base">File Extension: {{ detailArtifact?.extension || '-' }}</span>
+                    <span class="text-base">File Size: {{ formatBytes(detailArtifact?.fileMetadata?.contentLength) ||
+                        '-'
+                        }}</span>
+                </section>
+
+                <section class="flex flex-col gap-1">
+                    <div class="flex items-center gap-1">
+                        <h2 class="text-base font-semibold">Release notes</h2>
+                        <Button icon="pi pi-pencil" text rounded size="small" aria-label="Edit release notes"
+                            v-tooltip.top="'Edit release notes'" @click="showEdit = true"
+                            data-testid="edit_release_btn" />
+                    </div>
+                    <p v-if="detailArtifact?.releaseNotes" class="whitespace-pre-wrap text-base leading-relaxed">{{
+                        detailArtifact.releaseNotes }}</p>
+                    <p v-else class="text-base text-[var(--p-text-muted-color)]">No release notes for this build.</p>
+                </section>
+            </div>
+        </div>
     </div>
-    <div class="card flex flex-col gap-3 mx-4 mb-4" style="white-space: break-spaces;">
-        <div class="flex flex-col md:flex-row items-stretch gap-2">
-            <div class="flex flex-col gap-1 flex-1">
-                <!-- <span class="text-sm">Release Id {{ detailArtifact?.releaseId }}</span> -->
-                <span class="font-semibold text-xl">Version {{ detailArtifact?.versionName2 }} ({{
-                    detailArtifact?.versionCode2
-                    }})</span>
-                <ClientOnly>
-                    <span class="text-base"
-                        v-tooltip="{ value: detailArtifact?.createdAt || '-', showDelay: 1250 }">Uploaded: {{
-                            formatDate(detailArtifact?.createdAt) }}</span>
-                </ClientOnly>
-            </div>
-        </div>
-        <div class="flex flex-col gap-2">
-            <span class="font-semibold">Downloads</span>
-            <span>{{ '-' }}</span>
-        </div>
-        <div class="flex flex-col gap-2">
-            <span class="font-semibold">Platform</span>
-            <PlatformBadge :osType="detailApp?.osType" />
-        </div>
-        <div class="flex flex-col gap-2">
-            <span class="font-semibold">Groups</span>
-            <div class="flex flex-col md:flex-row gap-2 items-center">
-                <MultiSelect class="w-full md:max-w-[24rem]" v-model="selectedGroup" display="chip" :options="groups"
-                    :optionLabel="(w) => w.displayName || w.name" placeholder="Select Groups" filter />
-                <Button class="w-full md:w-[11rem]" @click="() => saveGroups()" :loading="saveGroupsStatus == 'pending'"
-                    label="Update Groups" outlined />
-            </div>
-        </div>
-        <div class="flex flex-col gap-2">
-            <span class="font-semibold">File metadata</span>
-            <div class="flex flex-col">
-                <!-- <span>{{ `MD5: ${detailArtifact?.fileMetadata?.md5?.replaceAll('"', '')}` }}</span> -->
-                <span>{{ `File Extension: ${detailArtifact?.extension}`
-                    }}</span>
-                <span>{{ `File Size: ${formatBytes(detailArtifact?.fileMetadata?.contentLength) || 'n/a'}` }}</span>
-            </div>
-        </div>
-        <div class="flex flex-col gap-2">
-            <span class="font-semibold">Release Notes</span>
-            <span>{{ detailArtifact?.releaseNotes || '-' }}</span>
-        </div>
-    </div>
+
     <div v-if="showEdit">
         <DialogEditArtifact v-model="showEdit" :release-notes="detailArtifact?.releaseNotes ?? ''"
             @on-edited="refreshData" />
@@ -85,7 +101,8 @@
 </template>
 
 <script setup lang="ts">
-import { formatDate, formatBytes } from '#imports'
+import { formatBytes } from '#imports'
+import { useDebounceFn } from '@vueuse/core'
 import { UpdateGroupsRequest } from '~/server/api/update-artifact-groups.put';
 import { MenuItem } from '#imports'
 import { PlatformBadge } from '#components';
@@ -108,6 +125,13 @@ const { data: detailArtifact, refresh, status: status2 } = useFetch('/api/artifa
         orgName: orgName,
         releaseId: releaseId,
     },
+})
+
+const uploaded = computed(() => {
+    const value = detailArtifact.value?.createdAt
+    return value
+        ? new Date(value).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
+        : '-'
 })
 
 const { download, isDownloading } = useDownloadArtifact(appName, orgName)
@@ -139,6 +163,8 @@ const { execute: saveGroups, status: saveGroupsStatus } = useAsyncData(() => {
 }, {
     immediate: false,
 })
+
+const saveGroupsDebounced = useDebounceFn(() => saveGroups(), 350)
 
 const router = useRouter()
 
@@ -197,14 +223,7 @@ const confirmDelete = (event: any) => {
 const menu = ref()
 const items = ref<MenuItem[]>([
     {
-        label: 'Edit',
-        icon: 'pi pi-pencil',
-        command: () => {
-            showEdit.value = true
-        },
-    },
-    {
-        label: 'Delete',
+        label: 'Delete release',
         icon: 'pi pi-trash',
         command: (event: MenuItemCommandEvent) => {
             confirmDelete(event.originalEvent)
