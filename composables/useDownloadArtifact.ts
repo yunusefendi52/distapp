@@ -4,8 +4,9 @@ export const useDownloadArtifact = (appName: string, orgName: string) => {
     const isDownloading = ref(false)
     const dialog = useDialog()
 
-    const download = async (releaseId: string, publicId: string | undefined, hasApk: boolean) => {
-        let url = `/api/artifacts/download-artifact?appName=${appName}&orgName=${orgName}&releaseId=${releaseId}&publicId=${publicId || ''}&hasApk=${hasApk}`
+    const download = async (releaseId: string, publicId: string | undefined, hasApk: boolean, secureLink?: string) => {
+        const secureLinkQuery = secureLink ? `&secureLink=${encodeURIComponent(secureLink)}` : ''
+        let url = `/api/artifacts/download-artifact?appName=${appName}&orgName=${orgName}&releaseId=${releaseId}&publicId=${publicId || ''}&hasApk=${hasApk}${secureLinkQuery}`
         if (isIosDevice()) {
             try {
                 isDownloading.value = true
@@ -15,7 +16,7 @@ export const useDownloadArtifact = (appName: string, orgName: string) => {
                         hasManifestPList: true,
                     },
                 })
-                const manifestLink = generateManifestLink(data, orgName, appName, releaseId, publicId)
+                const manifestLink = generateManifestLink(data, orgName, appName, releaseId, publicId, secureLink)
                 if (import.meta.dev) {
                     console.log('manifestLink', manifestLink)
                 }
