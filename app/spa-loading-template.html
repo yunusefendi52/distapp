@@ -1,1 +1,48 @@
-<span class="loader"></span>
+<style>
+    .spa-loader {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #000;
+        background-color: var(--p-content-background, #fff);
+    }
+
+    .spa-loader__spinner {
+        width: 42px;
+        height: 42px;
+        border: 4px solid currentColor;
+        border-bottom-color: transparent;
+        border-radius: 50%;
+        box-sizing: border-box;
+        animation: spa-loader-spin 1.3s linear infinite;
+    }
+
+    .appdark .spa-loader {
+        color: #fff;
+        background-color: var(--p-content-background, #020617);
+    }
+
+    @media (prefers-color-scheme: dark) {
+        html:not(.applight) .spa-loader {
+            color: #fff;
+            background-color: var(--p-content-background, #020617);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .spa-loader__spinner {
+            animation-duration: 3s;
+        }
+    }
+
+    @keyframes spa-loader-spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+<div class="spa-loader" role="status" aria-label="Loading">
+    <span class="spa-loader__spinner"></span>
+</div>

@@ -199,11 +199,6 @@ export default defineNuxtConfig({
         rel: 'mask-icon',
         href: '/safari-pinned-tab.svg',
         color: '#717171',
-      }, {
-        rel: 'stylesheet',
-        href: '/assets/spa-loader.css',
-        media: "print",
-        onload: "this.media='all'",
       }],
       meta: [{
         name: 'theme-color',
