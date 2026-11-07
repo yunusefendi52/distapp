@@ -1,11 +1,13 @@
 import { getListGroups } from "./list-groups.get"
+import { generateSecureLink } from "~/utils/secure-link"
 
 export default defineEventHandler(async (event) => {
-    const { appName, orgName, groupName, isPublic } = await readValidatedBody(event, z.object({
+    const { appName, orgName, groupName, isPublic, generateSecureLink: withSecureLink } = await readValidatedBody(event, z.object({
         appName: z.string().max(256),
         orgName: z.string().max(256),
         groupName: z.string().max(256),
         isPublic: z.boolean(),
+        generateSecureLink: z.boolean().optional(),
     }).parse)
     if (await roleEditNotAllowed(event, orgName)) {
         throw createError({
@@ -32,6 +34,7 @@ export default defineEventHandler(async (event) => {
             appsId: app!.id,
             publicId: normalizeGroupName,
             isPublic: isPublic,
+            secureLink: isPublic && withSecureLink ? generateSecureLink() : null,
             createdAt: now,
             updatedAt: now,
         })

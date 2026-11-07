@@ -28,6 +28,7 @@
             orgName: props.orgName,
             groupName: newGroupName,
             isPublic: isPublic,
+            generateSecureLink: generateSecureLink,
         })">
             <div class="flex align-items-center gap-3 mb-3">
                 <InputText v-model="newGroupName" class="flex-auto" autocomplete="off" placeholder="Group Name" required
@@ -36,6 +37,10 @@
             <div class="flex items-center gap-3 my-3">
                 <ToggleSwitch v-model="isPublic" name="isPublic" />
                 <label for="isPublic" class="text-sm"> Anyone with the link can access this group </label>
+            </div>
+            <div v-if="isPublic" class="flex items-center gap-3 my-3">
+                <Checkbox v-model="generateSecureLink" binary inputId="generateSecureLink" name="generateSecureLink" />
+                <label for="generateSecureLink" class="text-sm"> Protect with a secure link </label>
             </div>
             <div class="flex justify-content-end gap-2 mt-5">
                 <Button type="button" label="Cancel" severity="secondary" @click="visible = false"></Button>
@@ -62,11 +67,13 @@ const { data: list, refresh } = useFetch('/api/groups/list-groups', {
 
 const newGroupName = ref('')
 const isPublic = ref(false)
+const generateSecureLink = ref(false)
 
 const visible = ref(false)
 watchEffect(() => {
     if (visible.value) {
         newGroupName.value = ''
+        generateSecureLink.value = false
     }
 })
 
