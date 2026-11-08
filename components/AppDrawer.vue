@@ -18,8 +18,9 @@ const onTouchEnd = (event: TouchEvent) => {
 
 <template>
     <div class="flex flex-col h-full touch-pan-y" @touchstart="onTouchStart" @touchend="onTouchEnd">
+        <AppHeader />
+        <AppDivider orientation="horizontal" />
         <div class="flex-1 overflow-auto">
-            <AppHeader />
             <AppMenu />
         </div>
         <LazyBottomMenu />

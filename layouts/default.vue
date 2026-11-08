@@ -21,10 +21,10 @@ const { isOpen } = useAppDrawer()
     <div class="h-full flex flex-row overflow-auto">
         <Drawer id="app-drawer" class="p-drawer-nb" v-model:visible="isOpen" :block-scroll="true">
             <template #container="{ closeCallback }">
-                <LazyAppDrawer />
+                <LazyAppDrawer class="bg-color" />
             </template>
         </Drawer>
-        <LazyAppDrawer class="hidden md:inline-flex w-[248px] lg:w-[320px] bg-color" />
+        <LazyAppDrawer class="hidden md:inline-flex w-[280px] bg-color" />
         <AppDivider orientation="vertical" class="hidden md:inline-flex" />
         <div class="flex-1 overflow-auto layout-content">
             <slot />

@@ -11,7 +11,6 @@
             <ThemeSwitcher />
         </div>
     </div>
-    <!-- <AppDivider orientation="horizontal" /> -->
 </template>
 
 <script setup lang="ts">

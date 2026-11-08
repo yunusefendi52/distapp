@@ -91,11 +91,11 @@ body {
 }
 
 .bg-color {
-    background: var(--p-surface-50);
+    background: var(--p-content-background);
 }
 
 .appdark .bg-color {
-    background: rgb(25, 25, 25);
+    background: rgb(14, 14, 14);
 }
 
 .p-multiselect {

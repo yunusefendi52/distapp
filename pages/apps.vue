@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { CreateAppDialog, PlatformBadge } from '#components'
+import { getIconForOsType } from '#imports'
 import { ListAppsRequest } from '~/server/api/list-apps.get';
 import { omitBy } from 'es-toolkit'
 import { refDebounced } from '@vueuse/core'
 import { useRouteQuery } from '@vueuse/router'
-import { getInitials } from '~/utils/avatar'
 
 const { name: routeName, params } = useRoute()
 const orgNameParam = params.orgName
@@ -122,12 +122,11 @@ useTitleApp('Apps')
                     class="flex w-full cursor-pointer items-center gap-3 border-b border-[var(--p-content-border-color)] px-4 py-3 text-left transition-colors last:border-b-0 hover:bg-[var(--p-surface-100)] dark:hover:bg-[var(--p-surface-800)]"
                     @click="openApp(app)">
                     <div
-                        class="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 text-base font-semibold"
-                        style="color: #2a1261">
-                        {{ getInitials(app.displayName) }}
+                        class="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-md bg-[var(--p-surface-200)] font-semibold text-[var(--p-text-color)] dark:bg-[var(--p-surface-700)]">
+                        <i :class="getIconForOsType(app.osType)" class="text-lg" />
                     </div>
                     <div class="flex min-w-0 flex-1 flex-col gap-1 md:flex-row md:items-center md:gap-4">
-                        <span class="truncate font-semibold md:flex-1">{{ app.displayName }}</span>
+                        <span class="truncate md:flex-1">{{ app.displayName }}</span>
                         <div class="flex min-w-0 items-center gap-2">
                             <PlatformBadge :osType="app.osType" />
                             <span v-if="!isOrg" class="truncate text-sm">{{ app.organization.displayName }}</span>

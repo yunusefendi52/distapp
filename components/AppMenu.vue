@@ -54,7 +54,7 @@ const closeDrawer = () => {
                         :aria-current="isItemActive(item) ? 'page' : undefined" :data-testid="`amenu-${index}`">
                         <i :class="item.icon" style="font-size: 1.25rem"></i>
                         <span class="line-clamp-1 flex-1"
-                            :class="{ 'font-bold': isItemActive(item) }">{{ item.label }}</span>
+                            :class="{ '': isItemActive(item) }">{{ item.label }}</span>
                     </a>
                 </NuxtLink>
                 <NuxtLink v-if="item.routeName === 'orgs'" :to="{
@@ -109,11 +109,11 @@ const closeDrawer = () => {
 .appdark {
 
     .menu-hover:hover:not(.menu-active) {
-        background: var(--p-surface-800);
+        background: rgb(255 255 255 / 0.03);
     }
 
     .menu-active {
-        background: var(--p-navigation-item-focus-background);
+        background: #1f1f1f;
     }
 }
 
