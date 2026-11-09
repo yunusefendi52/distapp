@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-    const { orgName, appName } = await getValidatedQuery(event, z.object({
+    const { orgName, appName } = await readValidatedBody(event, z.object({
         orgName: z.string().min(1).max(256),
         appName: z.string().min(1).max(256),
     }).parse)
@@ -15,13 +15,13 @@ export default defineEventHandler(async (event) => {
     const userApp = await getUserApp(event, orgName, appName)
     const orgId = userApp.userOrg.org!.id
     const appId = userApp.userApp.id
-    await db.batch([
-        db.delete(tables.apps)
-            .where(and(
-                eq(tables.apps.organizationsId, orgId),
-                eq(tables.apps.id, appId),
-            )),
-    ])
+    await db.delete(tables.apps)
+        .where(and(
+            eq(tables.apps.organizationsId, orgId),
+            eq(tables.apps.id, appId),
+        ))
 
-    await sendRedirect(event, `/orgs/${orgName}`)
+    return {
+        ok: true,
+    }
 })

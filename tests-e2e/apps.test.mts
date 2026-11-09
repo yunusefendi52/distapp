@@ -329,6 +329,7 @@ test('Apps test', async ({ page, goto, context, request }) => {
         const orgId = await page.getByTestId('org_name_span').textContent()
         await page.getByTestId('orgName').fill(orgId!)
         await page.getByTestId('deleteOrgBtn').click()
+        await page.locator('.p-confirmdialog').getByRole('button', { name: 'Delete organization', exact: true }).click()
         await expect(page.getByLabel('Danger')).toHaveCount(0)
         await expect(page.getByText(orgName)).toHaveCount(0)
     })

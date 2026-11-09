@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-    const { orgName } = await getValidatedQuery(event, z.object({
+    const { orgName } = await readValidatedBody(event, z.object({
         orgName: z.string().trim().min(1),
     }).parse)
     const db = event.context.drizzle
