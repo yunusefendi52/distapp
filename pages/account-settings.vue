@@ -9,7 +9,7 @@
                 </div>
             </div>
         </AppBarContainer>
-        <div class="px-4 py-2">
+        <div class="px-4 py-3">
             <AppTabMenu :items="items" />
             <div class="flex-1 mt-3">
                 <NuxtPage />

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex w-full flex-col gap-2">
+    <div class="flex w-full flex-col gap-3">
         <div class="app-tabs-shell">
             <nav ref="nav" class="app-tabs" :class="{
                 'app-tabs--fade-start': canScrollStart,

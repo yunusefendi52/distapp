@@ -40,11 +40,23 @@ body {
 }
 
 .p-datatable-table-container {
+    background-color: transparent;
+}
+
+.p-datatable-thead > tr > th {
     background-color: var(--p-surface-50);
 }
 
-.appdark .p-datatable-table-container {
+.appdark .p-datatable-thead > tr > th {
     background-color: var(--p-surface-900);
+}
+
+.p-datatable-tbody > tr:not(.p-datatable-row-selected):hover {
+    background-color: var(--p-surface-100);
+}
+
+.appdark .p-datatable-tbody > tr:not(.p-datatable-row-selected):hover {
+    background-color: var(--p-surface-800);
 }
 
 .p-divider-vertical.divider-app::before {
