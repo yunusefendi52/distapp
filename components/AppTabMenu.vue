@@ -7,7 +7,7 @@
             }" aria-label="Tabs" @scroll="updateScrollState">
                 <NuxtLink v-for="item in items" :key="item.routeName ?? item.label" :to="toFor(item)"
                     class="app-tabs__item" :class="{ 'app-tabs__item--active': isActive(item) }"
-                    :aria-current="isActive(item) ? 'page' : undefined">
+                    :aria-label="labelOf(item)" :aria-current="isActive(item) ? 'page' : undefined">
                     {{ item.label }}
                 </NuxtLink>
             </nav>
@@ -42,6 +42,8 @@ const canScrollStart = ref(false)
 const canScrollEnd = ref(false)
 
 const isActive = (item: AppTabItem) => !!item.routeName && route.name === item.routeName
+
+const labelOf = (item: AppTabItem) => typeof item.label === 'string' ? item.label : ''
 
 const toFor = (item: AppTabItem) => {
     if (item.routeName) {

@@ -40,7 +40,7 @@ test('Apps test', async ({ page, goto, context, request }) => {
             await page.getByTestId('dropdown_platform').click()
             await page.getByLabel(osTestType).click()
             await page.getByTestId('inputAppName').fill(appName)
-            await page.getByText('Save').click()
+            await page.getByTestId('create_app_save_btn').click()
             await expect(page.getByText(appName)).toHaveCount(1)
             await expect(page.getByTestId('createAppDialogForm')).toBeHidden()
         })
@@ -50,9 +50,9 @@ test('Apps test', async ({ page, goto, context, request }) => {
             await page.getByTestId('a_menus').getByText(orgName).click()
             await page.getByText(appName).click()
             await page.getByLabel('Groups').click()
-            await page.getByText('New Group').click()
+            await page.getByTestId('new_group_btn').click()
             await page.getByTestId('group_name').fill(groupName)
-            await page.getByText('Save').click()
+            await page.getByTestId('create_group_save_btn').click()
         })
 
         let appSlug: string
@@ -325,7 +325,7 @@ test('Apps test', async ({ page, goto, context, request }) => {
     await test.step('User admin can delete org', async () => {
         await page.getByTestId('a_menus').getByText(orgName).click()
         await page.getByTestId('settings_btn').click()
-        await page.getByRole('menuitem').nth(3).click()
+        await page.getByLabel('Danger').click()
         const orgId = await page.getByTestId('org_name_span').textContent()
         await page.getByTestId('orgName').fill(orgId!)
         await page.getByTestId('deleteOrgBtn').click()

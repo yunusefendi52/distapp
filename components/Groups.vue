@@ -7,7 +7,7 @@
         <div class="flex flex-1 items-center gap-2">
             <Select v-model="visibility" :options="visibilityOptions" optionLabel="label" optionValue="value"
                 class="flex-1 sm:w-[140px] sm:flex-none" aria-label="Filter by visibility" />
-            <Button label="New Group" class="ml-auto shrink-0" @click="visible = true" />
+            <Button label="New Group" class="ml-auto shrink-0" data-testid="new_group_btn" @click="visible = true" />
         </div>
     </div>
 
@@ -89,7 +89,7 @@
             </div>
             <div class="flex justify-end gap-2">
                 <Button type="button" label="Cancel" severity="secondary" @click="visible = false" />
-                <Button :loading="savingNewGroup" type="submit" label="Save" />
+                <Button :loading="savingNewGroup" type="submit" label="Save" data-testid="create_group_save_btn" />
             </div>
         </form>
     </Dialog>

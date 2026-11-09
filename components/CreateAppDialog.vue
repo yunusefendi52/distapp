@@ -125,7 +125,7 @@ watchEffect(() => {
                 <i class="pi pi-info-circle"></i>
                 <span>Artifact retention settings can be changed later in the app settings.</span>
             </div>
-            <Button label="Save" class="mt-3" :loading="isPending" type="submit" />
+            <Button data-testid="create_app_save_btn" label="Save" class="mt-3" :loading="isPending" type="submit" />
         </div>
     </form>
 
