@@ -23,7 +23,9 @@
         </div>
     </AppBarContainer>
     <div class="flex-1 flex flex-col gap-3">
-        <AppTabMenu :items="items" class="px-4 pt-2" />
+        <div class="px-4 pt-2">
+            <AppTabMenu :items="items" />
+        </div>
         <div class="px-4 py-2">
             <NuxtPage :osType="detailApp.data?.value?.osType" />
         </div>

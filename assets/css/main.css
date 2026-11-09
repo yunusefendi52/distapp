@@ -27,12 +27,7 @@ body {
     font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     font-size: 15px;
 
-    --p-tabmenu-active-bar-height: 2.5px;
-    --p-tabmenu-item-color: var(--p-text-color);
-
     word-break: break-word;
-
-    --p-tabmenu-tablist-background: unset !important;
 }
 
 .p-datatable-table-container {
@@ -118,3 +113,4 @@ html:not([class*=appdark]) .bottom-menu {
 .bottom-menu {
     --p-button-outlined-primary-border-color: rgb(90,90,90);
 }
+
