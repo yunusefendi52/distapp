@@ -554,6 +554,20 @@
       "when": 1792602064109,
       "tag": "0078_wealthy_gunslinger",
       "breakpoints": true
+    },
+    {
+      "idx": 79,
+      "version": "6",
+      "when": 1793870216796,
+      "tag": "0079_melodic_typhoid_mary",
+      "breakpoints": true
+    },
+    {
+      "idx": 80,
+      "version": "6",
+      "when": 1793983294863,
+      "tag": "0080_mighty_slapstick",
+      "breakpoints": true
     }
   ]
 }
