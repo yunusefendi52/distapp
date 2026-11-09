@@ -300,7 +300,7 @@ const { mutate: removeSecureLinkApi, isPending: removeSecureLinkIsPending } = us
 const removeSecureLinkConfirm = (event: any) => {
     confirm.require({
         target: event.currentTarget,
-        message: 'Remove secure link? The current link stops working and a new one will be different.',
+        message: 'Remove secure link? The current secure link stops working, and anyone with the link can access this group.',
         icon: 'pi pi-info-circle',
         accept: () => {
             removeSecureLinkApi()
