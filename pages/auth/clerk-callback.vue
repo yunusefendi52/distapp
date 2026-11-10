@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { normalizeError } from '#imports'
-import { Clerk } from '@clerk/clerk-js'
+// import { Clerk } from '@clerk/clerk-js'
 
 definePageMeta({
     layout: false,
@@ -14,12 +14,12 @@ const { mutate, isPending, error } = useMutation({
             return
         }
 
-        const clerk = new Clerk(CLERK_PUBLISHABLE_KEY)
-        await clerk.load({})
-        const authResponse = await $fetch('/api/auth/sign-in-clerk', {
-            method: 'post',
-        })
-        location.href = `/?${authResponse.param}`
+        // const clerk = new Clerk(CLERK_PUBLISHABLE_KEY)
+        // await clerk.load({})
+        // const authResponse = await $fetch('/api/auth/sign-in-clerk', {
+        //     method: 'post',
+        // })
+        // location.href = `/?${authResponse.param}`
     },
     gcTime: 0,
 })
