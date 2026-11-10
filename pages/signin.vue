@@ -90,7 +90,7 @@ import {
     type CredentialResponse,
 } from "vue3-google-signin";
 import ProgressSpinner from 'primevue/progressspinner';
-// import { Clerk } from '@clerk/clerk-js'
+import { Clerk } from '@clerk/clerk-js'
 
 useTitleApp('Sign In')
 
@@ -202,14 +202,14 @@ const { mutate: signInWithEmail, isPending: signingEmail } = useMutation({
 
         signInError.value = ''
         try {
-            // const clerk = new Clerk(CLERK_PUBLISHABLE_KEY)
-            // await clerk.load({})
-            // await clerk.signOut(() => {
-            //     console.log('signed out cleared')
-            // })
-            // await clerk.redirectToSignIn({
-            //     redirectUrl: '/auth/clerk-callback',
-            // })
+            const clerk = new Clerk(CLERK_PUBLISHABLE_KEY)
+            await clerk.load({})
+            await clerk.signOut(() => {
+                console.log('signed out cleared')
+            })
+            await clerk.redirectToSignIn({
+                redirectUrl: '/auth/clerk-callback',
+            })
         } catch {
             signInError.value = 'Email sign-in didn\'t start. Try again.'
         }
