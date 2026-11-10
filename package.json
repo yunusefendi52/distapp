@@ -26,9 +26,9 @@
     "cli:publish": "cd cli && bun publish"
   },
   "dependencies": {
-    "@clerk/backend": "^2.30.1",
+    "@clerk/backend": "^3.26.5",
     "@clerk/clerk-js": "^6.42.1",
-    "@clerk/vue": "^1.17.12",
+    "@clerk/vue": "^2.5.17",
     "@hebilicious/vue-query-nuxt": "^0.3.0",
     "@lemonsqueezy/lemonsqueezy.js": "^4.0.0",
     "@libsql/client": "^0.14.0",
