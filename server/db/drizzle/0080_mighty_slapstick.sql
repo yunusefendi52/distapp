@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `artifactsGroups_appsId_secureLink_unique` ON `artifactsGroups` (`appsId`,`secureLink`);

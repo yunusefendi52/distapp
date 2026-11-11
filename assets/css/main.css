@@ -126,3 +126,6 @@ html:not([class*=appdark]) .bottom-menu {
     --p-button-outlined-primary-border-color: rgb(90,90,90);
 }
 
+.p-confirmpopup {
+    max-width: 20rem;
+}
