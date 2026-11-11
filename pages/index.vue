@@ -41,7 +41,7 @@
                 </div>
             </div>
 
-            <div class="flex flex-col flex-1 w-full min-w-0">
+            <div class="flex flex-col flex-1 w-full min-w-0 items-center">
                 <a :href="link" class="group block">
                     <img class="distapp-dark border border-white/15 rounded-xl shadow-xl max-w-full h-auto" width="550"
                         loading="lazy"
