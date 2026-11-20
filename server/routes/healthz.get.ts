@@ -1,4 +1,4 @@
 export default defineEventHandler(async (event) => {
-    setResponseStatus(event, 500)
+    setResponseStatus(event, 200)
     return 'ok'
 })
