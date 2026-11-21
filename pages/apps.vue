@@ -5,6 +5,7 @@ import { ListAppsRequest } from '~/server/api/list-apps.get';
 import { omitBy } from 'es-toolkit'
 import { refDebounced } from '@vueuse/core'
 import { useRouteQuery } from '@vueuse/router'
+import Skeleton from 'primevue/skeleton'
 
 const { name: routeName, params } = useRoute()
 const orgNameParam = params.orgName
@@ -85,7 +86,7 @@ useTitleApp('Apps')
                     <div class="flex-1 flex gap-2 items-center">
                         <AppTitle title="Apps" />
                         <ProgressSpinner style="width: 22px; height: 22px; margin: unset;" strokeWidth="6"
-                            v-if="status === 'pending'" />
+                            v-if="status === 'pending' && !!apps?.length" />
                     </div>
                     <div>
                         <NuxtLink :to="{
@@ -117,7 +118,22 @@ useTitleApp('Apps')
             </div>
         </AppBarContainer>
         <div class="m-4">
-            <div v-if="apps?.length" class="overflow-hidden rounded-md border border-[var(--p-content-border-color)]">
+            <div v-if="status === 'pending' && !apps?.length"
+                class="overflow-hidden rounded-md border border-[var(--p-content-border-color)]">
+                <div v-for="i in 5" :key="i"
+                    class="flex items-center gap-3 border-b border-[var(--p-content-border-color)] px-4 py-3 last:border-b-0">
+                    <Skeleton width="34px" height="34px" borderRadius="6px" />
+                    <div class="flex min-w-0 flex-1 flex-col gap-1 md:flex-row md:items-center md:gap-4">
+                        <Skeleton width="10rem" height="1rem" class="md:flex-1" />
+                        <div class="flex min-w-0 items-center gap-2">
+                            <Skeleton width="4.5rem" height="1.25rem" borderRadius="9999px" />
+                            <Skeleton v-if="!isOrg" width="6rem" height="1rem" />
+                        </div>
+                    </div>
+                    <Skeleton width="1rem" height="1rem" />
+                </div>
+            </div>
+            <div v-else-if="apps?.length" class="overflow-hidden rounded-md border border-[var(--p-content-border-color)]">
                 <button v-for="app in apps ?? []" :key="app.name" type="button"
                     class="flex w-full cursor-pointer items-center gap-3 border-b border-[var(--p-content-border-color)] px-4 py-3 text-left transition-colors last:border-b-0 hover:bg-[var(--p-surface-100)] dark:hover:bg-[var(--p-surface-800)]"
                     @click="openApp(app)">
@@ -135,7 +151,7 @@ useTitleApp('Apps')
                     <i class="pi pi-chevron-right shrink-0 text-xs"></i>
                 </button>
             </div>
-            <div v-else-if="status !== 'pending'" class="flex items-center justify-center py-10 flex-col gap-2">
+            <div v-else class="flex items-center justify-center py-10 flex-col gap-2">
                 <label>No apps yet. Add app by clicking button below</label>
                 <Button label="Add App" @click="addApp" severity="secondary"></Button>
             </div>
