@@ -11,7 +11,8 @@ export default defineEventHandler(async (event) => {
 	const orgName: string = data.orgName
 	const appName: string = data.appName
 	const releaseId = data.releaseId
-	const { signedUrl, app, detailArtifact: artifact } = await getArtifactFromInternal(event, orgName, appName, releaseId, publicId, false)
+	const secureLink: string | undefined = data.secureLink
+	const { signedUrl, app, detailArtifact: artifact } = await getArtifactFromInternal(event, orgName, appName, releaseId, publicId, false, secureLink)
 	const plist = generatePlist(
 		signedUrl,
 		artifact.packageName!,

@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
         orgName,
         appName,
         groupDisplayName,
-        isPublic
+        isPublic,
     } = await readValidatedBody(event, z.object({
         artifactGroupId: z.string().max(256),
         orgName: z.string().max(256),

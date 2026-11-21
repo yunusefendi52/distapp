@@ -1,4 +1,5 @@
 import { getStorageKeys } from "~/server/utils/utils"
+import { secureLinkMaxLength } from "~/utils/secure-link"
 import type { EventHandlerRequest, H3Event } from "h3"
 import { S3Fetch } from "~/server/services/s3fetch"
 
@@ -9,9 +10,10 @@ export const getArtifactFromInternal = async (
     releaseId: string,
     publicId: string,
     hasApk: boolean,
+    secureLink?: string,
 ) => {
     const { app, org } = publicId
-        ? await getArtifactGroupFromPublicIdOrUser(event, orgName, appName, publicId)
+        ? await getArtifactGroupFromPublicIdOrUser(event, orgName, appName, publicId, secureLink)
         : await getUserApp(event, orgName, appName).then(e => ({ app: e.userApp, org: e.userOrg }))
     const db = event.context.drizzle
     const releaseIdInt = parseInt(releaseId)
@@ -37,12 +39,13 @@ export const getArtifactFromInternal = async (
 }
 
 export default defineEventHandler(async (event) => {
-    const { appName, orgName, releaseId, hasManifestPList, publicId, hasApk } = await getValidatedQuery(event, z.object({
+    const { appName, orgName, releaseId, hasManifestPList, publicId, secureLink, hasApk } = await getValidatedQuery(event, z.object({
         appName: z.string().min(1),
         orgName: z.string().min(1),
         releaseId: z.string().min(1),
         hasManifestPList: z.any().optional(),
         publicId: z.string().nullable(),
+        secureLink: z.string().max(secureLinkMaxLength).optional(),
         hasApk: z.string().transform(e => e === 'true'),
     }).parse)
     const { signedUrl, app, detailArtifact, } = await getArtifactFromInternal(
@@ -51,7 +54,8 @@ export default defineEventHandler(async (event) => {
         appName,
         releaseId,
         publicId || '',
-        hasApk)
+        hasApk,
+        secureLink)
     if (hasManifestPList) {
         return {
             signedUrl,

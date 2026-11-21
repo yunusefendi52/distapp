@@ -179,11 +179,11 @@ const showAccountBtn = useState<boolean>('show-account-btn')
 definePageMeta({
     layout: 'install-layout',
     server: false,
-    path: '/install/:orgName/apps/:appName/:publicId',
+    path: '/install/:orgName/apps/:appName/:publicId/:secureLink?',
 })
 
 const route = useRoute()
-const { value: { publicId, orgName, appName } } = computed(() => route.params)
+const { value: { publicId, orgName, appName, secureLink } } = computed(() => route.params)
 const { value: { artifactId, releaseId } } = computed(() => route.query)
 
 const page = ref(1)
@@ -218,6 +218,7 @@ const { data, status, error } = useFetch('/api/install/get-data', {
         page,
         pageSize,
         search: debouncedSearch,
+        secureLink,
     },
     server: false,
 })

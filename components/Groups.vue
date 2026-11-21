@@ -72,6 +72,7 @@
             orgName: props.orgName,
             groupName: newGroupName,
             isPublic: isPublic,
+            generateSecureLink: generateSecureLink,
         })">
             <div class="flex flex-col gap-2">
                 <label for="groupName" class="text-sm font-medium">Group name</label>
@@ -84,6 +85,15 @@
                     <label for="isPublic" class="text-sm font-medium">Public group</label>
                     <span class="text-xs text-[var(--p-text-muted-color)]">
                         Anyone with the install link can access this group.
+                    </span>
+                </div>
+            </div>
+            <div v-if="isPublic" class="flex items-start gap-3">
+                <Checkbox v-model="generateSecureLink" binary inputId="generateSecureLink" name="generateSecureLink" />
+                <div class="flex flex-col">
+                    <label for="generateSecureLink" class="text-sm font-medium">Protect with a secure link</label>
+                    <span class="text-xs text-[var(--p-text-muted-color)]">
+                        Adds a secret to the install link so only people with the full link can access this group.
                     </span>
                 </div>
             </div>
@@ -145,12 +155,14 @@ const installLink = (group: any) => {
 
 const newGroupName = ref('')
 const isPublic = ref(false)
+const generateSecureLink = ref(false)
 
 const visible = ref(false)
 watchEffect(() => {
     if (visible.value) {
         newGroupName.value = ''
         isPublic.value = false
+        generateSecureLink.value = false
     }
 })
 

@@ -24,10 +24,27 @@
                 <div v-if="detailGroup?.isPublic">
                     <Badge class="self-start" value="PUBLIC" severity="info" size="small"></Badge>
                 </div>
+                <div v-if="detailGroup?.secureLink">
+                    <Badge class="self-start" value="SECURE LINK" severity="success" size="small"></Badge>
+                </div>
             </div>
-            <span v-if="publicLink" class="mb-2">Install link: <a class="underline break-all" target="_blank"
-                    :href="publicLink">{{ publicLink }}</a></span>
+            <div v-if="publicLink" class="flex items-center gap-1 mb-2">
+                <span class="break-words">Install link: <a class="underline break-all" target="_blank"
+                        :href="publicLink">{{ publicLink }}</a></span>
+                <AppCopyButton text rounded class="!h-6 !w-6 !p-0 shrink-0" aria-label="Copy install link"
+                    v-tooltip.top="'Copy install link'" :textValue="() => publicLink"
+                    data-testid="group_copy_link_btn" />
+            </div>
             <div class="flex flex-row flex-wrap gap-2">
+                <Button v-if="detailGroup?.isPublic" icon="pi pi-shield" severity="secondary" outlined
+                    :label="detailGroup?.secureLink ? 'Change secure link' : 'Set secure link'"
+                    aria-label="Set secure link"
+                    v-tooltip.top="detailGroup?.secureLink ? 'Change secure link' : 'Set secure link'"
+                    @click="openSecureLinkDialog" data-testid="group_secure_link_btn" />
+                <Button v-if="detailGroup?.secureLink" icon="pi pi-shield" severity="danger" outlined
+                    label="Remove secure link" aria-label="Remove secure link"
+                    v-tooltip.top="'Remove secure link'" :loading="removeSecureLinkIsPending"
+                    @click="removeSecureLinkConfirm" data-testid="group_remove_secure_link_btn" />
                 <Button icon="pi pi-qrcode" severity="secondary" outlined aria-label="Show QR code"
                     v-tooltip.top="'Show QR code'" @click="() => showQrLink = true" data-testid="group_qr_btn" />
                 <Button icon="pi pi-user" severity="secondary" outlined aria-label="Manage testers"
@@ -75,6 +92,39 @@
             </div>
         </form>
     </Drawer>
+    <Dialog v-model:visible="showSecureLinkDialog" modal header="Set secure link" :style="{ width: '26rem' }">
+        <form @submit.prevent="submitSecureLink" class="flex flex-col gap-3">
+            <p class="text-sm text-[var(--p-text-muted-color)] m-0">
+                Add a secret segment to the install link. Only people with the full link can access and install this
+                group.
+            </p>
+            <div class="flex flex-col gap-1">
+                <label for="secureLinkInput" class="text-sm font-medium">Secure link</label>
+                <div class="flex gap-2">
+                    <InputText id="secureLinkInput" v-model="secureLinkInput" class="flex-1" autocomplete="off"
+                        spellcheck="false" placeholder="e.g. team-preview" data-testid="secure_link_input" />
+                    <Button type="button" icon="pi pi-refresh" aria-label="Generate random secure link"
+                        v-tooltip.top="'Generate random'" @click="secureLinkInput = generateSecureLink()"
+                        data-testid="secure_link_generate_btn" />
+                </div>
+                <small class="text-xs text-[var(--p-text-muted-color)] break-all">
+                    Appended to /install/{{ orgName }}/apps/{{ appName }}/{{ detailGroup?.publicId }}/
+                </small>
+                <small class="text-xs text-[var(--p-text-muted-color)]">
+                    Letters, numbers, dash and underscore. {{ secureLinkMinLength }}-{{ secureLinkMaxLength }}
+                    characters.
+                </small>
+                <small v-if="secureLinkError" class="text-xs text-red-500" data-testid="secure_link_error">
+                    {{ secureLinkError }}
+                </small>
+            </div>
+            <div class="flex justify-end gap-2">
+                <Button type="button" label="Cancel" severity="secondary" @click="showSecureLinkDialog = false" />
+                <Button type="submit" label="Save" :loading="saveSecureLinkPending"
+                    data-testid="secure_link_save_btn" />
+            </div>
+        </form>
+    </Dialog>
     <Dialog v-model:visible="showQrLink" modal header="QR Link" style="width: 22rem;">
         <div class="px-4 pb-2 flex flex-col gap-4">
             <span class="text-center">Scan the following QR in your device to open the link</span>
@@ -86,6 +136,7 @@
 
 <script setup lang="ts">
 const showQrLink = ref(false)
+const toast = useToast()
 const route = useRoute()
 const params = route.params
 const appName = params.appId as string
@@ -109,9 +160,12 @@ const { data, execute: executeListGroups } = useFetch('/api/groups/list-groups',
 const detailGroup = computed(() => data.value?.find(e => e))
 
 const publicLink = computed(() => {
-    return import.meta.client && detailGroup.value?.publicId
-        ? `${window.location.origin}/install/${orgName}/apps/${appName}/${detailGroup?.value?.publicId}`
-        : ''
+    const group = detailGroup.value
+    if (!import.meta.client || !group?.publicId) {
+        return ''
+    }
+    const secureSegment = group.secureLink ? `/${group.secureLink}` : ''
+    return `${window.location.origin}/install/${orgName}/apps/${appName}/${group.publicId}${secureSegment}`
 })
 
 const confirm = useConfirm();
@@ -180,6 +234,81 @@ const isPublic = ref(detailGroup.value?.isPublic ?? false)
 watchEffect(() => {
     isPublic.value = detailGroup.value?.isPublic ?? false
 })
+
+const showSecureLinkDialog = ref(false)
+const secureLinkInput = ref('')
+const secureLinkError = ref('')
+
+const openSecureLinkDialog = () => {
+    secureLinkInput.value = detailGroup.value?.secureLink ?? ''
+    secureLinkError.value = ''
+    showSecureLinkDialog.value = true
+}
+
+const { mutate: mutateSetSecureLink, isPending: saveSecureLinkPending } = useMutation({
+    mutationFn: async () => {
+        await $fetch('/api/groups/set-secure-link', {
+            method: 'post',
+            body: {
+                orgName,
+                appName,
+                artifactGroupId: detailGroup.value?.id,
+                secureLink: secureLinkInput.value,
+            },
+        })
+    },
+    onSuccess: () => {
+        showSecureLinkDialog.value = false
+        executeListGroups()
+        toast.add({
+            severity: 'success',
+            summary: 'Secure link saved',
+            detail: 'Only people with the full link can access and install this group.',
+            life: 5000,
+        })
+    },
+    onError: (error: any) => {
+        secureLinkError.value = error?.message || 'Could not save the secure link'
+    },
+})
+
+const submitSecureLink = () => {
+    const value = secureLinkInput.value
+    if (value.length < secureLinkMinLength || value.length > secureLinkMaxLength || !secureLinkPattern.test(value)) {
+        secureLinkError.value = `Use ${secureLinkMinLength}-${secureLinkMaxLength} letters, numbers, dash or underscore.`
+        return
+    }
+    secureLinkError.value = ''
+    mutateSetSecureLink()
+}
+
+const { mutate: removeSecureLinkApi, isPending: removeSecureLinkIsPending } = useMutation({
+    mutationFn: async () => {
+        await $fetch('/api/groups/remove-secure-link', {
+            method: 'post',
+            body: {
+                orgName,
+                appName,
+                artifactGroupId: detailGroup.value?.id,
+            },
+        })
+    },
+    onSuccess: () => {
+        executeListGroups()
+    },
+})
+const removeSecureLinkConfirm = (event: any) => {
+    confirm.require({
+        target: event.currentTarget,
+        message: 'Remove secure link? The current secure link stops working, and anyone with the link can access this group.',
+        icon: 'pi pi-info-circle',
+        accept: () => {
+            removeSecureLinkApi()
+        },
+        reject: () => {
+        }
+    });
+}
 
 const { mutate: mutateArtifactGroupData, isPending: updateArtifactGroupDataIsPending } = useMutation({
     mutationFn: async (r: Event) => {

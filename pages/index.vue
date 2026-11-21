@@ -353,7 +353,7 @@ const features = [
     },
     {
         title: 'Public and private apps',
-        description: 'Control who can access each build, from private testers to public releases.',
+        description: 'Manage access to each build with private testers, public releases, or secure links shared with selected people.',
         icon: 'pi pi-shield',
     },
     {

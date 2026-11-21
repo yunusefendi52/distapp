@@ -92,13 +92,14 @@ function formatRelativeTime(date: Date, baseDate = Date.now()) {
 
 export const isIosDevice = () => /(iPad|iPhone|iPod)/g.test(navigator.userAgent) || (/(Mac OS)/g.test(navigator.userAgent) && "ontouchend" in document)
 
-export const generateManifestLink = (manifestData: any, orgName: string, appName: string, releaseId: string, publicLink: string | undefined) => {
+export const generateManifestLink = (manifestData: any, orgName: string, appName: string, releaseId: string, publicLink: string | undefined, secureLink?: string) => {
     const data = {
         ...manifestData,
         orgName,
         appName,
         releaseId,
         publicLink,
+        secureLink,
     }
     const dataStr = btoa(JSON.stringify(data))
     const dd = encodeURIComponent(`?data=${dataStr}`)

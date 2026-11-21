@@ -199,6 +199,8 @@ export const artifactsGroups = sqliteTable('artifactsGroups', {
     isPublic: integer('isPublic', {
         mode: 'boolean'
     }).default(false),
+    // Secret path segment appended to the public install link, null means plain public link
+    secureLink: text('secureLink'),
     // Retention override, retentionMode = 'inherit' means use app level settings
     retentionEnabled: integer('retentionEnabled', { mode: 'boolean' }).default(false),
     retentionMode: text('retentionMode', {
@@ -210,6 +212,7 @@ export const artifactsGroups = sqliteTable('artifactsGroups', {
 }, t => ({
     appsId_releaseId: unique().on(t.appsId, t.name),
     appsId_name_publicId: unique().on(t.appsId, t.name, t.publicId),
+    appsId_secureLink: unique().on(t.appsId, t.secureLink),
 }))
 export const artifactsGroupsRelations = relations(artifactsGroups, t => ({
     artifactsGroupsManager: t.many(artifactsGroupsManager),

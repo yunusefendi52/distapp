@@ -2,7 +2,7 @@ import { ne } from "drizzle-orm"
 import type { EventHandlerRequest, H3Event } from "h3"
 
 
-export const getArtifactGroupFromPublicIdOrUser = async (event: H3Event<EventHandlerRequest>, orgName: string, appName: string, publicId: string) => {
+export const getArtifactGroupFromPublicIdOrUser = async (event: H3Event<EventHandlerRequest>, orgName: string, appName: string, publicId: string, secureLink?: string) => {
     const db = event.context.drizzle
     const userId = event.context.auth?.userId || ''
 
@@ -32,6 +32,7 @@ export const getArtifactGroupFromPublicIdOrUser = async (event: H3Event<EventHan
     }
 
     var item = await getArtifact(true)
+    const matchedViaPublicLink = !!item
     if (!item) {
         console.log('Still cannot find artifact, find using userId')
         item = await getArtifact(false)
@@ -44,6 +45,12 @@ export const getArtifactGroupFromPublicIdOrUser = async (event: H3Event<EventHan
         })
     }
     const { artifactsGroups: artifactGroup } = item
+    if (matchedViaPublicLink && artifactGroup.secureLink && artifactGroup.secureLink !== secureLink) {
+        throw createError({
+            message: `The app installation does not exist or is invalid.`,
+            statusCode: 400,
+        })
+    }
     return {
         app: item.apps!,
         org: item.organizations!,
