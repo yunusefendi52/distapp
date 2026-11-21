@@ -19,25 +19,39 @@
     </AppBarContainer>
     <div class="p-4">
         <div class="card p-4 flex flex-col gap-3">
-            <div class="flex flex-wrap gap-2 items-stretch">
-                <span class="text-xl font-bold">{{ detailGroup?.displayName || detailGroup?.name }}</span>
-                <div v-if="detailGroup?.isPublic">
-                    <Badge class="self-start" value="PUBLIC" severity="info" size="small"></Badge>
+            <template v-if="groupStatus === 'pending' && !detailGroup">
+                <div class="flex flex-wrap items-center gap-2">
+                    <Skeleton width="10rem" height="1.5rem" />
+                    <Skeleton width="3.5rem" height="1.25rem" borderRadius="9999px" />
                 </div>
-            </div>
-            <span v-if="publicLink" class="mb-2">Install link: <a class="underline break-all" target="_blank"
-                    :href="publicLink">{{ publicLink }}</a></span>
-            <div class="flex flex-row flex-wrap gap-2">
-                <Button icon="pi pi-qrcode" severity="secondary" outlined aria-label="Show QR code"
-                    v-tooltip.top="'Show QR code'" @click="() => showQrLink = true" data-testid="group_qr_btn" />
-                <Button icon="pi pi-user" severity="secondary" outlined aria-label="Manage testers"
-                    v-tooltip.top="'Manage testers'" @click="() => showManageApptester = true"
-                    data-testid="group_testers_btn" />
-                <Button icon="pi pi-pencil" severity="secondary" outlined aria-label="Group settings"
-                    v-tooltip.top="'Group settings'" @click="() => groupSettings = true"
-                    data-testid="group_settings_btn" />
-            </div>
-            <!-- <Button icon="pi pi-refresh" label="Regenerate Link" @click="regenerateLink" /> -->
+                <Skeleton width="100%" height="1rem" class="max-w-md" />
+                <div class="flex flex-row flex-wrap gap-2">
+                    <Skeleton width="2.5rem" height="2.5rem" borderRadius="6px" />
+                    <Skeleton width="2.5rem" height="2.5rem" borderRadius="6px" />
+                    <Skeleton width="2.5rem" height="2.5rem" borderRadius="6px" />
+                </div>
+            </template>
+            <template v-else>
+                <div class="flex flex-wrap gap-2 items-stretch">
+                    <span class="text-xl font-bold">{{ detailGroup?.displayName || detailGroup?.name }}</span>
+                    <div v-if="detailGroup?.isPublic">
+                        <Badge class="self-start" value="PUBLIC" severity="info" size="small"></Badge>
+                    </div>
+                </div>
+                <span v-if="publicLink" class="mb-2">Install link: <a class="underline break-all" target="_blank"
+                        :href="publicLink">{{ publicLink }}</a></span>
+                <div class="flex flex-row flex-wrap gap-2">
+                    <Button icon="pi pi-qrcode" severity="secondary" outlined aria-label="Show QR code"
+                        v-tooltip.top="'Show QR code'" @click="() => showQrLink = true" data-testid="group_qr_btn" />
+                    <Button icon="pi pi-user" severity="secondary" outlined aria-label="Manage testers"
+                        v-tooltip.top="'Manage testers'" @click="() => showManageApptester = true"
+                        data-testid="group_testers_btn" />
+                    <Button icon="pi pi-pencil" severity="secondary" outlined aria-label="Group settings"
+                        v-tooltip.top="'Group settings'" @click="() => groupSettings = true"
+                        data-testid="group_settings_btn" />
+                </div>
+                <!-- <Button icon="pi pi-refresh" label="Regenerate Link" @click="regenerateLink" /> -->
+            </template>
         </div>
     </div>
     <div class="px-4">
@@ -85,6 +99,8 @@
 </template>
 
 <script setup lang="ts">
+import Skeleton from 'primevue/skeleton'
+
 const showQrLink = ref(false)
 const route = useRoute()
 const params = route.params
@@ -99,7 +115,7 @@ const detailApp = useFetch('/api/detail-app', {
     },
 })
 
-const { data, execute: executeListGroups } = useFetch('/api/groups/list-groups', {
+const { data, execute: executeListGroups, status: groupStatus } = useFetch('/api/groups/list-groups', {
     query: {
         appName,
         orgName,
