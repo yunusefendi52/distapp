@@ -11,7 +11,19 @@
         </div>
     </div>
 
-    <DataTable :show-gridlines="false" scrollable :value="filteredList" dataKey="id" @row-click="selectRow">
+    <div v-if="showSkeleton" class="flex flex-col">
+        <div v-for="i in 5" :key="i"
+            class="flex items-center gap-4 border-b border-[var(--p-content-border-color)] px-4 py-3 last:border-0">
+            <div class="flex flex-1 flex-col gap-1">
+                <Skeleton width="8rem" height="1rem" />
+                <Skeleton width="5rem" height="0.75rem" class="sm:hidden" />
+            </div>
+            <Skeleton width="4.5rem" height="1.25rem" borderRadius="9999px" />
+            <Skeleton width="5rem" height="1rem" class="hidden sm:block" />
+            <Skeleton width="2rem" height="1rem" />
+        </div>
+    </div>
+    <DataTable v-else :show-gridlines="false" scrollable :value="filteredList" dataKey="id" @row-click="selectRow">
         <Column header="Group">
             <template #body="{ data }">
                 <div class="flex flex-col">
@@ -51,7 +63,8 @@
             </template>
         </Column>
         <template #empty>
-            <div class="flex flex-col items-center justify-center gap-3 py-10 text-center">
+            <div v-if="status !== 'pending'"
+                class="flex flex-col items-center justify-center gap-3 py-10 text-center">
                 <i class="pi pi-users text-3xl text-[var(--p-text-muted-color)]" />
                 <div class="flex flex-col gap-1">
                     <span class="font-semibold">{{ hasActiveFilters ? 'No groups match your filters' : 'No groups yet'
@@ -97,6 +110,7 @@
 
 <script setup lang="ts">
 import { DataTableRowClickEvent } from 'primevue/datatable';
+import Skeleton from 'primevue/skeleton';
 import { formatDate } from '#imports';
 
 const props = defineProps<{
@@ -106,7 +120,7 @@ const props = defineProps<{
 
 const toast = useToast()
 
-const { data: list, refresh } = useFetch('/api/groups/list-groups', {
+const { data: list, refresh, status } = useFetch('/api/groups/list-groups', {
     query: {
         orgName: props.orgName,
         appName: props.appName,
@@ -132,6 +146,8 @@ const filteredList = computed(() => (list.value ?? []).filter((group) => {
 }))
 
 const hasActiveFilters = computed(() => !!search.value.trim() || visibility.value !== 'all')
+
+const showSkeleton = computed(() => status.value === 'pending' && !list.value?.length)
 
 const clearFilters = () => {
     search.value = ''

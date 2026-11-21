@@ -5,8 +5,20 @@
             :optionLabel="(w) => w.displayName || w.name" class="sm:w-[200px]" filter />
     </div>
 
-    <div v-if="status === 'pending' && !list?.length" class="flex justify-center py-10">
-        <ProgressSpinner style="width: 24px; height: 24px" strokeWidth="6" />
+    <div v-if="status === 'pending' && !list?.length" class="flex flex-col">
+        <div v-for="i in 5" :key="i"
+            class="flex items-center gap-4 border-b border-[var(--p-content-border-color)] px-4 py-3 last:border-0">
+            <div class="flex shrink-0 flex-col gap-1">
+                <Skeleton width="7rem" height="1rem" />
+                <Skeleton width="9rem" height="0.75rem" />
+            </div>
+            <div class="flex flex-1 flex-wrap items-center gap-1">
+                <Skeleton width="3.5rem" height="1rem" borderRadius="9999px" />
+                <Skeleton width="3rem" height="1rem" borderRadius="9999px" />
+            </div>
+            <Skeleton width="6rem" height="1rem" class="hidden sm:block" />
+            <Skeleton width="1.75rem" height="1.75rem" borderRadius="9999px" />
+        </div>
     </div>
 
     <div v-else>
@@ -95,6 +107,7 @@
 
 <script setup lang="ts">
 import { DataTableRowClickEvent } from 'primevue/datatable';
+import Skeleton from 'primevue/skeleton';
 import { formatDate } from '#imports';
 
 const props = defineProps<{

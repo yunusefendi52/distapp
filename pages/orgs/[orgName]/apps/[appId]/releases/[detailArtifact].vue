@@ -49,14 +49,17 @@
             <div class="flex flex-col gap-5 p-5 md:p-6">
                 <section class="flex flex-col gap-2">
                     <h2 class="text-base font-semibold">Groups</h2>
-                    <MultiSelect class="w-full max-w-md" v-model="selectedGroup" display="chip" :options="groups"
-                        :optionLabel="(w) => w.displayName || w.name" placeholder="Select groups" filter
-                        @change="saveGroupsDebounced()" data-testid="groups_multiselect" />
+                    <Skeleton v-if="showGroupsSkeleton" height="2.75rem" width="100%" borderRadius="6px"
+                        class="max-w-md" />
+                    <MultiSelect v-else class="w-full max-w-md" v-model="selectedGroup" display="chip"
+                        :options="groups" :optionLabel="(w) => w.displayName || w.name" placeholder="Select groups"
+                        filter @change="saveGroupsDebounced()" data-testid="groups_multiselect" />
                     <span v-if="saveGroupsStatus === 'pending'" class="text-xs text-[var(--p-text-muted-color)]">Saving
                         changes…</span>
                     <span v-else-if="saveGroupsStatus === 'error'" class="text-xs text-red-500">Could not save groups.
                         Try again.</span>
-                    <span v-if="!groups.length" class="text-sm text-[var(--p-text-muted-color)]">
+                    <span v-if="groupsStatus !== 'pending' && !groups.length"
+                        class="text-sm text-[var(--p-text-muted-color)]">
                         No groups yet.
                         <NuxtLink :to="{
                             name: 'orgs-orgName-apps-appId-index-groups',
@@ -106,6 +109,7 @@ import { useDebounceFn } from '@vueuse/core'
 import { UpdateGroupsRequest } from '~/server/api/update-artifact-groups.put';
 import { MenuItem } from '#imports'
 import { PlatformBadge } from '#components';
+import Skeleton from 'primevue/skeleton';
 
 const { params } = useRoute()
 const appName = params.appId as string
@@ -136,13 +140,14 @@ const uploaded = computed(() => {
 
 const { download, isDownloading } = useDownloadArtifact(appName, orgName)
 
-const { data: appGroups } = useFetch('/api/groups/list-groups', {
+const { data: appGroups, status: groupsStatus } = useFetch('/api/groups/list-groups', {
     query: {
         appName: appName,
         orgName: orgName,
     },
 })
 const groups = computed(() => appGroups.value ?? [])
+const showGroupsSkeleton = computed(() => groupsStatus.value === 'pending' && !appGroups.value?.length)
 const selectedGroup = ref<typeof groups.value>()
 watchEffect(() => {
     selectedGroup.value = detailArtifact.value?.groups.map(e => e.artifactsGroups) ?? []
