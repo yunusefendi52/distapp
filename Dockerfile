@@ -67,4 +67,6 @@ LABEL org.opencontainers.image.url="https://distapp.app"
 LABEL org.opencontainers.image.source="https://github.com/yunusefendi52/distapp"
 LABEL org.opencontainers.image.licenses="https://github.com/yunusefendi52/distapp/blob/main/LICENSE-hosting.txt"
 
+EXPOSE 3000
+
 ENTRYPOINT [ "bun", "run", "server/index.mjs" ]
