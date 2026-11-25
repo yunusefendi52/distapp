@@ -1,5 +1,4 @@
 <template>
-    <NuxtLoadingIndicator />
     <NuxtLayout>
         <NuxtPage />
         <DynamicDialog />
