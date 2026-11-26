@@ -1,4 +1,4 @@
-FROM oven/bun:1.2.8 AS builder
+FROM oven/bun:1.4.5 AS builder
 WORKDIR /builder
 
 ENV NUXT_DISTAPP_SELF_HOST=true
@@ -21,9 +21,9 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Bun
-ARG BUN_VERSION=1.2.8
-ARG BUN_SHA256_AMD64=1d48ae3f4649d281b14efd723e49b69a44e5da9a8d7341d611a3ea58ec478ec1
-ARG BUN_SHA256_ARM64=23083f256f2a1d155c456e12e39c51e31dc41b97c63420d9915f43bb86abeab1
+ARG BUN_VERSION=1.4.5
+ARG BUN_SHA256_AMD64=dcb23a18a1c2fff12d57bcef696dbbb42eb67fde29f43816ecb595459a24c463
+ARG BUN_SHA256_ARM64=18656a3bf0ea5641f5796ae4213b75255579a70a0fded2f337933785568cdf84
 RUN set -eu; \
     case "$(dpkg --print-architecture)" in \
         amd64) \
