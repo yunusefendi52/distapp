@@ -1,12 +1,22 @@
 diff --git a/dist/presets/bun/runtime/bun.mjs b/dist/presets/bun/runtime/bun.mjs
-index e46d1616dc6d6efa473e2d53a0884efc83fd7867..0c66bbccba10caa1f8750d06ada3195f31ecc944 100644
+index e46d1616dc6d6efa473e2d53a0884efc83fd7867..7df02e96865558841fade1ae59724e2d69f194ed 100644
 --- a/dist/presets/bun/runtime/bun.mjs
 +++ b/dist/presets/bun/runtime/bun.mjs
-@@ -6,6 +6,7 @@ const nitroApp = useNitroApp();
+@@ -6,6 +6,8 @@ const nitroApp = useNitroApp();
  const ws = import.meta._websocket ? wsAdapter(nitroApp.h3App.websocket) : void 0;
  const server = Bun.serve({
    port: process.env.NITRO_PORT || process.env.PORT || 3e3,
++  hostname: process.env.NUXT_BUN_HOSTNAME || undefined,
 +  idleTimeout: process.env.NUXT_BUN_IDLE_TIMEOUT ? parseInt(process.env.NUXT_BUN_IDLE_TIMEOUT) : 120,
    websocket: import.meta._websocket ? ws.websocket : void 0,
    async fetch(req, server2) {
      if (import.meta._websocket && req.headers.get("upgrade") === "websocket") {
+@@ -26,7 +28,7 @@ const server = Bun.serve({
+     });
+   }
+ });
+-console.log(`Listening on http://localhost:${server.port}...`);
++console.log(`Listening on http://${server.hostname}:${server.port}...`);
+ if (import.meta._tasks) {
+   startScheduleRunner();
+ }
