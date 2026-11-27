@@ -125,3 +125,18 @@ export function formatSimpleDate(value: string | undefined) {
         timeStyle: 'medium',
     }).format(new Date(value)) : '-'
 }
+
+export function safeRedirect(value?: string | null): string | undefined {
+    if (!value) {
+        return undefined
+    }
+    try {
+        const decoded = decodeURIComponent(value)
+        if (/^\/(?!\/|\\)/.test(decoded)) {
+            return decoded
+        }
+    } catch (e) {
+        console.error('Failed to decode redirect value', e)
+    }
+    return undefined
+}

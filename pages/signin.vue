@@ -122,8 +122,8 @@ const invalidCredentialsMessage = 'We couldn\'t sign you in. Check your username
 
 function handleSuccessSignIn(r: { param: string } | undefined) {
     if (r) {
-        const redirect = route.query.redirect
-        location.href = `/?${r.param}${redirect ? `&redirect=${redirect}` : ''}`
+        const redirect = safeRedirect(route.query.redirect?.toString())
+        location.href = `/?${r.param}${redirect ? `&redirect=${encodeURIComponent(redirect)}` : ''}`
     }
 }
 

@@ -298,7 +298,7 @@ if (isLoggedIn.value) {
     if (import.meta.client) {
         const userToken = route.query.usr?.toString()
         const userEmail = route.query.e?.toString()
-        const redirect = route.query.redirect?.toString()
+        const redirect = safeRedirect(route.query.redirect?.toString())
         const userTokens = useLocalStorage<UserTokenInfo[]>(userTokensKey, [])
         router.push({
             query: {
@@ -315,7 +315,7 @@ if (isLoggedIn.value) {
             userTokens.value = newUserTokens
         }
         if (redirect) {
-            navigateTo(decodeURIComponent(redirect))
+            navigateTo(redirect)
         }
     }
 }
