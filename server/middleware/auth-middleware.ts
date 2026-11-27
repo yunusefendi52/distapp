@@ -44,7 +44,5 @@ export default defineEventHandler(async (event) => {
         }
       }
     }
-  } else {
-    console.log('user not logged in')
   }
 })
