@@ -25,7 +25,8 @@
                     <NuxtLink :to="{
                         name: isLoggedIn ? 'apps' : 'signin',
                     }">
-                        <Button data-testid="hero_cta_btn" :label="isLoggedIn ? 'Go To Apps' : 'Get Started'" />
+                        <Button data-testid="hero_cta_btn" :label="isLoggedIn ? 'Go To Apps' : 'Get Started'"
+                            :loading="isNavigating" @click="isNavigating = true" />
                     </NuxtLink>
                     <NuxtLink to="https://github.com/yunusefendi52/distapp" target="_blank">
                         <Button icon="pi pi-github" label="GitHub" text />
@@ -294,6 +295,7 @@ const route = useRoute()
 const router = useRouter()
 const cookie = useCookie(cookieAuthKey)
 const isLoggedIn = computed(() => cookie.value ? true : false)
+const isNavigating = ref(false)
 if (isLoggedIn.value) {
     if (import.meta.client) {
         const userToken = route.query.usr?.toString()
