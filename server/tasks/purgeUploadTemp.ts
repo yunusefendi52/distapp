@@ -16,9 +16,19 @@ export default defineTask({
 });
 
 export async function runPurgeUploadTemp(event?: H3Event<EventHandlerRequest>) {
+    const env = event?.context.cloudflare?.env || process.env
+
+    if (readBooleanEnv(env.NUXT_PURGE_UPLOAD_TEMP_DISABLED)) {
+        console.log('Purge upload temp is disabled (NUXT_PURGE_UPLOAD_TEMP_DISABLED), skipping run')
+        return {
+            result: {
+                status: `purge upload temp disabled ${new Date().toISOString()}`,
+            },
+        };
+    }
+
     console.log('Starting purge upload temp')
 
-    const env = event?.context.cloudflare?.env || process.env
     const drizzle = db({
         ...env,
         enableLogging: false,

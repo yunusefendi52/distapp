@@ -14,9 +14,19 @@ export default defineTask({
 });
 
 export async function runPurgeArtifact(event?: H3Event<EventHandlerRequest>) {
+    const env = event?.context.cloudflare?.env || process.env
+
+    if (readBooleanEnv(env.NUXT_PURGE_ARTIFACT_DISABLED)) {
+        console.log('Purge artifact is disabled (NUXT_PURGE_ARTIFACT_DISABLED), skipping run')
+        return {
+            result: {
+                status: `purge artifact disabled ${new Date().toISOString()}`,
+            },
+        };
+    }
+
     console.log('Staring purge artifact')
 
-    const env = event?.context.cloudflare?.env || process.env
     const drizzle = db({
         ...env,
         enableLogging: false,

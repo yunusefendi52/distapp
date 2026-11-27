@@ -13,10 +13,6 @@ function readPositiveInt(value: unknown, fallback: number) {
     return Number.isInteger(n) && n > 0 ? n : fallback
 }
 
-function readBoolean(value: unknown) {
-    return value === true || value === 'true' || value === '1'
-}
-
 const logger = createTaggedLogger('retention')
 
 export default defineTask({
@@ -35,11 +31,9 @@ export default defineTask({
 });
 
 export async function runRetentionPurge(event?: H3Event<EventHandlerRequest>, dryRunOverride?: boolean) {
-    logger.log('Starting retention purge')
-
     const env = event?.context.cloudflare?.env || process.env
 
-    if (readBoolean(env.NUXT_RETENTION_DISABLED)) {
+    if (readBooleanEnv(env.NUXT_RETENTION_DISABLED)) {
         logger.log('Retention purge is disabled (NUXT_RETENTION_DISABLED), skipping run')
         return {
             apps: 0,
@@ -51,13 +45,15 @@ export async function runRetentionPurge(event?: H3Event<EventHandlerRequest>, dr
         }
     }
 
+    logger.log('Starting retention purge')
+
     const drizzle = db({
         ...env,
         enableLogging: false,
     })
 
     const dateNow = new Date()
-    const dryRun = dryRunOverride ?? readBoolean(env.NUXT_RETENTION_DRY_RUN)
+    const dryRun = dryRunOverride ?? readBooleanEnv(env.NUXT_RETENTION_DRY_RUN)
     const batchSize = readPositiveInt(env.NUXT_RETENTION_APP_BATCH_SIZE, DEFAULT_APP_BATCH_SIZE)
     const s3 = new S3Fetch()
 
