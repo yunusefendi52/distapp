@@ -153,6 +153,13 @@ export default defineNuxtConfig({
       '0 * * * *': ['retention-purge'],
     } : undefined,
     // node: true,
+    routeRules: {
+      '/assets/**': {
+        headers: {
+          'Cache-Control': 'public, max-age=86400',
+        },
+      },
+    },
   },
 
   imports: {
